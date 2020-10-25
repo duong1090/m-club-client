@@ -1,114 +1,229 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
+import React from "react";
 import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
   View,
   Text,
-  StatusBar,
-} from 'react-native';
+  TouchableOpacity,
+  Animated,
+  ScrollView,
+  Image,
+  Dimensions,
+} from "react-native";
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const { width } = Dimensions.get("window");
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
+export default class App extends React.Component {
+  state = {
+    active: 0,
+    xTabOne: 0,
+    xTabTwo: 0,
+    translateX: new Animated.Value(0),
+    translateXTabOne: new Animated.Value(0),
+    translateXTabTwo: new Animated.Value(width),
+    translateY: -1000,
+  };
+
+  handleSlide = (type) => {
+    let {
+      active,
+      xTabOne,
+      xTabTwo,
+      translateX,
+      translateXTabOne,
+      translateXTabTwo,
+    } = this.state;
+    Animated.spring(translateX, {
+      toValue: type,
+      useNativeDriver: true,
+      duration: 100,
+    }).start();
+    if (active === 0) {
+      Animated.parallel([
+        Animated.spring(translateXTabOne, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: true,
+        }).start(),
+        Animated.spring(translateXTabTwo, {
+          toValue: width,
+          duration: 100,
+          useNativeDriver: true,
+        }).start(),
+      ]);
+    } else {
+      Animated.parallel([
+        Animated.spring(translateXTabOne, {
+          toValue: -width,
+          duration: 100,
+          useNativeDriver: true,
+        }).start(),
+        Animated.spring(translateXTabTwo, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: true,
+        }).start(),
+      ]);
+    }
+  };
+
+  render() {
+    let {
+      xTabOne,
+      xTabTwo,
+      translateX,
+      active,
+      translateXTabOne,
+      translateXTabTwo,
+      translateY,
+    } = this.state;
+    return (
+      <View style={{ flex: 1 }}>
+        <View
+          style={{
+            width: "90%",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              marginTop: 40,
+              marginBottom: 20,
+              height: 36,
+              position: "relative",
+            }}
+          >
+            <Animated.View
+              style={{
+                position: "absolute",
+                width: "50%",
+                height: "100%",
+                top: 0,
+                left: 0,
+                backgroundColor: "#007aff",
+                borderRadius: 4,
+                transform: [
+                  {
+                    translateX,
+                  },
+                ],
+              }}
+            />
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                borderWidth: 1,
+                borderColor: "#007aff",
+                borderRadius: 4,
+                borderRightWidth: 0,
+                borderTopRightRadius: 0,
+                borderBottomRightRadius: 0,
+              }}
+              onLayout={(event) =>
+                this.setState({
+                  xTabOne: event.nativeEvent.layout.x,
+                })
+              }
+              onPress={() =>
+                this.setState({ active: 0 }, () => this.handleSlide(xTabOne))
+              }
+            >
+              <Text
+                style={{
+                  color: active === 0 ? "#fff" : "#007aff",
+                }}
+              >
+                Tab One
               </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                borderWidth: 1,
+                borderColor: "#007aff",
+                borderRadius: 4,
+                borderLeftWidth: 0,
+                borderTopLeftRadius: 0,
+                borderBottomLeftRadius: 0,
+              }}
+              onLayout={(event) =>
+                this.setState({
+                  xTabTwo: event.nativeEvent.layout.x,
+                })
+              }
+              onPress={() =>
+                this.setState({ active: 1 }, () => this.handleSlide(xTabTwo))
+              }
+            >
+              <Text
+                style={{
+                  color: active === 1 ? "#fff" : "#007aff",
+                }}
+              >
+                Tab Two
               </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
+            </TouchableOpacity>
           </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
+          <ScrollView>
+            <Animated.View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                transform: [
+                  {
+                    translateX: translateXTabOne,
+                  },
+                ],
+              }}
+              onLayout={(event) =>
+                this.setState({
+                  translateY: event.nativeEvent.layout.height,
+                })
+              }
+            >
+              <Text>Hi, I am a cute cat</Text>
+              <View
+                style={{
+                  marginTop: 20,
+                  width: 100,
+                  height: 100,
+                  backgroundColor: "red",
+                }}
+              ></View>
+            </Animated.View>
 
-export default App;
+            <Animated.View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                transform: [
+                  {
+                    translateX: translateXTabTwo,
+                  },
+                  {
+                    translateY: -translateY,
+                  },
+                ],
+              }}
+            >
+              <Text>Hi, I am a cute dog</Text>
+              <View
+                style={{
+                  marginTop: 20,
+                  width: 100,
+                  height: 100,
+                  backgroundColor: "blue",
+                }}
+              ></View>
+            </Animated.View>
+          </ScrollView>
+        </View>
+      </View>
+    );
+  }
+}
