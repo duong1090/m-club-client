@@ -33,6 +33,7 @@ export const getApiToken = () => {
 export const buildDeviceInfo = async () => {
   try {
     if (!global.buildDeviceInfo) {
+      console.log("buildDeviceInfo:::");
       if (Base64 == null) {
         Base64 = require("js-base64").Base64;
       }

@@ -168,8 +168,7 @@ const postUpload = async (uri, method = "POST", data, quiet) => {
   );
 };
 
-const postPut = async (uri, method = 'POST', data, quiet) => {
-  
+const postPut = async (uri, method = "POST", data, quiet) => {
   const token = getApiToken();
   console.log("TOKEN ", token);
   // var lang = store.getState().get("application").get("locale");
@@ -227,7 +226,7 @@ export const postRequest = (url, params) => {
           ) {
             const error = new Error();
             error.response = {
-              status: 'Request_timeout'
+              status: "Request_timeout",
               //TODO: multi-language
               // status: getIntl().formatMessage(Messages.request_timeout),
             };
@@ -253,7 +252,7 @@ export const postRequest = (url, params) => {
 
 //#region GET
 
-export const get = (uri, params = "", quiet) => {
+export const get = async (uri, params = "", quiet) => {
   const token = getApiToken();
   console.log("tokkenenene", token);
   // var lang = store.getState().get("application").get("locale");
@@ -266,7 +265,7 @@ export const get = (uri, params = "", quiet) => {
   }
   console.log("getRequest ++++++++");
   const deviceInfo = await buildDeviceInfo();
-  console.log(uri, params, deviceInfo);
+  console.log("get", uri, params, deviceInfo);
   console.log("token:::::", token);
   return fetch(uri, {
     retries: 2,
@@ -290,10 +289,15 @@ export const get = (uri, params = "", quiet) => {
       Pragma: "no-cache",
       Expires: 0,
     },
-  }).then(
-    checkStatus.bind({ request: get.bind(undefined, uri, true), quiet: quiet })
-  );
-}
+  })
+    .then(
+      checkStatus.bind({
+        request: get.bind(undefined, uri, true),
+        quiet: quiet,
+      })
+    )
+    .catch((err) => console.error("get:::catch:::", err));
+};
 
 export const getRequest = (url, params) => {
   return new Promise((resolve, reject) => {
@@ -312,7 +316,7 @@ export const getRequest = (url, params) => {
           if (error.message && error.message.indexOf("timed out")) {
             //TODO:
             // notify(error);
-            console.error("getRequest:::");
+            console.error("getRequest:::", error);
           }
           if (
             error.message &&
