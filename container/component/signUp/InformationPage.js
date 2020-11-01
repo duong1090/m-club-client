@@ -12,6 +12,8 @@ import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import InputItem from "container/component/ui/inputItem";
 import { scale, color, fontSize } from "container/variables/common";
+import { injectIntl } from "react-intl";
+import Messages from "container/translation/Message";
 
 const { width } = Dimensions.get("window");
 
@@ -19,7 +21,7 @@ const LAYOUT_SIZE = width - scale(120);
 const TITLE_X = (LAYOUT_SIZE - scale(200)) / 2 - scale(15);
 
 const InformationPage = (props) => {
-  const { style } = props;
+  const { style, intl } = props;
 
   const [clubName, setClubName] = useState(null);
   const [clubCode, setClubCode] = useState(null);
@@ -43,7 +45,6 @@ const InformationPage = (props) => {
 
   const handleSlide = async () => {
     if (active === 0) {
-      console.log("handleSlide::::", translateXTabOne);
       Animated.parallel([
         Animated.spring(translateXTabOne, {
           toValue: -LAYOUT_SIZE,
@@ -86,8 +87,6 @@ const InformationPage = (props) => {
     if (phone) params.phone = phone;
     if (adminName) params.mem_name = adminName;
 
-    console.log("doSignUp:::", params);
-
     postRequest(Config.API_URL.concat("auth/sign-up"), params)
       .then((res) => {
         if (res) {
@@ -101,12 +100,7 @@ const InformationPage = (props) => {
     <View style={[style, styles.container]}>
       <View>
         <View style={styles.progress}>
-          <View
-            style={[
-              styles.circle,
-              { backgroundColor: active != 0 ? "#CCCCCC" : "#37CE27" },
-            ]}
-          />
+          <View style={[styles.circle, { backgroundColor: "#37CE27" }]} />
           <View style={[styles.line]} />
           <View
             style={[
@@ -138,7 +132,9 @@ const InformationPage = (props) => {
               fontWeight: "bold",
             }}
           >
-            Club's Info
+            {active == 0
+              ? intl.formatMessage(Messages.club_information)
+              : intl.formatMessage(Messages.admin_information)}
           </Text>
           <View style={styles.miniCircle} />
         </Animated.View>
@@ -164,13 +160,13 @@ const InformationPage = (props) => {
           >
             <InputItem
               style={styles.input}
-              placeholder={"Club name"}
+              placeholder={intl.formatMessage(Messages.club_name)}
               onChangeText={(text) => setClubName(text)}
               value={clubName}
             />
 
             <InputItem
-              placeholder={"Club code"}
+              placeholder={intl.formatMessage(Messages.club_code)}
               onChangeText={(code) => setClubCode(code)}
               value={clubCode}
             />
@@ -194,13 +190,13 @@ const InformationPage = (props) => {
           >
             <InputItem
               style={styles.input}
-              placeholder={"Admin name"}
+              placeholder={intl.formatMessage(Messages.admin_name)}
               onChangeText={(text) => setAdminName(text)}
               value={adminName}
             />
 
             <InputItem
-              placeholder={"Phone"}
+              placeholder={intl.formatMessage(Messages.phone)}
               onChangeText={(code) => setPhone(code)}
               value={phone}
             />
@@ -210,7 +206,9 @@ const InformationPage = (props) => {
 
       {active == 0 ? (
         <TouchableOpacity style={styles.button} onPress={() => handleSlide()}>
-          <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>Next</Text>
+          <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
+            {intl.formatMessage(Messages.next)}
+          </Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -218,7 +216,7 @@ const InformationPage = (props) => {
           onPress={() => doSignUp()}
         >
           <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
-            Sign Up
+            {intl.formatMessage(Messages.sign_up)}
           </Text>
         </TouchableOpacity>
       )}
@@ -231,7 +229,7 @@ const InformationPage = (props) => {
             fontWeight: "bold",
           }}
         >
-          Have an account?{" "}
+          {intl.formatMessage(Messages.have_an_account)}{" "}
         </Text>
         <TouchableOpacity onPress={() => {}}>
           <Text
@@ -241,7 +239,7 @@ const InformationPage = (props) => {
               fontWeight: "bold",
             }}
           >
-            Sign in now!
+            {intl.formatMessage(Messages.sign_in_now)}
           </Text>
         </TouchableOpacity>
       </View>
@@ -302,4 +300,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InformationPage;
+export default injectIntl(InformationPage);
