@@ -1,44 +1,14 @@
+import React from "react";
 import { screens } from "container/constant/screen";
 import { Navigation } from "react-native-navigation";
 import { loadInitialStatus } from "container/action/initialize";
+import MainProvider from "container/provider";
 
 //#region Register Screen ------------------------------------------------------------------------------------------------
-const getRequireByKey = (key) => {
-  console.log("getRequireByKey:::");
-  switch (key) {
-    case screens.LOGIN.value:
-      return require("container/component/logIn").default;
-    case screens.SIGNUP.value:
-      return require("container/component/signUp").default;
-  }
-};
 
 export const registerLazyScreen = () => {
-  console.log("registerLazyScreen::::", Navigation.setLazyComponentRegistrator);
-  try {
-    Navigation.setLazyComponentRegistrator((componentName) => {
-      console.log("registerLazyScreen::::setLazyComponentRegistrator:::");
-
-      lazyScreen = screens[componentName];
-      if (lazyScreen) {
-        if (!lazyScreen.screen) {
-          lazyScreen.screen = getRequireByKey(componentName);
-        }
-
-        if (lazyScreen.isModal) {
-          registerModalComponent(componentName, lazyScreen.screen);
-        } else {
-          registerComponent(
-            componentName,
-            lazyScreen.screen,
-            lazyScreen.option
-          );
-        }
-      }
-    });
-  } catch (err) {
-    console.error(err);
-  }
+  registerComponent(screens.LOGIN.value, screens.SIGNUP.screen);
+  registerComponent(screens.SIGNUP.value, screens.SIGNUP.screen);
 };
 
 const registerComponent = (
@@ -47,7 +17,13 @@ const registerComponent = (
   defaultProps = {},
   isModalScreen = false
 ) => {
-  Navigation.registerComponent(routeName, () => <Screen {...defaultProps} />);
+  console.log("registerComponent:::", routeName);
+
+  Navigation.registerComponent(routeName, () => (props) => (
+    <MainProvider>
+      <Screen {...props} />
+    </MainProvider>
+  ));
 };
 
 const registerModalComponent = (routeName, Screen, defaultProps = {}) => {
@@ -57,7 +33,6 @@ const registerModalComponent = (routeName, Screen, defaultProps = {}) => {
 //#endregion ------------------------------------------------------------------------------------------------
 
 const onAppLaunched = () => {
-  console.log("onAppLaunched:::");
   loadInitialStatus();
 };
 

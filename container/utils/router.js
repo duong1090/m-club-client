@@ -28,7 +28,7 @@ export const gotoLogin = (options = {}) => {
   });
 };
 
-export const gotoSignup = () => {
+export const gotoSignup = (options = {}) => {
   Navigation.setRoot({
     root: {
       stack: {
