@@ -54,3 +54,7 @@ export const gotoSignup = (options = {}) => {
     },
   });
 };
+
+export const gotoHome = (option = {}) => {
+  
+};
