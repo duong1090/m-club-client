@@ -5,11 +5,12 @@ import React, {
   useImperativeHandle,
 } from "react";
 
-import { StyleSheet, View, TextInput, Platform } from "react-native";
+import { StyleSheet, View, TextInput, Platform, Text } from "react-native";
 import { color, scale, fontSize } from "container/variables/common";
 
 const InputItem = (props, ref) => {
   const {
+    type,
     style,
     placeholder,
     value,
@@ -55,22 +56,66 @@ const InputItem = (props, ref) => {
     }
   };
 
+  const renderOTPInput = () => {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingRight: scale(30),
+        }}
+      >
+        {placeholder ? (
+          <Text
+            style={{
+              fontSize: fontSize.size28,
+              color: color.fontColor,
+              marginRight: scale(15),
+              fontWeight: "bold",
+            }}
+          >
+            {placeholder}
+          </Text>
+        ) : null}
+        <TextInput
+          ref={inputRef}
+          value={value}
+          style={[styles.textInput, inputStyle]}
+          editable={!disabled}
+          onBlur={onBlur ? onBlur : null}
+          onFocus={onFocus ? onFocus : null}
+          autoCorrect={autoCorrect}
+          textAlign={textAlign ? textAlign : null}
+          keyboardType={keyboardType ? keyboardType : null}
+          maxLength={maxLength}
+          onChangeText={onChange}
+        />
+      </View>
+    );
+  };
+
   return (
     <View style={[styles.container, style]}>
-      <TextInput
-        ref={inputRef}
-        placeholder={placeholder}
-        value={value}
-        style={[styles.textInput, inputStyle]}
-        editable={!disabled}
-        onBlur={onBlur ? onBlur : null}
-        onFocus={onFocus ? onFocus : null}
-        autoCorrect={autoCorrect}
-        textAlign={textAlign ? textAlign : null}
-        keyboardType={keyboardType ? keyboardType : null}
-        maxLength={maxLength}
-        onChangeText={onChange}
-      />
+      {type == "otp" ? (
+        renderOTPInput()
+      ) : (
+        <TextInput
+          ref={inputRef}
+          placeholder={placeholder}
+          value={value}
+          type="number"
+          style={[styles.textInput, inputStyle]}
+          editable={!disabled}
+          onBlur={onBlur ? onBlur : null}
+          onFocus={onFocus ? onFocus : null}
+          autoCorrect={autoCorrect}
+          textAlign={textAlign ? textAlign : null}
+          keyboardType={keyboardType ? keyboardType : null}
+          maxLength={maxLength}
+          onChangeText={onChange}
+        />
+      )}
     </View>
   );
 };
@@ -90,6 +135,25 @@ const styles = StyleSheet.create({
     // fontFamily: "Roboto-Regular",
     color: color.fontColor,
     minHeight: scale(80),
+  },
+
+  otpInput: {
+    width: "80%",
+    fontSize: fontSize.size28,
+    // fontFamily: "Roboto-Regular",
+    color: "#000",
+    minHeight: scale(80),
+  },
+
+  underlineStyleBase: {
+    width: scale(50),
+    height: scale(100),
+    borderWidth: 0,
+    borderBottomWidth: scale(2),
+  },
+
+  underlineStyleHighLighted: {
+    borderColor: "#000",
   },
 });
 

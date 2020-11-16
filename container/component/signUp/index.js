@@ -44,7 +44,7 @@ const styles = {
   },
   elOneHeader: {
     height: scale(220),
-    backgroundColor: "#9A41AB",
+    backgroundColor: color.background,
   },
   elTwoHeader: {
     width: scale(164),

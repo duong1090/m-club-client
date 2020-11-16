@@ -14,6 +14,8 @@ import InputItem from "container/component/ui/inputItem";
 import { scale, color, fontSize } from "container/variables/common";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
+import { gotoRoute } from "container/utils/router";
+import screens from "container/constant/screen";
 
 const { width } = Dimensions.get("window");
 
@@ -94,6 +96,10 @@ const InformationPage = (props) => {
         }
       })
       .catch((err) => console.error(err));
+  };
+
+  const gotoSignIn = () => {
+    gotoRoute(screens.LOGIN);
   };
 
   return (
@@ -231,7 +237,7 @@ const InformationPage = (props) => {
         >
           {intl.formatMessage(Messages.have_an_account)}{" "}
         </Text>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => gotoSignIn()}>
           <Text
             style={{
               color: color.background,
