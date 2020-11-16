@@ -1,10 +1,12 @@
-export const screens = {
-  LOGIN: {
-    value: "LOGIN",
-    screen: require("container/component/logIn").default,
-  },
-  SIGNUP: {
-    value: "SIGNUP",
-    screen: require("container/component/signUp").default,
-  },
+const screens = {
+  HOME: "HOME",
+  TAB_ACCOUNT: "TAB_ACCOUNT",
+  TAB_NAVIGATE: "TAB_NAVIGATE",
+  TAB_NOTIFICATION: "TAB_NOTIFICATION",
+  TAB_TASK: "TAB_TASK",
+  LOGIN: "LOGIN",
+  SIGNUP: "SIGNUP",
+  MEMBER_RECORD: "MEMBER_RECORD",
 };
+
+export default screens;

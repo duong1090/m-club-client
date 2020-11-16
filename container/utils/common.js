@@ -1,19 +1,13 @@
-import { setItem } from "./storage";
+import { setItem, getItem } from "./storage";
 import { API_TOKEN } from "container/constant/storage";
 import DeviceInfo from "react-native-device-info";
 import JailMonkey from "jail-monkey";
 
-
 let Base64 = null;
-
-const global = {
-  apiToken: "",
-};
 
 export const setApiToken = (token) => {
   return new Promise((resolve, reject) => {
     try {
-      global.apiToken = token;
       setItem(API_TOKEN, token, (err) => {
         if (err) {
           reject(err);
@@ -27,7 +21,9 @@ export const setApiToken = (token) => {
 };
 
 export const getApiToken = () => {
-  return global.apiToken;
+  const apiToken = getItem(API_TOKEN);
+  if (apiToken) return apiToken;
+  return null;
 };
 
 export const buildDeviceInfo = async () => {

@@ -1,2 +1,3 @@
-export const API_TOKEN = "API_TOKEN";
-export const IS_FIRST_TIME = "IS_FIRST_TIME";
+export const API_TOKEN = "";
+export const LANG = "";
+export const IS_RECENT_TIME = "IS_RECENT_TIME";

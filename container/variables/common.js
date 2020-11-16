@@ -10,7 +10,10 @@ export const verticalScale = (size) => (height / guidelineBaseHeight) * size;
 
 export const color = {
   background: "#9A41AB",
+  topBarButtonColor: "#9A41AB",
+  topBarBgColor: "#9A41AB",
   fontColor: "#707070",
+  disable: "#9F9F9F",
 };
 
 export const fontSize = {
@@ -18,6 +21,7 @@ export const fontSize = {
   size48: scale(48),
   size44: scale(44),
   size42: scale(42),
+  size40: scale(40),
   size36: scale(36),
   size30: scale(30),
   size32: scale(32),

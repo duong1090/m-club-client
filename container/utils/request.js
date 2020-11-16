@@ -1,6 +1,8 @@
 import { getApiToken } from "./common";
 import { buildDeviceInfo } from "./common";
 import { Text, Alert } from "react-native";
+import { getItem } from "./storage";
+import { LANG } from "container/constant/storage";
 
 const constants = {
   APP_JSON_HEADER: "application/json",
@@ -14,7 +16,7 @@ const HttpCodes = {
 };
 
 const showServerError = (error, cb) => {
-  console.log("showServerError", error);
+  console.log("showServerError", error.message);
 
   const message = error.message ? (
     <Text>{error.message}</Text>
@@ -63,6 +65,9 @@ const checkStatus = (response) => {
       } else {
         error = new Error(response.statusText);
       }
+
+      response.json().then((json) => console.log("responesJSON:::", json));
+
       error.response = response;
       error.data = [response.statusText];
       // notify(error);
@@ -133,7 +138,7 @@ const postUpload = async (uri, method = "POST", data, quiet) => {
   console.log("postUpload");
 
   const token = getApiToken();
-  // var lang = store.getState().get("application").get("locale");
+  const lang = getItem(LANG) ? getItem(LANG) : "en";
 
   return fetch(uri, {
     retries: 2,
@@ -151,10 +156,9 @@ const postUpload = async (uri, method = "POST", data, quiet) => {
       Device: await buildDeviceInfo(),
       Authorization: "Bearer " + token,
       Connection: "close",
-      //Accept: 'application/x-www-form-urlencoded',
       Accept: "multipart/form-data",
       "Content-Type": "multipart/form-data",
-      // LANG: lang,
+      LANG: lang,
       "Cache-Control": "Private, No-Cache",
       Pragma: "no-cache",
       Expires: 0,
@@ -171,7 +175,8 @@ const postUpload = async (uri, method = "POST", data, quiet) => {
 const postPut = async (uri, method = "POST", data, quiet) => {
   const token = getApiToken();
   console.log("TOKEN ", token);
-  // var lang = store.getState().get("application").get("locale");
+  const lang = getItem(LANG) ? getItem(LANG) : "en";
+
   return fetch(uri, {
     retryDelay: 1000 * 5,
     method: method,
@@ -181,7 +186,7 @@ const postPut = async (uri, method = "POST", data, quiet) => {
       Accept: constants.APP_JSON_HEADER,
       "Content-Type": constants.APP_JSON_HEADER,
       Authorization: "Bearer " + token,
-      // LANG: lang,
+      LANG: lang,
       "Cache-Control": "Private, No-Cache",
       Pragma: "no-cache",
       Expires: 0,
@@ -255,7 +260,8 @@ export const postRequest = (url, params) => {
 export const get = async (uri, params = "", quiet) => {
   const token = getApiToken();
   console.log("tokkenenene", token);
-  // var lang = store.getState().get("application").get("locale");
+  const lang = getItem(LANG) ? getItem(LANG) : "en";
+
   if (params) {
     var esc = encodeURIComponent;
     var query = Object.keys(params)
@@ -284,7 +290,7 @@ export const get = async (uri, params = "", quiet) => {
       Device: deviceInfo,
       Accept: "application/json",
       Authorization: "Bearer " + token,
-      // LANG: lang,
+      LANG: lang,
       "Cache-Control": "Private, No-Cache",
       Pragma: "no-cache",
       Expires: 0,

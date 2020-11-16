@@ -1,14 +1,41 @@
 import React from "react";
-import { screens } from "container/constant/screen";
+import screens from "../constant/screen";
 import { Navigation } from "react-native-navigation";
-import { loadInitialStatus } from "container/action/initialize";
-import MainProvider from "container/provider";
+import { loadInitialStatus } from "../action/initialize";
+import MainProvider from "../provider";
+import { setCurrentScreen, popNavigatorStack } from "../utils/router";
 
 //#region Register Screen ------------------------------------------------------------------------------------------------
 
 export const registerLazyScreen = () => {
-  registerComponent(screens.LOGIN.value, screens.SIGNUP.screen);
-  registerComponent(screens.SIGNUP.value, screens.SIGNUP.screen);
+  registerComponent(
+    screens.LOGIN,
+    require("container/component/logIn").default
+  );
+  registerComponent(
+    screens.SIGNUP,
+    require("container/component/signUp").default
+  );
+  registerComponent(
+    screens.MEMBER_RECORD,
+    require("container/component/club/member/record").default
+  );
+  registerComponent(
+    screens.TAB_ACCOUNT,
+    require("container/component/tabAccount").default
+  );
+  registerComponent(
+    screens.TAB_NAVIGATE,
+    require("container/component/tabNavigate").default
+  );
+  registerComponent(
+    screens.TAB_NOTIFICATION,
+    require("container/component/tabNotification").default
+  );
+  registerComponent(
+    screens.TAB_TASK,
+    require("container/component/tabTask").default
+  );
 };
 
 const registerComponent = (
@@ -32,8 +59,18 @@ const registerModalComponent = (routeName, Screen, defaultProps = {}) => {
 
 //#endregion ------------------------------------------------------------------------------------------------
 
+//#region event  ------------------------------------------------------------------------------------------------
+
+Navigation.events().registerComponentDidAppearListener(
+  ({ componentId, componentName, passProps }) => {
+    setCurrentScreen(componentId, componentName, passProps);
+  }
+);
+
 const onAppLaunched = () => {
   loadInitialStatus();
 };
 
 Navigation.events().registerAppLaunchedListener(onAppLaunched);
+
+//#endregion

@@ -7,11 +7,13 @@ export const setItem = async (...args) => {
 export const getItem = async (...args) => {
   try {
     const value = await AsyncStorage.getItem(...args);
-    if (value !== null) {
+    if (value != null) {
       // value previously stored
+      return JSON.parse(value);
     }
   } catch (e) {
     // error reading value
+    return null;
   }
 };
 
