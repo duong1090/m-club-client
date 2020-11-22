@@ -2,7 +2,7 @@ import { getApiToken } from "./common";
 import { buildDeviceInfo } from "./common";
 import { Text, Alert } from "react-native";
 import { getItem } from "./storage";
-import { LANG } from "container/constant/storage";
+import { LANG, API_TOKEN } from "container/constant/storage";
 
 const constants = {
   APP_JSON_HEADER: "application/json",
@@ -137,10 +137,9 @@ const checkStatus = (response) => {
 const postUpload = async (uri, method = "POST", data, quiet) => {
   console.log("postUpload");
 
-  const token = getApiToken();
-  const lang = getItem(LANG) ? getItem(LANG) : "en";
-
-  return fetch(uri, {
+  const token = await getItem(API_TOKEN);
+  const lang = await getItem(LANG);
+  const config = {
     retries: 2,
     onRetry: ({ retriesLeft, retryDelay, response }) => {
       // retry on any network error, or 4xx or 5xx status codes
@@ -158,13 +157,19 @@ const postUpload = async (uri, method = "POST", data, quiet) => {
       Connection: "close",
       Accept: "multipart/form-data",
       "Content-Type": "multipart/form-data",
-      LANG: lang,
+      lang: lang ? lang : "en",
       "Cache-Control": "Private, No-Cache",
       Pragma: "no-cache",
       Expires: 0,
     },
     body: data,
-  }).then(
+  };
+
+  console.log("token:::", token);
+  console.log("lang:::", lang);
+  console.log("apiConfig:::", config);
+
+  return fetch(uri, config).then(
     checkStatus.bind({
       request: postUpload.bind(undefined, uri, method, data, true),
       quiet: quiet,
@@ -173,11 +178,9 @@ const postUpload = async (uri, method = "POST", data, quiet) => {
 };
 
 const postPut = async (uri, method = "POST", data, quiet) => {
-  const token = getApiToken();
-  console.log("TOKEN ", token);
-  const lang = getItem(LANG) ? getItem(LANG) : "en";
-
-  return fetch(uri, {
+  const token = await getItem(API_TOKEN);
+  const lang = await getItem(LANG);
+  const config = {
     retryDelay: 1000 * 5,
     method: method,
     credentials: constants.SAME_ORIGIN,
@@ -186,13 +189,19 @@ const postPut = async (uri, method = "POST", data, quiet) => {
       Accept: constants.APP_JSON_HEADER,
       "Content-Type": constants.APP_JSON_HEADER,
       Authorization: "Bearer " + token,
-      LANG: lang,
+      lang: lang ? lang : "en",
       "Cache-Control": "Private, No-Cache",
       Pragma: "no-cache",
       Expires: 0,
     },
     body: JSON.stringify(data),
-  }).then(
+  };
+
+  console.log("token:::", token);
+  console.log("lang:::", lang);
+  console.log("apiConfig:::", config);
+
+  return fetch(uri, config).then(
     checkStatus.bind({
       request: postPut.bind(undefined, uri, method, data, true),
       quiet: quiet,
@@ -258,9 +267,9 @@ export const postRequest = (url, params) => {
 //#region GET
 
 export const get = async (uri, params = "", quiet) => {
-  const token = getApiToken();
+  const token = await getItem(API_TOKEN);
   console.log("tokkenenene", token);
-  const lang = getItem(LANG) ? getItem(LANG) : "en";
+  const lang = await getItem(LANG);
 
   if (params) {
     var esc = encodeURIComponent;
@@ -273,7 +282,8 @@ export const get = async (uri, params = "", quiet) => {
   const deviceInfo = await buildDeviceInfo();
   console.log("get", uri, params, deviceInfo);
   console.log("token:::::", token);
-  return fetch(uri, {
+  console.log("lang:::", lang);
+  const config = {
     retries: 2,
     retryDelay: 1000 * 5,
     onRetry: function ({ retriesLeft, retryDelay, response }) {
@@ -287,15 +297,20 @@ export const get = async (uri, params = "", quiet) => {
     method: "GET",
     credentials: constants.SAME_ORIGIN,
     headers: {
+      Host: "tao-lao",
       Device: deviceInfo,
       Accept: "application/json",
       Authorization: "Bearer " + token,
-      LANG: lang,
+      LANG: lang ? lang : "en",
       "Cache-Control": "Private, No-Cache",
       Pragma: "no-cache",
       Expires: 0,
     },
-  })
+  };
+
+  console.log("apiConfig:::", config);
+
+  return fetch(uri, config)
     .then(
       checkStatus.bind({
         request: get.bind(undefined, uri, true),
