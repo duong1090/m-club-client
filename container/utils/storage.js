@@ -9,7 +9,7 @@ export const getItem = async (...args) => {
     const value = await AsyncStorage.getItem(...args);
     if (value != null) {
       // value previously stored
-      return JSON.parse(value);
+      return value;
     }
   } catch (e) {
     // error reading value

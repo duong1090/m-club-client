@@ -46,8 +46,7 @@ const InformationPage = (props) => {
       <Text style={styles.welcome}>
         {intl.formatMessage(Messages.welcome_to_mclub)}
       </Text>
-      {/* {tabs[activeTab]} */}
-      <InputOTP style={styles.inputOTP} />
+      {tabs[activeTab]}
     </View>
   );
 };

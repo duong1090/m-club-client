@@ -10,7 +10,6 @@ export const doLogin = async (payload) => {
       .then((res) => {
         if (res && res.data) {
           loginSuccess(res.data);
-          gotoHome();
         }
       })
       .catch((err) => reject(err));
@@ -20,6 +19,7 @@ export const doLogin = async (payload) => {
 export const loginSuccess = (payload) => {
   const { firebase_token } = payload;
   setItem(API_TOKEN, firebase_token);
+  gotoHome();
 };
 
 export const preValidateLogin = (payload) => {

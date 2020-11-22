@@ -1,11 +1,13 @@
-import auth from "@react-native-firebase/auth";
+// import auth from "@react-native-firebase/auth";
+import firebase from "../config/firebase.config";
+
+const { auth } = firebase;
 
 export const signInWithPhoneNumber = (phone) => {
-  console.log("signInWithPhoneNumber:::");
-
+  console.log("signInWithPhoneNumber::::", phone);
   return new Promise((resolve, reject) => {
     auth()
-      .signInWithPhoneNumber(`+84${"911674849"}`)
+      .signInWithPhoneNumber(`+84${phone}`)
       .then((confirmResult) => {
         console.log("signInWithPhoneNumber:::", confirmResult);
         resolve(confirmResult);
@@ -14,9 +16,9 @@ export const signInWithPhoneNumber = (phone) => {
   });
 };
 
-export const doActiveUser = () => {
+export const getIdToken = () => {
   return new Promise((resolve, reject) => {
-    auth.currentUser
+    auth().currentUser
       .getIdToken()
       .then((idToken) => {
         resolve(idToken);

@@ -12,7 +12,10 @@ import { certificateState } from "container/recoil/state/login";
 import { scale, color, fontSize } from "container/variables/common";
 import Messages from "container/translation/Message";
 import InputItem from "container/component/ui/inputItem";
-import { signInWithPhoneNumber } from "container/action/authenticate";
+import {
+  signInWithPhoneNumber,
+  getIdToken,
+} from "container/action/authenticate";
 import { doLogin, loginSuccess } from "container/action/user";
 import screens from "container/constant/screen";
 import { gotoRoute } from "container/utils/router";
@@ -35,18 +38,25 @@ const InputOTP = (props) => {
       .catch((err) => console.error(err));
   }, []);
 
-  const activeUser = () => {
-    if (confirmOTP) {
-      confirmOTP.confirm(otp).then((user) => {
-        if (user && certificate) {
-          const firebase_token = user.getIdToken();
-          let payload = {};
-          if (certificate.phone) payload.phone = certificate.phone;
-          if (certificate.club_id) payload.club_id = certificate.club_id;
-          if (firebase_token) payload.firebase_token = firebase_token;
-          doLogin(payload);
-        }
-      });
+  const activeUser = async () => {
+    if (confirmOTP && otp) {
+      confirmOTP
+        .confirm(otp)
+        .then((result) => {
+          if (result && certificate) {
+            getIdToken().then((token) => {
+              console.log("activeUser::::", token);
+              if (token) {
+                let payload = {};
+                if (certificate.phone) payload.phone_number = certificate.phone;
+                if (certificate.club_id) payload.club_id = certificate.club_id;
+                // payload.firebase_token = token;
+                doLogin(payload);
+              }
+            });
+          }
+        })
+        .catch((err) => console.error(err));
     }
   };
 
