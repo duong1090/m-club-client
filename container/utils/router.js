@@ -6,6 +6,7 @@ import { FormattedMessage } from "react-intl";
 import Messages from "container/translation/Message";
 import { Platform, Dimensions, PixelRatio, Vibration } from "react-native";
 import DeviceInfo from "react-native-device-info";
+import { getIntl } from "../utils/common";
 
 let currentScreen = null;
 
@@ -29,7 +30,7 @@ bottomTabsByID[screens.TAB_ACCOUNT] = () => ({
               rightButtonColor: color.topBarButtonColor,
               rightButtons: [],
               title: {
-                text: <FormattedMessage {...Messages.tab_account} />,
+                text: getIntl().formatMessage(Messages.tab_account),
                 alignment: "fill",
               },
               backButton: {
@@ -57,7 +58,7 @@ bottomTabsByID[screens.TAB_ACCOUNT] = () => ({
         titleDisplayMode: "alwaysShow",
       },
       bottomTab: {
-        text: <FormattedMessage {...Messages.tab_account} />,
+        text: getIntl().formatMessage(Messages.tab_account),
         // icon: require('@src/assets/icons/Tab_acc_in.png'),
         // selectedIcon: require('@src/assets/icons/Tab_acc_act.png'),
         testID: screens.TAB_ACCOUNT,
@@ -81,7 +82,7 @@ bottomTabsByID[screens.TAB_NAVIGATE] = () => ({
               rightButtonColor: color.topBarButtonColor,
               rightButtons: [],
               title: {
-                text: <FormattedMessage {...Messages.tab_navigate} />,
+                text: getIntl().formatMessage(Messages.tab_navigate),
                 alignment: "fill",
               },
               backButton: {
@@ -109,7 +110,7 @@ bottomTabsByID[screens.TAB_NAVIGATE] = () => ({
         titleDisplayMode: "alwaysShow",
       },
       bottomTab: {
-        text: <FormattedMessage {...Messages.tab_navigate} />,
+        text: getIntl().formatMessage(Messages.tab_navigate),
         // icon: require('@src/assets/icons/Tab_acc_in.png'),
         // selectedIcon: require('@src/assets/icons/Tab_acc_act.png'),
         testID: screens.TAB_NAVIGATE,
@@ -133,7 +134,7 @@ bottomTabsByID[screens.TAB_NOTIFICATION] = () => ({
               rightButtonColor: color.topBarButtonColor,
               rightButtons: [],
               title: {
-                text: <FormattedMessage {...Messages.tab_notification} />,
+                text: getIntl().formatMessage(Messages.tab_notification),
                 alignment: "fill",
               },
               backButton: {
@@ -161,7 +162,7 @@ bottomTabsByID[screens.TAB_NOTIFICATION] = () => ({
         titleDisplayMode: "alwaysShow",
       },
       bottomTab: {
-        text: <FormattedMessage {...Messages.tab_notification} />,
+        text: getIntl().formatMessage(Messages.tab_notification),
         // icon: require('@src/assets/icons/Tab_acc_in.png'),
         // selectedIcon: require('@src/assets/icons/Tab_acc_act.png'),
         testID: screens.TAB_NOTIFICATION,
@@ -185,7 +186,7 @@ bottomTabsByID[screens.TAB_TASK] = () => ({
               rightButtonColor: color.topBarButtonColor,
               rightButtons: [],
               title: {
-                text: <FormattedMessage {...Messages.tab_task} />,
+                text: getIntl().formatMessage(Messages.tab_task),
                 alignment: "fill",
               },
               backButton: {
@@ -213,7 +214,7 @@ bottomTabsByID[screens.TAB_TASK] = () => ({
         titleDisplayMode: "alwaysShow",
       },
       bottomTab: {
-        text: <FormattedMessage {...Messages.tab_task} />,
+        text: getIntl().formatMessage(Messages.tab_task),
         // icon: require('@src/assets/icons/Tab_acc_in.png'),
         // selectedIcon: require('@src/assets/icons/Tab_acc_act.png'),
         testID: screens.TAB_TASK,
@@ -221,13 +222,6 @@ bottomTabsByID[screens.TAB_TASK] = () => ({
     },
   },
 });
-
-const DEFAULT_TABS = [
-  bottomTabsByID[screens.TAB_NAVIGATE],
-  bottomTabsByID[screens.TAB_TASK],
-  bottomTabsByID[screens.TAB_NOTIFICATION],
-  bottomTabsByID[screens.TAB_ACCOUNT],
-];
 
 export const gotoLogin = (options = {}) => {
   console.log("gotoLogin:::");
@@ -262,6 +256,13 @@ export const gotoHome = (params = {}) => {
 };
 
 const navigationHomeTab = () => {
+  const defaultTabs = [
+    bottomTabsByID[screens.TAB_NAVIGATE](),
+    bottomTabsByID[screens.TAB_TASK](),
+    bottomTabsByID[screens.TAB_NOTIFICATION](),
+    bottomTabsByID[screens.TAB_ACCOUNT](),
+  ];
+
   Navigation.setRoot({
     root: {
       bottomTabs: {
@@ -278,7 +279,7 @@ const navigationHomeTab = () => {
                 : "onSwitchToTab",
           },
         },
-        children: DEFAULT_TABS,
+        children: defaultTabs,
       },
     },
   });

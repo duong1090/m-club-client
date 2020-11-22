@@ -1,9 +1,24 @@
 import { setItem, getItem } from "./storage";
-import { API_TOKEN } from "container/constant/storage";
+import { Text } from "react-native";
+
+import { API_TOKEN, LANG } from "container/constant/storage";
 import DeviceInfo from "react-native-device-info";
 import JailMonkey from "jail-monkey";
+import { createIntl, createIntlCache } from "react-intl";
+import { translationMessages } from "../translation/i18n";
 
 let Base64 = null;
+
+global.intl = createIntl(
+  {
+    locale: "en",
+    messages: translationMessages["en"],
+    textComponent: Text,
+  },
+  intlCache
+);
+
+const intlCache = createIntlCache();
 
 export const setApiToken = (token) => {
   return new Promise((resolve, reject) => {
@@ -64,4 +79,22 @@ export const buildDeviceInfo = async () => {
   } finally {
     return global.buildDeviceInfo;
   }
+};
+
+export const setIntl = async () => {
+  const lang = await getItem(LANG);
+  const intl = createIntl(
+    {
+      locale: lang ? lang : "en",
+      messages: lang ? translationMessages[lang] : translationMessages["en"],
+      textComponent: Text,
+    },
+    intlCache
+  );
+  console.log("setIntl::::");
+  global.intl = intl;
+};
+
+export const getIntl = () => {
+  return global.intl ? global.intl : null;
 };
