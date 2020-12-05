@@ -10,10 +10,34 @@ export const verticalScale = (size) => (height / guidelineBaseHeight) * size;
 
 export const color = {
   background: "#9A41AB",
+  backgroundColor: "#F1F1F1",
   topBarButtonColor: "#9A41AB",
   topBarBgColor: "#9A41AB",
   fontColor: "#707070",
   disable: "#9F9F9F",
+  hint: "#707070",
+  warning: "#F6BE00",
+  danger: "#DF3651",
+  border: "#707070",
+};
+
+export const shadow = {
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 1,
+  },
+  shadowOpacity: 0.22,
+  shadowRadius: 2.22,
+
+  elevation: 3,
+};
+
+export const space = {
+  bgPadding: scale(20),
+  componentMargin: scale(20),
+  itemMargin: scale(15),
+  border: scale(20),
 };
 
 export const fontSize = {
@@ -31,4 +55,11 @@ export const fontSize = {
   size22: scale(22),
   size20: scale(20),
   size18: scale(18),
+  sizeTitle: scale(32),
+  sizeBigContent: scale(30),
+  sizeContent: scale(28),
+};
+
+export const defaultText = {
+  color: "#222",
 };
