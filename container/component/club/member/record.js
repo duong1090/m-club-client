@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import InputItem from "container/component/ui/inputItem";
 import { injectIntl } from "react-intl";
-import { scale, color, fontSize } from "container/variables/common";
+import {
+  scale,
+  color,
+  fontSize,
+  defaultText,
+} from "container/variables/common";
 import Messages from "container/translation/Message";
 import { getRequest, postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
@@ -64,8 +69,11 @@ const MemberRecord = (props) => {
 
       <InputItem
         style={styles.input}
+        type="button"
+        label="Name"
+        required
+        onPress={() => {}}
         placeholder={intl.formatMessage(Messages.address)}
-        onChangeText={(text) => setInfo({ ...info, address: text })}
         value={address ? address : null}
       />
 
@@ -108,7 +116,9 @@ const MemberRecord = (props) => {
         style={[styles.button, { backgroundColor: color.background }]}
         onPress={() => createMember()}
       >
-        <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
+        <Text
+          style={{ color: "#fff", fontSize: fontSize.size28, ...defaultText }}
+        >
           {intl.formatMessage(Messages.create)}
         </Text>
       </TouchableOpacity>
