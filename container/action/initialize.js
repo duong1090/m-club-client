@@ -12,7 +12,7 @@ export const loadInitialStatus = async () => {
     //case 1: User logged in. go to HOME
     gotoHome();
   } else {
-    // gotoLogin();
-    gotoHome();
+    gotoLogin();
+    // gotoHome();
   }
 };
