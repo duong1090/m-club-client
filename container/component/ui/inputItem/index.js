@@ -5,8 +5,24 @@ import React, {
   useImperativeHandle,
 } from "react";
 
-import { StyleSheet, View, TextInput, Platform, Text } from "react-native";
-import { color, scale, fontSize } from "container/variables/common";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Platform,
+  Text,
+  TouchableOpacity,
+} from "react-native";
+import {
+  color,
+  scale,
+  fontSize,
+  defaultText,
+  space,
+} from "container/variables/common";
+import Messages from "container/translation/Message";
+import { injectIntl } from "react-intl";
+import { Icon } from "native-base";
 
 const InputItem = (props, ref) => {
   const {
@@ -23,6 +39,11 @@ const InputItem = (props, ref) => {
     keyboardType,
     maxLength,
     onChangeText,
+    label,
+    intl,
+    noIcon,
+    onPress,
+    required,
   } = props;
   const inputRef = useRef(null);
 
@@ -69,6 +90,7 @@ const InputItem = (props, ref) => {
         {placeholder ? (
           <Text
             style={{
+              ...defaultText,
               fontSize: fontSize.size28,
               color: color.fontColor,
               marginRight: scale(15),
@@ -95,33 +117,83 @@ const InputItem = (props, ref) => {
     );
   };
 
+  const renderInput = () => {
+    return (
+      <TextInput
+        ref={inputRef}
+        placeholder={placeholder}
+        value={value}
+        type="number"
+        style={[styles.textInput, inputStyle]}
+        editable={!disabled}
+        onBlur={onBlur ? onBlur : null}
+        onFocus={onFocus ? onFocus : null}
+        autoCorrect={autoCorrect}
+        textAlign={textAlign ? textAlign : null}
+        keyboardType={keyboardType ? keyboardType : null}
+        maxLength={maxLength}
+        onChangeText={onChange}
+      />
+    );
+  };
+
+  const renderButton = () => {
+    return (
+      <TouchableOpacity onPress={onPress}>
+        <View style={[styles.wrapButton, inputStyle]}>
+          {value ? (
+            <Text
+              style={{ ...defaultText }}
+              numberOfLines={1}
+              ellipsizeMode={"tail"}
+            >
+              {value}
+            </Text>
+          ) : (
+            <Text style={{ ...defaultText, color: color.hint }}>
+              {placeholder ? placeholder : intl.formatMessage(Messages.select)}
+            </Text>
+          )}
+          {!noIcon ? (
+            <Icon
+              name="caret-down"
+              style={{ color: color.hint, fontSize: scale(40) }}
+            />
+          ) : null}
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderItem = () => {
+    switch (type) {
+      case "otp":
+        return renderOTPInput();
+        break;
+      case "button":
+        return renderButton();
+        break;
+      default:
+        return renderInput();
+    }
+  };
+
   return (
     <View style={[styles.container, style]}>
-      {type == "otp" ? (
-        renderOTPInput()
-      ) : (
-        <TextInput
-          ref={inputRef}
-          placeholder={placeholder}
-          value={value}
-          type="number"
-          style={[styles.textInput, inputStyle]}
-          editable={!disabled}
-          onBlur={onBlur ? onBlur : null}
-          onFocus={onFocus ? onFocus : null}
-          autoCorrect={autoCorrect}
-          textAlign={textAlign ? textAlign : null}
-          keyboardType={keyboardType ? keyboardType : null}
-          maxLength={maxLength}
-          onChangeText={onChange}
-        />
-      )}
+      {label ? (
+        <View style={styles.label}>
+          <Text style={styles.textLabel}>{label}</Text>
+          {required ? <View style={styles.dot} /> : null}
+        </View>
+      ) : null}
+      <View style={styles.card}>{renderItem()}</View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  container: {},
+  card: {
     justifyContent: "center",
     height: scale(80),
     backgroundColor: "#F5EDF6",
@@ -130,6 +202,7 @@ const styles = StyleSheet.create({
     paddingVertical: scale(10),
   },
   textInput: {
+    ...defaultText,
     flex: 1,
     fontSize: fontSize.size28,
     // fontFamily: "Roboto-Regular",
@@ -155,6 +228,33 @@ const styles = StyleSheet.create({
   underlineStyleHighLighted: {
     borderColor: "#000",
   },
+
+  textLabel: {
+    ...defaultText,
+    fontSize: fontSize.size28,
+    fontWeight: "bold",
+    marginLeft: scale(30),
+    marginBottom: scale(5),
+  },
+  label: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  wrapButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flex: 1,
+    alignItems: "center",
+  },
+  dot: {
+    width: scale(15),
+    height: scale(15),
+    backgroundColor: color.danger,
+    borderRadius: scale(8),
+    marginLeft: scale(10),
+  },
 });
 
-export default forwardRef(InputItem);
+const intlComponent = injectIntl(InputItem);
+
+export default forwardRef(intlComponent);

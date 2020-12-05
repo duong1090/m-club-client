@@ -32,6 +32,7 @@ bottomTabsByID[screens.TAB_ACCOUNT] = () => ({
               title: {
                 text: getIntl().formatMessage(Messages.tab_account),
                 alignment: "fill",
+                color: "#fff",
               },
               backButton: {
                 color: color.topBarButtonColor,
@@ -84,6 +85,7 @@ bottomTabsByID[screens.TAB_NAVIGATE] = () => ({
               title: {
                 text: getIntl().formatMessage(Messages.tab_navigate),
                 alignment: "fill",
+                color: "#fff",
               },
               backButton: {
                 color: color.topBarButtonColor,
@@ -136,6 +138,7 @@ bottomTabsByID[screens.TAB_NOTIFICATION] = () => ({
               title: {
                 text: getIntl().formatMessage(Messages.tab_notification),
                 alignment: "fill",
+                color: "#fff",
               },
               backButton: {
                 color: color.topBarButtonColor,
@@ -188,6 +191,7 @@ bottomTabsByID[screens.TAB_TASK] = () => ({
               title: {
                 text: getIntl().formatMessage(Messages.tab_task),
                 alignment: "fill",
+                color: "#fff",
               },
               backButton: {
                 color: color.topBarButtonColor,
@@ -435,7 +439,7 @@ export const gotoRoute = (screen, config = {}) => {
                 ...topBar,
                 title: {
                   ...title,
-                  color: color.background,
+                  color: "#fff",
                   alignment: "center",
                 },
                 backButton: {
@@ -464,4 +468,25 @@ export const back = () => {
   } else {
     Navigation.pop(currentScreen.componentId);
   }
+};
+
+export const showSpinner = () => {
+  Navigation.showOverlay({
+    component: {
+      name: screens.SPINNER,
+      id: screens.SPINNER,
+      options: {
+        overlay: {
+          interceptTouchOutside: true,
+        },
+      },
+      passProps: {
+        show: true,
+      },
+    },
+  });
+};
+
+export const hideSpinner = () => {
+  Navigation.dismissOverlay(screens.SPINNER);
 };

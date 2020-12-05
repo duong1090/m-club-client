@@ -26,5 +26,12 @@
   "tab_navigate": "Điều hướng",
   "tab_notification": "Thông báo",
   "tab_task": "Công việc",
-  "otp": "OTP"
+  "otp": "OTP",
+  "member": "Thành viên",
+  "funds": "Quỹ tài chính",
+  "search_placeholder": "nhập để tìm kiếm...",
+  "edit": "Sửa",
+  "done": "Xong",
+  "empty_data": "Không có dữ liệu",
+  "select": "Chọn"
 }

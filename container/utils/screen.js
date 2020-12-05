@@ -8,6 +8,11 @@ import { setCurrentScreen, popNavigatorStack } from "../utils/router";
 //#region Register Screen ------------------------------------------------------------------------------------------------
 
 export const registerLazyScreen = () => {
+  Navigation.registerComponent(
+    screens.SPINNER,
+    () => require("container/component/ui/spinner").default
+  );
+
   registerComponent(
     screens.LOGIN,
     require("container/component/logIn").default
@@ -19,6 +24,14 @@ export const registerLazyScreen = () => {
   registerComponent(
     screens.MEMBER_RECORD,
     require("container/component/club/member/record").default
+  );
+  registerComponent(
+    screens.MEMBER_LIST,
+    require("container/component/club/member/list").default
+  );
+  registerComponent(
+    screens.MEMBER_DETAIL,
+    require("container/component/club/member/detail").default
   );
   registerComponent(
     screens.TAB_ACCOUNT,

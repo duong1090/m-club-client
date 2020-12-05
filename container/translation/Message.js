@@ -111,6 +111,38 @@ export default defineMessages({
   },
   otp: {
     id: "otp",
-    defaultMessage: 'OTP',
-  }
+    defaultMessage: "OTP",
+  },
+  member: {
+    id: "member",
+    defaultMessage: "Member",
+  },
+  have_no_member: {
+    id: "have_no_member",
+    defaultMessage: "Have no member",
+  },
+  funds: {
+    id: "funds",
+    defaultMessage: "Club Funds",
+  },
+  search_placeholder: {
+    id: "search_placeholder",
+    defaultMessage: "type something to search...",
+  },
+  edit: {
+    id: "edit",
+    defaultMessage: "Edit",
+  },
+  done: {
+    id: "done",
+    defaultMessage: "Done",
+  },
+  empty_data: {
+    id: "empty_data",
+    defaultMessage: "Empty data",
+  },
+  select: {
+    id: "select",
+    defaultMessage: "Select",
+  },
 });

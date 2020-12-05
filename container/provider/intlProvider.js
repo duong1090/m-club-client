@@ -1,6 +1,6 @@
 import React from "react";
 import { IntlProvider } from "react-intl";
-import { Text } from "react-native";
+import { Text, Platform } from "react-native";
 import { translationMessages } from "../translation/i18n";
 import { useRecoilValue } from "recoil";
 import { userState } from "container/recoil/state/user";

@@ -7,6 +7,9 @@ const screens = {
   LOGIN: "LOGIN",
   SIGNUP: "SIGNUP",
   MEMBER_RECORD: "MEMBER_RECORD",
+  MEMBER_LIST: "MEMBER_LIST",
+  MEMBER_DETAIL: "MEMBER_DETAIL",
+  SPINNER: "SPINNER",
 };
 
 export default screens;
