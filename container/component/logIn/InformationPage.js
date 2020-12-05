@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import { injectIntl } from "react-intl";
 import { View, Text, StyleSheet } from "react-native";
 import Messages from "container/translation/Message";
-import { scale, color, fontSize } from "container/variables/common";
+import {
+  scale,
+  color,
+  fontSize,
+  space,
+  defaultText,
+} from "container/variables/common";
 import InputPhone from "./InputPhone";
 import SelectClub from "./SelectClub";
 import InputOTP from "./InputOTP";
@@ -57,10 +63,11 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   welcome: {
+    ...defaultText,
     fontSize: fontSize.size50,
     color: color.fontColor,
     fontWeight: "bold",
-    marginBottom: scale(30),
+    marginBottom: space.componentMargin,
     alignSelf: "center",
   },
   selectClub: {

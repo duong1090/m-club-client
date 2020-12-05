@@ -9,7 +9,14 @@ import {
   FlatList,
 } from "react-native";
 import { Icon } from "native-base";
-import { scale, color, fontSize } from "container/variables/common";
+import {
+  scale,
+  color,
+  fontSize,
+  shadow,
+  space,
+  defaultText,
+} from "container/variables/common";
 import Messages from "container/translation/Message";
 
 const SelectClub = (props) => {
@@ -84,7 +91,9 @@ const SelectClub = (props) => {
         style={[styles.button, { backgroundColor: color.background }]}
         onPress={() => {}}
       >
-        <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
+        <Text
+          style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
+        >
           {intl.formatMessage(Messages.next)}
         </Text>
       </TouchableOpacity>
@@ -104,7 +113,8 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    marginBottom: scale(30),
+    ...defaultText,
+    marginBottom: space.componentMargin,
     alignSelf: "center",
     fontSize: fontSize.size36,
     color: color.background,
@@ -117,11 +127,11 @@ const styles = StyleSheet.create({
 
   item: {
     backgroundColor: "#fff",
-    padding: scale(30),
+    padding: space.bgPadding,
     borderRadius: scale(20),
-    marginBottom: scale(30),
+    marginBottom: space.componentMargin,
     borderWidth: scale(2),
-    elevation: 1,
+    ...shadow,
   },
 
   descriptionItem: {
@@ -131,12 +141,14 @@ const styles = StyleSheet.create({
   },
 
   titleItem: {
-    marginBottom: scale(30),
+    ...defaultText,
+    marginBottom: space.componentMargin,
     fontSize: fontSize.size32,
     fontWeight: "bold",
   },
 
   codeItem: {
+    ...defaultText,
     fontSize: fontSize.size28,
   },
 

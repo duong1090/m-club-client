@@ -9,7 +9,12 @@ import {
 } from "react-native";
 import { useRecoilValue } from "recoil";
 import { certificateState } from "container/recoil/state/login";
-import { scale, color, fontSize } from "container/variables/common";
+import {
+  scale,
+  color,
+  fontSize,
+  defaultText,
+} from "container/variables/common";
 import Messages from "container/translation/Message";
 import InputItem from "container/component/ui/inputItem";
 import {
@@ -76,7 +81,9 @@ const InputOTP = (props) => {
         style={[styles.button, { backgroundColor: color.background }]}
         onPress={() => activeUser()}
       >
-        <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
+        <Text
+          style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
+        >
           {intl.formatMessage(Messages.sign_in)}
         </Text>
       </TouchableOpacity>
@@ -84,6 +91,7 @@ const InputOTP = (props) => {
       <View style={styles.signUp}>
         <Text
           style={{
+            ...defaultText,
             color: color.fontColor,
             fontSize: fontSize.size28,
             fontWeight: "bold",
@@ -94,6 +102,7 @@ const InputOTP = (props) => {
         <TouchableOpacity onPress={() => {}}>
           <Text
             style={{
+              ...defaultText,
               color: color.background,
               fontSize: fontSize.size28,
               fontWeight: "bold",

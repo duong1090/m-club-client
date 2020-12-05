@@ -8,7 +8,12 @@ import {
   View,
 } from "react-native";
 import { useSetRecoilState } from "recoil";
-import { scale, color, fontSize } from "container/variables/common";
+import {
+  scale,
+  color,
+  fontSize,
+  defaultText,
+} from "container/variables/common";
 import Messages from "container/translation/Message";
 import InputItem from "container/component/ui/inputItem";
 import { preValidateLogin } from "container/action/user";
@@ -51,7 +56,9 @@ const InputPhone = (props) => {
         style={[styles.button, { backgroundColor: color.background }]}
         onPress={() => checkLogin()}
       >
-        <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
+        <Text
+          style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
+        >
           {intl.formatMessage(Messages.sign_in)}
         </Text>
       </TouchableOpacity>
@@ -59,6 +66,7 @@ const InputPhone = (props) => {
       <View style={styles.signUp}>
         <Text
           style={{
+            ...defaultText,
             color: color.fontColor,
             fontSize: fontSize.size28,
             fontWeight: "bold",
@@ -69,6 +77,7 @@ const InputPhone = (props) => {
         <TouchableOpacity onPress={() => gotoSignUp()}>
           <Text
             style={{
+              ...defaultText,
               color: color.background,
               fontSize: fontSize.size28,
               fontWeight: "bold",
