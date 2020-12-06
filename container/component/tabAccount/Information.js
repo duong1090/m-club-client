@@ -38,11 +38,12 @@ const styles = StyleSheet.create({
   },
   name: {
     ...defaultText,
-    fontSize: fontSize.size36,
+    fontSize: fontSize.sizeTitle,
+    fontWeight: "bold",
   },
   position: {
     ...defaultText,
-    fontSize: fontSize.size30,
+    fontSize: fontSize.sizeBigContent,
   },
 });
 

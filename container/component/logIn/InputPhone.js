@@ -20,6 +20,7 @@ import { preValidateLogin } from "container/action/user";
 import { clubListState, certificateState } from "container/recoil/state/login";
 import { gotoRoute } from "container/utils/router";
 import screens from "container/constant/screen";
+import { showSpinner, hideSpinner } from "container/utils/router";
 
 const InputPhone = (props) => {
   const { intl, style } = props;
@@ -32,11 +33,17 @@ const InputPhone = (props) => {
     let payload = {
       phone,
     };
+
+    showSpinner();
     preValidateLogin(payload)
       .then((clubList) => {
         if (clubList && clubList.length) setClubList(clubList);
+        hideSpinner();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        hideSpinner();
+      });
   };
 
   const gotoSignUp = () => {

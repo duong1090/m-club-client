@@ -463,7 +463,7 @@ export const setCurrentScreen = (componentId, componentName, passProps) => {
 };
 
 export const back = () => {
-  if (currentScreen && screens[currentScreen.componentId].isModal) {
+  if (currentScreen && screens[currentScreen.componentName].isModal) {
     Navigation.dismissModal(currentScreen.componentId);
   } else {
     Navigation.pop(currentScreen.componentId);

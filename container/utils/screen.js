@@ -49,6 +49,21 @@ export const registerLazyScreen = () => {
     screens.TAB_TASK,
     require("container/component/tabTask").default
   );
+
+  registerComponent(
+    screens.DEPARTMENT_LIST,
+    require("container/component/club/department/list").default
+  );
+
+  registerComponent(
+    screens.DEPARTMENT_DETAIL,
+    require("container/component/club/department/detail").default
+  );
+
+  registerComponent(
+    screens.DEPARTMENT_RECORD,
+    require("container/component/club/department/record").default
+  );
 };
 
 const registerComponent = (
@@ -76,7 +91,8 @@ const registerModalComponent = (routeName, Screen, defaultProps = {}) => {
 
 Navigation.events().registerComponentDidAppearListener(
   ({ componentId, componentName, passProps }) => {
-    setCurrentScreen(componentId, componentName, passProps);
+    if (componentName != screens.SPINNER)
+      setCurrentScreen(componentId, componentName, passProps);
   }
 );
 

@@ -145,4 +145,32 @@ export default defineMessages({
     id: "select",
     defaultMessage: "Select",
   },
+  create_success: {
+    id: "create_success",
+    defaultMessage: "Create successfully",
+  },
+  create_fail: {
+    id: "create_fail",
+    defaultMessage: "Create failed",
+  },
+  update_success: {
+    id: "update_success",
+    defaultMessage: "Update successfully",
+  },
+  update_fail: {
+    id: "update_fail",
+    defaultMessage: "Update failed",
+  },
+  delete_success: {
+    id: "delete_success",
+    defaultMessage: "Delete successfully",
+  },
+  delete_fail: {
+    id: "delete_fail",
+    defaultMessage: "Delete failed",
+  },
+  name_placeholder: {
+    id: "name_placeholder",
+    defaultMessage: "Enter name",
+  },
 });

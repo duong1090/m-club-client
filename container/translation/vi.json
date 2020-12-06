@@ -33,5 +33,6 @@
   "edit": "Sửa",
   "done": "Xong",
   "empty_data": "Không có dữ liệu",
-  "select": "Chọn"
+  "select": "Chọn",
+  "name_placeholder": "Nhập tên"
 }

@@ -83,6 +83,7 @@ export const buildDeviceInfo = async () => {
 
 export const setIntl = async () => {
   const lang = await getItem(LANG);
+  console.log("setIntl::::", lang);
   const intl = createIntl(
     {
       locale: lang ? lang : "en",

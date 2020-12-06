@@ -22,8 +22,7 @@ import {
   getIdToken,
 } from "container/action/authenticate";
 import { doLogin, loginSuccess } from "container/action/user";
-import screens from "container/constant/screen";
-import { gotoRoute } from "container/utils/router";
+import { showSpinner, hideSpinner } from "container/utils/router";
 
 const InputOTP = (props) => {
   const { intl, style } = props;
@@ -36,11 +35,16 @@ const InputOTP = (props) => {
 
   //function
   useEffect(() => {
+    showSpinner();
     signInWithPhoneNumber(certificate.phone)
       .then((confirm) => {
         if (confirm) setConfirmOTP(confirm);
+        hideSpinner();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        hideSpinner();
+      });
   }, []);
 
   const activeUser = async () => {
@@ -55,7 +59,7 @@ const InputOTP = (props) => {
                 let payload = {};
                 if (certificate.phone) payload.phone_number = certificate.phone;
                 if (certificate.club_id) payload.club_id = certificate.club_id;
-                // payload.firebase_token = token;
+                payload.firebase_token = token;
                 doLogin(payload);
               }
             });

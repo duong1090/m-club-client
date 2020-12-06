@@ -1,7 +1,7 @@
 import React from "react";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import {
   scale,
   color,
@@ -14,7 +14,7 @@ import { Icon } from "native-base";
 import InputItem from "container/component/ui/inputItem";
 
 const SimpleRecord = (props) => {
-  const { mode, intl, header, data, fields } = props;
+  const { mode, intl, header, data, fields, onSubmit } = props;
 
   //render
   return (
@@ -24,7 +24,7 @@ const SimpleRecord = (props) => {
           <Icon
             type="MaterialCommunityIcons"
             name="pencil"
-            style={style.iconSymbol}
+            style={styles.iconSymbol}
           />
           {mode === "edit" ? (
             <Text style={styles.titleSymbol}>
@@ -42,7 +42,8 @@ const SimpleRecord = (props) => {
             ? fields.map((item) => (
                 <InputItem
                   style={styles.inputField}
-                  label={item.fieldName}
+                  label={item.name}
+                  required={item.required ? item.required : false}
                   placeholder={item.placeholder ? item.placeholder : null}
                   onChangeText={item.onChangeText}
                   value={
@@ -52,7 +53,7 @@ const SimpleRecord = (props) => {
               ))
             : null}
         </View>
-        <TouchableOpacity style={styles.doneBox}>
+        <TouchableOpacity style={styles.doneBox} onPress={onSubmit}>
           <Text style={styles.titleSymbol}>
             {intl.formatMessage(Messages.done)}
           </Text>
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
   container: {
     padding: space.bgPadding,
     backgroundColor: color.backgroundColor,
+    height: "100%",
   },
   card: {
     backgroundColor: "#fff",
@@ -75,29 +77,38 @@ const styles = StyleSheet.create({
   },
   iconSymbol: {
     color: "#fff",
-    fontSize: scale(50),
+    fontSize: scale(39),
     alignItems: "center",
-    marginRight: space.componentMargin,
+    marginRight: scale(10),
   },
   symbol: {
-    padding: scale(15),
-    borderRadius: space.border,
+    flexDirection: "row",
+    paddingVertical: scale(15),
+    paddingHorizontal: scale(20),
+    borderRadius: scale(40),
     backgroundColor: color.background,
+    alignSelf: "flex-start",
+    alignItems: "center",
+    marginBottom: scale(60),
   },
   titleSymbol: {
     ...defaultText,
     color: "#fff",
+    fontSize: fontSize.sizeBigContent,
+    fontWeight: "bold",
   },
   inputField: {
-    marginBottom: space.componentMargin,
+    marginBottom: scale(60),
   },
   doneBox: {
-    padding: scale(15),
+    paddingVertical: scale(15),
+    paddingHorizontal: scale(20),
     backgroundColor: color.warning,
     borderRadius: scale(40),
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "flex-end",
+    ...shadow,
   },
 });
 

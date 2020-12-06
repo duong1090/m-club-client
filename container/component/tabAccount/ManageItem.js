@@ -11,13 +11,13 @@ import {
 
 const ManageItem = (props) => {
   //props
-  const { style, data, onPress } = props;
+  const { style, data, onPress, icon } = props;
 
   const title = data.title ? data.title : "";
 
   return (
     <TouchableOpacity onPress={onPress} style={[styles.container, style]}>
-      <View style={styles.icon}></View>
+      <View style={styles.icon}>{icon}</View>
       <Text style={styles.title}>{title}</Text>
     </TouchableOpacity>
   );
@@ -35,11 +35,10 @@ const styles = StyleSheet.create({
   icon: {
     width: "20%",
     aspectRatio: 1,
-    borderWidth: scale(2),
   },
   title: {
     ...defaultText,
-    fontSize: fontSize.size30,
+    fontSize: fontSize.sizeBigContent,
   },
 });
 

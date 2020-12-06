@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   TouchableOpacity,
   View,
@@ -18,6 +18,7 @@ import {
   defaultText,
 } from "container/variables/common";
 import ActionButton from "react-native-action-button";
+import { showSpinner, hideSpinner } from "container/utils/router";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 
 const SimpleList = (props) => {
@@ -29,7 +30,15 @@ const SimpleList = (props) => {
     styleTextItem,
     styleDesItem,
     onPressItem,
+    loading,
+    loadMore,
   } = props;
+
+  //effect
+  useEffect(() => {
+    if (loading) showSpinner();
+    else hideSpinner();
+  }, [loading]);
 
   const renderItem = (item) => {
     return (
@@ -50,16 +59,31 @@ const SimpleList = (props) => {
     );
   };
 
+  const renderEmpty = () => {
+    return (
+      <View style={styles.boxEmpty}>
+        <Text style={styles.textEmpty}>
+          {intl.formatMessage(Messages.empty_data)}
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <SearchBox />
-      <FlatList
-        style={styles.body}
-        data={data}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => renderItem(item)}
-        contentContainerStyle={{ paddingBottom: scale(30) }}
-      />
+      {data && data.length ? (
+        <FlatList
+          style={styles.body}
+          data={data}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => renderItem(item)}
+          contentContainerStyle={{ paddingBottom: scale(30) }}
+          onEndReached={loadMore}
+        />
+      ) : (
+        renderEmpty()
+      )}
       {addNewItem ? (
         <ActionButton
           offsetX={scale(30)}
@@ -78,7 +102,7 @@ const SimpleList = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "red",
+    backgroundColor: color.backgroundColor,
     height: "100%",
   },
   body: {
@@ -117,6 +141,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     height: 22,
     color: "white",
+  },
+  boxEmpty: {
+    marginTop: scale(60),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textEmpty: {
+    ...defaultText,
+    fontSize: fontSize.sizeBigContent,
   },
 });
 
