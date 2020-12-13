@@ -53,3 +53,12 @@ export const getOrganization = () => {
       .catch((err) => reject(err));
   });
 };
+
+export const getAvatarSource = (data = {}) => {
+  if (data && (data.id || data.user_id)) {
+    const id = data.id || data.user_id;
+    return Config.API_IMAGE.concat(`avatar/${id}.jpg`);
+  }
+  return null;
+  // return Config.API_IMAGE.concat(`avatar/ava.jpg`);
+};
