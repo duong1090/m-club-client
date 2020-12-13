@@ -61,5 +61,5 @@ export const fontSize = {
 };
 
 export const defaultText = {
-  color: "#222",
+  color: "#333",
 };
