@@ -31,14 +31,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: space.bgPadding,
     borderRadius: scale(20),
+    alignItems: "center",
     ...shadow,
   },
   info: {
-    marginLeft: space.componentMargin,
+    marginLeft: scale(40),
   },
   name: {
     ...defaultText,
-    fontSize: fontSize.sizeTitle,
+    fontSize: fontSize.size36,
     fontWeight: "bold",
   },
   position: {
