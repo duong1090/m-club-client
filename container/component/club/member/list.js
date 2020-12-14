@@ -16,7 +16,7 @@ const MemberList = (props) => {
   //props
   const { changeMode } = props;
   //state
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const [meta, setMeta] = useState({});
   const [loading, setLoading] = useState(false);
   const page = 1;

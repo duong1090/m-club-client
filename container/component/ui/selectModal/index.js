@@ -10,7 +10,7 @@ import Config from "container/config/server.config";
 import { getRequest } from "container/utils/request";
 import { Navigation } from "react-native-navigation";
 import { back } from "container/utils/router";
-import { getIntl } from "../utils/common";
+import { getIntl } from "../../../utils/common";
 
 const SelectModal = (props) => {
   const {
@@ -131,8 +131,8 @@ const SelectModal = (props) => {
           {item.title
             ? item.title
             : optionIndexName
-            ? item[optionIndexName]
-            : item.name}
+              ? item[optionIndexName]
+              : item.name}
         </Text>
         {isSelected ? (
           <Icon
@@ -163,10 +163,10 @@ const SelectModal = (props) => {
           />
         </View>
       ) : (
-        <Text style={styles.text}>
-          {intl.formatMessage(Messages.empty_data)}
-        </Text>
-      )}
+            <Text style={styles.text}>
+              {intl.formatMessage(Messages.empty_data)}
+            </Text>
+          )}
     </Container>
   );
 };
@@ -177,13 +177,13 @@ SelectModal.options = (passProps) => {
 
   const rightButtons = multiSelect
     ? [
-        {
-          id: "done",
-          system: "done",
-          text: getIntl().formatMessage(Messages.done),
-          showAsAction: "always",
-        },
-      ]
+      {
+        id: "done",
+        system: "done",
+        text: getIntl().formatMessage(Messages.done),
+        showAsAction: "always",
+      },
+    ]
     : [];
   return {
     topBar: {
