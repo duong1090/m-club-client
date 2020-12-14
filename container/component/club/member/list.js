@@ -1,70 +1,113 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  listMemberState,
+  currMemberState,
+} from "container/recoil/state/club/member";
 import { View } from "react-native";
-import SimpleList from "container/component/ui/simpleList";
-import screens from "container/constant/screen";
-import { gotoRoute } from "container/utils/router";
 import { Icon } from "native-base";
 import { scale, defaultText } from "container/variables/common";
-import Messages from "container/translation/Message";
-import { Navigation } from "react-native-navigation";
-import { injectIntl } from "react-intl";
-
-const data = [
-  { name: "Pham Thai Duong", description: "Chu nhiem" },
-  { name: "Le Duc Khang", description: "Pho chu nhiem" },
-  { name: "Pham Thai Duong", description: "Chu nhiem" },
-  { name: "Le Duc Khang", description: "Pho chu nhiem" },
-  { name: "Pham Thai Duong", description: "Chu nhiem" },
-  { name: "Le Duc Khang", description: "Pho chu nhiem" },
-  { name: "Pham Thai Duong", description: "Chu nhiem" },
-  { name: "Le Duc Khang", description: "Pho chu nhiem" },
-  { name: "Pham Thai Duong", description: "Chu nhiem" },
-  { name: "Le Duc Khang", description: "Pho chu nhiem" },
-  { name: "Pham Thai Duong", description: "Chu nhiem" },
-  { name: "Le Duc Khang", description: "Pho chu nhiem" },
-  { name: "Pham Thai Duong", description: "Chu nhiem" },
-  { name: "Le Duc Khang", description: "Pho chu nhiem" },
-];
+import { getRequest } from "container/utils/request";
+import Config from "container/config/server.config";
+import SimpleList from "container/component/ui/simpleList";
+import Avatar from "container/component/ui/avatar";
 
 const MemberList = (props) => {
-  const { componentId, intl } = props;
+  //props
+  const { changeMode } = props;
+  //state
+  const [data, setData] = useState([]);
+  const [meta, setMeta] = useState({});
+  const [loading, setLoading] = useState(false);
+  const page = 1;
 
-  //default option topBar
-  Navigation.mergeOptions(componentId, {
-    topBar: {
-      visible: true,
-      title: {
-        text: intl.formatMessage(Messages.member),
-      },
-    },
-  });
+  //recoil
+  const [data, setData] = useRecoilState(listMemberState);
+  const setCurrMember = useSetRecoilState(currMemberState);
 
-  //#region  navigate
-  const gotoRecord = (mode) => {
-    gotoRoute(screens.MEMBER_RECORD);
-  };
+  //#region effect
+  useEffect(() => {
+    getList();
+  }, []);
 
   //#endregion
 
-  //#region event - function
-  const onPressItem = (item) => {};
-  
+  console.log();
+
+  //#region function - event
+  const gotoRecord = (mode = "create") => {
+    // gotoRoute(screens.DEPARTMENT_EDIT, { mode });
+    console.log("changeMode:::", mode, changeMode);
+    changeMode && changeMode(mode);
+  };
+
+  const onPressItem = (item) => {
+    setCurrMember(item);
+    changeMode && changeMode("detail");
+  };
+
+  const transform = (data) => {
+    let temp = JSON.parse(JSON.stringify(data));
+    temp.map((item, index) => {
+      item.title = data[index].name;
+      return item;
+    });
+    return temp;
+  };
+
+  const getList = (page = 1) => {
+    getRequest(Config.API_URL.concat("member/get"), { page })
+      .then((res) => {
+        if (res && res.data && res.data.items) {
+          console.log("getList:::", res.data);
+          if (page > 1) {
+            let temp = [...data];
+            temp.concat(transform(res.data.items));
+            setData(temp);
+          } else {
+            let temp = transform(res.data.items);
+            setData(temp);
+          }
+          setMeta(res.data.meta);
+          setLoading(false);
+        }
+      })
+      .then((err) => {
+        setLoading(false);
+        console.error(err);
+      });
+  };
+
+  const loadMore = () => {
+    if (meta.total_page && page < meta.total_page) {
+      page++;
+      getList(page);
+    }
+  };
+
   //#endregion
 
   //render
   return (
     <View>
       <SimpleList
+        loading={loading}
         data={data}
+        iconHeader={(item) => <Avatar data={item} size={scale(50)} />}
         addNewItem={gotoRecord}
         styleTextItem={{ fontWeight: "bold" }}
         onPressItem={(item) => onPressItem(item)}
         iconItem={
-          <Icon name="home" style={{ ...defaultText, fontSize: scale(30) }} />
+          <Icon
+            type="FontAwesome5"
+            name="user"
+            style={{ ...defaultText, fontSize: scale(30) }}
+          />
         }
+        loadMore={loadMore}
       />
     </View>
   );
 };
 
-export default injectIntl(MemberList);
+export default MemberList;
