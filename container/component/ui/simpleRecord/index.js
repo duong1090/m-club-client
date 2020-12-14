@@ -14,11 +14,21 @@ import { Icon } from "native-base";
 import InputItem from "container/component/ui/inputItem";
 
 const SimpleRecord = (props) => {
-  const { mode, intl, header, data, fields, onSubmit } = props;
+  const { mode, intl, header, data, fields, onSubmit, backButton } = props;
 
   //render
   return (
     <View style={styles.container}>
+      {backButton ? (
+        <TouchableOpacity
+          onPress={() => backButton.onPress()}
+          style={styles.backButton}
+        >
+          <Icon name="caret-back" style={styles.backIcon} />
+          <Text style={styles.backText}>{backButton.title}</Text>
+        </TouchableOpacity>
+      ) : null}
+
       <View style={styles.card}>
         <View style={styles.symbol}>
           <Icon
@@ -39,15 +49,20 @@ const SimpleRecord = (props) => {
         {header ? header(data) : null}
         <View>
           {fields && fields.length
-            ? fields.map((item) => (
+            ? fields.map((item, index) => (
                 <InputItem
+                  type={item.type ? item.type : null}
+                  key={index}
                   style={styles.inputField}
+                  onPress={item.onPress ? item.onPress : null}
                   label={item.name}
                   required={item.required ? item.required : false}
                   placeholder={item.placeholder ? item.placeholder : null}
-                  onChangeText={item.onChangeText}
+                  onChangeText={item.onChangeText ? item.onChangeText : null}
                   value={
-                    data && data[item.fieldName] ? data[item.fieldName] : null
+                    mode != "create" && data && data[item.fieldName]
+                      ? data[item.fieldName]
+                      : null
                   }
                 />
               ))
@@ -109,6 +124,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "flex-end",
     ...shadow,
+  },
+  backButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    alignSelf: "flex-start",
+    marginBottom: space.componentMargin,
+  },
+  backText: {
+    ...defaultText,
+    fontSize: fontSize.size32,
+    color: color.hint,
+    fontWeight: "bold",
+  },
+  backIcon: {
+    fontSize: scale(40),
+    color: color.hint,
   },
 });
 

@@ -32,6 +32,7 @@ const SimpleList = (props) => {
     onPressItem,
     loading,
     loadMore,
+    iconHeader,
   } = props;
 
   //effect
@@ -44,9 +45,9 @@ const SimpleList = (props) => {
     return (
       <TouchableOpacity onPress={() => onPressItem(item)} style={styles.item}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <View style={styles.dot} />
+          {iconHeader ? iconHeader(item) : <View style={styles.dot} />}
           <View>
-            <Text style={[styles.textItem, styleTextItem]}>{item.name}</Text>
+            <Text style={[styles.textItem, styleTextItem]}>{item.title}</Text>
             {item.description ? (
               <Text style={[styles.description, styleDesItem]}>
                 {item.description}

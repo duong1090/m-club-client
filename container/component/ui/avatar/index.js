@@ -31,10 +31,8 @@ const Avatar = (props) => {
   const getAvatar = async () => {
     setLoading(true);
     const url = await getAvatarSource(data);
-    if (url) {
-      setAvatar(url);
-      setLoading(false);
-    }
+    if (url) setAvatar(url);
+    setLoading(false);
   };
 
   const getColorByName = (firstLetter) => {

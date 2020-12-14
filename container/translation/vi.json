@@ -34,5 +34,20 @@
   "done": "Xong",
   "empty_data": "Không có dữ liệu",
   "select": "Chọn",
-  "name_placeholder": "Nhập tên"
+  "name_placeholder": "Nhập tên",
+  "list": "Danh sách",
+  "create_success": "Tạo thành công",
+  "create_fail": "Tạo không thành công",
+  "update_success": "Cập nhật thành công",
+  "update_fail": "Cập nhật không thành công",
+  "delete": "Xoá",
+  "delete_success": "Xoá thành công",
+  "delete_fail": "Xoá không thành công",
+  "phone_placeholder": "Nhập số điện thoại",
+  "address_placeholder": "Nhập địa chỉ",
+  "email_placeholder": "Nhập email",
+  "sex_placeholder": "Chọn giới tính",
+  "birthday_placeholder": "Chọn ngày sinh",
+  "department_placeholder": "Chọn phòng ban",
+  "position_placeholder": "Chọn chức danh"
 }

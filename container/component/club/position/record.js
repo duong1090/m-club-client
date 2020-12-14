@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { injectIntl, FormattedMessage } from "react-intl";
 import { useRecoilState } from "recoil";
 import {
-  listDepartmentState,
-  currDepartmentState,
-} from "container/recoil/state/club/department";
+  currPositionState,
+  listPositionState,
+} from "container/recoil/state/club/position";
 import Messages from "container/translation/Message";
 import { View } from "react-native";
 import { postRequest } from "container/utils/request";
@@ -17,15 +17,15 @@ const DEFAULT_INFO = {
   name: "",
 };
 
-const DepartmentRecord = (props) => {
+const PositionRecord = (props) => {
   //props
   const { mode, intl, changeMode } = props;
   //state
   const [info, setInfo] = useState(DEFAULT_INFO);
 
   //recoil
-  const [data, setData] = useRecoilState(currDepartmentState);
-  const [list, setList] = useRecoilState(listDepartmentState);
+  const [data, setData] = useRecoilState(currPositionState);
+  const [list, setList] = useRecoilState(listPositionState);
 
   //#region effect
   useEffect(() => {
@@ -71,7 +71,7 @@ const DepartmentRecord = (props) => {
 
   const create = () => {
     showSpinner();
-    postRequest(Config.API_URL.concat("department/create"), info)
+    postRequest(Config.API_URL.concat("position/create"), info)
       .then((res) => {
         if (res && res.data) createSuccess(res.data);
         hideSpinner();
@@ -106,7 +106,7 @@ const DepartmentRecord = (props) => {
     let params = { ...info };
     if (data && data.id) params.id = data.id;
 
-    postRequest(Config.API_URL.concat("department/update"), params)
+    postRequest(Config.API_URL.concat("position/update"), params)
       .then((res) => {
         if (res && res.data) updateSuccess();
         hideSpinner();
@@ -149,4 +149,4 @@ const DepartmentRecord = (props) => {
   );
 };
 
-export default injectIntl(DepartmentRecord);
+export default injectIntl(PositionRecord);

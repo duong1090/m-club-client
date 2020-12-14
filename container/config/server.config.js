@@ -1,8 +1,11 @@
+const server = "172.168.81.221:8888";
+//android emulator server
+// const server = "10.0.2.2:8888";
+
 const Config = () => {
   const development = {
-    // API_URL: "http://10.0.2.2:8888/api/",
-    API_URL: "http://113.172.214.57:1000/api/",
-    API_IMAGE: "http://113.172.214.57:1000/files/images/",
+    API_URL: `http://${server}/api/`,
+    API_IMAGE: `http://${server}/files/images/`,
   };
   return development;
 };

@@ -13,6 +13,7 @@ export const color = {
   backgroundColor: "#F1F1F1",
   topBarButtonColor: "#fff",
   topBarBgColor: "#9A41AB",
+  action: "#9A41AB",
   fontColor: "#707070",
   disable: "#9F9F9F",
   hint: "#707070",

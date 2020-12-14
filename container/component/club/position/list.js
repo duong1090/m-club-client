@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
-  listDepartmentState,
-  currDepartmentState,
-} from "container/recoil/state/club/department";
+  listPositionState,
+  currPositionState,
+} from "container/recoil/state/club/position";
 import { View } from "react-native";
 import { Icon } from "native-base";
 import { scale, defaultText } from "container/variables/common";
@@ -11,7 +11,7 @@ import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
 
-const DepartmentList = (props) => {
+const PositionList = (props) => {
   //props
   const { changeMode } = props;
   //state
@@ -21,8 +21,8 @@ const DepartmentList = (props) => {
   const page = 1;
 
   //recoil
-  const [data, setData] = useRecoilState(listDepartmentState);
-  const setCurrDepartment = useSetRecoilState(currDepartmentState);
+  const [data, setData] = useRecoilState(listPositionState);
+  const setCurrPosition = useSetRecoilState(currPositionState);
 
   //#region effect
   useEffect(() => {
@@ -35,13 +35,12 @@ const DepartmentList = (props) => {
 
   //#region function - event
   const gotoRecord = (mode = "create") => {
-    // gotoRoute(screens.DEPARTMENT_EDIT, { mode });
     console.log("changeMode:::", mode, changeMode);
     changeMode && changeMode(mode);
   };
 
   const onPressItem = (item) => {
-    setCurrDepartment(item);
+    setCurrPosition(item);
     changeMode && changeMode("detail");
   };
 
@@ -55,7 +54,7 @@ const DepartmentList = (props) => {
   };
 
   const getList = (page = 1) => {
-    getRequest(Config.API_URL.concat("department/get"), { page })
+    getRequest(Config.API_URL.concat("position/get"), { page })
       .then((res) => {
         if (res && res.data && res.data.items) {
           console.log("getList:::", res.data);
@@ -96,7 +95,11 @@ const DepartmentList = (props) => {
         styleTextItem={{ fontWeight: "bold" }}
         onPressItem={(item) => onPressItem(item)}
         iconItem={
-          <Icon name="people" style={{ ...defaultText, fontSize: scale(30) }} />
+          <Icon
+            type="FontAwesome5"
+            name="user-tag"
+            style={{ ...defaultText, fontSize: scale(30) }}
+          />
         }
         loadMore={loadMore}
       />
@@ -104,4 +107,4 @@ const DepartmentList = (props) => {
   );
 };
 
-export default DepartmentList;
+export default PositionList;

@@ -7,21 +7,21 @@ import { scale, color, defaultText } from "container/variables/common";
 import { Icon } from "native-base";
 import SimpleDetail from "container/component/ui/simpleDetail";
 import {
-  currDepartmentState,
-  listDepartmentState,
-} from "container/recoil/state/club/department";
+  currPositionState,
+  listPositionState,
+} from "container/recoil/state/club/position";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import Toast from "react-native-simple-toast";
 
-const DepartmentDetail = (props) => {
+const PositionDetail = (props) => {
   //props
   const { intl, changeMode } = props;
 
   //recoil
-  const [data, setData] = useRecoilState(currDepartmentState);
-  const [list, setList] = useRecoilState(listDepartmentState);
+  const [data, setData] = useRecoilState(currPositionState);
+  const [list, setList] = useRecoilState(listPositionState);
 
   //#region effect
   useEffect(() => {
@@ -43,7 +43,7 @@ const DepartmentDetail = (props) => {
 
     let params = {};
     if (data && data.id) params.id = data.id;
-    postRequest(Config.API_URL.concat("department/delete"), params)
+    postRequest(Config.API_URL.concat("position/delete"), params)
       .then((res) => {
         if (res && res.data) {
           deleteSuccess();
@@ -73,7 +73,7 @@ const DepartmentDetail = (props) => {
         iconHeader={
           <Icon
             type="FontAwesome5"
-            name="users"
+            name="user-tag"
             style={{ ...defaultText, fontSize: scale(50), color: "#fff" }}
           />
         }
@@ -118,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default injectIntl(DepartmentDetail);
+export default injectIntl(PositionDetail);

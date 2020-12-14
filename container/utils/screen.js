@@ -13,6 +13,7 @@ export const registerLazyScreen = () => {
     () => require("container/component/ui/spinner").default
   );
 
+  //#region component
   registerComponent(
     screens.LOGIN,
     require("container/component/logIn").default
@@ -22,16 +23,8 @@ export const registerLazyScreen = () => {
     require("container/component/signUp").default
   );
   registerComponent(
-    screens.MEMBER_RECORD,
-    require("container/component/club/member/record").default
-  );
-  registerComponent(
-    screens.MEMBER_LIST,
-    require("container/component/club/member/list").default
-  );
-  registerComponent(
-    screens.MEMBER_DETAIL,
-    require("container/component/club/member/detail").default
+    screens.MEMBER,
+    require("container/component/club/member").default
   );
   registerComponent(
     screens.TAB_ACCOUNT,
@@ -51,19 +44,22 @@ export const registerLazyScreen = () => {
   );
 
   registerComponent(
-    screens.DEPARTMENT_LIST,
-    require("container/component/club/department/list").default
+    screens.DEPARTMENT,
+    require("container/component/club/department").default
   );
 
   registerComponent(
-    screens.DEPARTMENT_DETAIL,
-    require("container/component/club/department/detail").default
+    screens.POSITION,
+    require("container/component/club/position").default
   );
+  //#endregion
 
-  registerComponent(
-    screens.DEPARTMENT_RECORD,
-    require("container/component/club/department/record").default
+  //#region modal
+  registerModalComponent(
+    screens.SELECT_MODAL,
+    require("container/component/ui/selectModal").default
   );
+  //#endregion
 };
 
 const registerComponent = (
@@ -76,7 +72,7 @@ const registerComponent = (
 
   Navigation.registerComponent(routeName, () => (props) => (
     <MainProvider>
-      <Screen {...props} />
+      <Screen {...props} {...defaultProps} />
     </MainProvider>
   ));
 };

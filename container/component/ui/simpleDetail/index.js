@@ -9,6 +9,7 @@ import {
   space,
   defaultText,
 } from "container/variables/common";
+import { Icon } from "native-base";
 import Messages from "container/translation/Message";
 
 const SimpleDetail = (props) => {
@@ -22,11 +23,15 @@ const SimpleDetail = (props) => {
     intl,
     onViewMembers,
     style,
+    backButton,
+    updateButton,
+    onDelete,
   } = props;
-
 
   // render
   const renderHeader = () => {
+    console.log("renderHeader:::", data);
+
     return (
       <View style={styles.header}>
         <View style={styles.title}>
@@ -86,9 +91,44 @@ const SimpleDetail = (props) => {
 
   return (
     <View style={[styles.container, style]}>
+      <View style={styles.actionBox}>
+        {backButton ? (
+          <TouchableOpacity
+            onPress={() => backButton.onPress()}
+            style={styles.backButton}
+          >
+            <Icon name="caret-back" style={styles.actionIcon} />
+            <Text style={styles.actionText}>{backButton.title}</Text>
+          </TouchableOpacity>
+        ) : null}
+        {updateButton ? (
+          <TouchableOpacity
+            onPress={() => updateButton.onPress()}
+            style={styles.backButton}
+          >
+            <Icon
+              name="edit"
+              type="Entypo"
+              style={[
+                styles.actionIcon,
+                { color: color.action, marginRight: scale(10) },
+              ]}
+            />
+            <Text style={[styles.actionText, { color: color.action }]}>
+              {updateButton.title}
+            </Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
       <View style={styles.card}>
         {header ? header(data) : renderHeader()}
         {body ? body(data) : renderBody()}
+
+        <TouchableOpacity style={styles.deleteBox} onPress={onDelete}>
+          <Text style={styles.titleSymbol}>
+            {intl.formatMessage(Messages.delete)}
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -98,6 +138,7 @@ const styles = StyleSheet.create({
   container: {
     padding: space.bgPadding,
     backgroundColor: color.backgroundColor,
+    height: "100%",
   },
   card: {
     backgroundColor: "#fff",
@@ -107,27 +148,34 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#fff",
-    borderColor: color.border,
-    borderRadius: space.border,
-    borderBottomWidth: scale(2),
     paddingBottom: scale(50),
     marginBottom: space.componentMargin,
-    ...shadow,
+    borderColor: color.border,
+    borderBottomWidth: scale(2),
   },
   title: {
     flexDirection: "row",
     justifyContent: "center",
-    flex: 1,
+    borderRadius: space.border,
+    alignItems: "center",
+    padding: space.bgPadding,
+    ...shadow,
   },
   iconTitle: {
     borderRadius: space.border,
-    height: "100%",
-    aspectRatio: 1,
+    height: scale(90),
+    width: scale(90),
     position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: color.background,
     left: 0,
+    ...shadow,
   },
   textTitle: {
     ...defaultText,
+    fontSize: fontSize.sizeTitle,
+    fontWeight: "bold",
   },
   description: {
     ...defaultText,
@@ -154,6 +202,43 @@ const styles = StyleSheet.create({
   },
   itemContent: {
     marginBottom: space.componentMargin,
+  },
+  backButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    alignSelf: "flex-start",
+    marginBottom: space.componentMargin,
+  },
+  actionText: {
+    ...defaultText,
+    fontSize: fontSize.size32,
+    color: color.hint,
+    fontWeight: "bold",
+  },
+  actionIcon: {
+    fontSize: scale(40),
+    color: color.hint,
+  },
+  actionBox: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  deleteBox: {
+    paddingVertical: scale(15),
+    paddingHorizontal: scale(20),
+    backgroundColor: color.danger,
+    borderRadius: scale(40),
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "flex-end",
+    ...shadow,
+  },
+  titleSymbol: {
+    ...defaultText,
+    color: "#fff",
+    fontSize: fontSize.sizeBigContent,
+    fontWeight: "bold",
   },
 });
 

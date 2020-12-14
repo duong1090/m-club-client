@@ -47,6 +47,10 @@ const InputItem = (props, ref) => {
   } = props;
   const inputRef = useRef(null);
 
+  // useImperativeHandle(ref, () => ({
+  //   inputRef,
+  // }));
+
   const replaceSpace = (str) => {
     return str.replace(/\u0020/, "\u00a0");
   };

@@ -29,7 +29,7 @@ const DEFAULT_MANAGE_LIST = [
   },
   {
     title: <FormattedMessage {...Messages.department} />,
-    type: screens.DEPARTMENT_LIST,
+    type: screens.DEPARTMENT,
     icon: (
       <Icon
         type="FontAwesome5"
@@ -40,7 +40,7 @@ const DEFAULT_MANAGE_LIST = [
   },
   {
     title: <FormattedMessage {...Messages.position} />,
-    type: "position",
+    type: screens.POSITION,
     icon: (
       <Icon
         type="FontAwesome5"

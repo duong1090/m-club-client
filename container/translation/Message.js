@@ -37,6 +37,10 @@ export default defineMessages({
     id: "phone",
     defaultMessage: "Phone",
   },
+  phone_placeholder: {
+    id: "phone_placeholder",
+    defaultMessage: "Enter phone",
+  },
   sign_up: {
     id: "sign_up",
     defaultMessage: "Sign Up",
@@ -161,6 +165,10 @@ export default defineMessages({
     id: "update_fail",
     defaultMessage: "Update failed",
   },
+  delete: {
+    id: "delete",
+    defaultMessage: "Delete",
+  },
   delete_success: {
     id: "delete_success",
     defaultMessage: "Delete successfully",
@@ -172,5 +180,33 @@ export default defineMessages({
   name_placeholder: {
     id: "name_placeholder",
     defaultMessage: "Enter name",
+  },
+  list: {
+    id: "list",
+    defaultMessage: "List",
+  },
+  address_placeholder: {
+    id: "address_placeholder",
+    defaultMessage: "Enter address",
+  },
+  email_placeholder: {
+    id: "email_placeholder",
+    defaultMessage: "Enter email",
+  },
+  sex_placeholder: {
+    id: "sex_placeholder",
+    defaultMessage: "Enter sex",
+  },
+  birthday_placeholder: {
+    id: "birthday_placeholder",
+    defaultMessage: "Enter birthday",
+  },
+  department_placeholder: {
+    id: "department_placeholder",
+    defaultMessage: "Enter department",
+  },
+  position_placeholder: {
+    id: "position_placeholder",
+    defaultMessage: "Enter position",
   },
 });
