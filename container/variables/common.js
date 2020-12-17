@@ -20,6 +20,9 @@ export const color = {
   warning: "#F6BE00",
   danger: "#DF3651",
   border: "#707070",
+  orange: "#FFAA00",
+  red: "#FF0000",
+  green: "#009900" 
 };
 
 export const shadow = {
