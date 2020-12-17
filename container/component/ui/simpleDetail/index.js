@@ -48,13 +48,14 @@ const SimpleDetail = (props) => {
   };
 
   const renderContentItem = (item) => {
+    console.log("renderContentItem:::", item);
     return (
-      <View style={style.itemContent}>
+      <View style={styles.itemContent}>
         <View style={styles.leftItem}>
           <View style={styles.dot} />
           <Text style={styles.titleItem}>{item.title}</Text>
         </View>
-        <Text style={styles.textItem}></Text>
+        <Text style={styles.textItem}>{item.value}</Text>
       </View>
     );
   };
@@ -95,7 +96,7 @@ const SimpleDetail = (props) => {
         {backButton ? (
           <TouchableOpacity
             onPress={() => backButton.onPress()}
-            style={styles.backButton}
+            style={[styles.backButton, { backgroundColor: color.primary }]}
           >
             <Icon name="caret-back" style={styles.actionIcon} />
             <Text style={styles.actionText}>{backButton.title}</Text>
@@ -104,31 +105,24 @@ const SimpleDetail = (props) => {
         {updateButton ? (
           <TouchableOpacity
             onPress={() => updateButton.onPress()}
-            style={[styles.backButton, { borderColor: color.action }]}
+            style={[styles.backButton, { backgroundColor: color.success }]}
           >
-            <Icon
-              name="edit"
-              type="Entypo"
-              style={[
-                styles.actionIcon,
-                { color: color.action, marginRight: scale(10) },
-              ]}
-            />
-            <Text style={[styles.actionText, { color: color.action }]}>
-              {updateButton.title}
-            </Text>
+            <Icon name="edit" type="Entypo" style={styles.actionIcon} />
+            <Text style={styles.actionText}>{updateButton.title}</Text>
           </TouchableOpacity>
         ) : null}
       </View>
       <View style={styles.card}>
         {header ? header(data) : renderHeader()}
-        {body ? body(data) : renderBody()}
+        <View style={styles.content}>
+          {body ? body(data) : renderBody()}
 
-        <TouchableOpacity style={styles.deleteBox} onPress={onDelete}>
-          <Text style={styles.titleSymbol}>
-            {intl.formatMessage(Messages.delete)}
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.deleteBox} onPress={onDelete}>
+            <Text style={styles.titleSymbol}>
+              {intl.formatMessage(Messages.delete)}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -140,40 +134,42 @@ const styles = StyleSheet.create({
     backgroundColor: color.backgroundColor,
     height: "100%",
   },
+  content: {
+    padding: space.bgPadding,
+  },
   card: {
     backgroundColor: "#fff",
     borderRadius: space.border,
-    padding: space.bgPadding,
     ...shadow,
   },
   header: {
-    backgroundColor: "#fff",
-    paddingBottom: scale(50),
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    backgroundColor: color.background,
     marginBottom: space.componentMargin,
-    borderColor: color.border,
-    borderBottomWidth: scale(2),
+    borderTopLeftRadius: space.border,
+    borderTopRightRadius: space.border,
   },
   title: {
     flexDirection: "row",
     justifyContent: "center",
-    borderRadius: space.border,
     alignItems: "center",
-    padding: space.bgPadding,
-    ...shadow,
+    paddingHorizontal: space.bgPadding,
+    paddingVertical: space.bgPadding / 1.5,
   },
   iconTitle: {
     borderRadius: space.border,
     height: scale(90),
     width: scale(90),
-    position: "absolute",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: color.background,
-    left: 0,
-    ...shadow,
+    backgroundColor: "#fff",
+    marginRight: space.componentMargin,
   },
   textTitle: {
     ...defaultText,
+    color: "#fff",
     fontSize: fontSize.sizeTitle,
     fontWeight: "bold",
   },
@@ -192,35 +188,44 @@ const styles = StyleSheet.create({
   },
   textItem: {
     ...defaultText,
-    fontWeight: "bold",
+    fontSize: fontSize.sizeContent,
   },
   titleItem: {
     ...defaultText,
+    fontSize: fontSize.sizeContent,
+    fontWeight: "bold",
   },
   leftItem: {
     marginRight: scale(40),
+    flexDirection: "row",
+    alignItems: "center",
   },
   itemContent: {
     marginBottom: space.componentMargin,
+    marginHorizontal: space.componentMargin,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   backButton: {
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    alignSelf: "flex-start",
     marginBottom: space.itemMargin,
-    borderBottomWidth: scale(2),
     borderColor: color.text,
+    paddingHorizontal: scale(20),
+    paddingVertical: scale(5),
+    borderRadius: space.border,
+    ...shadow,
   },
   actionText: {
     ...defaultText,
     fontSize: fontSize.size28,
-    color: color.text,
+    color: "#fff",
     marginLeft: scale(5),
   },
   actionIcon: {
     fontSize: scale(25),
-    color: color.text,
+    color: "#fff",
   },
   actionBox: {
     flexDirection: "row",

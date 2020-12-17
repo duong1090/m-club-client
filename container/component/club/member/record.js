@@ -15,6 +15,8 @@ import SimpleRecord from "container/component/ui/simpleRecord";
 import { gotoRoute } from "container/utils/router";
 import { modals } from "container/constant/screen";
 import { SEX } from "container/constant/element";
+import moment from "moment";
+import { getIntl } from "container/utils/common";
 
 const DEFAULT_INFO = {
   name: null,
@@ -22,7 +24,7 @@ const DEFAULT_INFO = {
   address: null,
   email: null,
   sex: null,
-  birthday: null,
+  birthday: moment().format(getIntl().formatMessage(Messages.date_format)),
   department: null,
   position: null,
 };
@@ -42,9 +44,9 @@ const MemberRecord = (props) => {
     if (props.data) setData(props.data);
   }, [props.data]);
 
-  useEffect(() => {
-    if (data) setInfo(data);
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) setInfo(data);
+  // }, [data]);
 
   //#endregion
 
@@ -80,22 +82,23 @@ const MemberRecord = (props) => {
       name: <FormattedMessage {...Messages.birthday} />,
       fieldName: "birthday",
       type: "date_picker",
+      mode: "date",
       placeholder: intl.formatMessage(Messages.birthday_placeholder),
-      onChangeText: (value) => onChangeField("birthday", value),
+      onChangeDate: (value) => onChangeField("birthday", value),
     },
     {
       name: <FormattedMessage {...Messages.department} />,
-      fieldName: "position",
+      fieldName: "department",
       type: "button",
       placeholder: intl.formatMessage(Messages.department_placeholder),
-      onPress: () => onPressField("position", "department/get"),
+      onPress: () => onPressField("department", "department/get"),
     },
     {
       name: <FormattedMessage {...Messages.position} />,
       fieldName: "position",
       type: "button",
       placeholder: intl.formatMessage(Messages.position_placeholder),
-      onPress: () => onPressField("department", "position/get"),
+      onPress: () => onPressField("position", "position/get"),
     },
   ];
 
@@ -116,7 +119,6 @@ const MemberRecord = (props) => {
   };
 
   const onChangeField = (fieldName, value) => {
-    console.log("onChangeField:::", fieldName, value);
     let temp = { ...info };
     temp[fieldName] = value;
     setInfo(temp);
@@ -140,7 +142,7 @@ const MemberRecord = (props) => {
     if (info.phone) params.phone = info.phone;
     if (info.address) params.address = info.address;
     if (info.email) params.email = info.email;
-    if (info.sex) params.sex = info.sex;
+    if (info.sex && info.sex.id) params.sex = info.sex.id;
     if (info.birthday) params.birthday = info.birthday;
     if (info.department && info.department.id)
       params.department_id = info.department.id;
@@ -215,7 +217,7 @@ const MemberRecord = (props) => {
     <View>
       <SimpleRecord
         mode={mode}
-        // data={mode != "create" ? info : null}
+        data={info}
         fields={fields}
         onSubmit={() => onSubmit()}
         backButton={{

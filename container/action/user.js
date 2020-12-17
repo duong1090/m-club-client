@@ -4,6 +4,7 @@ import { getRequest, postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import { gotoHome } from "container/utils/router";
 import { showSpinner, hideSpinner } from "container/utils/router";
+import { ORGANIZATION } from "../constant/storage";
 
 export const doLogin = async (payload) => {
   showSpinner();
@@ -22,9 +23,18 @@ export const doLogin = async (payload) => {
   });
 };
 
-export const loginSuccess = (token) => {
-  setItem(API_TOKEN, token);
+export const loginSuccess = async (token) => {
   gotoHome();
+  await setItem(API_TOKEN, token);
+  //loading organization
+  const res = await getOrganization();
+  if (res && res.data) {
+    global.organization = res.data;
+    setItem(ORGANIZATION, res.data);
+  } else {
+    const temp = await getItem(ORGANIZATION);
+    if (temp) global.organization = temp;
+  }
 };
 
 export const preValidateLogin = (payload) => {
@@ -46,8 +56,9 @@ export const getOrganization = () => {
     getRequest(Config.API_URL.concat("auth/organization"))
       .then((res) => {
         if (res && res.data) {
+          console.log("getOrganization:::", res.data);
           resolve(res.data);
-          if (res.data.lang) setItem(LANG, res.data.lang);
+          // if (res.data.lang) setItem(LANG, res.data.lang);
         }
       })
       .catch((err) => reject(err));

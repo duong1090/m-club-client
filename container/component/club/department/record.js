@@ -69,9 +69,17 @@ const DepartmentRecord = (props) => {
     }
   };
 
+  const prepareParams = () => {
+    let params = {};
+    if (mode == "edit" && data.id) params.id = data.id;
+    if (info.name) params.name = info.name;
+    return params;
+  };
+
   const create = () => {
     showSpinner();
-    postRequest(Config.API_URL.concat("department/create"), info)
+    const params = prepareParams();
+    postRequest(Config.API_URL.concat("department/create"), params)
       .then((res) => {
         if (res && res.data) createSuccess(res.data);
         hideSpinner();
@@ -102,10 +110,7 @@ const DepartmentRecord = (props) => {
 
   const update = () => {
     showSpinner();
-
-    let params = { ...info };
-    if (data && data.id) params.id = data.id;
-
+    const params = prepareParams();
     postRequest(Config.API_URL.concat("department/update"), params)
       .then((res) => {
         if (res && res.data) updateSuccess();

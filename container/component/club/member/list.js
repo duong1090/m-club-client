@@ -41,6 +41,7 @@ const MemberList = (props) => {
   };
 
   const onPressItem = (item) => {
+    console.log("onPressItem:::", item);
     setCurrMember(item);
     changeMode && changeMode("detail");
   };

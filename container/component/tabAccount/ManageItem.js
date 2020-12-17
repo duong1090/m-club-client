@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
     ...shadow,
   },
   icon: {
-    width: "20%",
-    aspectRatio: 1,
+    // width: "20%",
+    // aspectRatio: 1,
   },
   title: {
     ...defaultText,

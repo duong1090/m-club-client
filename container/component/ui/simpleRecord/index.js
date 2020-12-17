@@ -54,31 +54,36 @@ const SimpleRecord = (props) => {
             </Text>
           ) : null}
         </View>
-        {header ? header(data) : null}
-        <View>
-          {fields && fields.length
-            ? fields.map((item, index) => (
-                <InputItem
-                  type={item.type ? item.type : null}
-                  key={index}
-                  style={styles.inputField}
-                  onPress={item.onPress ? item.onPress : null}
-                  label={item.name}
-                  required={item.required ? item.required : false}
-                  placeholder={item.placeholder ? item.placeholder : null}
-                  onChangeText={item.onChangeText ? item.onChangeText : null}
-                  value={
-                    data && data[item.fieldName] ? data[item.fieldName] : null
-                  }
-                />
-              ))
-            : null}
+
+        <View style={styles.content}>
+          {header ? header(data) : null}
+          <View>
+            {fields && fields.length
+              ? fields.map((item, index) => (
+                  <InputItem
+                    type={item.type ? item.type : null}
+                    key={index}
+                    style={styles.inputField}
+                    label={item.name}
+                    required={item.required ? item.required : false}
+                    placeholder={item.placeholder ? item.placeholder : null}
+                    onPress={item.onPress ? item.onPress : null}
+                    onChangeText={item.onChangeText ? item.onChangeText : null}
+                    onChangeDate={item.onChangeDate ? item.onChangeDate : null}
+                    value={
+                      data && data[item.fieldName] ? data[item.fieldName] : null
+                    }
+                    mode={item.mode ? item.mode : null}
+                  />
+                ))
+              : null}
+          </View>
+          <TouchableOpacity style={styles.doneBox} onPress={onSubmit}>
+            <Text style={styles.titleSymbol}>
+              {intl.formatMessage(Messages.done)}
+            </Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.doneBox} onPress={onSubmit}>
-          <Text style={styles.titleSymbol}>
-            {intl.formatMessage(Messages.done)}
-          </Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -90,10 +95,12 @@ const styles = StyleSheet.create({
     backgroundColor: color.backgroundColor,
     height: "100%",
   },
+  content: {
+    padding: space.bgPadding,
+  },
   card: {
     backgroundColor: "#fff",
     borderRadius: space.border,
-    padding: space.bgPadding,
     marginBottom: space.bgPadding * 2,
     ...shadow,
   },
@@ -105,13 +112,15 @@ const styles = StyleSheet.create({
   },
   symbol: {
     flexDirection: "row",
-    paddingVertical: scale(15),
+    width: "100%",
+    paddingVertical: scale(20),
     paddingHorizontal: scale(20),
-    borderRadius: scale(40),
+    borderTopLeftRadius: scale(20),
+    borderTopRightRadius: scale(20),
     backgroundColor: color.background,
-    alignSelf: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
-    marginBottom: scale(60),
+    marginBottom: scale(20),
   },
   titleSymbol: {
     ...defaultText,
@@ -138,18 +147,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "flex-start",
     marginBottom: space.itemMargin,
-    borderBottomWidth: scale(2),
     borderColor: color.text,
+    backgroundColor: color.primary,
+    paddingHorizontal: scale(20),
+    paddingVertical: scale(5),
+    borderRadius: space.border,
   },
   backText: {
     ...defaultText,
     fontSize: fontSize.size28,
-    color: color.text,
+    color: "#fff",
     marginLeft: scale(5),
   },
   backIcon: {
     fontSize: scale(25),
-    color: color.text,
+    color: "#fff",
   },
 });
 

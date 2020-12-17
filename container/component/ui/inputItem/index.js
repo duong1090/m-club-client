@@ -23,6 +23,7 @@ import {
 import Messages from "container/translation/Message";
 import { injectIntl } from "react-intl";
 import { Icon } from "native-base";
+import DatePicker from "react-native-datepicker";
 
 const InputItem = (props, ref) => {
   const {
@@ -44,6 +45,9 @@ const InputItem = (props, ref) => {
     noIcon,
     onPress,
     required,
+    mode,
+    format,
+    onDateChange,
   } = props;
   const inputRef = useRef(null);
 
@@ -178,6 +182,54 @@ const InputItem = (props, ref) => {
     );
   };
 
+  const renderDateTimePicker = () => {
+    console.log("renderDateTimePicker:::", value);
+    return (
+      <DatePicker
+        date={value}
+        mode={mode ? mode : "date"}
+        format={format ? format : intl.formatMessage(Messages.date_format)}
+        placeholder={placeholder}
+        confirmBtnText={intl.formatMessage(Messages.done)}
+        cancelBtnText={intl.formatMessage(Messages.cancel)}
+        showIcon={true}
+        iconComponent={
+          <Icon
+            name="caret-down"
+            style={{ color: color.hint, fontSize: scale(40) }}
+          />
+        }
+        onDateChange={onDateChange}
+        customStyles={{
+          dateTouchBody: {
+            padding: 0,
+            alignItems: "center",
+            paddingTop: 0,
+            height: null,
+          },
+          dateInput: {
+            borderWidth: 0,
+            alignItems: "flex-start",
+            padding: 0,
+            height: null,
+          },
+          disabled: {
+            backgroundColor: "transparent",
+          },
+          dateText: {
+            color: color.text,
+            fontSize: fontSize.fontSize28,
+            fontFamily: "Roboto-Regular",
+          },
+          placeholderText: {
+            color: color.hint,
+          },
+        }}
+        style={{ width: "100%" }}
+      />
+    );
+  };
+
   const renderItem = () => {
     switch (type) {
       case "otp":
@@ -185,6 +237,9 @@ const InputItem = (props, ref) => {
         break;
       case "button":
         return renderButton();
+        break;
+      case "date_picker":
+        return renderDateTimePicker();
         break;
       default:
         return renderInput();

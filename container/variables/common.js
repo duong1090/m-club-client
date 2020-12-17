@@ -19,12 +19,15 @@ export const color = {
   fontColor: "#707070",
   disable: "#9F9F9F",
   hint: "#BBBBBB",
-  warning: "#F6BE00",
+  warning: "#f0ad4e",
   danger: "#DF3651",
+  success: "#5cb85c",
+  info: "#5bc0de",
+  primary: "#0275d8",
   border: "#707070",
-  orange: "#FFAA00",
-  red: "#FF0000",
-  green: "#009900" 
+  dark: "#000000",
+  light:"#f7f7f7",
+  inverse: "#292b2c",
 };
 
 export const shadow = {

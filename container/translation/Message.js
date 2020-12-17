@@ -221,4 +221,12 @@ export default defineMessages({
     id: "unknown",
     defaultMessage: "Unknown",
   },
+  date_format: {
+    id: "date_format",
+    defaultMessage: "YYYY-MM-DD",
+  },
+  cancel: {
+    id: "cancel",
+    defaultMessage: "Cancel",
+  },
 });

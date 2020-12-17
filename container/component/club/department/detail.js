@@ -74,7 +74,11 @@ const DepartmentDetail = (props) => {
           <Icon
             type="FontAwesome5"
             name="users"
-            style={{ ...defaultText, fontSize: scale(50), color: "#fff" }}
+            style={{
+              ...defaultText,
+              fontSize: scale(50),
+              color: color.inverse,
+            }}
           />
         }
         backButton={{
@@ -85,7 +89,7 @@ const DepartmentDetail = (props) => {
           title: intl.formatMessage(Messages.edit),
           onPress: () => gotoEdit(),
         }}
-        onDelete={() => {}}
+        onDelete={() => onDelete()}
       />
     </View>
   );

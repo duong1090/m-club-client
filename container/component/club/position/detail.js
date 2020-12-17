@@ -74,7 +74,11 @@ const PositionDetail = (props) => {
           <Icon
             type="FontAwesome5"
             name="user-tag"
-            style={{ ...defaultText, fontSize: scale(50), color: "#fff" }}
+            style={{
+              ...defaultText,
+              fontSize: scale(50),
+              color: color.inverse,
+            }}
           />
         }
         backButton={{
@@ -85,7 +89,7 @@ const PositionDetail = (props) => {
           title: intl.formatMessage(Messages.edit),
           onPress: () => gotoEdit(),
         }}
-        onDelete={() => {}}
+        onDelete={() => onDelete()}
       />
     </View>
   );
