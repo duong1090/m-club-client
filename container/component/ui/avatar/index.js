@@ -20,10 +20,13 @@ const Avatar = (props) => {
 
   //effect
   useEffect(() => {
-    if (data) getAvatar();
+    if (data) {
+      getAvatar();
+      if (data.name) setName(data.name[0].toUpperCase());
+    }
   }, [data]);
-
   useEffect(() => {
+
     getAvatar();
   }, []);
 
@@ -55,6 +58,10 @@ const Avatar = (props) => {
         { backgroundColor: getColorByName(name) },
       ]}
     >
+      <Text style={[styles.text, size ? { fontSize: size * 0.6 } : null]}>
+        {name}
+      </Text>
+
       {avatar ? (
         <Image
           style={[
@@ -63,11 +70,7 @@ const Avatar = (props) => {
           ]}
           source={{ uri: avatar }}
         />
-      ) : (
-        <Text style={[styles.text, size ? { fontSize: size * 0.6 } : null]}>
-          {name}
-        </Text>
-      )}
+      ) : null}
 
       {loading ? (
         <View
@@ -94,6 +97,7 @@ const styles = StyleSheet.create({
     ...shadow,
   },
   avatar: {
+    position: "absolute",
     width: scale(100),
     height: scale(100),
     borderRadius: scale(50),
