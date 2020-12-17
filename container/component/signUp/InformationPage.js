@@ -20,7 +20,7 @@ import {
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
 import { gotoRoute } from "container/utils/router";
-import screens from "container/constant/screen";
+import {screens} from "container/constant/screen";
 
 const { width } = Dimensions.get("window");
 

@@ -9,7 +9,7 @@ import Messages from "container/translation/Message";
 import { View } from "react-native";
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import { showSpinner, hideSpinner, back } from "container/utils/router";
+import { showSpinner, hideSpinner } from "container/utils/router";
 import Toast from "react-native-simple-toast";
 import SimpleRecord from "container/component/ui/simpleRecord";
 
@@ -127,7 +127,6 @@ const PositionRecord = (props) => {
     let index = tempList.findIndex((item) => item.id == data.id);
     tempList[index] = transform(data);
     setList(tempList);
-    back();
   };
 
   //#endregion

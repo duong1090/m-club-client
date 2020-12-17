@@ -1,5 +1,5 @@
 import React from "react";
-import screens from "../constant/screen";
+import { screens, modals } from "../constant/screen";
 import { Navigation } from "react-native-navigation";
 import { loadInitialStatus } from "../action/initialize";
 import MainProvider from "../provider";
@@ -56,7 +56,7 @@ export const registerLazyScreen = () => {
 
   //#region modal
   registerModalComponent(
-    screens.SELECT_MODAL,
+    modals.SELECT_MODAL,
     require("container/component/ui/selectModal").default
   );
   //#endregion

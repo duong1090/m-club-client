@@ -49,5 +49,8 @@
   "sex_placeholder": "Chọn giới tính",
   "birthday_placeholder": "Chọn ngày sinh",
   "department_placeholder": "Chọn phòng ban",
-  "position_placeholder": "Chọn chức danh"
+  "position_placeholder": "Chọn chức danh",
+  "male": "Nam",
+  "female": "Nữ",
+  "unknown": "Không xác định"
 }

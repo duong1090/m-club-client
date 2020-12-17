@@ -26,7 +26,6 @@ const Department = (props) => {
 
   //change mode to switch screen
   const onChangeMode = (mode = "list") => {
-    console.log("onChangeMode:::", mode);
     setMode(mode);
   };
 

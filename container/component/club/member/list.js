@@ -37,7 +37,6 @@ const MemberList = (props) => {
   //#region function - event
   const gotoRecord = (mode = "create") => {
     // gotoRoute(screens.DEPARTMENT_EDIT, { mode });
-    console.log("changeMode:::", mode, changeMode);
     changeMode && changeMode(mode);
   };
 
@@ -56,6 +55,7 @@ const MemberList = (props) => {
   };
 
   const getList = (page = 1) => {
+    setLoading(true);
     getRequest(Config.API_URL.concat("member/get"), { page })
       .then((res) => {
         if (res && res.data && res.data.items) {
@@ -93,7 +93,7 @@ const MemberList = (props) => {
       <SimpleList
         loading={loading}
         data={data}
-        iconHeader={(item) => <Avatar data={item} size={scale(50)} />}
+        iconHeader={(item) => <Avatar data={item} size={scale(80)} />}
         addNewItem={gotoRecord}
         styleTextItem={{ fontWeight: "bold" }}
         onPressItem={(item) => onPressItem(item)}
