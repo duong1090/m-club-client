@@ -1,4 +1,4 @@
-const screens = {
+export const screens = {
   HOME: "HOME",
   TAB_ACCOUNT: "TAB_ACCOUNT",
   TAB_NAVIGATE: "TAB_NAVIGATE",
@@ -10,7 +10,8 @@ const screens = {
   SPINNER: "SPINNER",
   DEPARTMENT: "DEPARTMENT",
   POSITION: "POSITION",
-  SELECT_MODAL: "SELECT_MODAL",
 };
 
-export default screens;
+export const modals = {
+  SELECT_MODAL: "SELECT_MODAL",
+};

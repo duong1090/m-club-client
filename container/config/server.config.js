@@ -1,4 +1,5 @@
-const server = "172.168.81.221:8888";
+const server = "192.168.0.134:8888";
+// const server = "172.168.81.221:8888";
 //android emulator server
 // const server = "10.0.2.2:8888";
 

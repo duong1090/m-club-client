@@ -195,18 +195,30 @@ export default defineMessages({
   },
   sex_placeholder: {
     id: "sex_placeholder",
-    defaultMessage: "Enter sex",
+    defaultMessage: "Select sex",
   },
   birthday_placeholder: {
     id: "birthday_placeholder",
-    defaultMessage: "Enter birthday",
+    defaultMessage: "Select birthday",
   },
   department_placeholder: {
     id: "department_placeholder",
-    defaultMessage: "Enter department",
+    defaultMessage: "Select department",
   },
   position_placeholder: {
     id: "position_placeholder",
-    defaultMessage: "Enter position",
+    defaultMessage: "Select position",
+  },
+  male: {
+    id: "male",
+    defaultMessage: "Male",
+  },
+  female: {
+    id: "female",
+    defaultMessage: "Female",
+  },
+  unknown: {
+    id: "unknown",
+    defaultMessage: "Unknown",
   },
 });
