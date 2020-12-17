@@ -12,13 +12,13 @@ import Messages from "container/translation/Message";
 import Information from "./Information";
 import ManageItem from "./ManageItem";
 import { gotoRoute } from "container/utils/router";
-import screens from "container/constant/screen";
+import {screens} from "container/constant/screen";
 import { Icon } from "native-base";
 
 const DEFAULT_MANAGE_LIST = [
   {
     title: <FormattedMessage {...Messages.member} />,
-    type: screens.MEMBER_LIST,
+    type: screens.MEMBER,
     icon: (
       <Icon
         type="FontAwesome5"

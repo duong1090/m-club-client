@@ -104,7 +104,7 @@ const SimpleDetail = (props) => {
         {updateButton ? (
           <TouchableOpacity
             onPress={() => updateButton.onPress()}
-            style={styles.backButton}
+            style={[styles.backButton, { borderColor: color.action }]}
           >
             <Icon
               name="edit"
@@ -208,17 +208,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     alignSelf: "flex-start",
-    marginBottom: space.componentMargin,
+    marginBottom: space.itemMargin,
+    borderBottomWidth: scale(2),
+    borderColor: color.text,
   },
   actionText: {
     ...defaultText,
-    fontSize: fontSize.size32,
-    color: color.hint,
-    fontWeight: "bold",
+    fontSize: fontSize.size28,
+    color: color.text,
+    marginLeft: scale(5),
   },
   actionIcon: {
-    fontSize: scale(40),
-    color: color.hint,
+    fontSize: scale(25),
+    color: color.text,
   },
   actionBox: {
     flexDirection: "row",

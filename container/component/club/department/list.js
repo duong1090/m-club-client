@@ -10,6 +10,7 @@ import { scale, defaultText } from "container/variables/common";
 import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
+import { showSpinner, hideSpinner } from "container/utils/router";
 
 const DepartmentList = (props) => {
   //props
@@ -36,7 +37,6 @@ const DepartmentList = (props) => {
   //#region function - event
   const gotoRecord = (mode = "create") => {
     // gotoRoute(screens.DEPARTMENT_EDIT, { mode });
-    console.log("changeMode:::", mode, changeMode);
     changeMode && changeMode(mode);
   };
 
@@ -55,6 +55,7 @@ const DepartmentList = (props) => {
   };
 
   const getList = (page = 1) => {
+    setLoading(true);
     getRequest(Config.API_URL.concat("department/get"), { page })
       .then((res) => {
         if (res && res.data && res.data.items) {

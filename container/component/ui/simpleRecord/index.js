@@ -1,7 +1,13 @@
 import React from "react";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import {
   scale,
   color,
@@ -10,15 +16,17 @@ import {
   space,
   defaultText,
 } from "container/variables/common";
-import { Icon } from "native-base";
+import { Icon, Content, Container } from "native-base";
 import InputItem from "container/component/ui/inputItem";
 
 const SimpleRecord = (props) => {
   const { mode, intl, header, data, fields, onSubmit, backButton } = props;
 
+  console.log("SimpleRecord:::", data);
+
   //render
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {backButton ? (
         <TouchableOpacity
           onPress={() => backButton.onPress()}
@@ -60,9 +68,7 @@ const SimpleRecord = (props) => {
                   placeholder={item.placeholder ? item.placeholder : null}
                   onChangeText={item.onChangeText ? item.onChangeText : null}
                   value={
-                    mode != "create" && data && data[item.fieldName]
-                      ? data[item.fieldName]
-                      : null
+                    data && data[item.fieldName] ? data[item.fieldName] : null
                   }
                 />
               ))
@@ -74,7 +80,7 @@ const SimpleRecord = (props) => {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -88,6 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: space.border,
     padding: space.bgPadding,
+    marginBottom: space.bgPadding * 2,
     ...shadow,
   },
   iconSymbol: {
@@ -130,17 +137,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     alignSelf: "flex-start",
-    marginBottom: space.componentMargin,
+    marginBottom: space.itemMargin,
+    borderBottomWidth: scale(2),
+    borderColor: color.text,
   },
   backText: {
     ...defaultText,
-    fontSize: fontSize.size32,
-    color: color.hint,
-    fontWeight: "bold",
+    fontSize: fontSize.size28,
+    color: color.text,
+    marginLeft: scale(5),
   },
   backIcon: {
-    fontSize: scale(40),
-    color: color.hint,
+    fontSize: scale(25),
+    color: color.text,
   },
 });
 

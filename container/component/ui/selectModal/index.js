@@ -5,14 +5,14 @@ import { View, FlatList, Text, TouchableOpacity } from "react-native";
 import { Icon } from "native-base";
 import { Container } from "native-base";
 import Spinner from "container/component/ui/spinner";
-import { scale, color, defaultText } from "container/variables/common";
+import { scale, color, defaultText, space } from "container/variables/common";
 import Config from "container/config/server.config";
 import { getRequest } from "container/utils/request";
 import { Navigation } from "react-native-navigation";
 import { back } from "container/utils/router";
-import { getIntl } from "../../../utils/common";
 
 const SelectModal = (props) => {
+  //props
   const {
     intl,
     style,
@@ -22,17 +22,48 @@ const SelectModal = (props) => {
     params,
     onSelectItem,
     componentId,
+    title,
   } = props;
+
+  //state
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState([]);
-  const page = 1;
-  const meta = {};
+  let page = 1;
+  let meta = {};
+
+  //default option topBar
+  Navigation.mergeOptions(componentId, {
+    topBar: {
+      visible: true,
+      rightButtons: multiSelect
+        ? [
+            {
+              id: "done",
+              system: "done",
+              text: intl.formatMessage(Messages.done),
+              showAsAction: "always",
+            },
+          ]
+        : [],
+      title: {
+        text: title || intl.formatMessage(Messages.select),
+      },
+      leftButtons: [
+        {
+          id: "back",
+          icon: require("container/asset/icon/icon_topbar_close.png"),
+          visible: true,
+        },
+      ],
+    },
+  });
 
   //#region  effect
   useEffect(() => {
     if (!props.data) getData();
-  }, []);
+    else setData(props.data);
+  }, [props.data]);
 
   //button header event
   useEffect(() => {
@@ -49,10 +80,6 @@ const SelectModal = (props) => {
       sub.remove();
     };
   }, [componentId]);
-
-  useEffect(() => {
-    if (props.data) setData(props.data);
-  }, [props.data]);
 
   useEffect(() => {
     if (props.selectedItem) setSelectedItem(props.selectedItem);
@@ -131,8 +158,8 @@ const SelectModal = (props) => {
           {item.title
             ? item.title
             : optionIndexName
-              ? item[optionIndexName]
-              : item.name}
+            ? item[optionIndexName]
+            : item.name}
         </Text>
         {isSelected ? (
           <Icon
@@ -163,44 +190,14 @@ const SelectModal = (props) => {
           />
         </View>
       ) : (
-            <Text style={styles.text}>
-              {intl.formatMessage(Messages.empty_data)}
-            </Text>
-          )}
+        <View style={styles.textBox}>
+          <Text style={styles.text}>
+            {intl.formatMessage(Messages.empty_data)}
+          </Text>
+        </View>
+      )}
     </Container>
   );
-};
-
-SelectModal.options = (passProps) => {
-  const { title, multiSelect } = passProps;
-  console.log("Picker passProps", multiSelect);
-
-  const rightButtons = multiSelect
-    ? [
-      {
-        id: "done",
-        system: "done",
-        text: getIntl().formatMessage(Messages.done),
-        showAsAction: "always",
-      },
-    ]
-    : [];
-  return {
-    topBar: {
-      visible: true,
-      title: {
-        text: title || getIntl().formatMessage(Messages.select),
-      },
-      rightButtons,
-      leftButtons: [
-        {
-          id: "back",
-          icon: require("container/asset/icon/icon_topbar_close.png"),
-          visible: true,
-        },
-      ],
-    },
-  };
 };
 
 const styles = {
@@ -216,6 +213,11 @@ const styles = {
   },
   container: {
     paddingHorizontal: scale(20),
+  },
+  textBox: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: space.componentMargin,
   },
   text: {
     ...defaultText,

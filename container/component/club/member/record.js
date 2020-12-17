@@ -7,21 +7,24 @@ import {
 } from "container/recoil/state/club/member";
 import Messages from "container/translation/Message";
 import { View } from "react-native";
-import { postRequest } from "container/utils/request";
+import { postRequest, getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import { showSpinner, hideSpinner, back } from "container/utils/router";
+import { showSpinner, hideSpinner } from "container/utils/router";
 import Toast from "react-native-simple-toast";
 import SimpleRecord from "container/component/ui/simpleRecord";
+import { gotoRoute } from "container/utils/router";
+import { modals } from "container/constant/screen";
+import { SEX } from "container/constant/element";
 
 const DEFAULT_INFO = {
-  name: "",
-  phone: "",
-  address: "",
-  email: "",
-  sex: "",
-  birthday: "",
-  department: "",
-  position: "",
+  name: null,
+  phone: null,
+  address: null,
+  email: null,
+  sex: null,
+  birthday: null,
+  department: null,
+  position: null,
 };
 
 const MemberRecord = (props) => {
@@ -36,9 +39,7 @@ const MemberRecord = (props) => {
 
   //#region effect
   useEffect(() => {
-    if (props.data) {
-      setData(props.data);
-    }
+    if (props.data) setData(props.data);
   }, [props.data]);
 
   useEffect(() => {
@@ -71,31 +72,51 @@ const MemberRecord = (props) => {
     {
       name: <FormattedMessage {...Messages.sex} />,
       fieldName: "sex",
+      type: "button",
       placeholder: intl.formatMessage(Messages.sex_placeholder),
-      onChangeText: (value) => onChangeField("sex", value),
+      onPress: () => onPressField("sex", null, null, SEX),
     },
     {
       name: <FormattedMessage {...Messages.birthday} />,
       fieldName: "birthday",
+      type: "date_picker",
       placeholder: intl.formatMessage(Messages.birthday_placeholder),
       onChangeText: (value) => onChangeField("birthday", value),
     },
     {
       name: <FormattedMessage {...Messages.department} />,
-      fieldName: "department",
+      fieldName: "position",
+      type: "button",
       placeholder: intl.formatMessage(Messages.department_placeholder),
-      onChangeText: (value) => onChangeField("department", value),
+      onPress: () => onPressField("position", "department/get"),
     },
     {
       name: <FormattedMessage {...Messages.position} />,
       fieldName: "position",
+      type: "button",
       placeholder: intl.formatMessage(Messages.position_placeholder),
-      onChangeText: (value) => onChangeField("department", value),
+      onPress: () => onPressField("department", "position/get"),
     },
   ];
 
   //#region function - event
+  const onPressField = (fieldName, api, params = {}, data) => {
+    let props = {
+      onSelectItem: (value) => onChangeField(fieldName, value),
+    };
+
+    if (data) {
+      props.data = data;
+    } else if (api) {
+      props.api = api;
+      props.params = params;
+    }
+
+    gotoRoute(modals.SELECT_MODAL, props, true);
+  };
+
   const onChangeField = (fieldName, value) => {
+    console.log("onChangeField:::", fieldName, value);
     let temp = { ...info };
     temp[fieldName] = value;
     setInfo(temp);
@@ -185,7 +206,6 @@ const MemberRecord = (props) => {
     let index = tempList.findIndex((item) => item.id == data.id);
     tempList[index] = transform(data);
     setList(tempList);
-    back();
   };
 
   //#endregion
@@ -195,7 +215,7 @@ const MemberRecord = (props) => {
     <View>
       <SimpleRecord
         mode={mode}
-        data={info}
+        // data={mode != "create" ? info : null}
         fields={fields}
         onSubmit={() => onSubmit()}
         backButton={{

@@ -45,7 +45,13 @@ const SimpleList = (props) => {
     return (
       <TouchableOpacity onPress={() => onPressItem(item)} style={styles.item}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          {iconHeader ? iconHeader(item) : <View style={styles.dot} />}
+          {iconHeader ? (
+            <View style={{ marginRight: space.componentMargin }}>
+              {iconHeader(item)}
+            </View>
+          ) : (
+            <View style={styles.dot} />
+          )}
           <View>
             <Text style={[styles.textItem, styleTextItem]}>{item.title}</Text>
             {item.description ? (
@@ -82,14 +88,14 @@ const SimpleList = (props) => {
           contentContainerStyle={{ paddingBottom: scale(30) }}
           onEndReached={loadMore}
         />
-      ) : (
+      ) : loading ? null : (
         renderEmpty()
       )}
       {addNewItem ? (
         <ActionButton
           offsetX={scale(30)}
           offsetY={scale(30)}
-          style={{ elevation: 100 }}
+          style={{ ...shadow }}
           renderIcon={() => {
             return <EntypoIcon name="plus" style={styles.actionButtonIcon} />;
           }}

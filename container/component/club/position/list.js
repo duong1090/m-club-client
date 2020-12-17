@@ -35,7 +35,6 @@ const PositionList = (props) => {
 
   //#region function - event
   const gotoRecord = (mode = "create") => {
-    console.log("changeMode:::", mode, changeMode);
     changeMode && changeMode(mode);
   };
 
@@ -54,6 +53,7 @@ const PositionList = (props) => {
   };
 
   const getList = (page = 1) => {
+    setLoading(true);
     getRequest(Config.API_URL.concat("position/get"), { page })
       .then((res) => {
         if (res && res.data && res.data.items) {
