@@ -128,6 +128,7 @@ const InputItem = (props, ref) => {
         placeholder={placeholder}
         value={value}
         type="number"
+        placeholderTextColor={color.hint}
         style={[styles.textInput, inputStyle]}
         editable={!disabled}
         onBlur={onBlur ? onBlur : null}
@@ -142,8 +143,10 @@ const InputItem = (props, ref) => {
   };
 
   const renderButton = () => {
+    console.log("renderButton:::", value);
+
     return (
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity style={{ flex: 1 }} onPress={onPress}>
         <View style={[styles.wrapButton, inputStyle]}>
           {value ? (
             <Text
@@ -151,10 +154,16 @@ const InputItem = (props, ref) => {
               numberOfLines={1}
               ellipsizeMode={"tail"}
             >
-              {value}
+              {value.name || value.title || ""}
             </Text>
           ) : (
-            <Text style={{ ...defaultText, color: color.hint }}>
+            <Text
+              style={{
+                ...defaultText,
+                fontSize: fontSize.size28,
+                color: color.hint,
+              }}
+            >
               {placeholder ? placeholder : intl.formatMessage(Messages.select)}
             </Text>
           )}
@@ -209,15 +218,14 @@ const styles = StyleSheet.create({
     ...defaultText,
     flex: 1,
     fontSize: fontSize.size28,
-    // fontFamily: "Roboto-Regular",
-    color: color.fontColor,
+    color: color.text,
     minHeight: scale(80),
   },
 
   otpInput: {
+    ...defaultText,
     width: "80%",
     fontSize: fontSize.size28,
-    // fontFamily: "Roboto-Regular",
     color: "#000",
     minHeight: scale(80),
   },
