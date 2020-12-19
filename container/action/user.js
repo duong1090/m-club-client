@@ -1,8 +1,8 @@
-import { setItem } from "container/utils/storage";
+import { setItem, removeItem } from "container/utils/storage";
 import { API_TOKEN, LANG } from "container/constant/storage";
 import { getRequest, postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import { gotoHome } from "container/utils/router";
+import { gotoHome, gotoLogin } from "container/utils/router";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import { ORGANIZATION } from "../constant/storage";
 
@@ -48,6 +48,31 @@ export const preValidateLogin = (payload) => {
         }
       })
       .catch((err) => reject(err));
+  });
+};
+
+export const logOut = () => {
+  return new Promise((resolve, reject) => {
+    removeUserInfo()
+      .then((res) => {
+        if (res) {
+          resolve(res);
+          gotoLogin();
+        }
+      })
+      .catch((err) => reject(err));
+  });
+};
+
+const removeUserInfo = () => {
+  return new Promise((resolve, reject) => {
+    try {
+      removeItem(API_TOKEN)
+        .then(() => resolve(true))
+        .catch((err) => reject(err));
+    } catch (err) {
+      reject(err);
+    }
   });
 };
 

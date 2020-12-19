@@ -8,22 +8,19 @@ import { setItem } from "../utils/storage";
 
 export const loadInitialStatus = async () => {
   const apiToken = await getItem(API_TOKEN);
-  console.log("loadInitialStatus:::", apiToken);
 
   //set intl for multi language
   await setIntl();
   if (apiToken) {
     gotoHome();
     //loading organization when app start
-    const res = await getOrganization();
-    if (res && res.data) {
-      global.organization = res.data;
-      setItem(ORGANIZATION, res.data);
+    const org = await getOrganization();
+    if (org) {
+      global.organization = org;
+      setItem(ORGANIZATION, org);
     } else {
       const temp = await getItem(ORGANIZATION);
       if (temp) global.organization = temp;
     }
-  } else {
-    gotoLogin();
-  }
+  } else gotoLogin();
 };
