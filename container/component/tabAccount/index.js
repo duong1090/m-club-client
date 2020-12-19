@@ -3,7 +3,7 @@ import { View, StyleSheet, FlatList } from "react-native";
 import {
   scale,
   color,
-  fontSize,
+  shadow,
   space,
   defaultText,
 } from "container/variables/common";
@@ -12,8 +12,11 @@ import Messages from "container/translation/Message";
 import Information from "./Information";
 import ManageItem from "./ManageItem";
 import { gotoRoute } from "container/utils/router";
-import {screens} from "container/constant/screen";
+import { screens } from "container/constant/screen";
 import { Icon } from "native-base";
+import ActionButton from "react-native-action-button";
+import { showSpinner, hideSpinner } from "container/utils/router";
+import { logOut } from "container/action/user";
 
 const DEFAULT_MANAGE_LIST = [
   {
@@ -63,10 +66,24 @@ const DEFAULT_MANAGE_LIST = [
 ];
 
 const TabAccount = (props) => {
+  //function - event
   const gotoManageItem = (type) => {
     gotoRoute(type);
   };
 
+  const doLogOut = () => {
+    showSpinner();
+    logOut()
+      .then((res) => {
+        hideSpinner();
+      })
+      .catch((err) => {
+        console.error(err);
+        hideSpinner();
+      });
+  };
+
+  //render
   const renderManageList = () => {
     return (
       <FlatList
@@ -91,6 +108,22 @@ const TabAccount = (props) => {
     <View style={styles.container}>
       <Information style={styles.information} />
       {renderManageList()}
+      <ActionButton
+        offsetX={scale(30)}
+        offsetY={scale(30)}
+        style={{ ...shadow }}
+        renderIcon={() => {
+          return (
+            <Icon
+              name="sign-out-alt"
+              type="FontAwesome5"
+              style={styles.actionButtonIcon}
+            />
+          );
+        }}
+        buttonColor={color.danger}
+        onPress={() => doLogOut()}
+      />
     </View>
   );
 };
@@ -107,6 +140,11 @@ const styles = StyleSheet.create({
   },
   manageList: {
     flex: 1,
+  },
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: "white",
   },
 });
 

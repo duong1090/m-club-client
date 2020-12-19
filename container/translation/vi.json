@@ -22,7 +22,7 @@
   "department": "Nhóm ban",
   "position": "Chức danh",
   "create": "Tạo",
-  "tab_account": "Tài khoản",
+  "tab_account": "Thêm",
   "tab_navigate": "Điều hướng",
   "tab_notification": "Thông báo",
   "tab_task": "Công việc",
@@ -54,5 +54,9 @@
   "female": "Nữ",
   "unknown": "Không xác định",
   "date_format": "DD-MM-YYYY",
-  "cancel": "Huỷ"
+  "cancel": "Huỷ",
+  "status": "Tình trạng",
+  "priority": "Độ ưu tiên",
+  "deadline": "Hạn chót",
+  "sort": "Sắp xếp"
 }

@@ -32,11 +32,7 @@ const SearchBox = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    paddingHorizontal: scale(20),
-    paddingVertical: scale(15),
-  },
+  container: {},
   text: {
     ...defaultText,
     fontSize: fontSize.sizeContent,

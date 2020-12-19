@@ -99,7 +99,7 @@ export default defineMessages({
   },
   tab_account: {
     id: "tab_account",
-    defaultMessage: "Account",
+    defaultMessage: "More",
   },
   tab_navigate: {
     id: "tab_navigate",
@@ -228,5 +228,21 @@ export default defineMessages({
   cancel: {
     id: "cancel",
     defaultMessage: "Cancel",
+  },
+  status: {
+    id: "status",
+    defaultMessage: "Status",
+  },
+  priority: {
+    id: "priority",
+    defaultMessage: "Priority",
+  },
+  deadline: {
+    id: "deadline",
+    defaultMessage: "Deadline",
+  },
+  sort: {
+    id: "sort",
+    defaultMessage: "Sort",
   },
 });

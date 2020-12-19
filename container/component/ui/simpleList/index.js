@@ -78,7 +78,9 @@ const SimpleList = (props) => {
 
   return (
     <View style={styles.container}>
-      <SearchBox />
+      <View style={styles.searchBox}>
+        <SearchBox />
+      </View>
       {data && data.length ? (
         <FlatList
           style={styles.body}
@@ -157,6 +159,11 @@ const styles = StyleSheet.create({
   textEmpty: {
     ...defaultText,
     fontSize: fontSize.sizeBigContent,
+  },
+  searchBox: {
+    backgroundColor: "#fff",
+    paddingHorizontal: scale(20),
+    paddingVertical: scale(15),
   },
 });
 

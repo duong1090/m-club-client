@@ -61,8 +61,8 @@ bottomTabsByID[screens.TAB_ACCOUNT] = () => ({
       },
       bottomTab: {
         text: getIntl().formatMessage(Messages.tab_account),
-        // icon: require('@src/assets/icons/Tab_acc_in.png'),
-        // selectedIcon: require('@src/assets/icons/Tab_acc_act.png'),
+        icon: require("container/asset/icon/more.png"),
+        selectedIcon: require("container/asset/icon/more_select.png"),
         testID: screens.TAB_ACCOUNT,
       },
     },
@@ -115,8 +115,8 @@ bottomTabsByID[screens.TAB_NAVIGATE] = () => ({
       },
       bottomTab: {
         text: getIntl().formatMessage(Messages.tab_navigate),
-        // icon: require('@src/assets/icons/Tab_acc_in.png'),
-        // selectedIcon: require('@src/assets/icons/Tab_acc_act.png'),
+        icon: require("container/asset/icon/navitage.png"),
+        selectedIcon: require("container/asset/icon/navitage_select.png"),
         testID: screens.TAB_NAVIGATE,
       },
     },
@@ -169,8 +169,8 @@ bottomTabsByID[screens.TAB_NOTIFICATION] = () => ({
       },
       bottomTab: {
         text: getIntl().formatMessage(Messages.tab_notification),
-        // icon: require('@src/assets/icons/Tab_acc_in.png'),
-        // selectedIcon: require('@src/assets/icons/Tab_acc_act.png'),
+        icon: require("container/asset/icon/notification.png"),
+        selectedIcon: require("container/asset/icon/notification_select.png"),
         testID: screens.TAB_NOTIFICATION,
       },
     },
@@ -223,8 +223,8 @@ bottomTabsByID[screens.TAB_TASK] = () => ({
       },
       bottomTab: {
         text: getIntl().formatMessage(Messages.tab_task),
-        // icon: require('@src/assets/icons/Tab_acc_in.png'),
-        // selectedIcon: require('@src/assets/icons/Tab_acc_act.png'),
+        icon: require("container/asset/icon/task.png"),
+        selectedIcon: require("container/asset/icon/task_select.png"),
         testID: screens.TAB_TASK,
       },
     },

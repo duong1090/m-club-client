@@ -26,8 +26,11 @@ export const color = {
   primary: "#0275d8",
   border: "#707070",
   dark: "#000000",
-  light:"#f7f7f7",
+  light: "#f7f7f7",
   inverse: "#292b2c",
+  orange: "#FFAA00",
+  red: "#FF0000",
+  green: "#009900",
 };
 
 export const shadow = {
