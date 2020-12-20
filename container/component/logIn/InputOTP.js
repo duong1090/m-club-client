@@ -35,6 +35,8 @@ const InputOTP = (props) => {
 
   //function
   useEffect(() => {
+    console.log('didUpdate::::', certificate)
+
     //in case bypass, force login
     if (certificate.is_bypass)
       doLogin({
@@ -42,7 +44,7 @@ const InputOTP = (props) => {
         is_bypass: certificate.is_bypass,
         phone_number: certificate.phone,
       });
-    // else do authenticate by firebase
+    //do authenticate by firebase
     else {
       showSpinner();
       signInWithPhoneNumber(certificate.phone)
@@ -55,7 +57,7 @@ const InputOTP = (props) => {
           hideSpinner();
         });
     }
-  }, []);
+  }, [certificate])
 
   const activeUser = async () => {
     if (confirmOTP && otp) {
@@ -113,7 +115,7 @@ const InputOTP = (props) => {
         >
           {intl.formatMessage(Messages.new_here)}{" "}
         </Text>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => { }}>
           <Text
             style={{
               ...defaultText,
