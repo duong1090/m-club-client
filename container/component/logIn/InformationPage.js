@@ -14,6 +14,7 @@ import SelectClub from "./SelectClub";
 import InputOTP from "./InputOTP";
 import { clubListState, certificateState } from "container/recoil/state/login";
 import { useRecoilValue, useRecoilState } from "recoil";
+import Toast from "react-native-simple-toast";
 
 const TAB_INPUT_PHONE = 0;
 const TAB_SELECT_CLUB = 1;
@@ -24,23 +25,39 @@ const InformationPage = (props) => {
 
   //state
   const [activeTab, setActiveTab] = useState(0);
+  const [isByPass, setIsByPass] = useState(false);
+  let countByPass = 0;
 
   //recoil state
   const clubList = useRecoilValue(clubListState);
   const [certificate, setCertificate] = useRecoilState(certificateState);
 
+  //effect
   useEffect(() => {
     console.log("Login:::useEffect:::", clubList);
     if (clubList && clubList.length) {
       if (clubList.length == 1) {
         setActiveTab(TAB_INPUT_OTP);
-        setCertificate({ ...certificate, club_id: clubList[0].id });
+        let tmpCertificate = { ...certificate, club_id: clubList[0].id };
+        if (isByPass) tmpCertificate.is_bypass = 1;
+        setCertificate({ ...certificate });
       } else {
         setActiveTab(TAB_SELECT_CLUB);
       }
     }
   }, [clubList]);
 
+  //function - event
+  const doByPass = () => {
+    countByPass++;
+    console.log("doByPass:::", countByPass, isByPass);
+    if (countByPass >= 10) {
+      Toast.show("sua di khang :))", Toast.SHORT);
+      setIsByPass(true);
+    }
+  };
+
+  //render
   const tabs = [
     <InputPhone style={styles.inputPhone} />,
     <SelectClub style={styles.selectClub} />,
@@ -49,7 +66,7 @@ const InformationPage = (props) => {
 
   return (
     <View style={[style, styles.container]}>
-      <Text style={styles.welcome}>
+      <Text onPress={() => doByPass()} style={styles.welcome}>
         {intl.formatMessage(Messages.welcome_to_mclub)}
       </Text>
       {tabs[activeTab]}

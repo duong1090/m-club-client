@@ -35,16 +35,26 @@ const InputOTP = (props) => {
 
   //function
   useEffect(() => {
-    showSpinner();
-    signInWithPhoneNumber(certificate.phone)
-      .then((confirm) => {
-        if (confirm) setConfirmOTP(confirm);
-        hideSpinner();
-      })
-      .catch((err) => {
-        console.error(err);
-        hideSpinner();
+    //in case bypass, force login
+    if (certificate.is_bypass)
+      doLogin({
+        club_id: certificate.club_id,
+        is_bypass: certificate.is_bypass,
+        phone_number: certificate.phone,
       });
+    // else do authenticate by firebase
+    else {
+      showSpinner();
+      signInWithPhoneNumber(certificate.phone)
+        .then((confirm) => {
+          if (confirm) setConfirmOTP(confirm);
+          hideSpinner();
+        })
+        .catch((err) => {
+          console.error(err);
+          hideSpinner();
+        });
+    }
   }, []);
 
   const activeUser = async () => {
