@@ -6027,6 +6027,13 @@ react-native-navigation@^7.2.0:
     react-lifecycles-compat "2.0.0"
     tslib "1.9.3"
 
+react-native-onesignal@^3.9.3:
+  version "3.9.3"
+  resolved "https://registry.yarnpkg.com/react-native-onesignal/-/react-native-onesignal-3.9.3.tgz#8f8c095f8eed4ca4d934d25d7f33790569076fc9"
+  integrity sha512-ruCwKfBbofb6wDBVDLe37tIrnt3lqoIhPvejk/yIeie21yYirXt3HdytaDH47TuuXclet7HsC+2X39rLFP5JpQ==
+  dependencies:
+    invariant "^2.2.2"
+
 react-native-safe-modules@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-modules/-/react-native-safe-modules-1.0.0.tgz#10a918adf97da920adb1e33e0c852b1e80123b65"
