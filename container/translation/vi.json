@@ -58,5 +58,8 @@
   "status": "Tình trạng",
   "priority": "Độ ưu tiên",
   "deadline": "Hạn chót",
-  "sort": "Sắp xếp"
+  "sort": "Sắp xếp",
+  "placeholder_task_name": "Tên công việc...",
+  "assign_person": "Người phụ trách",
+  "due_date": "Hạn chót"
 }

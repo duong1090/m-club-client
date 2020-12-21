@@ -245,4 +245,16 @@ export default defineMessages({
     id: "sort",
     defaultMessage: "Sort",
   },
+  placeholder_task_name: {
+    id: "placeholder_task_name",
+    defaultMessage: "Task name...",
+  },
+  assign_person: {
+    id: "assign_person",
+    defaultMessage: "Assigned to",
+  },
+  due_date: {
+    id: "due_date",
+    defaultMessage: "Due date",
+  },
 });

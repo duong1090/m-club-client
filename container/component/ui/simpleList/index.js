@@ -147,9 +147,8 @@ const styles = StyleSheet.create({
     marginTop: space.itemMargin,
   },
   actionButtonIcon: {
-    fontSize: 20,
-    height: 22,
-    color: "white",
+    fontSize: 25,
+    color: "#fff",
   },
   boxEmpty: {
     marginTop: scale(60),

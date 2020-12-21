@@ -19,6 +19,7 @@ export const color = {
   fontColor: "#707070",
   disable: "#9F9F9F",
   hint: "#BBBBBB",
+  lightGrey: "#E7E7E7",
   warning: "#f0ad4e",
   danger: "#DF3651",
   success: "#5cb85c",
