@@ -10,6 +10,8 @@ target 'MClub' do
 
   pod 'Interactable', :path => '../node_modules/react-native-interactable'
 
+  pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
+
   target 'MClubTests' do
     inherit! :complete
     # Pods for testing
