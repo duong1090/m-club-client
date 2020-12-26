@@ -147,12 +147,9 @@ const BottomPopUp = (props, ref) => {
   const renderWithKeyBoard = () => {
     return (
       visible && (
-        <View
-          style={[styles.panelContainer, { backgroundColor: "red" }]}
-          pointerEvents="box-none"
-        >
+        <View style={styles.panelContainer} pointerEvents="box-none">
           <KeyboardAvoidingView
-            style={{ flex: 1, backgroundColor: "yellow" }}
+            style={{ flex: 1 }}
             keyboardVerticalOffset={50}
             behavior="position"
           >
@@ -162,8 +159,8 @@ const BottomPopUp = (props, ref) => {
               style={[
                 styles.panelContainer,
                 {
-                  height: Screen.height - height,
                   backgroundColor: "black",
+                  height: Screen.height - height,
                   opacity: _deltaY.interpolate({
                     inputRange: [0, Screen.height - 100],
                     outputRange: [0.5, 0],
@@ -224,6 +221,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   panel: {
+    height: Screen.height,
     padding: space.bgPadding,
     backgroundColor: "#fff",
     borderTopLeftRadius: space.border,
@@ -241,7 +239,6 @@ const styles = StyleSheet.create({
     marginBottom: scale(30),
   },
   panelBody: {
-    justifyContent: "center",
     alignItems: "center",
   },
   toolbar: {
