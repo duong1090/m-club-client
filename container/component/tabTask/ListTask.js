@@ -1,11 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  KeyboardAvoidingView,
+  TextInput,
 } from "react-native";
 import SearchBox from "container/component/ui/searchBox";
 import {
@@ -16,31 +16,39 @@ import {
   space,
   defaultText,
 } from "container/variables/common";
-import { Icon, Tabs, Tab, ScrollableTab, Image } from "native-base";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { listTaskState, currTaskState } from "container/recoil/state/tabTask";
+import { Icon, Tabs, Tab, ScrollableTab } from "native-base";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
 import ActionButton from "react-native-action-button";
-import BottomPopUp from "container/component/ui/bottomPopUp";
+import CreateTask from "./CreateTask";
+import { getRequest } from "container/utils/request";
+import Config from "container/config/server.config";
+import HeaderInfo from "./HeaderInfo";
+import { showSpinner, hideSpinner } from "container/utils/router";
 
-const AVATAR_SIZE = scale(60);
-
-const DEFAULT_DATA = [
-  {
-    id: "1",
-    categoryName: "today",
-    isExpanded: true,
-    subCategory: [],
-  },
-];
+const TODAY = 0,
+  FUTURE = 1,
+  TIMED = 2,
+  NO_TIME = 3;
 
 const ListTask = (props) => {
   //props
-  const { style, intl } = props;
+  const { style, intl, changeMode, mode } = props;
   //state
-  const [data, setData] = useState(DEFAULT_DATA);
+  const [data, setData] = useRecoilState(listTaskState);
+  const setCurrTask = useSetRecoilState(currTaskState);
+  // const [data, setData] = useState(DEFAULT_DATA);
+  const [activeTab, setActiveTab] = useState(0);
+
   //variables
-  const bottomPopUpRef = useRef(null);
-  let pageTabs = [0];
+  const createTaskRef = useRef(null);
+
+  //effect
+  useEffect(() => {
+    getData();
+  }, []);
 
   //function - event
   const selectStatus = () => {
@@ -57,16 +65,36 @@ const ListTask = (props) => {
   const loadMore = (index) => {};
 
   const openCreatePopUp = () => {
-    bottomPopUpRef.current.show();
+    createTaskRef.current.show();
+  };
+
+  const getData = () => {
+    showSpinner();
+    getRequest(Config.API_URL.concat("task/get"))
+      .then((res) => {
+        if (res && res.data) {
+          console.log("getTask:::", res.data);
+          let temp = [...data];
+          temp[TODAY].data = res.data.today;
+          temp[FUTURE].data = res.data.future;
+          temp[TIMED].data = res.data.timed;
+          temp[NO_TIME].data = res.data.no_time;
+          setData(temp);
+        }
+        hideSpinner();
+      })
+      .catch((err) => {
+        hideSpinner();
+        console.log(err);
+      });
+  };
+
+  const gotoDetail = async (item, indexTab) => {
+    setCurrTask({ ...item, indexTab });
+    changeMode && changeMode("detail");
   };
 
   //render
-  const uiUser = [
-    <Image
-      style={{ width: AVATAR_SIZE, height: AVATAR_SIZE }}
-      source={require("container/asset/icon/unassign-nhanvien.png")}
-    />,
-  ];
 
   const renderPriorLevel = (level) => {
     let colors =
@@ -78,13 +106,16 @@ const ListTask = (props) => {
     );
   };
 
-  const renderItemTask = (item) => (
-    <View style={[styles.taskContent, style]}>
-      {renderPriorLevel(item.priorLevel)}
+  const renderItemTask = (item, indexTab) => (
+    <TouchableOpacity
+      onPress={() => gotoDetail(item, indexTab)}
+      style={[styles.taskContent, style]}
+    >
+      {renderPriorLevel(item.prior_level)}
       <View style={[styles.taskTitle, style]}>
         <Text numberOfLines={1}>{item.name}</Text>
       </View>
-      {item.isDone ? (
+      {item.is_done ? (
         <Icon
           type="Ionicons"
           name="md-checkmark-circle"
@@ -97,7 +128,7 @@ const ListTask = (props) => {
           style={{ ...defaultText, fontSize: scale(50) }}
         />
       )}
-    </View>
+    </TouchableOpacity>
   );
 
   const renderFilter = () => {
@@ -151,25 +182,45 @@ const ListTask = (props) => {
     );
   };
 
-  const renderEntityTab = (tab, index) => {
+  const renderEntityTab = (tab, indexTab) => {
     const heading = (
-      <View>
-        <Text style={{ ...defaultText }}>{tab.name}</Text>
-        <View style={styles.dot}>
-          <Text style={{ ...defaultText, fontSize: fontSize.size26 }}>
-            {tab.number}
-          </Text>
-        </View>
+      <View
+        style={[
+          styles.headingBox,
+          activeTab != indexTab ? { backgroundColor: color.lightGrey } : null,
+        ]}
+      >
+        <Text
+          style={{
+            ...defaultText,
+            fontWeight: "bold",
+          }}
+        >
+          {tab.name}
+        </Text>
+        {tab.data && tab.data.length > 0 ? (
+          <View style={styles.dot}>
+            <Text
+              style={{
+                ...defaultText,
+                fontSize: fontSize.size20,
+                color: "#fff",
+              }}
+            >
+              {tab.data.length <= 99 ? tab.data.length : "+99"}
+            </Text>
+          </View>
+        ) : null}
       </View>
     );
     return (
-      <Tab heading={heading} locked>
-        {tab.data && tab.data.items && tab.data.items.length ? (
+      <Tab heading={heading} style={{ backgroundColor: color.backgroundColor }}>
+        {tab.data && tab.data.length ? (
           <FlatList
-            data={tab.data.items}
+            data={tab.data}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => renderItemTask(item)}
-            onEndReached={() => loadMore(index)}
+            renderItem={({ item }) => renderItemTask(item, indexTab)}
+            // onEndReached={() => loadMore(index)}
           />
         ) : (
           <View style={styles.boxEmpty}>
@@ -185,6 +236,8 @@ const ListTask = (props) => {
   const renderTabs = () => {
     return (
       <Tabs
+        onChangeTab={(event) => setActiveTab(event.i)}
+        locked
         renderTabBar={() => <ScrollableTab style={styles.tabWrapper} />}
         tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
       >
@@ -195,6 +248,7 @@ const ListTask = (props) => {
 
   return (
     <View style={[styles.container, style]}>
+      <HeaderInfo />
       {renderFilter()}
       {renderTabs()}
 
@@ -210,218 +264,7 @@ const ListTask = (props) => {
         buttonColor={color.warning}
         onPress={() => openCreatePopUp()}
       />
-      <BottomPopUp
-        ref={bottomPopUpRef}
-        isUseKeyBoard
-        height={scale(400)}
-        animateToY={scale(-800)}
-        limitAnimateY={scale(-500)}
-        body={
-          <View>
-            <View style={styles.taskTypeWrapper}>
-              <React.Fragment>
-                <Icon
-                  style={{
-                    color: color.text,
-                    fontSize: fontSize.size26,
-                  }}
-                  name="ios-lock"
-                />
-                <Text
-                  style={{
-                    ...defaultText,
-                    fontSize: fontSize.size26,
-                    marginLeft: scale(10),
-                  }}
-                >
-                  quan que
-                </Text>
-              </React.Fragment>
-            </View>
-            <TextInput
-              onChangeText={(text) => {}}
-              autoFocus
-              autoCorrect={false}
-              maxLength={200}
-              placeholder={intl.formatMessage(Messages.placeholder_task_name)}
-              style={{
-                fontSize: fontSize.size32,
-              }}
-              blurOnSubmit={false}
-              returnKeyType="next"
-              onSubmitEditing={() => {
-                // this.createTaskElem && this.createTaskElem.snapTo({ index: 0 });
-                // this._descriptionText &&
-                //   this._descriptionText.wrappedInstance &&
-                //   this._descriptionText.wrappedInstance.focus();
-              }}
-            />
-            <View style={styles.blockItem}>
-              <TouchableOpacity style={styles.assignWrap} onPress={() => {}}>
-                <View
-                  style={{
-                    width: AVATAR_SIZE,
-                    paddingVertical: space.bgPadding,
-                  }}
-                >
-                  {uiUser}
-                </View>
-                <View style={{ marginLeft: scale(15) }}>
-                  <Text
-                    style={{
-                      ...defaultText,
-                      fontSize: fontSize.size26,
-                      color: color.text,
-                    }}
-                  >
-                    {intl.formatMessage(Messages.assign_person)}
-                  </Text>
-                  {/* {dataGeneral.assigned_user &&
-                  dataGeneral.assigned_user.name ? ( */}
-                  <Text
-                    style={{
-                      ...defaultText,
-                      fontSize: fontSize.size26,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {"Dai DAi"}
-                  </Text>
-                  {/* ) : null} */}
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                require
-                onPress={this.openDueDatePicker}
-                style={styles.dueDateWrap}
-              >
-                <Image
-                  style={{ width: AVATAR_SIZE, height: AVATAR_SIZE }}
-                  source={require("@src/assets/icons/unassign-hanchot.png")}
-                />
-                <View style={{ marginLeft: variables.scale(15) }}>
-                  <Text font-size-22 color-secondary>
-                    {intl.formatMessage(Messages.due_date)}
-                  </Text>
-                  {due_date ? (
-                    <Text font-size-22 bold style={{ color: dueDateColor }}>
-                      {moment(due_date, DUE_DATE_FORMAT).format(
-                        intl.formatMessage(Messages.due_date_format)
-                      )}
-                    </Text>
-                  ) : null}
-                </View>
-                <DatePicker
-                  mode="date"
-                  showIcon={false}
-                  hideText={true}
-                  androidMode="spinner"
-                  ref={(ref) => (this.datePickerRef = ref)}
-                  onDateChange={(date) => {
-                    this.setState({ due_date: date });
-                  }}
-                  format={DUE_DATE_FORMAT}
-                  confirmBtnText={intl
-                    .formatMessage(Messages.confirm)
-                    .toUpperCase()}
-                  cancelBtnText={intl
-                    .formatMessage(Messages.cancel)
-                    .toUpperCase()}
-                  style={{ width: 0 }}
-                />
-              </TouchableOpacity>
-              {due_date ? (
-                <TouchableOpacity
-                  onPress={this.openDueTimePicker}
-                  style={styles.dueDateWrap}
-                >
-                  <Image
-                    style={{ width: AVATAR_SIZE, height: AVATAR_SIZE }}
-                    source={require("@src/assets/icons/dukien.png")}
-                  />
-                  <View style={{ marginLeft: variables.scale(15) }}>
-                    <Text font-size-22 color-secondary>
-                      {intl.formatMessage(Messages.due_time)}
-                    </Text>
-                    {due_time ? (
-                      <Text font-size-22 bold style={{ color: dueDateColor }}>
-                        {moment(due_time, DUE_TIME_FORMAT).format(
-                          intl.formatMessage(Messages.due_time_format)
-                        )}
-                      </Text>
-                    ) : null}
-                  </View>
-                  <DatePicker
-                    mode="time"
-                    showIcon={false}
-                    hideText={true}
-                    androidMode="spinner"
-                    ref={(ref) => (this.timePickerRef = ref)}
-                    onDateChange={(time) => {
-                      this.setState({ due_time: time });
-                    }}
-                    format={DUE_TIME_FORMAT}
-                    confirmBtnText={intl
-                      .formatMessage(Messages.confirm)
-                      .toUpperCase()}
-                    cancelBtnText={intl
-                      .formatMessage(Messages.cancel)
-                      .toUpperCase()}
-                    style={{ width: 0 }}
-                  />
-                </TouchableOpacity>
-              ) : null}
-            </View>
-            {bundle ? (
-              <TouchableOpacity
-                onPress={this.gotoSelectStatus}
-                disabled={
-                  this.state.isEditTitle || this.state.isEditDescription
-                }
-                style={{ flexDirection: "row", alignItems: "center" }}
-              >
-                {status ? (
-                  <View
-                    style={[
-                      styles.priority,
-                      {
-                        backgroundColor: status ? status.color : "",
-                      },
-                    ]}
-                  />
-                ) : null}
-                <Text color-secondary font-size-26>
-                  {status
-                    ? status.name
-                    : intl.formatMessage(Messages.select_section)}
-                </Text>
-              </TouchableOpacity>
-            ) : null}
-            <View flex-row align-items-center>
-              <Textarea
-                ref={(ref) => (this._descriptionText = ref)}
-                autoCorrect={false}
-                onChangeText={(text) => this.setState({ description: text })}
-                rowSpan={3}
-                placeholder={intl.formatMessage(Messages.description)}
-                placeholderTextColor={variables.textColorSecondary}
-                style={{
-                  flex: 1,
-                  marginTop: variables.scale(15),
-                  paddingLeft: 0,
-                }}
-              />
-            </View>
-          </View>
-        }
-        toolbar={() => (
-          <TouchableOpacity style={styles.createButton}>
-            <Text style={styles.textCreateButton}>
-              {intl.formatMessage(Messages.create)}
-            </Text>
-          </TouchableOpacity>
-        )}
-      />
+      <CreateTask ref={createTaskRef} />
     </View>
   );
 };
@@ -444,8 +287,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: scale(20),
     alignItems: "center",
-    padding: scale(10),
-    paddingRight: 0,
+    padding: scale(20),
+    paddingVertical: scale(10),
+    margin: space.itemMargin,
+    marginBottom: 0,
     ...shadow,
   },
   taskTitle: {
@@ -456,7 +301,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   noneItem: {
-    backgroundColor: "#ddd",
+    backgroundColor: color.lightGrey,
     borderRadius: scale(30),
     width: "100%",
     height: scale(40),
@@ -471,7 +316,6 @@ const styles = StyleSheet.create({
   },
   filter: {
     margin: scale(20),
-    marginBottom: space.itemMargin * 2,
     borderBottomWidth: scale(4),
     paddingBottom: scale(20),
     borderColor: color.backgroundColor,
@@ -489,21 +333,25 @@ const styles = StyleSheet.create({
   },
   searchBox: {},
   tabWrapper: {
-    backgroundColor: "#fff",
-    borderBottomWidth: 0,
+    height: scale(80),
+    backgroundColor: "transparent",
+    borderWidth: 0,
+    marginBottom: scale(-2),
+    marginHorizontal: scale(10),
   },
   tabBarUnderlineStyle: {
-    height: scale(4),
-    backgroundColor: color.success,
-    marginTop: scale(15),
+    height: 0,
   },
   dot: {
+    position: "absolute",
+    top: scale(-20),
+    right: scale(-20),
     justifyContent: "center",
     alignItems: "center",
-    height: scale(38),
-    minWidth: scale(38),
-    borderRadius: scale(19),
-    backgroundColor: color.primary,
+    height: scale(45),
+    width: scale(45),
+    borderRadius: scale(23),
+    backgroundColor: color.danger,
   },
   boxEmpty: {
     marginTop: scale(60),
@@ -518,37 +366,14 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: "#fff",
   },
-  createButton: {
-    paddingVertical: scale(10),
-    paddingHorizontal: scale(20),
-    alignSelf: "flex-end",
-    borderRadius: space.border,
-    backgroundColor: color.primary,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  textCreateButton: {
-    ...defaultText,
-    color: "#fff",
-  },
-  taskTypeWrapper: {
-    flexDirection: "row",
-    marginBottom: space.bgPadding,
-    alignItems: "center",
-  },
-  blockItem: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  assignWrap: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  dueDateWrap: {
-    marginLeft: scale(50),
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+  headingBox: {
+    width: scale(200),
+    marginTop: scale(20),
+    marginRight: scale(20),
+    backgroundColor: color.info,
+    borderTopLeftRadius: space.border,
+    borderTopRightRadius: space.border,
+    backgroundColor: color.backgroundColor,
   },
 });
 

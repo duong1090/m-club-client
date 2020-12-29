@@ -5,7 +5,7 @@ import Config from "container/config/server.config";
 import { gotoHome, gotoLogin } from "container/utils/router";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import { ORGANIZATION } from "../constant/storage";
-import OneSignal from 'react-native-onesignal'; // Import package from node modules
+import OneSignal from "react-native-onesignal"; // Import package from node modules
 
 export const doLogin = async (payload) => {
   showSpinner();
@@ -31,18 +31,17 @@ export const loginSuccess = async (token) => {
   const data = await getOrganization();
   if (data) {
     global.organization = data;
-    setItem(ORGANIZATION, data);
-    console.log("organizationnn", data)
+    setItem(ORGANIZATION, JSON.stringify(data));
+    console.log("organizationnn", data);
     if (data.member && data.club) {
       OneSignal.sendTags({
         mem_id: data.member.id,
         club_id: data.club.id,
       });
-
     }
   } else {
     const temp = await getItem(ORGANIZATION);
-    if (temp) global.organization = temp;
+    if (temp) global.organization = JSON.parse(temp);
   }
 };
 
@@ -79,10 +78,10 @@ const removeUserInfo = () => {
       removeItem(API_TOKEN)
         .then(() => resolve(true))
         .catch((err) => reject(err));
-      OneSignal.getTags(receivedTags => {
-        console.log('receivedTags', receivedTags);
-        OneSignal.deleteTag('userId');
-        OneSignal.deleteTag('username');
+      OneSignal.getTags((receivedTags) => {
+        console.log("receivedTags", receivedTags);
+        OneSignal.deleteTag("userId");
+        OneSignal.deleteTag("username");
       });
       // OneSignal.deleteTag('userId');
       // OneSignal.deleteTag('username');

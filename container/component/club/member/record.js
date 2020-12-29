@@ -84,7 +84,13 @@ const MemberRecord = (props) => {
       type: "date_picker",
       mode: "date",
       placeholder: intl.formatMessage(Messages.birthday_placeholder),
-      onChangeDate: (value) => onChangeField("birthday", value),
+      onChangeDate: (value) => {
+        console.log("onChangeDate:::", value);
+        let temp = moment(value).format(
+          intl.formatMessage(Messages.date_format)
+        );
+        onChangeField("birthday", temp);
+      },
     },
     {
       name: <FormattedMessage {...Messages.department} />,

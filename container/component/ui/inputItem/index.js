@@ -23,7 +23,8 @@ import {
 import Messages from "container/translation/Message";
 import { injectIntl } from "react-intl";
 import { Icon } from "native-base";
-import DatePicker from "react-native-datepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from "moment";
 
 const InputItem = (props, ref) => {
   const {
@@ -46,10 +47,12 @@ const InputItem = (props, ref) => {
     onPress,
     required,
     mode,
-    format,
-    onDateChange,
+    onChangeDate,
   } = props;
   const inputRef = useRef(null);
+
+  //state
+  const [visible, setVisible] = useState(false);
 
   // useImperativeHandle(ref, () => ({
   //   inputRef,
@@ -183,50 +186,49 @@ const InputItem = (props, ref) => {
   };
 
   const renderDateTimePicker = () => {
-    console.log("renderDateTimePicker:::", value);
     return (
-      <DatePicker
-        date={value}
-        mode={mode ? mode : "date"}
-        format={format ? format : intl.formatMessage(Messages.date_format)}
-        placeholder={placeholder}
-        confirmBtnText={intl.formatMessage(Messages.done)}
-        cancelBtnText={intl.formatMessage(Messages.cancel)}
-        showIcon={true}
-        iconComponent={
-          <Icon
-            name="caret-down"
-            style={{ color: color.hint, fontSize: scale(40) }}
-          />
-        }
-        onDateChange={onDateChange}
-        customStyles={{
-          dateTouchBody: {
-            padding: 0,
-            alignItems: "center",
-            paddingTop: 0,
-            height: null,
-          },
-          dateInput: {
-            borderWidth: 0,
-            alignItems: "flex-start",
-            padding: 0,
-            height: null,
-          },
-          disabled: {
-            backgroundColor: "transparent",
-          },
-          dateText: {
-            color: color.text,
-            fontSize: fontSize.fontSize28,
-            fontFamily: "Roboto-Regular",
-          },
-          placeholderText: {
-            color: color.hint,
-          },
-        }}
-        style={{ width: "100%" }}
-      />
+      <TouchableOpacity
+        style={{ flex: 1, justifyContent: "center" }}
+        onPress={() => setVisible(true)}
+      >
+        {value ? (
+          <Text
+            style={{ ...defaultText }}
+            numberOfLines={1}
+            ellipsizeMode={"tail"}
+          >
+            {value || ""}
+          </Text>
+        ) : (
+          <Text
+            style={{
+              ...defaultText,
+              fontSize: fontSize.size28,
+              color: color.hint,
+            }}
+          >
+            {placeholder ? placeholder : intl.formatMessage(Messages.select)}
+          </Text>
+        )}
+        <DateTimePickerModal
+          isVisible={visible}
+          mode={mode ? mode : "date"}
+          onConfirm={(date) => {
+            setVisible(false);
+            onChangeDate(date);
+          }}
+          date={
+            new Date(
+              Date.parse(
+                moment(value, intl.formatMessage(Messages.date_format)).format(
+                  "YYYY-MM-DD"
+                )
+              )
+            )
+          }
+          onCancel={() => setVisible(false)}
+        />
+      </TouchableOpacity>
     );
   };
 

@@ -1,23 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
-import HeaderInfo from "./HeaderInfo.js";
-import ListTask from "./ListTask.js";
-import { scale, shadow } from "container/variables/common";
+import ListTask from "./ListTask";
+import DetailTask from "./DetailTask";
+import { color, shadow } from "container/variables/common";
 
 const TabTask = (props) => {
   console.log("TabTask:::", global, global.organization);
+  //state
+  const [mode, setMode] = useState("list");
 
-  return (
-    <View style={styles.container}>
-      <HeaderInfo />
-      <ListTask />
-    </View>
-  );
+  //change mode to switch screen
+  const onChangeMode = (mode = "list") => {
+    setMode(mode);
+  };
+
+  //render
+  const tabs = {
+    list: <ListTask changeMode={onChangeMode} mode={mode} />,
+    detail: (
+      <DetailTask changeMode={onChangeMode} mode={mode} data={props.data} />
+    ),
+  };
+
+  return <View style={styles.container}>{tabs[mode]}</View>;
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#eee",
     height: "100%",
     ...shadow,
   },

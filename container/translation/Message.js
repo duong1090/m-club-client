@@ -225,6 +225,10 @@ export default defineMessages({
     id: "date_format",
     defaultMessage: "YYYY-MM-DD",
   },
+  datetime_format: {
+    id: "datetime_format",
+    defaultMessage: "YYYY-MM-DD HH:ss",
+  },
   cancel: {
     id: "cancel",
     defaultMessage: "Cancel",
@@ -256,5 +260,21 @@ export default defineMessages({
   due_date: {
     id: "due_date",
     defaultMessage: "Due date",
+  },
+  due_date_format: {
+    id: "due_date_format",
+    defaultMessage: "MMM DD",
+  },
+  due_time_format: {
+    id: "due_time_format",
+    defaultMessage: "HH:mm",
+  },
+  due_time: {
+    id: "due_time",
+    defaultMessage: "Time",
+  },
+  description: {
+    id: "description",
+    defaultMessage: "Description",
   },
 });

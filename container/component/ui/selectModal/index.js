@@ -1,19 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
-import { View, FlatList, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  Image,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { Icon } from "native-base";
 import { Container } from "native-base";
 import Spinner from "container/component/ui/spinner";
 import { scale, color, defaultText, space } from "container/variables/common";
 import Config from "container/config/server.config";
 import { getRequest } from "container/utils/request";
-import { Navigation } from "react-native-navigation";
 import { back } from "container/utils/router";
+import Avatar from "container/component/ui/avatar";
+import { fontSize } from "../../../variables/common";
 
 const SelectModal = (props) => {
   //props
   const {
+    isMember,
     intl,
     style,
     multiSelect,
@@ -32,54 +41,11 @@ const SelectModal = (props) => {
   let page = 1;
   let meta = {};
 
-  //default option topBar
-  Navigation.mergeOptions(componentId, {
-    topBar: {
-      visible: true,
-      rightButtons: multiSelect
-        ? [
-            {
-              id: "done",
-              system: "done",
-              text: intl.formatMessage(Messages.done),
-              showAsAction: "always",
-            },
-          ]
-        : [],
-      title: {
-        text: title || intl.formatMessage(Messages.select),
-      },
-      leftButtons: [
-        {
-          id: "back",
-          icon: require("container/asset/icon/icon_topbar_close.png"),
-          visible: true,
-        },
-      ],
-    },
-  });
-
   //#region  effect
   useEffect(() => {
-    if (!props.data) getData();
-    else setData(props.data);
+    if (props.data && props.data.length) setData(props.data);
+    else getData();
   }, [props.data]);
-
-  //button header event
-  useEffect(() => {
-    const sub = Navigation.events().registerNavigationButtonPressedListener(
-      ({ buttonId }) => {
-        if (buttonId == "done") {
-          onMultiSelectDone();
-        } else if (buttonId == "back") {
-          back();
-        }
-      }
-    );
-    return () => {
-      sub.remove();
-    };
-  }, [componentId]);
 
   useEffect(() => {
     if (props.selectedItem) setSelectedItem(props.selectedItem);
@@ -94,9 +60,13 @@ const SelectModal = (props) => {
       let tempData = [...data];
       if (res && res.data) {
         if (res.data.items) {
-          tempData = tempData.concat(res.data.items);
+          if (page > 1) tempData = tempData.concat(res.data.items);
+          else tempData = res.data.items;
           meta = res.data.meta;
-        } else tempData = tempData.concat(res.data);
+        } else {
+          if (page > 1) tempData = tempData.concat(res.data);
+          else tempData = res.data;
+        }
         setData(tempData);
       }
     });
@@ -137,6 +107,7 @@ const SelectModal = (props) => {
 
   //render
   const renderItem = ({ item }) => {
+    console.log("renderItem:::", selectedItem);
     let isSelected = false;
 
     if (multiSelect) {
@@ -154,13 +125,22 @@ const SelectModal = (props) => {
 
     return (
       <TouchableOpacity onPress={() => onPress(item)} style={styles.rowItem}>
-        <Text style={styles.text}>
-          {item.title
-            ? item.title
-            : optionIndexName
-            ? item[optionIndexName]
-            : item.name}
-        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          {isMember ? (
+            <Avatar
+              style={{ marginRight: space.itemMargin }}
+              data={item}
+              size={scale(80)}
+            />
+          ) : null}
+          <Text style={styles.text}>
+            {item.title
+              ? item.title
+              : optionIndexName
+              ? item[optionIndexName]
+              : item.name}
+          </Text>
+        </View>
         {isSelected ? (
           <Icon
             name="ios-checkmark"
@@ -176,6 +156,19 @@ const SelectModal = (props) => {
 
   return (
     <Container style={{ backgroundColor: "#fff" }}>
+      <View style={styles.header}>
+        <TouchableWithoutFeedback onPress={() => back()}>
+          <Image
+            source={require("container/asset/icon/icon_topbar_close.png")}
+          />
+        </TouchableWithoutFeedback>
+        <Text style={styles.title}>
+          {title || intl.formatMessage(Messages.select)}
+        </Text>
+        <TouchableWithoutFeedback onPress={() => onMultiSelectDone()}>
+          <Text style={styles.done}>{intl.formatMessage(Messages.done)}</Text>
+        </TouchableWithoutFeedback>
+      </View>
       {loading ? (
         <Spinner />
       ) : data && data.length ? (
@@ -201,19 +194,33 @@ const SelectModal = (props) => {
 };
 
 const styles = {
+  header: {
+    padding: space.bgPadding,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: scale(40),
+  },
+  title: {
+    ...defaultText,
+    fontSize: fontSize.sizeTitle,
+    fontWeight: "bold",
+  },
+  done: {
+    ...defaultText,
+    color: color.success,
+  },
   rowItem: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: scale(30),
+    alignItems: "center",
     paddingVertical: scale(25),
-    borderBottomWidth: 0.5,
-    borderBottomColor: color.hint,
+    paddingHorizontal: space.bgPadding,
+    borderBottomWidth: scale(2),
+    borderBottomColor: color.lightGrey,
     backgroundColor: "#fff",
-    height: scale(90),
   },
-  container: {
-    paddingHorizontal: scale(20),
-  },
+  container: {},
   textBox: {
     justifyContent: "center",
     alignItems: "center",

@@ -19,7 +19,8 @@ export const color = {
   fontColor: "#707070",
   disable: "#9F9F9F",
   hint: "#BBBBBB",
-  lightGrey: "#E7E7E7",
+  grey: "#858585",
+  lightGrey: "#ddd",
   warning: "#f0ad4e",
   danger: "#DF3651",
   success: "#5cb85c",
@@ -29,9 +30,11 @@ export const color = {
   dark: "#000000",
   light: "#f7f7f7",
   inverse: "#292b2c",
-  orange: "#FFAA00",
-  red: "#FF0000",
-  green: "#009900",
+  orange: "#f0ad4e",
+  red: "#DF3651",
+  green: "#5cb85c",
+  colorMandy: "#E24F63",
+  lightGreen: "#d0ffd0",
 };
 
 export const shadow = {
