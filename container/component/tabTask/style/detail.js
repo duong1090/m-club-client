@@ -26,6 +26,7 @@ export const styles = StyleSheet.create({
   contentChild: {
     flexDirection: "row",
     alignSelf: "flex-end",
+    alignItems: "center",
   },
   contentChildText: {
     ...defaultText,

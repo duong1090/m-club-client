@@ -6,13 +6,16 @@ import { color, shadow } from "container/variables/common";
 import { Tabs, Tab, Container, ScrollableTab } from "native-base";
 
 const TabTask = (props) => {
-  console.log("TabTask:::", global, global.organization);
+  console.log("TabTask:::", props);
   //state
   const [mode, setMode] = useState("list");
 
   //effect
   useEffect(() => {
-    if (props.mode) setMode(props.mode);
+    if (props.mode) {
+      console.log("didUpdate:::", props.mode);
+      setMode(props.mode);
+    }
   }, [props.mode]);
 
   //change mode to switch screen
@@ -22,19 +25,13 @@ const TabTask = (props) => {
   };
 
   //render
-  // const tabs = {
-  //   list: <ListTask changeMode={onChangeMode} mode={mode} />,
-  //   detail: (
-  //     <DetailTask changeMode={onChangeMode} mode={mode} data={props.data} />
-  //   ),
-  // };
-
+  
   const renderMode = (mode) => {
     const activeTab = mode == "detail" ? 1 : 0;
     console.log("renderMode:::", mode, activeTab);
     return (
       <Tabs
-        initialPage={0}
+        initialPage={activeTab}
         page={activeTab}
         locked
         onChangeTab={(e) => {

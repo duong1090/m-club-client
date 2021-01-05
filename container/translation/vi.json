@@ -54,7 +54,7 @@
   "female": "Nữ",
   "unknown": "Không xác định",
   "date_format": "DD-MM-YYYY",
-  "datetime_format": "DD-MM-YYYY HH:ss",
+  "datetime_format": "DD-MM-YYYY HH:mm",
   "cancel": "Huỷ",
   "status": "Tình trạng",
   "priority": "Độ ưu tiên",

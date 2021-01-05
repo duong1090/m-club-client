@@ -34,15 +34,17 @@ const UPDATE_API = {
   member: "task/update-assigned-member",
   name: "task/update-task-name",
   deadline: "task/update-task-dealine",
-  priority: "task/update-task-prior",
-  isDone: "task/update-task-status",
+  prior_level: "task/update-task-prior",
+  is_done: "task/update-task-status",
 };
+const INDEX_LIST = { today: 0, future: 1, timed: 2, no_time: 3 };
 
 const DetailTask = (props) => {
   //props
   const { style, intl, changeMode } = props;
   //state
   const [name, setName] = useState(null);
+  const [parent, setParent] = useState(null);
   const [member, setMember] = useState([]);
   const [priorityLevel, setPriorityLevel] = useState(0);
   const [deadline, setDeadline] = useState(null);
@@ -65,8 +67,8 @@ const DetailTask = (props) => {
     member: setMember,
     name: setName,
     deadline: setDeadline,
-    priority: setPriorityLevel,
-    isDone: setIsDone,
+    prior_level: setPriorityLevel,
+    is_done: setIsDone,
   };
 
   //effect -------------------------------------------------------------------------------
@@ -113,6 +115,7 @@ const DetailTask = (props) => {
           setActivities(res.data.logs);
           setPriorityLevel(res.data.prior_level);
           setIsDone(res.data.is_done ? true : false);
+          setParent(res.data.parent ? res.data.parent : null);
         }
         hideSpinner();
       })
@@ -123,6 +126,8 @@ const DetailTask = (props) => {
   };
 
   const updateTask = (field, extraParams) => {
+    console.log("updateTask:::", field, extraParams);
+
     let params = {};
     if (currTask && currTask.id) params.id = currTask.id;
     postRequest(Config.API_URL.concat(UPDATE_API[field]), {
@@ -130,7 +135,20 @@ const DetailTask = (props) => {
       ...extraParams,
     })
       .then((res) => {
-        if (res) updateMethod[field](res.data);
+        if (res) {
+          updateMethod[field](res.data);
+          //update list
+          let taskIndex = listTask[INDEX_LIST[currTask.group]].data.findIndex(
+            (item) => item.id == currTask.id
+          );
+          setListTask(
+            update(listTask, {
+              [INDEX_LIST[currTask.group]]: {
+                data: { [currTask.index]: { [field]: { $set: res.data } } },
+              },
+            })
+          );
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -157,13 +175,14 @@ const DetailTask = (props) => {
     let passProps = {
       data: PRIORITY_LEVEL,
       onSelectItem: (value) => {
-        updateTask("priority", { prior_level: value.id });
+        updateTask("prior_level", { prior_level: value.id });
       },
     };
     gotoRoute(modals.SELECT_MODAL, passProps, true);
   };
 
   const confirmPickTime = (date) => {
+    console.log("confirmPickTime:::", date);
     setVisibleTimePicker(false);
     updateTask("deadline", {
       end_date: moment(date).format(
@@ -183,15 +202,13 @@ const DetailTask = (props) => {
           resetState();
 
           //update list
-          let indexOf = listTask[currTask.indexTab].findIndex(
-            (item) => item.id == currTask.id
+          setListTask(
+            update(listTask, {
+              [INDEX_LIST[currTask.group]]: {
+                data: { $splice: [[currTask.index, 1]] },
+              },
+            })
           );
-          if (indexOf >= 0)
-            setListTask(
-              update(listTask, {
-                [currTask.indexTab]: { $splice: [[indexOf, 1]] },
-              })
-            );
         }
         hideSpinner();
       })
@@ -216,7 +233,7 @@ const DetailTask = (props) => {
   };
 
   const onDone = () => {
-    updateTask("isDone", {
+    updateTask("is_done", {
       is_done: isDone ? 0 : 1,
     });
     setIsDone(!isDone);
@@ -383,10 +400,12 @@ const DetailTask = (props) => {
   const renderContent = () => {
     return (
       <View style={styles.content}>
-        <View style={styles.contentChild}>
-          <Text style={styles.contentChildText}>Công việc con của </Text>
-          <Text style={styles.contentChildTask}>Sự kiện 20/11</Text>
-        </View>
+        {parent ? (
+          <View style={styles.contentChild}>
+            <Text style={styles.contentChildText}>Công việc con của </Text>
+            <Text style={styles.contentChildTask}>{parent.name}</Text>
+          </View>
+        ) : null}
         {renderName()}
         <View style={styles.contentBody}>
           <View style={styles.contentMem}>

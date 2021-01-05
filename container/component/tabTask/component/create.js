@@ -80,10 +80,10 @@ const CreateTask = (props, ref) => {
           props.callbackCreate && props.callbackCreate(res.data);
 
           //update list task
-          console.log("createTask:::", listTask);
+          console.log("createTask:::", listTask, INDEX_LIST[res.data.group]);
           setListTask(
             update(listTask, {
-              [INDEX_LIST[res.data.group]]: { $push: [res.data] },
+              [INDEX_LIST[res.data.group]]: { data: { $push: [res.data] } },
             })
           );
           hide();

@@ -1,10 +1,9 @@
-import { getItem } from "container/utils/storage";
 import { API_TOKEN, IS_RECENT_TIME } from "container/constant/storage";
 import { gotoLogin, gotoHome, gotoRoute } from "container/utils/router";
 import { setIntl } from "container/utils/common";
-import { getOrganization } from "../action/user";
+import { getOrganization, logOut } from "../action/user";
 import { ORGANIZATION } from "../constant/storage";
-import { setItem } from "../utils/storage";
+import { setItem, getItem } from "../utils/storage";
 import OneSignal from "react-native-onesignal"; // Import package from node modules
 
 export const loadInitialStatus = async () => {
@@ -17,13 +16,17 @@ export const loadInitialStatus = async () => {
   if (apiToken) {
     gotoHome();
     //loading organization when app start
-    const org = await getOrganization();
-    if (org) {
-      global.organization = org;
-      setItem(ORGANIZATION, JSON.stringify(org));
-    } else {
-      const temp = await getItem(ORGANIZATION);
-      if (temp) global.organization = JSON.parse(temp);
+    try {
+      const org = await getOrganization();
+      if (org) {
+        global.organization = org;
+        setItem(ORGANIZATION, JSON.stringify(org));
+      } else {
+        const temp = await getItem(ORGANIZATION);
+        if (temp) global.organization = JSON.parse(temp);
+      }
+    } catch (err) {
+      logOut();
     }
   } else gotoLogin();
 };

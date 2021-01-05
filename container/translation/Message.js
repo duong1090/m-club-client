@@ -227,7 +227,7 @@ export default defineMessages({
   },
   datetime_format: {
     id: "datetime_format",
-    defaultMessage: "YYYY-MM-DD HH:ss",
+    defaultMessage: "YYYY-MM-DD HH:mm",
   },
   cancel: {
     id: "cancel",

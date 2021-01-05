@@ -9,7 +9,7 @@ import {
   defaultText,
 } from "container/variables/common";
 
-import { styles } from "../style/list";
+import { styles, AVATAR_SIZE } from "../style/list";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { listTaskState, currTaskState } from "container/recoil/state/tabTask";
 import { Icon, Tabs, Tab, ScrollableTab, CheckBox } from "native-base";
@@ -27,6 +27,7 @@ import { repairParams } from "container/helper/format";
 import { gotoRoute } from "container/utils/router";
 import { modals } from "container/constant/screen";
 import { PRIORITY_LEVEL } from "container/constant/element";
+import Avatar from "container/component/ui/avatar";
 
 const TODAY = 0,
   FUTURE = 1,
@@ -86,8 +87,8 @@ const ListTask = (props) => {
     setData(temp);
   };
 
-  const gotoDetail = async (item, indexTab) => {
-    setCurrTask({ ...item, indexTab });
+  const gotoDetail = async (item, index) => {
+    setCurrTask({ ...item, index });
     changeMode && changeMode("detail");
   };
 
@@ -121,7 +122,7 @@ const ListTask = (props) => {
           let temp = { ...filter };
           temp.priority = value.id;
           setFilter(temp);
-          doFilter(type, value);
+          doFilter("prior_level", value.id);
         },
         data: PRIORITY_LEVEL,
       };
@@ -132,7 +133,7 @@ const ListTask = (props) => {
           temp.member = temp.member.concat(value);
           setFilter(temp);
           doFilter(
-            type,
+            "user_ids",
             temp.member.map((item) => item.id)
           );
         },
@@ -164,7 +165,7 @@ const ListTask = (props) => {
   const renderItemTask = (item, index, indexTab) => (
     <View style={styles.childrenItem}>
       <TouchableOpacity
-        onPress={() => gotoDetail(item, indexTab)}
+        onPress={() => gotoDetail(item, index)}
         style={styles.childrenItemHeader}
       >
         <View style={styles.childrenItemPriorLevel(item.prior_level)} />
