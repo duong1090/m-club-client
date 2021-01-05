@@ -1,0 +1,385 @@
+import React, { useState, useRef, useEffect } from "react";
+import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import SearchBox from "container/component/ui/searchBox";
+import {
+  scale,
+  color,
+  fontSize,
+  shadow,
+  defaultText,
+} from "container/variables/common";
+
+import { styles } from "../style/list";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { listTaskState, currTaskState } from "container/recoil/state/tabTask";
+import { Icon, Tabs, Tab, ScrollableTab, CheckBox } from "native-base";
+import { injectIntl } from "react-intl";
+import Messages from "container/translation/Message";
+import ActionButton from "react-native-action-button";
+import CreateTask from "./create";
+import { getRequest, postRequest } from "container/utils/request";
+import Config from "container/config/server.config";
+import HeaderInfo from "../ui/HeaderInfo";
+import { showSpinner, hideSpinner } from "container/utils/router";
+import update from "immutability-helper";
+import debounce from "lodash/debounce";
+import { repairParams } from "container/helper/format";
+
+const TODAY = 0,
+  FUTURE = 1,
+  TIMED = 2,
+  NO_TIME = 3;
+
+const DEFAULT_FILTER = {
+  isDone: false,
+  member: [],
+  priority: 0,
+};
+
+const ListTask = (props) => {
+  //props
+  const { style, intl, changeMode, mode } = props;
+  //state
+  const [data, setData] = useRecoilState(listTaskState);
+  const setCurrTask = useSetRecoilState(currTaskState);
+  const [activeTab, setActiveTab] = useState(0);
+  const [filter, setFilter] = useState(DEFAULT_FILTER);
+
+  //variables
+  const createTaskRef = useRef(null);
+  const debounceSearch = useRef(debounce((text) => doFilter("name", text), 200))
+    .current;
+
+  //effect
+  useEffect(() => {
+    getData();
+  }, []);
+
+  //function - event
+  const selectStatus = () => {
+    console.log("selectStatus");
+  };
+
+  const loadMore = (index) => {};
+
+  const openCreatePopUp = () => {
+    createTaskRef.current.show();
+  };
+
+  const getData = () => {
+    showSpinner();
+    getRequest(Config.API_URL.concat("task/get"))
+      .then((res) => {
+        if (res && res.data) getDataSuccess(res);
+        hideSpinner();
+      })
+      .catch((err) => {
+        hideSpinner();
+        console.log(err);
+      });
+  };
+
+  const getDataSuccess = (response) => {
+    let temp = JSON.parse(JSON.stringify(data));
+    temp[TODAY].data = response.data.today;
+    temp[FUTURE].data = response.data.future;
+    temp[TIMED].data = response.data.timed;
+    temp[NO_TIME].data = response.data.no_time;
+    setData(temp);
+  };
+
+  const gotoDetail = async (item, indexTab) => {
+    setCurrTask({ ...item, indexTab });
+    changeMode && changeMode("detail");
+  };
+
+  const checkDoneTask = (item, index, indexTab) => {
+    let params = {
+      id: item.id,
+    };
+    const isDone =
+      data[indexTab].data && data[indexTab].data[index]
+        ? data[indexTab].data[index].is_done
+        : 0;
+    params.is_done = isDone ? 0 : 1;
+    postRequest(Config.API_URL.concat("task/update-task-status"), params).then(
+      (res) => {
+        if (res) {
+        }
+      }
+    );
+    setData(
+      update(data, {
+        [indexTab]: { data: { [index]: { is_done: { $set: !isDone } } } },
+      })
+    );
+  };
+
+  const doFilter = (type = "name", value) => {
+    showSpinner();
+    const params = value || value != "" ? repairParams({ [type]: value }) : "";
+    getRequest(Config.API_URL.concat("task/get").concat(`?${params}`))
+      .then((res) => {
+        if (res && res.data) getDataSuccess(res);
+        hideSpinner();
+      })
+      .catch((err) => {
+        console.error(err);
+        hideSpinner();
+      });
+  };
+
+  //render
+
+  const renderItemTask = (item, index, indexTab) => (
+    <View style={styles.childrenItem}>
+      <TouchableOpacity
+        onPress={() => gotoDetail(item, indexTab)}
+        style={styles.childrenItemHeader}
+      >
+        <View style={styles.childrenItemPriorLevel(item.prior_level)} />
+        <Text numberOfLines={1}>{item.name}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => checkDoneTask(item, index, indexTab)}
+        style={styles.childrenItemBtnDone}
+      >
+        {item.is_done ? (
+          <Icon
+            type="Ionicons"
+            name="md-checkmark-circle"
+            style={styles.childrenItemDone(item.is_done)}
+          />
+        ) : (
+          <Icon
+            type="Ionicons"
+            name="md-checkmark-circle-outline"
+            style={styles.childrenItemDone(item.is_done)}
+          />
+        )}
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderAvatar = () => {
+    const limit = 3;
+    if (filter.member.length == 1) {
+      return (
+        <View style={styles.contentMemAvtBox}>
+          <Text numberOfLines={2} style={styles.contentMemName}>
+            {filter.member[0].name}
+          </Text>
+          <Avatar size={AVATAR_SIZE} data={filter.member[0]} />
+        </View>
+      );
+    } else if (filter.member.length > limit)
+      return (
+        <View style={styles.contentMemAvtBox}>
+          {[...Array(limit + 1).keys()].map((item, index) => {
+            if (index >= limit)
+              return (
+                <View
+                  style={[
+                    styles.contentMemAvtMore,
+                    styles.contentMemAvt,
+                    { right: (index - limit) * (AVATAR_SIZE / 2) },
+                  ]}
+                >
+                  <Text style={styles.contentMemAvtMoreText}>
+                    {`+${filter.member.length - limit}`}
+                  </Text>
+                </View>
+              );
+            else
+              return (
+                <Avatar
+                  style={[
+                    styles.contentMemAvt,
+                    { right: (limit + 1 - index) * (AVATAR_SIZE / 2) },
+                  ]}
+                  size={AVATAR_SIZE}
+                  data={filter.member[index]}
+                />
+              );
+          })}
+        </View>
+      );
+    else if (filter.member.length == 0) {
+      return (
+        <View style={styles.contentMemAdd}>
+          <Icon
+            type="FontAwesome5"
+            name="user"
+            style={styles.contentMemAddIcon}
+          />
+        </View>
+      );
+    } else
+      return (
+        <View style={styles.contentMemAvtBox}>
+          {filter.member.map((item, index) => (
+            <Avatar
+              style={[
+                styles.contentMemAvt,
+                {
+                  right: (filter.member.length - 1 - index) * (AVATAR_SIZE / 2),
+                },
+              ]}
+              size={AVATAR_SIZE}
+              data={item}
+            />
+          ))}
+        </View>
+      );
+  };
+
+  const renderFilter = () => {
+    return (
+      <View style={styles.filter}>
+        <View style={styles.filterHeader}>
+          <SearchBox
+            style={styles.searchBox}
+            onSearch={(text) => {
+              debounceSearch(text);
+            }}
+          />
+          <TouchableOpacity style={styles.filterBox}>
+            <Icon name="filter" type="FontAwesome5" style={styles.filterIcon} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.filterAdvanced}>
+          <TouchableOpacity style={styles.filterItem}>
+            <Text style={styles.filterItemText}>Hoàn thành</Text>
+            {filter.isDone ? (
+              <Icon
+                type="Ionicons"
+                name="md-checkmark-circle"
+                style={styles.childrenItemDone(filter.isDone)}
+              />
+            ) : (
+              <Icon
+                type="Ionicons"
+                name="md-checkmark-circle-outline"
+                style={styles.childrenItemDone(filter.isDone)}
+              />
+            )}
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.filterItem,
+              {
+                borderRightWidth: scale(10),
+                borderLeftWidth: scale(10),
+                borderColor: "#fff",
+              },
+            ]}
+          >
+            <Text style={styles.filterItemText}>Độ ưu tiên</Text>
+            <View
+              style={[
+                styles.childrenItemPriorLevel(filter.priority),
+                { marginRight: 0 },
+              ]}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.filterItem}>
+            {renderAvatar()}
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
+
+  const renderEntityTab = (tab, indexTab) => {
+    const heading = (
+      <View
+        style={[
+          styles.headingBox,
+          activeTab != indexTab ? { backgroundColor: color.lightGrey } : null,
+        ]}
+      >
+        <Text
+          style={{
+            ...defaultText,
+            fontWeight: "bold",
+          }}
+        >
+          {tab.name}
+        </Text>
+        {tab.data && tab.data.length > 0 ? (
+          <View style={styles.dot}>
+            <Text
+              style={{
+                ...defaultText,
+                fontSize: fontSize.size20,
+                color: "#fff",
+              }}
+            >
+              {tab.data.length <= 99 ? tab.data.length : "+99"}
+            </Text>
+          </View>
+        ) : null}
+      </View>
+    );
+    return (
+      <Tab heading={heading} style={{ backgroundColor: color.backgroundColor }}>
+        {tab.data && tab.data.length ? (
+          <FlatList
+            data={tab.data}
+            style={{ marginTop: scale(20) }}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index }) =>
+              renderItemTask(item, index, indexTab)
+            }
+            // onEndReached={() => loadMore(index)}
+          />
+        ) : (
+          <View style={styles.boxEmpty}>
+            <Text style={styles.textEmpty}>
+              {intl.formatMessage(Messages.empty_data)}
+            </Text>
+          </View>
+        )}
+      </Tab>
+    );
+  };
+
+  const renderTabs = () => {
+    return (
+      <Tabs
+        onChangeTab={(event) => setActiveTab(event.i)}
+        locked
+        renderTabBar={() => <ScrollableTab style={styles.tabWrapper} />}
+        tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
+      >
+        {data.map((item, index) => renderEntityTab(item, index))}
+      </Tabs>
+    );
+  };
+
+  return (
+    <View style={[styles.container, style]}>
+      <HeaderInfo />
+      {renderFilter()}
+      {renderTabs()}
+
+      <ActionButton
+        offsetX={scale(30)}
+        offsetY={scale(30)}
+        style={{ ...shadow }}
+        renderIcon={() => {
+          return (
+            <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
+          );
+        }}
+        buttonColor={color.warning}
+        onPress={() => openCreatePopUp()}
+      />
+      <CreateTask ref={createTaskRef} />
+    </View>
+  );
+};
+
+export default injectIntl(ListTask);

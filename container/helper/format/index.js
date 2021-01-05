@@ -23,3 +23,27 @@ export const highlighText = (text, arrHighlight, style) => {
   } else arrText = text;
   return arrText;
 };
+
+export const getParamsFromObj = (params) => {
+  if (!params) {
+    return "";
+  }
+
+  var esc = encodeURIComponent;
+  var query = Object.keys(params)
+    .map((k) => esc(k) + "=" + esc(params[k]))
+    .join("&");
+  if (query) return "&" + query;
+  return "";
+};
+
+export const repairParams = (params) => {
+  let newParams = params;
+  Object.keys(params).map((k) => {
+    if (Array.isArray(params[k])) {
+      params[k].map((item, index) => (newParams[`${k}[${index}]`] = item));
+      delete newParams[k];
+    }
+  });
+  return getParamsFromObj(newParams);
+};

@@ -24,7 +24,7 @@ const SearchBox = (props) => {
               ? placeholder
               : intl.formatMessage(Messages.search_placeholder)
           }
-          onChangeText={(text) => onSearch}
+          onChangeText={(text) => onSearch(text)}
         />
       </View>
     </View>

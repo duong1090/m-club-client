@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Tabs, Tab, ScrollableTab } from "native-base";
 import List from "./list";
 import Detail from "./detail";
 import Record from "./record";
@@ -30,15 +31,43 @@ const Department = (props) => {
   };
 
   //screens
-  const tabs = {
-    list: <List changeMode={onChangeMode} mode={mode} />,
-    detail: <Detail changeMode={onChangeMode} mode={mode} />,
-    edit: <Record changeMode={onChangeMode} mode={mode} />,
-    create: <Record changeMode={onChangeMode} mode={mode} />,
-  };
+  const tabs = [
+    { key: "list", render: <List changeMode={onChangeMode} mode={mode} /> },
+    { key: "detail", render: <Detail changeMode={onChangeMode} mode={mode} /> },
+    { key: "edit", render: <Record changeMode={onChangeMode} mode={mode} /> },
+    { key: "create", render: <Record changeMode={onChangeMode} mode={mode} /> },
+  ];
 
   //render
-  return <View>{tabs[mode]}</View>;
+  const renderMode = (mode) => {
+    const activeTab = tabs.findIndex((item) => item.key == mode);
+
+    return (
+      <Tabs
+        initialPage={0}
+        page={activeTab}
+        locked
+        onChangeTab={(e) => {
+          setMode(tabs[e.i].key);
+        }}
+        renderTabBar={() => <ScrollableTab style={{ height: 0 }} />}
+      >
+        {tabs.map((tab) => (
+          <Tab heading="" style={{ backgroundColor: "transparent" }}>
+            {tab.render}
+          </Tab>
+        ))}
+      </Tabs>
+    );
+  };
+
+  return <View style={styles.container}>{renderMode(mode)}</View>;
 };
+
+const styles = StyleSheet.create({
+  container: {
+    height: "100%",
+  },
+});
 
 export default injectIntl(Department);

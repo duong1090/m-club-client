@@ -80,8 +80,8 @@ const removeUserInfo = () => {
         .catch((err) => reject(err));
       OneSignal.getTags((receivedTags) => {
         console.log("receivedTags", receivedTags);
-        OneSignal.deleteTag("userId");
-        OneSignal.deleteTag("username");
+        OneSignal.deleteTag("user_id");
+        OneSignal.deleteTag("club_id");
       });
       // OneSignal.deleteTag('userId');
       // OneSignal.deleteTag('username');
