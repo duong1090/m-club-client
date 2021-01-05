@@ -24,6 +24,9 @@ import { showSpinner, hideSpinner } from "container/utils/router";
 import update from "immutability-helper";
 import debounce from "lodash/debounce";
 import { repairParams } from "container/helper/format";
+import { gotoRoute } from "container/utils/router";
+import { modals } from "container/constant/screen";
+import { PRIORITY_LEVEL } from "container/constant/element";
 
 const TODAY = 0,
   FUTURE = 1,
@@ -55,12 +58,7 @@ const ListTask = (props) => {
     getData();
   }, []);
 
-  //function - event
-  const selectStatus = () => {
-    console.log("selectStatus");
-  };
-
-  const loadMore = (index) => {};
+  //function - event -----------------------------------------------------------------------------------------------------------------------
 
   const openCreatePopUp = () => {
     createTaskRef.current.show();
@@ -115,9 +113,41 @@ const ListTask = (props) => {
     );
   };
 
+  const openFilter = (type) => {
+    let passProps = {};
+    if (type == "priority")
+      passProps = {
+        onSelectItem: (value) => {
+          let temp = { ...filter };
+          temp.priority = value.id;
+          setFilter(temp);
+          doFilter(type, value);
+        },
+        data: PRIORITY_LEVEL,
+      };
+    else if (type == "member")
+      passProps = {
+        onSelectItem: (value) => {
+          let temp = { ...filter };
+          temp.member = temp.member.concat(value);
+          setFilter(temp);
+          doFilter(
+            type,
+            temp.member.map((item) => item.id)
+          );
+        },
+        api: "member/get",
+        params: { type: "simple" },
+        multiSelect: true,
+        isMember: true,
+      };
+    gotoRoute(modals.SELECT_MODAL, passProps, true);
+  };
+
   const doFilter = (type = "name", value) => {
     showSpinner();
-    const params = value || value != "" ? repairParams({ [type]: value }) : "";
+    const params =
+      value || value != "" || value == 0 ? repairParams({ [type]: value }) : "";
     getRequest(Config.API_URL.concat("task/get").concat(`?${params}`))
       .then((res) => {
         if (res && res.data) getDataSuccess(res);
@@ -129,7 +159,7 @@ const ListTask = (props) => {
       });
   };
 
-  //render
+  //render --------------------------------------------------------------------------------------------------------------------
 
   const renderItemTask = (item, index, indexTab) => (
     <View style={styles.childrenItem}>
@@ -248,7 +278,13 @@ const ListTask = (props) => {
           </TouchableOpacity>
         </View>
         <View style={styles.filterAdvanced}>
-          <TouchableOpacity style={styles.filterItem}>
+          <TouchableOpacity
+            style={styles.filterItem}
+            onPress={() => {
+              setFilter({ ...filter, isDone: !filter.isDone });
+              doFilter("is_done", filter.isDone ? 0 : 1);
+            }}
+          >
             <Text style={styles.filterItemText}>Hoàn thành</Text>
             {filter.isDone ? (
               <Icon
@@ -266,6 +302,7 @@ const ListTask = (props) => {
           </TouchableOpacity>
 
           <TouchableOpacity
+            onPress={() => openFilter("priority")}
             style={[
               styles.filterItem,
               {
@@ -284,7 +321,10 @@ const ListTask = (props) => {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.filterItem}>
+          <TouchableOpacity
+            onPress={() => openFilter("member")}
+            style={styles.filterItem}
+          >
             {renderAvatar()}
           </TouchableOpacity>
         </View>

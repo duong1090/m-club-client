@@ -28,12 +28,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ModalPopUp from "container/component/ui/modalPopUp";
 import CreateTask from "./create";
 import { scale } from "../../../variables/common";
+import { PRIORITY_LEVEL } from "container/constant/element";
 
-const PRIORITY_LEVEL = [
-  { id: 0, name: "Thấp" },
-  { id: 1, name: "Vừa" },
-  { id: 2, name: "Cao" },
-];
 const UPDATE_API = {
   member: "task/update-assigned-member",
   name: "task/update-task-name",
@@ -41,7 +37,6 @@ const UPDATE_API = {
   priority: "task/update-task-prior",
   isDone: "task/update-task-status",
 };
-const TASK_TABS = ["today", "future", "timed", "no_time"];
 
 const DetailTask = (props) => {
   //props

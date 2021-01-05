@@ -33,6 +33,7 @@ import { showSpinner, hideSpinner } from "container/utils/router";
 const intl = getIntl();
 const DUE_DATE_FORMAT = "YYYY-MM-DD ";
 const DUE_TIME_FORMAT = "HH:mm:ss";
+const INDEX_LIST = { today: 0, future: 1, timed: 2, no_time: 3 };
 
 const CreateTask = (props, ref) => {
   //props
@@ -79,8 +80,11 @@ const CreateTask = (props, ref) => {
           props.callbackCreate && props.callbackCreate(res.data);
 
           //update list task
+          console.log("createTask:::", listTask);
           setListTask(
-            update(listTask, { [res.data.group]: { $push: [res.data] } })
+            update(listTask, {
+              [INDEX_LIST[res.data.group]]: { $push: [res.data] },
+            })
           );
           hide();
         }
@@ -101,7 +105,7 @@ const CreateTask = (props, ref) => {
       else params.end_date = dueDate;
     }
     if (assignedMember.length)
-      params.assigned_member_ids = assignedMember.map((item) => item.id);
+      params.assigned_mem_ids = assignedMember.map((item) => item.id);
     if (description) params.description = description;
     return params;
   };
