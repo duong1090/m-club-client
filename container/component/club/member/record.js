@@ -44,9 +44,9 @@ const MemberRecord = (props) => {
     if (props.data) setData(props.data);
   }, [props.data]);
 
-  // useEffect(() => {
-  //   if (data) setInfo(data);
-  // }, [data]);
+  useEffect(() => {
+    if (data) setInfo(data);
+  }, [data]);
 
   //#endregion
 
@@ -76,7 +76,7 @@ const MemberRecord = (props) => {
       fieldName: "sex",
       type: "button",
       placeholder: intl.formatMessage(Messages.sex_placeholder),
-      onPress: () => onPressField("sex", null, null, SEX),
+      onPress: () => onPressField("sex", null, null, SEX, info.sex),
     },
     {
       name: <FormattedMessage {...Messages.birthday} />,
@@ -97,21 +97,30 @@ const MemberRecord = (props) => {
       fieldName: "department",
       type: "button",
       placeholder: intl.formatMessage(Messages.department_placeholder),
-      onPress: () => onPressField("department", "department/get"),
+      onPress: () =>
+        onPressField("department", "department/get", {}, null, info.department),
     },
     {
       name: <FormattedMessage {...Messages.position} />,
       fieldName: "position",
       type: "button",
       placeholder: intl.formatMessage(Messages.position_placeholder),
-      onPress: () => onPressField("position", "position/get"),
+      onPress: () =>
+        onPressField("position", "position/get", {}, null, info.department),
     },
   ];
 
   //#region function - event
-  const onPressField = (fieldName, api, params = {}, data) => {
+  const onPressField = (
+    fieldName,
+    api,
+    params = {},
+    data,
+    selectedItem = []
+  ) => {
     let props = {
       onSelectItem: (value) => onChangeField(fieldName, value),
+      selectedItem,
     };
 
     if (data) {
@@ -195,7 +204,7 @@ const MemberRecord = (props) => {
     const params = prepareParams();
     postRequest(Config.API_URL.concat("member/update"), params)
       .then((res) => {
-        if (res && res.data) updateSuccess();
+        if (res && res.data) updateSuccess(res.data);
         hideSpinner();
       })
       .catch((err) => {

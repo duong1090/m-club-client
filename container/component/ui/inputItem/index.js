@@ -197,7 +197,7 @@ const InputItem = (props, ref) => {
             numberOfLines={1}
             ellipsizeMode={"tail"}
           >
-            {value || ""}
+            {value}
           </Text>
         ) : (
           <Text
@@ -220,9 +220,12 @@ const InputItem = (props, ref) => {
           date={
             new Date(
               Date.parse(
-                moment(value, intl.formatMessage(Messages.date_format)).format(
-                  "YYYY-MM-DD"
-                )
+                value
+                  ? moment(
+                      value,
+                      intl.formatMessage(Messages.date_format)
+                    ).format("YYYY-MM-DD")
+                  : moment().format("YYYY-MM-DD")
               )
             )
           }

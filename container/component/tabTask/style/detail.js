@@ -127,6 +127,7 @@ export const styles = StyleSheet.create({
     height: "100%",
     flex: 1,
     alignItems: "center",
+    justifyContent: "flex-end",
   },
   contentMemAvt: {
     position: "absolute",
@@ -315,12 +316,13 @@ export const styles = StyleSheet.create({
 
   activityItemName: {
     ...defaultText,
-    maxWidth: "70%",
+    flex: 1,
   },
   activityItemTime: {
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "flex-start",
+    justifyContent: "flex-end",
   },
   activityItemTimeIcon: {
     fontSize: fontSize.size24,
@@ -332,6 +334,7 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.size22,
     color: color.grey,
     marginRight: space.itemMargin,
+    textAlign: "right",
   },
   activityButtonBox: {
     backgroundColor: color.background,

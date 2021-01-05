@@ -93,6 +93,10 @@ export default defineMessages({
     id: "position",
     defaultMessage: "Position",
   },
+  add: {
+    id: "add",
+    defaultMessage: "Add",
+  },
   create: {
     id: "create",
     defaultMessage: "Create",
@@ -276,5 +280,21 @@ export default defineMessages({
   description: {
     id: "description",
     defaultMessage: "Description",
+  },
+  yesterday: {
+    id: "yesterday",
+    defaultMessage: "Yesterday",
+  },
+  format_today: {
+    id: "format_today",
+    defaultMessage: "[Today at] h:mm A",
+  },
+  format_yesterday: {
+    id: "format_yesterday",
+    defaultMessage: "[Today at] h:mm A",
+  },
+  date_short_format: {
+    id: "date_short_format",
+    defaultMessage: "MMM DD",
   },
 });

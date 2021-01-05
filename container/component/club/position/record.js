@@ -113,7 +113,7 @@ const PositionRecord = (props) => {
     const params = prepareParams();
     postRequest(Config.API_URL.concat("position/update"), params)
       .then((res) => {
-        if (res && res.data) updateSuccess();
+        if (res && res.data) updateSuccess(res.data);
         hideSpinner();
       })
       .catch((err) => {

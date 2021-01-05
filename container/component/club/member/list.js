@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   listMemberState,
@@ -11,6 +11,7 @@ import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
 import Avatar from "container/component/ui/avatar";
+import debounce from "lodash/debounce";
 
 const MemberList = (props) => {
   //props
@@ -19,11 +20,15 @@ const MemberList = (props) => {
   // const [data, setData] = useState([]);
   const [meta, setMeta] = useState({});
   const [loading, setLoading] = useState(false);
-  const page = 1;
+  let page = 1;
 
   //recoil
   const [data, setData] = useRecoilState(listMemberState);
   const setCurrMember = useSetRecoilState(currMemberState);
+
+  //variables
+  const debounceSearch = useRef(debounce((text) => onSearch(text), 200))
+    .current;
 
   //#region effect
   useEffect(() => {
@@ -32,8 +37,6 @@ const MemberList = (props) => {
 
   //#endregion
 
-  console.log();
-
   //#region function - event
   const gotoRecord = (mode = "create") => {
     // gotoRoute(screens.DEPARTMENT_EDIT, { mode });
@@ -41,7 +44,6 @@ const MemberList = (props) => {
   };
 
   const onPressItem = (item) => {
-    console.log("onPressItem:::", item);
     setCurrMember(item);
     changeMode && changeMode("detail");
   };
@@ -55,12 +57,12 @@ const MemberList = (props) => {
     return temp;
   };
 
-  const getList = (page = 1) => {
+  const getList = (extraParams = {}) => {
+    let params = { ...extraParams, page };
     setLoading(true);
-    getRequest(Config.API_URL.concat("member/get"), { page })
+    getRequest(Config.API_URL.concat("member/get"), params)
       .then((res) => {
         if (res && res.data && res.data.items) {
-          console.log("getList:::", res.data);
           if (page > 1) {
             let temp = [...data];
             temp.concat(transform(res.data.items));
@@ -82,8 +84,14 @@ const MemberList = (props) => {
   const loadMore = () => {
     if (meta.total_page && page < meta.total_page) {
       page++;
-      getList(page);
+      getList();
     }
+  };
+
+  const onSearch = (text) => {
+    let params = {};
+    if (text != "") params.name = text;
+    getList(params);
   };
 
   //#endregion
@@ -92,6 +100,7 @@ const MemberList = (props) => {
   return (
     <View>
       <SimpleList
+        onSearch={(text) => debounceSearch(text)}
         loading={loading}
         data={data}
         iconHeader={(item) => <Avatar data={item} size={scale(80)} />}

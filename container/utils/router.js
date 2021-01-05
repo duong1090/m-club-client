@@ -472,6 +472,7 @@ export const setCurrentScreen = (componentId, componentName, passProps) => {
 };
 
 export const back = () => {
+  console.log('back::::', currentScreen)
   if (currentScreen && modals[currentScreen.componentName]) {
     Navigation.dismissModal(currentScreen.componentId);
   } else {

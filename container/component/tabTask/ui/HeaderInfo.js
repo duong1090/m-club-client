@@ -32,7 +32,7 @@ const HeaderInfo = (props) => {
       <View style={styles.content}>
         <View style={styles.info}>
           <Text style={styles.name}>{member.name}</Text>
-          <Text style={styles.position}>Trưởng ban truyền thông</Text>
+          <Text style={styles.position}>{member.position.name}</Text>
         </View>
         <Avatar size={scale(100)} data={member} />
       </View>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: "row",
-    alignItems: "flex-end",
+    alignItems: "center",
   },
   info: {
     marginRight: scale(20),

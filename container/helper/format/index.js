@@ -1,7 +1,7 @@
 import React from "react";
 import { Text } from "react-native";
 
-export const highlighText = (text, arrHighlight, style) => {
+export const highlighText = (text, arrHighlight, arrReplace = [], style) => {
   let tempText = text;
   let arrText = [];
 
@@ -15,9 +15,22 @@ export const highlighText = (text, arrHighlight, style) => {
       if (j % 2 == 0) {
         arrText.push(<Text style={style}>{text}</Text>);
       } else {
-        arrText.push(
-          <Text style={[style, { fontWeight: "bold" }]}>{text}</Text>
-        );
+        //in case replace text
+        const replace_split = text.split("_");
+        if (replace_split.length > 1) {
+          const index = replace_split[1];
+          arrText.push(
+            <Text
+              style={[style, { fontWeight: "bold" }, arrReplace[index].style]}
+            >
+              {arrReplace[index].text}
+            </Text>
+          );
+        } else {
+          arrText.push(
+            <Text style={[style, { fontWeight: "bold" }]}>{text}</Text>
+          );
+        }
       }
     });
   } else arrText = text;

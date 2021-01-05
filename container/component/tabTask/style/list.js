@@ -127,8 +127,30 @@ export const styles = StyleSheet.create({
     ...defaultText,
     fontSize: fontSize.sizeBigContent,
   },
+  actionButtonBox: {
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: scale(15),
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  actionButton: {
+    backgroundColor: color.primary,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: scale(5),
+    paddingHorizontal: scale(20),
+    borderRadius: space.border,
+    ...shadow,
+  },
+  actionButtonText: {
+    ...defaultText,
+    color: "#fff",
+  },
   actionButtonIcon: {
-    fontSize: 25,
+    fontSize: scale(30),
     color: "#fff",
   },
   headingBox: {

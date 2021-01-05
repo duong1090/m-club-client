@@ -18,6 +18,7 @@ import { useRecoilState } from "recoil";
 import { listTaskState, currTaskState } from "container/recoil/state/tabTask";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import { highlighText } from "container/helper/format";
+import { getHumanDay } from "container/helper/time";
 import { gotoRoute } from "container/utils/router";
 import { modals, screens } from "container/constant/screen";
 import moment from "moment";
@@ -29,6 +30,7 @@ import ModalPopUp from "container/component/ui/modalPopUp";
 import CreateTask from "./create";
 import { scale } from "../../../variables/common";
 import { PRIORITY_LEVEL } from "container/constant/element";
+import { back } from "container/utils/router";
 
 const UPDATE_API = {
   member: "task/update-assigned-member",
@@ -41,7 +43,7 @@ const INDEX_LIST = { today: 0, future: 1, timed: 2, no_time: 3 };
 
 const DetailTask = (props) => {
   //props
-  const { style, intl, changeMode } = props;
+  const { style, intl, changeMode, setListTask, listTask } = props;
   //state
   const [name, setName] = useState(null);
   const [parent, setParent] = useState(null);
@@ -57,7 +59,7 @@ const DetailTask = (props) => {
   const [visibleNameIcon, setVisibleNameIcon] = useState(true);
   const [visibleDesIcon, setVisibleDesIcon] = useState(true);
   const [currTask, setCurrTask] = useRecoilState(currTaskState);
-  const [listTask, setListTask] = useRecoilState(listTaskState);
+  // const [listTask, setListTask] = useRecoilState(listTaskState);
 
   //variables
   const createTaskRef = useRef(null);
@@ -138,9 +140,10 @@ const DetailTask = (props) => {
         if (res) {
           updateMethod[field](res.data);
           //update list
-          let taskIndex = listTask[INDEX_LIST[currTask.group]].data.findIndex(
-            (item) => item.id == currTask.id
-          );
+          // let taskIndex = listTask[INDEX_LIST[currTask.group]].data.findIndex(
+          //   (item) => item.id == currTask.id
+          // );
+          console.log("updateTask::::", listTask);
           setListTask(
             update(listTask, {
               [INDEX_LIST[currTask.group]]: {
@@ -177,6 +180,7 @@ const DetailTask = (props) => {
       onSelectItem: (value) => {
         updateTask("prior_level", { prior_level: value.id });
       },
+      selectedItem: PRIORITY_LEVEL[priorityLevel],
     };
     gotoRoute(modals.SELECT_MODAL, passProps, true);
   };
@@ -198,7 +202,8 @@ const DetailTask = (props) => {
     postRequest(Config.API_URL.concat("task/delete"), params)
       .then((res) => {
         if (res && res.data) {
-          changeMode && changeMode("list");
+          // changeMode && changeMode("list");
+          back();
           resetState();
 
           //update list
@@ -366,11 +371,12 @@ const DetailTask = (props) => {
   };
 
   const renderDescription = () => {
-    return description && description != "" ? (
+    return (
       <View style={styles.contentDescriptionBox}>
         <TextInput
           style={styles.contentDescriptionText}
-          value={description}
+          value={description && description != "" ? description : null}
+          placeholder="Description"
           ref={desInputRef}
           multiline
           onChangeText={(text) => setDescription(text)}
@@ -394,7 +400,7 @@ const DetailTask = (props) => {
           <View style={styles.editBox} />
         )}
       </View>
-    ) : null;
+    );
   };
 
   const renderContent = () => {
@@ -532,6 +538,10 @@ const DetailTask = (props) => {
 
   const renderActivityItem = (item) => {
     const text = highlighText(item.name, item.objects, styles.activityItemName);
+    const time = getHumanDay(
+      item.time,
+      intl.formatMessage(Messages.datetime_format)
+    );
 
     return (
       <View style={styles.activityItem}>
@@ -540,7 +550,7 @@ const DetailTask = (props) => {
         </Text>
         <View style={styles.activityItemTime}>
           <Text numberOfLines={2} style={styles.activityItemTimeText}>
-            {item.time}
+            {time}
           </Text>
           <Icon
             name="clockcircle"
@@ -620,9 +630,10 @@ const DetailTask = (props) => {
       >
         <HeaderInfo
           backButton={{
-            title: "List",
+            title: "Back",
             onPress: () => {
-              changeMode && changeMode("list");
+              // changeMode && changeMode("list");
+              back();
               resetState();
             },
           }}

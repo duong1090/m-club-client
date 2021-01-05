@@ -21,6 +21,7 @@
   "birthday": "Ngày sinh",
   "department": "Nhóm ban",
   "position": "Chức danh",
+  "add": "Thêm",
   "create": "Tạo",
   "tab_account": "Thêm",
   "tab_navigate": "Điều hướng",
@@ -66,5 +67,9 @@
   "due_date_format": "DD MMM",
   "due_time_format": "HH:mm",
   "due_time": "Thời gian",
-  "description": "Mô tả"
+  "description": "Mô tả",
+  "yesterday": "Hôm qua",
+  "format_today": "[Hôm nay lúc] h:mm A",
+  "format_yesterday": "[Hôm qua lúc ] h:mm A",
+  "date_short_format": "DD MMM"
 }

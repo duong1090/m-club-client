@@ -33,6 +33,7 @@ const SimpleList = (props) => {
     loading,
     loadMore,
     iconHeader,
+    onSearch,
   } = props;
 
   //effect
@@ -79,7 +80,7 @@ const SimpleList = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.searchBox}>
-        <SearchBox />
+        <SearchBox onSearch={onSearch} />
       </View>
       {data && data.length ? (
         <FlatList

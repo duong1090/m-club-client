@@ -23,7 +23,7 @@ import {
 
 const MemberDetail = (props) => {
   //props
-  const { intl, data } = props;
+  const { intl, data, changeMode } = props;
   //state
   const [isGetData, setIsGetData] = useState(true);
 
@@ -54,6 +54,14 @@ const MemberDetail = (props) => {
         setIsGetData(false);
         hideSpinner();
       });
+  };
+
+  const gotoList = () => {
+    changeMode && changeMode("list");
+  };
+
+  const gotoEdit = () => {
+    changeMode && changeMode("edit");
   };
 
   const transform = (data) => {

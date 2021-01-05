@@ -35,6 +35,7 @@ export const color = {
   green: "#5cb85c",
   colorMandy: "#E24F63",
   lightGreen: "#d0ffd0",
+  unread: "#ddefef",
 };
 
 export const shadow = {

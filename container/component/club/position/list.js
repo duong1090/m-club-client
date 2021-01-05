@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   listPositionState,
@@ -10,6 +10,7 @@ import { scale, defaultText } from "container/variables/common";
 import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
+import debounce from "lodash/debounce";
 
 const PositionList = (props) => {
   //props
@@ -18,11 +19,15 @@ const PositionList = (props) => {
   // const [data, setData] = useState([]);
   const [meta, setMeta] = useState({});
   const [loading, setLoading] = useState(false);
-  const page = 1;
+  let page = 1;
 
   //recoil
   const [data, setData] = useRecoilState(listPositionState);
   const setCurrPosition = useSetRecoilState(currPositionState);
+
+  //variables
+  const debounceSearch = useRef(debounce((text) => onSearch(text), 200))
+    .current;
 
   //#region effect
   useEffect(() => {
@@ -52,9 +57,10 @@ const PositionList = (props) => {
     return temp;
   };
 
-  const getList = (page = 1) => {
+  const getList = (extraParams = {}) => {
+    let params = { ...extraParams, page };
     setLoading(true);
-    getRequest(Config.API_URL.concat("position/get"), { page })
+    getRequest(Config.API_URL.concat("position/get"), params)
       .then((res) => {
         if (res && res.data && res.data.items) {
           console.log("getList:::", res.data);
@@ -79,9 +85,15 @@ const PositionList = (props) => {
   const loadMore = () => {
     if (meta.total_page && page < meta.total_page) {
       page++;
-      getList(page);
+      getList();
     }
   };
+
+ const onSearch = (text) => {
+   let params = {};
+   if (text != "") params.name = text;
+   getList(params);
+ };
 
   //#endregion
 
@@ -89,6 +101,7 @@ const PositionList = (props) => {
   return (
     <View>
       <SimpleList
+        onSearch={(text) => debounceSearch(text)}
         loading={loading}
         data={data}
         addNewItem={gotoRecord}

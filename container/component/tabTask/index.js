@@ -8,7 +8,7 @@ import { Tabs, Tab, Container, ScrollableTab } from "native-base";
 const TabTask = (props) => {
   console.log("TabTask:::", props);
   //state
-  const [mode, setMode] = useState("list");
+  const [mode, setMode] = useState(props.mode ? props.mode : "list");
 
   //effect
   useEffect(() => {
@@ -25,7 +25,7 @@ const TabTask = (props) => {
   };
 
   //render
-  
+
   const renderMode = (mode) => {
     const activeTab = mode == "detail" ? 1 : 0;
     console.log("renderMode:::", mode, activeTab);
@@ -50,7 +50,12 @@ const TabTask = (props) => {
           <ListTask changeMode={onChangeMode} mode={mode} />
         </Tab>
         <Tab heading="" style={{ backgroundColor: "transparent" }}>
-          <DetailTask changeMode={onChangeMode} mode={mode} data={props.data} />
+          <DetailTask
+            changeMode={onChangeMode}
+            mode={mode}
+            data={props.data}
+            {...props}
+          />
         </Tab>
       </Tabs>
     );

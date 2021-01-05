@@ -15,7 +15,6 @@ import { listTaskState, currTaskState } from "container/recoil/state/tabTask";
 import { Icon, Tabs, Tab, ScrollableTab, CheckBox } from "native-base";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
-import ActionButton from "react-native-action-button";
 import CreateTask from "./create";
 import { getRequest, postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
@@ -25,7 +24,7 @@ import update from "immutability-helper";
 import debounce from "lodash/debounce";
 import { repairParams } from "container/helper/format";
 import { gotoRoute } from "container/utils/router";
-import { modals } from "container/constant/screen";
+import { modals, screens } from "container/constant/screen";
 import { PRIORITY_LEVEL } from "container/constant/element";
 import Avatar from "container/component/ui/avatar";
 
@@ -89,7 +88,13 @@ const ListTask = (props) => {
 
   const gotoDetail = async (item, index) => {
     setCurrTask({ ...item, index });
-    changeMode && changeMode("detail");
+    // changeMode && changeMode("detail");
+    gotoRoute(screens.TAB_TASK, {
+      data: { ...item, index },
+      mode: "detail",
+      listTask: data,
+      setListTask: setData,
+    });
   };
 
   const checkDoneTask = (item, index, indexTab) => {
@@ -137,6 +142,7 @@ const ListTask = (props) => {
             temp.member.map((item) => item.id)
           );
         },
+        selectedItem: filter.member,
         api: "member/get",
         params: { type: "simple" },
         multiSelect: true,
@@ -370,6 +376,7 @@ const ListTask = (props) => {
           <FlatList
             data={tab.data}
             style={{ marginTop: scale(20) }}
+            contentContainerStyle={{ paddingBottom: scale(80) }}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item, index }) =>
               renderItemTask(item, index, indexTab)
@@ -400,24 +407,28 @@ const ListTask = (props) => {
     );
   };
 
+  const renderBtnAdd = () => {
+    return (
+      <View style={styles.actionButtonBox}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => openCreatePopUp()}
+        >
+          <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
+          <Text style={styles.actionButtonText}>
+            {intl.formatMessage(Messages.add)}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={[styles.container, style]}>
       <HeaderInfo />
       {renderFilter()}
       {renderTabs()}
-
-      <ActionButton
-        offsetX={scale(30)}
-        offsetY={scale(30)}
-        style={{ ...shadow }}
-        renderIcon={() => {
-          return (
-            <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
-          );
-        }}
-        buttonColor={color.warning}
-        onPress={() => openCreatePopUp()}
-      />
+      {renderBtnAdd()}
       <CreateTask ref={createTaskRef} />
     </View>
   );

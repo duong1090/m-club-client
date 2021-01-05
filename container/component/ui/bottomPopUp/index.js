@@ -147,7 +147,10 @@ const BottomPopUp = (props, ref) => {
   const renderWithKeyBoard = () => {
     return (
       visible && (
-        <View style={styles.panelContainer} pointerEvents="box-none">
+        <View
+          style={[styles.panelContainer, { elevation: 4 }]}
+          pointerEvents="box-none"
+        >
           <KeyboardAvoidingView
             style={{ flex: 1 }}
             keyboardVerticalOffset={50}

@@ -114,8 +114,9 @@ const CreateTask = (props, ref) => {
     let passProps = {
       onSelectItem: (value) => {
         console.log("onSelectItem:::", value, assignedMember);
-        setAssignMember(assignedMember.concat(value));
+        setAssignMember(value);
       },
+      selectedItem: assignedMember,
       api: "member/get",
       params: { type: "simple" },
       multiSelect: true,
