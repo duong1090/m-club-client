@@ -93,10 +93,14 @@ const FundList = (props) => {
           </Text>
         </View>
         <View style={styles.itemMid}>
-          <Text style={styles.itemText}>{item.reason}</Text>
+          <Text style={styles.itemText} numberOfLines={1}>
+            {item.reason}
+          </Text>
         </View>
         <View style={styles.itemRight}>
-          <Text style={styles.itemText}>{item.amount}</Text>
+          <Text style={[styles.itemText, styles.amountText]}>
+            {item.amount}
+          </Text>
         </View>
       </TouchableOpacity>
     );
@@ -229,8 +233,8 @@ const styles = StyleSheet.create({
     flex: 3,
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: scale(10),
     paddingHorizontal: scale(20),
+    paddingVertical: scale(20),
   },
   itemMid: {
     flex: 5,
@@ -238,13 +242,13 @@ const styles = StyleSheet.create({
     borderLeftWidth: scale(2),
     borderRightWidth: scale(2),
     borderColor: color.lightGrey,
-    padding: scale(10),
+    padding: scale(20),
     paddingHorizontal: scale(20),
   },
   itemRight: {
     flex: 3,
-    alignItems: "center",
-    padding: scale(10),
+    alignItems: "flex-end",
+    padding: scale(20),
     paddingHorizontal: scale(20),
   },
   headerLeft: {
@@ -252,20 +256,24 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: space.border,
     borderBottomLeftRadius: space.border,
     justifyContent: "center",
+    paddingVertical: scale(10),
+
     ...shadow,
   },
   headerMid: {
     backgroundColor: color.primary,
     paddingHorizontal: scale(5),
-
+    paddingVertical: scale(10),
     alignItems: "center",
     borderColor: "#fff",
     ...shadow,
   },
   headerRight: {
+    alignItems: "center",
     backgroundColor: color.primary,
     borderTopRightRadius: space.border,
     borderBottomRightRadius: space.border,
+    paddingVertical: scale(10),
     ...shadow,
   },
   btnUpdateBox: {
@@ -285,6 +293,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(20),
     borderRadius: space.border,
     ...shadow,
+  },
+  amountText: {
+    fontWeight: "bold",
   },
   btnUpdateText: {
     ...defaultText,
