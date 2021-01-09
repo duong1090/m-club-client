@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Image } from "react-native";
+import { View, Image, KeyboardAvoidingView } from "react-native";
 import InformationPage from "./InformationPage";
 import { scale, color } from "container/variables/common";
 
@@ -29,10 +29,12 @@ const SignUp = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {header()}
-      <InformationPage style={styles.information} />
-    </View>
+    <KeyboardAvoidingView keyboardVerticalOffset={50} behavior="position">
+      <View style={styles.container}>
+        {header()}
+        <InformationPage style={styles.information} />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

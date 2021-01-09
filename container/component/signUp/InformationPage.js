@@ -20,7 +20,8 @@ import {
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
 import { gotoRoute } from "container/utils/router";
-import {screens} from "container/constant/screen";
+import { screens } from "container/constant/screen";
+import { showSpinner, hideSpinner } from "container/utils/router";
 
 const { width } = Dimensions.get("window");
 
@@ -88,6 +89,7 @@ const InformationPage = (props) => {
   };
 
   const doSignUp = () => {
+    showSpinner();
     let params = {};
     if (clubName) params.club_name = clubName;
     if (clubCode) params.code = clubCode;
@@ -98,9 +100,14 @@ const InformationPage = (props) => {
       .then((res) => {
         if (res) {
           console.log("doSignUp:::", res);
+          gotoRoute(screens.LOGIN);
         }
+        hideSpinner();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        hideSpinner();
+      });
   };
 
   const gotoSignIn = () => {

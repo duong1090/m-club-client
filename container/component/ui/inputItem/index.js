@@ -120,7 +120,7 @@ const InputItem = (props, ref) => {
           onFocus={onFocus ? onFocus : null}
           autoCorrect={autoCorrect}
           textAlign={textAlign ? textAlign : null}
-          keyboardType={keyboardType ? keyboardType : null}
+          keyboardType={keyboardType ? keyboardType : 'numeric'}
           maxLength={maxLength}
           onChangeText={onChange}
         />

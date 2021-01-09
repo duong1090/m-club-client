@@ -10,6 +10,7 @@ export const screens = {
   SPINNER: "SPINNER",
   DEPARTMENT: "DEPARTMENT",
   POSITION: "POSITION",
+  FUNDS: "FUNDS",
 };
 
 export const modals = {

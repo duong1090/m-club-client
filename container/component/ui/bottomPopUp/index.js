@@ -79,6 +79,7 @@ const BottomPopUp = (props, ref) => {
   };
 
   const onKeyboardDidShow = (e) => {
+    console.log("onKeyboardDidShow:::", e);
     if (e.endCoordinates.height < 400)
       setKeyboardHeight(e.endCoordinates.height);
   };

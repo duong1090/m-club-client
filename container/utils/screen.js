@@ -52,6 +52,10 @@ export const registerLazyScreen = () => {
     screens.POSITION,
     require("container/component/club/position").default
   );
+  registerComponent(
+    screens.FUNDS,
+    require("container/component/club/funds").default
+  );
   //#endregion
 
   //#region modal

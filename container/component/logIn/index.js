@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, Image, StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  Image,
+  StyleSheet,
+  KeyboardAvoidingView,
+} from "react-native";
 import { scale, color, fontSize } from "container/variables/common";
 import InformationPage from "./InformationPage";
 import InputItem from "container/component/ui/inputItem";
@@ -30,10 +36,12 @@ const LogIn = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {header()}
-      <InformationPage style={styles.information} />
-    </View>
+    <KeyboardAvoidingView keyboardVerticalOffset={50} behavior="position">
+      <View style={styles.container}>
+        {header()}
+        <InformationPage style={styles.information} />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

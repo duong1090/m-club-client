@@ -54,7 +54,7 @@ const DEFAULT_MANAGE_LIST = [
   },
   {
     title: <FormattedMessage {...Messages.funds} />,
-    type: "funds",
+    type: screens.FUNDS,
     icon: (
       <Icon
         type="FontAwesome5"

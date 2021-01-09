@@ -297,4 +297,28 @@ export default defineMessages({
     id: "date_short_format",
     defaultMessage: "MMM DD",
   },
+  club_fund: {
+    id: "club_fund",
+    defaultMessage: "Club fund",
+  },
+  purpose_fund: {
+    id: "purpose_fund",
+    defaultMessage: "Purpose of revenue/pay",
+  },
+  amount: {
+    id: "amount",
+    defaultMessage: "Amount",
+  },
+  update: {
+    id: "update",
+    defaultMessage: "Update",
+  },
+  revenue: {
+    id: "revenue",
+    defaultMessage: "Revenue",
+  },
+  pay: {
+    id: "pay",
+    defaultMessage: "Pay",
+  },
 });

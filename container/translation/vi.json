@@ -71,5 +71,11 @@
   "yesterday": "Hôm qua",
   "format_today": "[Hôm nay lúc] h:mm A",
   "format_yesterday": "[Hôm qua lúc ] h:mm A",
-  "date_short_format": "DD MMM"
+  "date_short_format": "DD MMM",
+  "club_fund": "Quỹ câu lạc bộ",
+  "purpose_fund": "Mục đích thu/chi",
+  "amount": "Số tiền",
+  "update": "Cập nhật",
+  "revenue": "Thu",
+  "pay": "Chi"
 }

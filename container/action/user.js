@@ -101,7 +101,9 @@ export const getOrganization = () => {
           // if (res.data.lang) setItem(LANG, res.data.lang);
         }
       })
-      .catch((err) => reject(err));
+      .catch((err) => {
+        reject(err);
+      });
   });
 };
 
