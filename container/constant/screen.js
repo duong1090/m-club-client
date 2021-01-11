@@ -11,6 +11,7 @@ export const screens = {
   DEPARTMENT: "DEPARTMENT",
   POSITION: "POSITION",
   FUNDS: "FUNDS",
+  USER_INFO: "USER_INFO",
 };
 
 export const modals = {

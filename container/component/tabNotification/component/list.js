@@ -8,8 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { styles, AVATAR_SIZE } from "../style/list";
-import { useRecoilState } from "recoil";
-import { unreadNumberNotiState } from "container/recoil/state/tabNotification";
+import { gotoRoute } from "container/utils/router";
 import Avatar from "container/component/ui/avatar";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import { postRequest, getRequest } from "container/utils/request";
@@ -27,19 +26,19 @@ const NotificationList = (props) => {
   //state
   const [data, setData] = useState([]);
   const [meta, setMeta] = useState({});
-  const [unreadNum, setUnreadNum] = useRecoilState(unreadNumberNotiState);
+  const [refresh, setRefresh] = useState(false);
 
   //variables
   let page = 1;
 
   //effect -----------------------------------------------------------------------------------------------
   useEffect(() => {
+    showSpinner();
     getData();
   }, []);
 
   //function - event -------------------------------------------------------------------------------------
   const getData = () => {
-    showSpinner();
     getRequest(Config.API_URL.concat("notification/get"), { page })
       .then((res) => {
         if (res && res.data) {
@@ -47,9 +46,11 @@ const NotificationList = (props) => {
           setMeta(res.data.meta);
         }
         hideSpinner();
+        setRefresh(false);
       })
       .catch((err) => {
         console.error(err);
+        setRefresh(false);
         hideSpinner();
       });
   };
@@ -62,7 +63,13 @@ const NotificationList = (props) => {
   };
 
   const onPressItem = (item, index) => {
+    console.log("onPressItem::", item);
+
     doRead(item, index);
+    gotoRoute(item.target_route, {
+      data: { id: item.source_id },
+      mode: "detail",
+    });
   };
 
   const doRead = (item, index) => {
@@ -81,7 +88,32 @@ const NotificationList = (props) => {
       .catch((err) => console.error(err));
   };
 
+  const handleRefresh = () => {
+    setRefresh(true);
+    getData();
+  };
+
   //render -----------------------------------------------------------------------------------------------
+  const renderHeader = () => {
+    return (
+      <View style={styles.headerBox}>
+        <Text style={styles.headerText}>
+          {intl.formatMessage(Messages.tab_notification)}
+        </Text>
+      </View>
+    );
+  };
+
+  const renderEmpty = () => {
+    return (
+      <View style={styles.emptyBox}>
+        <Text style={styles.emptyText}>
+          {intl.formatMessage(Messages.empty_data)}
+        </Text>
+      </View>
+    );
+  };
+
   const renderIconType = () => {
     return require("container/asset/icon/task_noti.png");
   };
@@ -148,6 +180,10 @@ const NotificationList = (props) => {
         renderItem={({ item, index }) => renderItem(item, index)}
         onEndReachedThreshold={0.5}
         onEndReached={loadMore}
+        refreshing={refresh}
+        onRefresh={handleRefresh}
+        ListEmptyComponent={renderEmpty()}
+        ListHeaderComponent={renderHeader()}
       />
     </View>
   );

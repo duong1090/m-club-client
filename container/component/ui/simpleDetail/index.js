@@ -64,7 +64,7 @@ const SimpleDetail = (props) => {
     return (
       <View>
         {renderMember && data.member ? (
-          <View style={style.itemContent}>
+          <View style={styles.itemContent}>
             <View style={styles.leftItem}>
               <View style={styles.dot} />
               <Text style={styles.titleItem}>
@@ -202,9 +202,11 @@ const styles = StyleSheet.create({
   },
   itemContent: {
     marginBottom: space.componentMargin,
-    marginHorizontal: space.componentMargin,
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingBottom: scale(10),
+    borderBottomWidth: scale(2),
+    borderColor: color.lightGrey,
   },
   backButton: {
     alignItems: "center",

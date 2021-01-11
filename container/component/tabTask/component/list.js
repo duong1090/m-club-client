@@ -292,7 +292,9 @@ const ListTask = (props) => {
               doFilter("is_done", filter.isDone ? 0 : 1);
             }}
           >
-            <Text style={styles.filterItemText}>Hoàn thành</Text>
+            <Text style={styles.filterItemText}>
+              {intl.formatMessage(Messages.done)}
+            </Text>
             {filter.isDone ? (
               <Icon
                 type="Ionicons"
@@ -319,7 +321,9 @@ const ListTask = (props) => {
               },
             ]}
           >
-            <Text style={styles.filterItemText}>Độ ưu tiên</Text>
+            <Text style={styles.filterItemText}>
+              {intl.formatMessage(Messages.priority)}
+            </Text>
             <View
               style={[
                 styles.childrenItemPriorLevel(filter.priority),

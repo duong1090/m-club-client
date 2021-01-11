@@ -77,5 +77,13 @@
   "amount": "Số tiền",
   "update": "Cập nhật",
   "revenue": "Thu",
-  "pay": "Chi"
+  "pay": "Chi",
+  "log_out": "Đăng xuất",
+  "setting": "Cài đặt",
+  "assigned_member": "Người thực hiện",
+  "child_task_of": "Công việc con của ",
+  "child_task": "Công việc con",
+  "activities": "Tổng hoạt động",
+  "activity": "Hoạt động",
+  "reason": "Lý do"
 }

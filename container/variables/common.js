@@ -9,7 +9,7 @@ export const scale = (size) => ratio * size;
 export const verticalScale = (size) => (height / guidelineBaseHeight) * size;
 
 export const color = {
-  background: "#9A41AB",
+  background: "#0275d8",
   backgroundColor: "#F1F1F1",
   topBarButtonColor: "#3F3F3F",
   topBarTextColor: "#3F3F3F",

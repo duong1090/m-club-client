@@ -20,6 +20,7 @@ import {
 import ActionButton from "react-native-action-button";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import EntypoIcon from "react-native-vector-icons/Entypo";
+import { Icon } from "native-base";
 
 const SimpleList = (props) => {
   const {
@@ -77,6 +78,22 @@ const SimpleList = (props) => {
     );
   };
 
+  const renderBtnAdd = () => {
+    return (
+      <View style={styles.actionButtonBox}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => addNewItem()}
+        >
+          <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
+          <Text style={styles.actionButtonText}>
+            {intl.formatMessage(Messages.add)}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.searchBox}>
@@ -94,18 +111,7 @@ const SimpleList = (props) => {
       ) : loading ? null : (
         renderEmpty()
       )}
-      {addNewItem ? (
-        <ActionButton
-          offsetX={scale(30)}
-          offsetY={scale(30)}
-          style={{ ...shadow }}
-          renderIcon={() => {
-            return <EntypoIcon name="plus" style={styles.actionButtonIcon} />;
-          }}
-          buttonColor={color.warning}
-          onPress={() => addNewItem()}
-        />
-      ) : null}
+      {addNewItem ? renderBtnAdd() : null}
     </View>
   );
 };
@@ -164,6 +170,32 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingHorizontal: scale(20),
     paddingVertical: scale(15),
+  },
+  actionButtonBox: {
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: scale(15),
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  actionButton: {
+    backgroundColor: color.primary,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: scale(5),
+    paddingHorizontal: scale(20),
+    borderRadius: space.border,
+    ...shadow,
+  },
+  actionButtonText: {
+    ...defaultText,
+    color: "#fff",
+  },
+  actionButtonIcon: {
+    fontSize: scale(30),
+    color: "#fff",
   },
 });
 

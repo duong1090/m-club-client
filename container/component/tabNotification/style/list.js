@@ -73,4 +73,26 @@ export const styles = StyleSheet.create({
     color: color.grey,
     marginTop: scale(5),
   },
+  emptyBox: {
+    marginTop: scale(60),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    ...defaultText,
+    fontSize: fontSize.sizeBigContent,
+  },
+  headerBox: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    padding: space.bgPadding,
+    paddingVertical: space.bgPadding / 2,
+    marginBottom: scale(20),
+    borderBottomWidth: scale(2),
+    borderColor: color.lightGrey,
+  },
+  headerText: {
+    ...defaultText,
+  },
 });

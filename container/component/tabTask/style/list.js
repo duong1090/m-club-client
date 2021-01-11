@@ -182,7 +182,9 @@ export const styles = StyleSheet.create({
   childrenItemPriorLevel: (level) => ({
     height: scale(50),
     aspectRatio: 1,
-    backgroundColor: [color.green, color.orange, color.red][level],
+    backgroundColor: ["transparent", color.green, color.orange, color.red][
+      level
+    ],
     borderRadius: scale(15),
     marginRight: scale(20),
   }),

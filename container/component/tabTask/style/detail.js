@@ -166,7 +166,9 @@ export const styles = StyleSheet.create({
     marginRight: space.componentMargin,
   },
   contentPriorityBox: (level) => ({
-    backgroundColor: [color.green, color.orange, color.red][level],
+    backgroundColor: ["transparent", color.green, color.orange, color.red][
+      level
+    ],
     paddingHorizontal: scale(30),
     paddingVertical: scale(10),
     borderRadius: space.border,
@@ -282,7 +284,9 @@ export const styles = StyleSheet.create({
   childrenItemPriorLevel: (level) => ({
     height: scale(50),
     aspectRatio: 1,
-    backgroundColor: [color.green, color.orange, color.red][level],
+    backgroundColor: ["transparent", color.green, color.orange, color.red][
+      level
+    ],
     borderRadius: scale(15),
     marginRight: scale(20),
   }),

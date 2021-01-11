@@ -31,6 +31,7 @@ import CreateTask from "./create";
 import { scale } from "../../../variables/common";
 import { PRIORITY_LEVEL } from "container/constant/element";
 import { back } from "container/utils/router";
+import { Navigation } from "react-native-navigation";
 
 const UPDATE_API = {
   member: "task/update-assigned-member",
@@ -43,7 +44,7 @@ const INDEX_LIST = { today: 0, future: 1, timed: 2, no_time: 3 };
 
 const DetailTask = (props) => {
   //props
-  const { style, intl, changeMode, setListTask, listTask } = props;
+  const { style, intl, changeMode, setListTask, listTask, componentId } = props;
   //state
   const [name, setName] = useState(null);
   const [parent, setParent] = useState(null);
@@ -60,6 +61,16 @@ const DetailTask = (props) => {
   const [visibleDesIcon, setVisibleDesIcon] = useState(true);
   const [currTask, setCurrTask] = useRecoilState(currTaskState);
   // const [listTask, setListTask] = useRecoilState(listTaskState);
+
+  //default option topBar
+  Navigation.mergeOptions(componentId, {
+    topBar: {
+      visible: true,
+      title: {
+        text: intl.formatMessage(Messages.tab_task),
+      },
+    },
+  });
 
   //variables
   const createTaskRef = useRef(null);
@@ -144,13 +155,15 @@ const DetailTask = (props) => {
           //   (item) => item.id == currTask.id
           // );
           console.log("updateTask::::", listTask);
-          setListTask(
-            update(listTask, {
-              [INDEX_LIST[currTask.group]]: {
-                data: { [currTask.index]: { [field]: { $set: res.data } } },
-              },
-            })
-          );
+          setListTask &&
+            listTask &&
+            setListTask(
+              update(listTask, {
+                [INDEX_LIST[currTask.group]]: {
+                  data: { [currTask.index]: { [field]: { $set: res.data } } },
+                },
+              })
+            );
         }
       })
       .catch((err) => {
@@ -408,7 +421,9 @@ const DetailTask = (props) => {
       <View style={styles.content}>
         {parent ? (
           <View style={styles.contentChild}>
-            <Text style={styles.contentChildText}>Công việc con của </Text>
+            <Text style={styles.contentChildText}>
+              {intl.formatMessage(Messages.child_task_of)}
+            </Text>
             <Text style={styles.contentChildTask}>{parent.name}</Text>
           </View>
         ) : null}
@@ -417,14 +432,18 @@ const DetailTask = (props) => {
           <View style={styles.contentMem}>
             <View style={styles.rowView}>
               <View style={styles.dot} />
-              <Text style={styles.contentMemText}>Người thực hiện</Text>
+              <Text style={styles.contentMemText}>
+                {intl.formatMessage(Messages.assigned_member)}
+              </Text>
             </View>
             {renderAvatar()}
           </View>
           <View style={styles.contentPriority}>
             <View style={styles.rowView}>
               <View style={styles.dot} />
-              <Text style={styles.contentPriorityText}>Độ ưu tiên</Text>
+              <Text style={styles.contentPriorityText}>
+                {intl.formatMessage(Messages.priority)}
+              </Text>
             </View>
             <TouchableOpacity
               onPress={() => gotoSelectPriority()}
@@ -438,7 +457,9 @@ const DetailTask = (props) => {
           <View style={styles.contentDeadline}>
             <View style={styles.rowView}>
               <View style={styles.dot} />
-              <Text style={styles.contentDeadlineText}>Han chot</Text>
+              <Text style={styles.contentDeadlineText}>
+                {intl.formatMessage(Messages.deadline)}
+              </Text>
             </View>
             <TouchableOpacity
               onPress={() => setVisibleTimePicker(true)}
@@ -509,14 +530,18 @@ const DetailTask = (props) => {
         <View style={styles.childrenHeader}>
           <View style={styles.childrenTitleBox}>
             <View style={styles.dot} />
-            <Text style={styles.childrenTitle}>Công việc con</Text>
+            <Text style={styles.childrenTitle}>
+              {intl.formatMessage(Messages.child_task)}
+            </Text>
           </View>
           {children.length ? (
             <TouchableOpacity
               onPress={() => openCreatePopUp()}
               style={styles.childrenTitleBox}
             >
-              <Text style={styles.childrenCreateText}>Thêm</Text>
+              <Text style={styles.childrenCreateText}>
+                {intl.formatMessage(Messages.add)}
+              </Text>
               <Icon
                 name="pen"
                 type="FontAwesome5"
@@ -628,16 +653,7 @@ const DetailTask = (props) => {
         style={[styles.container, style]}
         contentContainerStyle={{ paddingBottom: scale(100) }}
       >
-        <HeaderInfo
-          backButton={{
-            title: "Back",
-            onPress: () => {
-              // changeMode && changeMode("list");
-              back();
-              resetState();
-            },
-          }}
-        />
+        <HeaderInfo />
         {renderContent()}
         {renderChildren()}
         {renderButtonAction()}

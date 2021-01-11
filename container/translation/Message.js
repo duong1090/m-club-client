@@ -321,4 +321,40 @@ export default defineMessages({
     id: "pay",
     defaultMessage: "Pay",
   },
+  log_out: {
+    id: "log_out",
+    defaultMessage: "Log Out",
+  },
+  setting: {
+    id: "setting",
+    defaultMessage: "Setting",
+  },
+  assigned_member: {
+    id: "assigned_member",
+    defaultMessage: "Assigned member",
+  },
+  child_task_of: {
+    id: "child_task_of",
+    defaultMessage: "child task of ",
+  },
+  child_task: {
+    id: "child_task",
+    defaultMessage: "Child task",
+  },
+  current_fund: {
+    id: "current_fund",
+    defaultMessage: "Current Fund",
+  },
+  activities: {
+    id: "activities",
+    defaultMessage: "Activities",
+  },
+  activity: {
+    id: "activity",
+    defaultMessage: "Activity",
+  },
+  reason: {
+    id: "reason",
+    defaultMessage: "Reason",
+  },
 });

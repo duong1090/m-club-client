@@ -1,5 +1,11 @@
 import React from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import {
   scale,
   color,
@@ -14,7 +20,6 @@ import ManageItem from "./ManageItem";
 import { gotoRoute } from "container/utils/router";
 import { screens } from "container/constant/screen";
 import { Icon } from "native-base";
-import ActionButton from "react-native-action-button";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import { logOut } from "container/action/user";
 
@@ -104,26 +109,31 @@ const TabAccount = (props) => {
     );
   };
 
+  const renderBtnLogOut = () => {
+    return (
+      <View style={styles.actionButtonBox}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => doLogOut()}
+        >
+          <Icon
+            name="sign-out-alt"
+            type="FontAwesome5"
+            style={styles.actionButtonIcon}
+          />
+          <Text style={styles.actionButtonText}>
+            {intl.formatMessage(Messages.log_out)}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Information style={styles.information} />
       {renderManageList()}
-      <ActionButton
-        offsetX={scale(30)}
-        offsetY={scale(30)}
-        style={{ ...shadow }}
-        renderIcon={() => {
-          return (
-            <Icon
-              name="sign-out-alt"
-              type="FontAwesome5"
-              style={styles.actionButtonIcon}
-            />
-          );
-        }}
-        buttonColor={color.danger}
-        onPress={() => doLogOut()}
-      />
+      {renderBtnLogOut()}
     </View>
   );
 };
@@ -131,20 +141,43 @@ const TabAccount = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: space.bgPadding,
-    backgroundColor: color.backgroundColor,
+    // backgroundColor: color.backgroundColor,
   },
   information: {
     width: "100%",
-    marginBottom: space.componentMargin,
   },
   manageList: {
     flex: 1,
+    padding: space.bgPadding,
+    borderTopWidth: scale(4),
+    borderColor: color.backgroundColor,
+  },
+  actionButtonBox: {
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: scale(15),
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  actionButton: {
+    backgroundColor: color.danger,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: scale(5),
+    paddingHorizontal: scale(20),
+    borderRadius: space.border,
+    ...shadow,
+  },
+  actionButtonText: {
+    ...defaultText,
+    color: "#fff",
   },
   actionButtonIcon: {
-    fontSize: 20,
-    height: 22,
-    color: "white",
+    fontSize: scale(30),
+    color: "#fff",
+    marginRight: scale(10),
   },
 });
 

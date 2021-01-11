@@ -37,6 +37,12 @@ const configOneSignal = () => {
     console.log("Notification received: ", notification);
   };
   const onOpened = (openResult) => {
+    const { additionalData } = openResult.notification.payload;
+    gotoRoute(additionalData.route, {
+      data: { id: additionalData.id },
+      mode: "detail",
+    });
+
     console.log("OneSignal:::: onOpened");
     console.log("Message: ", openResult.notification.payload.body);
     console.log("Data: ", openResult.notification.payload.additionalData);

@@ -31,8 +31,12 @@ const HeaderInfo = (props) => {
       )}
       <View style={styles.content}>
         <View style={styles.info}>
-          <Text style={styles.name}>{member.name}</Text>
-          <Text style={styles.position}>{member.position.name}</Text>
+          {member && member.name ? (
+            <Text style={styles.name}>{member.name}</Text>
+          ) : null}
+          {member && member.position && member.position.name ? (
+            <Text style={styles.position}>{member.position.name}</Text>
+          ) : null}
         </View>
         <Avatar size={scale(100)} data={member} />
       </View>

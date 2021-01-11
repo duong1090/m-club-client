@@ -28,6 +28,7 @@ const FundList = (props) => {
   const { intl } = props;
   //state
   const [data, setData] = useState([]);
+  const [currFund, setCurrFund] = useState(0);
   const [meta, setMeta] = useState({});
 
   //variables
@@ -37,7 +38,6 @@ const FundList = (props) => {
 
   //effect -------------------------------------------------------------------------------------------------------------------------------
   useEffect(() => {
-    // createData();
     getData();
   }, []);
 
@@ -57,6 +57,7 @@ const FundList = (props) => {
         if (res && res.data) {
           setData(res.data.items);
           setMeta(res.data.meta);
+          setCurrFund(res.data.current_fund);
         }
         hideSpinner();
       })
@@ -111,13 +112,19 @@ const FundList = (props) => {
       <View style={styles.table}>
         <View style={styles.itemHeaderContainer}>
           <View style={[styles.itemLeft, styles.headerLeft]}>
-            <Text style={styles.itemHeaderText}>Hoạt động</Text>
+            <Text style={styles.itemHeaderText}>
+              {intl.formatMessage(Messages.activity)}
+            </Text>
           </View>
           <View style={[styles.itemMid, styles.headerMid]}>
-            <Text style={styles.itemHeaderText}>Mục đích</Text>
+            <Text style={styles.itemHeaderText}>
+              {intl.formatMessage(Messages.reason)}
+            </Text>
           </View>
           <View style={[styles.itemRight, styles.headerRight]}>
-            <Text style={styles.itemHeaderText}>Số tiền</Text>
+            <Text style={styles.itemHeaderText}>
+              {intl.formatMessage(Messages.amount)}
+            </Text>
           </View>
         </View>
         <FlatList
@@ -136,12 +143,18 @@ const FundList = (props) => {
     <View style={styles.container}>
       <View style={styles.information}>
         <View style={styles.informationBox}>
-          <Text style={styles.informationTitle}>Quỹ hiện tại:</Text>
-          <Text style={styles.informationText}>12 300 000</Text>
+          <Text style={styles.informationTitle}>
+            {intl.formatMessage(Messages.current_fund)}
+            {":"}
+          </Text>
+          <Text style={styles.informationText}>{currFund}</Text>
         </View>
         <View style={styles.informationBox}>
-          <Text style={styles.informationTitle}>Tổng hoạt động:</Text>
-          <Text style={styles.informationText}>11</Text>
+          <Text style={styles.informationTitle}>
+            {intl.formatMessage(Messages.activities)}
+            {":"}
+          </Text>
+          <Text style={styles.informationText}>{meta.total}</Text>
         </View>
       </View>
 
@@ -153,7 +166,9 @@ const FundList = (props) => {
           style={styles.btnUpdate}
         >
           <Icon type="FontAwesome5" name="pen" style={styles.btnUpdateIcon} />
-          <Text style={styles.btnUpdateText}>Cập nhật quỹ</Text>
+          <Text style={styles.btnUpdateText}>
+            {intl.formatMessage(Messages.update)}
+          </Text>
         </TouchableOpacity>
       </View>
 

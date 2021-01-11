@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   inputField: {
-    marginBottom: scale(60),
+    marginBottom: space.componentMargin,
   },
   doneBox: {
     paddingVertical: scale(15),
