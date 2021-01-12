@@ -13,6 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.wix.interactable.Interactable;
+import com.microsoft.codepush.react.CodePush;
 
 public class MainApplication extends NavigationApplication {
 
@@ -37,6 +38,11 @@ public class MainApplication extends NavigationApplication {
         @Override
         protected String getJSMainModuleName() {
           return "index";
+        }
+
+        @Override
+        protected String getJSBundleFile() {
+            return CodePush.getJSBundleFile();
         }
       };
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { injectIntl } from "react-intl";
 import { View, Text, StyleSheet } from "react-native";
+import { Tabs, Tab, ScrollableTab } from "native-base";
 import Messages from "container/translation/Message";
 import {
   scale,
@@ -12,7 +13,11 @@ import {
 import InputPhone from "./InputPhone";
 import SelectClub from "./SelectClub";
 import InputOTP from "./InputOTP";
-import { clubListState, certificateState } from "container/recoil/state/login";
+import {
+  clubListState,
+  certificateState,
+  activeTabState,
+} from "container/recoil/state/login";
 import { useRecoilValue, useRecoilState } from "recoil";
 import Toast from "react-native-simple-toast";
 
@@ -24,11 +29,11 @@ const InformationPage = (props) => {
   const { style, intl } = props;
 
   //state
-  const [activeTab, setActiveTab] = useState(0);
   const [isByPass, setIsByPass] = useState(false);
   let countByPass = 0;
 
   //recoil state
+  const [activeTab, setActiveTab] = useRecoilState(activeTabState);
   const clubList = useRecoilValue(clubListState);
   const [certificate, setCertificate] = useRecoilState(certificateState);
 
@@ -64,20 +69,41 @@ const InformationPage = (props) => {
     <InputOTP style={styles.inputOTP} />,
   ];
 
+  const renderTabs = () => {
+    return (
+      <Tabs
+        initialPage={0}
+        page={activeTab}
+        locked
+        renderTabBar={() => (
+          <ScrollableTab style={{ height: 0, borderWidth: 0 }} />
+        )}
+      >
+        {tabs.map((tab) => (
+          <Tab heading="" style={{ backgroundColor: "transparent" }}>
+            {tab}
+          </Tab>
+        ))}
+      </Tabs>
+    );
+  };
+
   return (
     <View style={[style, styles.container]}>
       <Text onPress={() => doByPass()} style={styles.welcome}>
         {intl.formatMessage(Messages.welcome_to_mclub)}
       </Text>
-      {tabs[activeTab]}
+      {renderTabs()}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+  },
   inputPhone: {
-    width: "100%",
+    flex: 1,
   },
   welcome: {
     ...defaultText,
@@ -88,10 +114,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   selectClub: {
-    width: "100%",
+    flex: 1,
   },
   inputOTP: {
-    width: "100%",
+    flex: 1,
   },
 });
 

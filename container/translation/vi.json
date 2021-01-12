@@ -24,7 +24,7 @@
   "add": "Thêm",
   "create": "Tạo",
   "tab_account": "Thêm",
-  "tab_navigate": "Điều hướng",
+  "tab_navigate": "Trang chủ",
   "tab_notification": "Thông báo",
   "tab_task": "Công việc",
   "otp": "OTP",
@@ -85,5 +85,12 @@
   "child_task": "Công việc con",
   "activities": "Tổng hoạt động",
   "activity": "Hoạt động",
-  "reason": "Lý do"
+  "reason": "Lý do",
+  "language": "Ngôn ngữ",
+  "vi": "Tiếng Việt",
+  "en": "Tiếng Anh",
+  "today": "Hôm nay",
+  "future": "Sắp tới",
+  "timed": "Hết hạn",
+  "no time": "Không thời han"
 }

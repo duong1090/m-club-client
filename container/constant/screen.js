@@ -12,6 +12,8 @@ export const screens = {
   POSITION: "POSITION",
   FUNDS: "FUNDS",
   USER_INFO: "USER_INFO",
+  SETTING: "SETTING",
+  SPLASH_SCREEN: "SPLASH_SCREEN",
 };
 
 export const modals = {

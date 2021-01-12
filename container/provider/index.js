@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { RecoilRoot } from "recoil";
 import IntlMainProvider from "./intlProvider";
-
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { LogBox } from "react-native";
 
 // const PersistenceObserver = () => {
@@ -45,7 +45,9 @@ const MainProvider = (props) => {
   return (
     <RecoilRoot>
       {/* <PersistenceObserver /> */}
-      <IntlMainProvider>{React.Children.only(children)}</IntlMainProvider>
+      <ActionSheetProvider>
+        <IntlMainProvider>{React.Children.only(children)}</IntlMainProvider>
+      </ActionSheetProvider>
     </RecoilRoot>
   );
 };

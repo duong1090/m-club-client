@@ -24,36 +24,12 @@ bottomTabsByID[screens.TAB_ACCOUNT] = () => ({
           id: screens.TAB_ACCOUNT,
           options: {
             layout: { backgroundColor: "#fff" },
-            // topBar: {
-            //   visible: true,
-            //   leftButtonColor: color.topBarButtonColor,
-            //   rightButtonColor: color.topBarButtonColor,
-            //   rightButtons: [],
-            //   title: {
-            //     text: getIntl().formatMessage(Messages.tab_account),
-            //     alignment: "fill",
-            //     color: "#fff",
-            //   },
-            //   backButton: {
-            //     color: color.topBarButtonColor,
-            //   },
-            //   background: {
-            //     color: color.topBarBgColor,
-            //     translucent: true,
-            //     blur: false,
-            //   },
-            // },
           },
         },
       },
     ],
     options: {
       topBar: {
-        // background: {
-        //   color: color.topBarBgColor,
-        //   translucent: true,
-        //   blur: true,
-        // },
         visible: false,
       },
       bottomTabs: {
@@ -78,36 +54,12 @@ bottomTabsByID[screens.TAB_NAVIGATE] = () => ({
           id: screens.TAB_NAVIGATE,
           options: {
             layout: { backgroundColor: "#fff" },
-            // topBar: {
-            //   visible: true,
-            //   leftButtonColor: color.topBarButtonColor,
-            //   rightButtonColor: color.topBarButtonColor,
-            //   rightButtons: [],
-            //   title: {
-            //     text: getIntl().formatMessage(Messages.tab_navigate),
-            //     alignment: "fill",
-            //     color: "#fff",
-            //   },
-            //   backButton: {
-            //     color: color.topBarButtonColor,
-            //   },
-            //   background: {
-            //     color: color.topBarBgColor,
-            //     translucent: true,
-            //     blur: false,
-            //   },
-            // },
           },
         },
       },
     ],
     options: {
       topBar: {
-        // background: {
-        //   color: color.topBarBgColor,
-        //   translucent: true,
-        //   blur: false,
-        // },
         visible: false,
       },
       bottomTabs: {
@@ -132,36 +84,12 @@ bottomTabsByID[screens.TAB_NOTIFICATION] = () => ({
           id: screens.TAB_NOTIFICATION,
           options: {
             layout: { backgroundColor: "#fff" },
-            // topBar: {
-            //   visible: true,
-            //   leftButtonColor: color.topBarButtonColor,
-            //   rightButtonColor: color.topBarButtonColor,
-            //   rightButtons: [],
-            //   title: {
-            //     text: getIntl().formatMessage(Messages.tab_notification),
-            //     alignment: "fill",
-            //     color: "#fff",
-            //   },
-            //   backButton: {
-            //     color: color.topBarButtonColor,
-            //   },
-            //   background: {
-            //     color: color.topBarBgColor,
-            //     translucent: true,
-            //     blur: false,
-            //   },
-            // },
           },
         },
       },
     ],
     options: {
       topBar: {
-        // background: {
-        // color: color.topBarBgColor,
-        // translucent: true,
-        // blur: false,
-        // },
         visible: false,
       },
       bottomTabs: {
@@ -186,36 +114,12 @@ bottomTabsByID[screens.TAB_TASK] = () => ({
           id: screens.TAB_TASK,
           options: {
             layout: { backgroundColor: "#fff" },
-            // topBar: {
-            //   visible: true,
-            //   leftButtonColor: color.topBarButtonColor,
-            //   rightButtonColor: color.topBarButtonColor,
-            //   rightButtons: [],
-            //   title: {
-            //     text: getIntl().formatMessage(Messages.tab_task),
-            //     alignment: "fill",
-            //     color: "#fff",
-            //   },
-            //   backButton: {
-            //     color: color.topBarButtonColor,
-            //   },
-            //   background: {
-            //     color: color.topBarBgColor,
-            //     translucent: true,
-            //     blur: false,
-            //   },
-            // },
           },
         },
       },
     ],
     options: {
       topBar: {
-        // background: {
-        //   color: color.topBarBgColor,
-        //   translucent: true,
-        //   blur: false,
-        // },
         visible: false,
       },
       bottomTabs: {

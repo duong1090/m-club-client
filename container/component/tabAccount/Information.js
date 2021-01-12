@@ -24,6 +24,10 @@ const Information = (props) => {
     // gotoRoute(screens.USER_INFO);
   };
 
+  const gotoSetting = () => {
+    gotoRoute(screens.SETTING);
+  };
+
   return (
     <View style={[styles.container, style]}>
       <View style={styles.person}>
@@ -42,7 +46,7 @@ const Information = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity style={styles.settingBtn}>
+      <TouchableOpacity style={styles.settingBtn} onPress={() => gotoSetting()}>
         <Text style={styles.setting}>
           {intl.formatMessage(Messages.setting)}
         </Text>

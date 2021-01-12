@@ -136,8 +136,8 @@ const NotificationList = (props) => {
     const highlightContent = highlighText(
       item.content,
       item.objects,
-      replaceText(item.noti_type),
-      styles.content
+      styles.content,
+      replaceText(item.noti_type)
     );
 
     return (

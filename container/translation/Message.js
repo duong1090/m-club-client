@@ -107,7 +107,7 @@ export default defineMessages({
   },
   tab_navigate: {
     id: "tab_navigate",
-    defaultMessage: "Navigate",
+    defaultMessage: "Home",
   },
   tab_notification: {
     id: "tab_notification",
@@ -356,5 +356,33 @@ export default defineMessages({
   reason: {
     id: "reason",
     defaultMessage: "Reason",
+  },
+  language: {
+    id: "language",
+    defaultMessage: "Language",
+  },
+  vi: {
+    id: "vi",
+    defaultMessage: "Vietnamese",
+  },
+  en: {
+    id: "en",
+    defaultMessage: "English",
+  },
+  today: {
+    id: "today",
+    defaultMessage: "Today",
+  },
+  future: {
+    id: "future",
+    defaultMessage: "Future",
+  },
+  timed: {
+    id: "timed",
+    defaultMessage: "Timed",
+  },
+  no_time: {
+    id: "no_time",
+    defaultMessage: " No time",
   },
 });

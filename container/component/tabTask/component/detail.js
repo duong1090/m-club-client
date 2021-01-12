@@ -561,8 +561,19 @@ const DetailTask = (props) => {
     );
   };
 
+  const replaceText = () => {
+    return PRIORITY_LEVEL.map((item) => ({
+      text: item.name,
+    }));
+  };
+
   const renderActivityItem = (item) => {
-    const text = highlighText(item.name, item.objects, styles.activityItemName);
+    const text = highlighText(
+      item.name,
+      item.objects,
+      styles.activityItemName,
+      replaceText()
+    );
     const time = getHumanDay(
       item.time,
       intl.formatMessage(Messages.datetime_format)

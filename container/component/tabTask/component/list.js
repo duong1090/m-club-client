@@ -365,6 +365,7 @@ const ListTask = (props) => {
               style={{
                 ...defaultText,
                 fontSize: fontSize.size20,
+                fontWeight: "bold",
                 color: "#fff",
               }}
             >

@@ -18,21 +18,47 @@ import {
   defaultText,
 } from "container/variables/common";
 import Messages from "container/translation/Message";
+import {
+  clubListState,
+  certificateState,
+  activeTabState,
+} from "container/recoil/state/login";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import update from "immutability-helper";
+
+const TAB_INPUT_OTP = 2;
 
 const SelectClub = (props) => {
   const { intl, style } = props;
-  const [clubList, setClubList] = useState([
-    { title: "English Speaking Club", code: "ESC_HCMUTE_01", selected: true },
-    { title: "English Speaking Club", code: "ESC_HCMUTE_01", selected: false },
-    { title: "English Speaking Club", code: "ESC_HCMUTE_01", selected: false },
-    { title: "English Speaking Club", code: "ESC_HCMUTE_01", selected: false },
-    { title: "English Speaking Club", code: "ESC_HCMUTE_01", selected: false },
-  ]);
 
-  const clubItem = (item) => {
+  //recoil state
+  const [clubList, setClubList] = useRecoilState(clubListState);
+  const [certificate, setCertificate] = useRecoilState(certificateState);
+  const setActiveTab = useSetRecoilState(activeTabState);
+
+  const onPressItem = (item, index) => {
+    const temp = clubList.map((item, i) => {
+      let tempItem = { ...item };
+      if (i == index) tempItem.selected = true;
+      else tempItem.selected = false;
+      return tempItem;
+    });
+    setClubList(update(clubList, { $set: temp }));
+  };
+
+  const gotoInputOTP = () => {
+    const selectedClub = clubList.find((item) => item.selected);
+    setActiveTab(TAB_INPUT_OTP);
+    setCertificate({
+      ...certificate,
+      club_id: selectedClub && selectedClub.id ? selectedClub.id : null,
+    });
+  };
+
+  const clubItem = (item, index) => {
     return (
       <TouchableOpacity
-        onPress={() => {}}
+        onPress={() => onPressItem(item, index)}
         style={[
           styles.item,
           {
@@ -46,7 +72,7 @@ const SelectClub = (props) => {
             { color: item.selected ? color.background : color.disable },
           ]}
         >
-          {item.title}
+          {item.name}
         </Text>
         <View style={styles.descriptionItem}>
           <Text
@@ -73,6 +99,8 @@ const SelectClub = (props) => {
     );
   };
 
+  console.log("SelectClub:::", clubList);
+
   return (
     <Animated.View style={style}>
       <Text style={styles.title}>
@@ -83,13 +111,13 @@ const SelectClub = (props) => {
         style={styles.list}
         data={clubList}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => clubItem(item)}
+        renderItem={({ item, index }) => clubItem(item, index)}
         showsVerticalScrollIndicator={false}
       />
 
       <TouchableOpacity
         style={[styles.button, { backgroundColor: color.background }]}
-        onPress={() => {}}
+        onPress={() => gotoInputOTP()}
       >
         <Text
           style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
@@ -109,7 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.background,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: scale(60),
+    marginTop: scale(30),
   },
 
   title: {
@@ -122,7 +150,7 @@ const styles = StyleSheet.create({
   },
 
   list: {
-    height: "58%",
+    flex: 1,
   },
 
   item: {

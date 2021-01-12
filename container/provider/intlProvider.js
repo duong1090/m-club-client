@@ -9,7 +9,9 @@ const IntlMainProvider = (props) => {
   const { children } = props;
   const user = useRecoilValue(userState);
 
-  const lang = user && user.lang ? user.lang : "en";
+  const lang = global.lang ? global.lang : "en";
+
+  console.log("IntlMainProvider:::", lang);
 
   return (
     <IntlProvider

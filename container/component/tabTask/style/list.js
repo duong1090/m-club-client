@@ -113,9 +113,10 @@ export const styles = StyleSheet.create({
     right: scale(-20),
     justifyContent: "center",
     alignItems: "center",
-    height: scale(45),
-    width: scale(45),
-    borderRadius: scale(23),
+    height: scale(40),
+    // width: scale(30),
+    minWidth: scale(40),
+    borderRadius: scale(20),
     backgroundColor: color.danger,
   },
   boxEmpty: {

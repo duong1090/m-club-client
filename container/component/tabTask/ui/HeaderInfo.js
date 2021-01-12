@@ -31,6 +31,7 @@ const HeaderInfo = (props) => {
       )}
       <View style={styles.content}>
         <View style={styles.info}>
+          <Avatar size={scale(100)} data={member} />
           {member && member.name ? (
             <Text style={styles.name}>{member.name}</Text>
           ) : null}
@@ -38,7 +39,6 @@ const HeaderInfo = (props) => {
             <Text style={styles.position}>{member.position.name}</Text>
           ) : null}
         </View>
-        <Avatar size={scale(100)} data={member} />
       </View>
     </View>
   );
@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: scale(20),
     alignItems: "center",
-    justifyContent: "space-between",
     ...shadow,
   },
   content: {
@@ -59,17 +58,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   info: {
-    marginRight: scale(20),
-    alignItems: "flex-end",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   name: {
     ...defaultText,
+    marginLeft: scale(20),
+
     fontSize: fontSize.size36,
     fontWeight: "bold",
   },
   position: {
     ...defaultText,
     fontSize: fontSize.sizeBigContent,
+    marginLeft: scale(20),
     fontStyle: "italic",
   },
   backButton: {

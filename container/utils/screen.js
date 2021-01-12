@@ -60,6 +60,14 @@ export const registerLazyScreen = () => {
     screens.USER_INFO,
     require("container/component/info/user").default
   );
+  registerComponent(
+    screens.SETTING,
+    require("container/component/setting").default
+  );
+  registerComponent(
+    screens.SPLASH_SCREEN,
+    require("container/component/splashScreen").default
+  );
   //#endregion
 
   //#region modal
@@ -101,7 +109,23 @@ Navigation.events().registerComponentDidAppearListener(
 );
 
 const onAppLaunched = () => {
-  loadInitialStatus();
+  Navigation.setRoot({
+    root: {
+      stack: {
+        children: [
+          {
+            component: {
+              name: screens.SPLASH_SCREEN,
+            },
+          },
+        ],
+        options: {
+          topBar: { visible: false },
+        },
+      },
+    },
+  });
+  setTimeout(loadInitialStatus, 2500);
 };
 
 Navigation.events().registerAppLaunchedListener(onAppLaunched);

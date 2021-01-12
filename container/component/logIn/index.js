@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { scale, color, fontSize } from "container/variables/common";
 import InformationPage from "./InformationPage";
@@ -36,7 +37,10 @@ const LogIn = () => {
   };
 
   return (
-    <KeyboardAvoidingView keyboardVerticalOffset={50} behavior="position">
+    <KeyboardAvoidingView
+      behavior="height"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+    >
       <View style={styles.container}>
         {header()}
         <InformationPage style={styles.information} />
@@ -46,7 +50,9 @@ const LogIn = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    height: "100%",
+  },
   header: {
     height: scale(300),
   },

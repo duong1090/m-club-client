@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@expo/react-native-action-sheet": "^3.8.0",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/datetimepicker": "^3.0.8",
     "@react-native-community/toolbar-android": "^0.1.0-rc.2",
@@ -29,6 +30,7 @@
     "react-intl": "^5.8.8",
     "react-native": "0.63.2",
     "react-native-action-button": "^2.8.5",
+    "react-native-code-push": "^7.0.0",
     "react-native-device-info": "^7.0.1",
     "react-native-interactable": "^2.0.1",
     "react-native-modal-datetime-picker": "^9.1.0",

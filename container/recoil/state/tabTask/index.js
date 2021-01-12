@@ -1,4 +1,6 @@
 import { atom } from "recoil";
+import { getIntl } from "container/utils/common";
+import Messages from "container/translation/Message";
 
 export const currTaskState = atom({
   key: "currTaskState",
@@ -9,16 +11,16 @@ export const listTaskState = atom({
   key: "listTaskState",
   default: [
     {
-      name: "Today",
+      name: getIntl().formatMessage(Messages.today),
     },
     {
-      name: "Future",
+      name: getIntl().formatMessage(Messages.future),
     },
     {
-      name: "Timed",
+      name: getIntl().formatMessage(Messages.timed),
     },
     {
-      name: "No time",
+      name: getIntl().formatMessage(Messages.no_time),
     },
   ],
 });
