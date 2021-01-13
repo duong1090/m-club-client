@@ -38,7 +38,7 @@ const TabNavigate = (props) => {
           <View style={styles.elTwoHeader}>
             <Image
               style={styles.logo}
-              source={require("container/asset/image/Mclub-cirLogo.png")}
+              source={require("container/asset/image/MclubLogo.png")}
             />
           </View>
           <Text style={styles.welcome}>
@@ -54,7 +54,7 @@ const TabNavigate = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: color.background,
+    backgroundColor: color.backgroundColor,
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
@@ -64,26 +64,25 @@ const styles = StyleSheet.create({
     marginBottom: scale(100),
   },
   elTwoHeader: {
-    width: scale(164),
-    height: scale(164),
+    width: scale(250),
+    height: scale(250),
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: scale(82),
-    borderWidth: scale(4),
     borderColor: color.fontColor,
-    backgroundColor: "#fff",
   },
   logo: {
-    width: scale(160),
-    height: scale(160),
+    width: scale(250),
+    height: scale(250),
     resizeMode: "contain",
   },
   welcome: {
     ...defaultText,
-    fontSize: fontSize.size50,
-    color: "#fff",
+    fontSize: fontSize.size36,
+    color: "#00aaaa",
     fontWeight: "bold",
-    marginBottom: space.componentMargin,
+    marginVertical: space.componentMargin,
+    marginHorizontal: scale(60),
+    textAlign: "center",
     alignSelf: "center",
   },
 });

@@ -122,7 +122,7 @@ const NotificationList = (props) => {
     switch (type) {
       case "task":
         return PRIORITY_LEVEL.map((item) => ({
-          text: item.name,
+          text: intl.formatMessage(Messages[item.name]),
         }));
     }
   };

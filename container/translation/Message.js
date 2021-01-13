@@ -389,4 +389,28 @@ export default defineMessages({
     id: "set_deadline",
     defaultMessage: "Set deadline",
   },
+  implementer: {
+    id: "implementer",
+    defaultMessage: "Implementer",
+  },
+  time: {
+    id: "time",
+    defaultMessage: "Time",
+  },
+  none: {
+    id: "none",
+    defaultMessage: "None",
+  },
+  low: {
+    id: "low",
+    defaultMessage: "Low",
+  },
+  medium: {
+    id: "medium",
+    defaultMessage: "Medium",
+  },
+  high: {
+    id: "high",
+    defaultMessage: "High",
+  },
 });

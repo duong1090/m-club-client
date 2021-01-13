@@ -30,7 +30,6 @@ import update from "immutability-helper";
 import Config from "container/config/server.config";
 import { showSpinner, hideSpinner } from "container/utils/router";
 
-const intl = getIntl();
 const DUE_DATE_FORMAT = "YYYY-MM-DD ";
 const DUE_TIME_FORMAT = "HH:mm:ss";
 const INDEX_LIST = { today: 0, future: 1, timed: 2, no_time: 3 };
@@ -55,6 +54,7 @@ const CreateTask = (props, ref) => {
     (dueTime && moment(dueDate, DUE_DATE_FORMAT).isBefore(new Date()))
       ? color.colorMandy
       : color.hint;
+  const intl = getIntl();
 
   //effect
   useImperativeHandle(ref, () => ({
@@ -97,18 +97,13 @@ const CreateTask = (props, ref) => {
   };
 
   const prepareParams = () => {
+    console.log("prepareParams:::", dueDate, dueTime);
+
     let params = { prior_level: 0 };
     if (props.data && props.data.id) params.parent_id = props.data.id;
     if (name) params.name = name;
     if (dueDate) {
-      if (dueTime)
-        params.end_date = `${moment(
-          dueDate,
-          intl.formatMessage(Messages.due_date_format)
-        ).format("YYYY-MM-DD")} ${moment(
-          dueTime,
-          intl.formatMessage(Messages.due_time_format)
-        ).format("HH:mm")}`;
+      if (dueTime) params.end_date = `${dueDate} ${dueTime}`;
       else params.end_date = dueDate;
     }
     if (assignedMember.length)

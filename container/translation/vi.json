@@ -12,7 +12,7 @@
   "sign_in": "Đăng Nhập",
   "new_here": "Chưa có tài khoản?",
   "sign_up_now": "Đăng ký ngay!",
-  "welcome_to_mclub": "MClub xin chào bạn!",
+  "welcome_to_mclub": "Chào mừng bạn đến với MClub!",
   "select_club": "Chọn câu lạc bộ của bạn",
   "name": "Tên",
   "address": "Địa chỉ",
@@ -83,6 +83,7 @@
   "assigned_member": "Người thực hiện",
   "child_task_of": "Công việc con của ",
   "child_task": "Công việc con",
+  "current_fund": "Quỹ hiện tại",
   "activities": "Tổng hoạt động",
   "activity": "Hoạt động",
   "reason": "Lý do",
@@ -92,6 +93,12 @@
   "today": "Hôm nay",
   "future": "Sắp tới",
   "timed": "Hết hạn",
-  "no time": "Không thời han",
-  "set_deadline": "Hẹn hạn chót"
+  "no_time": "Không thời han",
+  "set_deadline": "Hẹn hạn chót",
+  "implementer": "Người thực hiện",
+  "time": "Thời gian",
+  "none": "Không có",
+  "low": "Thấp",
+  "medium": "Trung bình",
+  "high": "Cao"
 }

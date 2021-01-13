@@ -26,7 +26,6 @@ import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import { showSpinner, hideSpinner } from "container/utils/router";
 
-const intl = getIntl();
 
 const RADIO_BUTTON = { revenue: 1, pay: 0 };
 
@@ -37,6 +36,7 @@ const CreateFund = (props, ref) => {
   const [reason, setReason] = useState(null);
   const [isRevenue, setIsRevenue] = useState(1);
   const [amount, setAmount] = useState(null);
+  const intl = getIntl();
 
   //variables
   const bottomPopUpRef = useRef(null);

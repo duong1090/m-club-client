@@ -8,8 +8,8 @@ export const SEX = [
 ];
 
 export const PRIORITY_LEVEL = [
-  { id: 0, name: "Không có" },
-  { id: 1, name: "Thấp" },
-  { id: 2, name: "Vừa" },
-  { id: 3, name: "Cao" },
+  { id: 0, name: "none" },
+  { id: 1, name: "low" },
+  { id: 2, name: "medium" },
+  { id: 3, name: "high" },
 ];

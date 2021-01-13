@@ -41,9 +41,9 @@ const Information = (props) => {
               <Text style={styles.position}>{member.position.name}</Text>
             ) : null}
           </View>
-          <TouchableOpacity onPress={() => gotoEdit()}>
+          {/* <TouchableOpacity onPress={() => gotoEdit()}>
             <Icon type="FontAwesome5" name="pen" style={styles.editIcon} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
       <TouchableOpacity style={styles.settingBtn} onPress={() => gotoSetting()}>
@@ -59,6 +59,8 @@ const Information = (props) => {
 const styles = StyleSheet.create({
   container: {
     padding: space.bgPadding / 2,
+    backgroundColor: "#fff",
+    ...shadow,
   },
   person: {
     flexDirection: "row",

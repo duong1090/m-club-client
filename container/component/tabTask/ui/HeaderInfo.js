@@ -32,12 +32,14 @@ const HeaderInfo = (props) => {
       <View style={styles.content}>
         <View style={styles.info}>
           <Avatar size={scale(100)} data={member} />
-          {member && member.name ? (
-            <Text style={styles.name}>{member.name}</Text>
-          ) : null}
-          {member && member.position && member.position.name ? (
-            <Text style={styles.position}>{member.position.name}</Text>
-          ) : null}
+          <View>
+            {member && member.name ? (
+              <Text style={styles.name}>{member.name}</Text>
+            ) : null}
+            {member && member.position && member.position.name ? (
+              <Text style={styles.position}>{member.position.name}</Text>
+            ) : null}
+          </View>
         </View>
       </View>
     </View>
@@ -66,14 +68,13 @@ const styles = StyleSheet.create({
     ...defaultText,
     marginLeft: scale(20),
 
-    fontSize: fontSize.size36,
+    fontSize: fontSize.sizeBigContent,
     fontWeight: "bold",
   },
   position: {
     ...defaultText,
-    fontSize: fontSize.sizeBigContent,
+    fontSize: fontSize.size28,
     marginLeft: scale(20),
-    fontStyle: "italic",
   },
   backButton: {
     alignItems: "center",

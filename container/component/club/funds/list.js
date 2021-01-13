@@ -22,6 +22,7 @@ import FundDetail from "./detail";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
 import { Icon } from "native-base";
+import update from "immutability-helper";
 
 const FundList = (props) => {
   //props
@@ -72,6 +73,10 @@ const FundList = (props) => {
       page++;
       getData();
     }
+  };
+
+  const updateList = (item) => {
+    setData(update(data, { $unshift: [item] }));
   };
 
   //render ---------------------------------------------------------------------------------------------------------------------------------
@@ -172,7 +177,7 @@ const FundList = (props) => {
         </TouchableOpacity>
       </View>
 
-      <CreateFund ref={createFundRef} />
+      <CreateFund ref={createFundRef} updateCallback={updateList} />
       <FundDetail ref={detailFundRef} />
     </View>
   );

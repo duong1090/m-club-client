@@ -141,7 +141,7 @@ const TabAccount = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: color.backgroundColor,
+    backgroundColor: color.backgroundColor,
   },
   information: {
     width: "100%",

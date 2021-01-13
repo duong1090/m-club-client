@@ -129,7 +129,9 @@ const ListTask = (props) => {
           setFilter(temp);
           doFilter("prior_level", value.id);
         },
-        data: PRIORITY_LEVEL,
+        data: PRIORITY_LEVEL.map((item) => {
+          return { ...item, name: intl.formatMessage(Messages[item.name]) };
+        }),
       };
     else if (type == "member")
       passProps = {
@@ -355,6 +357,7 @@ const ListTask = (props) => {
           style={{
             ...defaultText,
             fontWeight: "bold",
+            textAlign: "center",
           }}
         >
           {intl.formatMessage(Messages[tab.name])}

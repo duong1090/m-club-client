@@ -8,11 +8,9 @@ import OneSignal from "react-native-onesignal"; // Import package from node modu
 
 export const loadInitialStatus = async () => {
   const apiToken = await getItem(API_TOKEN);
-  console.log("loadInitialStatus:::", apiToken);
 
   configOneSignal();
 
-  await setIntl();
   if (apiToken) {
     //loading organization when app start
     try {
@@ -26,6 +24,7 @@ export const loadInitialStatus = async () => {
           global.lang = org.lang;
         } else {
           const tempLang = await getItem(LANG);
+          console.log("loadInitialStatus:::", tempLang);
           if (tempLang) global.lang = tempLang;
           else global.lang = "en";
         }
@@ -36,6 +35,7 @@ export const loadInitialStatus = async () => {
         if (tempLang) global.lang = tempLang;
       }
 
+      await setIntl();
       gotoHome();
     } catch (err) {
       logOut();

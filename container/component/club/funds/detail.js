@@ -15,12 +15,11 @@ import { getIntl } from "container/utils/common";
 import { Icon } from "native-base";
 export const AVATAR_SIZE = scale(60);
 
-const intl = getIntl();
-
 const FundDetail = (props, ref) => {
   //state
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState(null);
+  const intl = getIntl();
 
   //effect
   useImperativeHandle(ref, () => ({
@@ -49,6 +48,8 @@ const FundDetail = (props, ref) => {
     );
   };
 
+  console.log("detail:::fund", intl);
+
   return (
     <ModalPopUp
       title="Chi tiết"
@@ -66,11 +67,15 @@ const FundDetail = (props, ref) => {
       {data ? (
         <View style={styles.container}>
           <View style={styles.itemBox}>
-            <Text style={styles.itemTitle}>Người thực hiện</Text>
+            <Text style={styles.itemTitle}>
+              {intl.formatMessage(Messages.implementer)}
+            </Text>
             {renderAvatar()}
           </View>
           <View style={styles.itemBox}>
-            <Text style={styles.itemTitle}>Hoạt động</Text>
+            <Text style={styles.itemTitle}>
+              {intl.formatMessage(Messages.activity)}
+            </Text>
             <View style={styles.contentBox}>
               <Text style={styles.itemText}>
                 {data.is_revenue
@@ -85,21 +90,27 @@ const FundDetail = (props, ref) => {
             </View>
           </View>
           <View style={styles.itemBox}>
-            <Text style={styles.itemTitle}>Số tiền</Text>
+            <Text style={styles.itemTitle}>
+              {intl.formatMessage(Messages.amount)}
+            </Text>
             <View style={styles.contentBox}>
               <Text style={styles.itemText}>{data.amount}</Text>
               <Icon type="FontAwesome5" name="coins" style={styles.icon} />
             </View>
           </View>
           <View style={styles.itemBox}>
-            <Text style={styles.itemTitle}>Thời gian</Text>
+            <Text style={styles.itemTitle}>
+              {intl.formatMessage(Messages.time)}
+            </Text>
             <View style={styles.contentBox}>
               <Text style={styles.itemText}>{data.time}</Text>
               <Icon name="time" style={styles.icon} />
             </View>
           </View>
           <View style={styles.reasonBox}>
-            <Text style={styles.itemTitle}>Mục đích</Text>
+            <Text style={styles.itemTitle}>
+              {intl.formatMessage(Messages.reason)}
+            </Text>
             <Text style={styles.itemText}>{data.reason}</Text>
           </View>
         </View>
@@ -155,9 +166,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  reasonBox: {
-      
-  },
+  reasonBox: {},
 });
 
 export default forwardRef(FundDetail);

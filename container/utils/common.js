@@ -87,12 +87,12 @@ export const setIntl = async () => {
   const intl = createIntl(
     {
       locale: lang ? lang : "en",
+      key: lang ? lang : "en",
       messages: lang ? translationMessages[lang] : translationMessages["en"],
       textComponent: Text,
     },
     intlCache
   );
-  console.log("setIntl::::");
   global.intl = intl;
 };
 

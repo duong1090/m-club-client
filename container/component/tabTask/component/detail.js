@@ -189,7 +189,9 @@ const DetailTask = (props) => {
 
   const gotoSelectPriority = () => {
     let passProps = {
-      data: PRIORITY_LEVEL,
+      data: PRIORITY_LEVEL.map((item) => {
+        return { ...item, name: intl.formatMessage(Messages[item.name]) };
+      }),
       onSelectItem: (value) => {
         updateTask("prior_level", { prior_level: value.id });
       },
@@ -387,7 +389,7 @@ const DetailTask = (props) => {
         <TextInput
           style={styles.contentDescriptionText}
           value={description && description != "" ? description : null}
-          placeholder="Description"
+          placeholder={intl.formatMessage(Messages.description)}
           ref={desInputRef}
           multiline
           onChangeText={(text) => setDescription(text)}
@@ -448,7 +450,9 @@ const DetailTask = (props) => {
               style={styles.contentPriorityBox(priorityLevel)}
             >
               <Text style={styles.contentPriorityLevel(priorityLevel)}>
-                {PRIORITY_LEVEL[priorityLevel].name}
+                {intl.formatMessage(
+                  Messages[PRIORITY_LEVEL[priorityLevel].name]
+                )}
               </Text>
             </TouchableOpacity>
           </View>
@@ -565,7 +569,7 @@ const DetailTask = (props) => {
 
   const replaceText = () => {
     return PRIORITY_LEVEL.map((item) => ({
-      text: item.name,
+      text: intl.formatMessage(Messages[item.name]),
     }));
   };
 
@@ -583,13 +587,9 @@ const DetailTask = (props) => {
 
     return (
       <View style={styles.activityItem}>
-        <Text numberOfLines={2} style={styles.activityItemName}>
-          {text}
-        </Text>
+        <Text style={styles.activityItemName}>{text}</Text>
         <View style={styles.activityItemTime}>
-          <Text numberOfLines={2} style={styles.activityItemTimeText}>
-            {time}
-          </Text>
+          <Text style={styles.activityItemTimeText}>{time}</Text>
           <Icon
             name="clockcircle"
             type="AntDesign"
@@ -603,7 +603,7 @@ const DetailTask = (props) => {
   const renderActivity = () => {
     return (
       <ModalPopUp
-        title="Nhật kí hoạt động"
+        title={intl.formatMessage(Messages.activity)}
         visible={visibleActivity}
         transparent
         animationType="fade"
@@ -682,7 +682,9 @@ const DetailTask = (props) => {
             name="book"
             style={styles.activityButtonIcon}
           />
-          <Text style={styles.activityButtonText}>Nhật ký hoạt động</Text>
+          <Text style={styles.activityButtonText}>
+            {intl.formatMessage(Messages.activity)}
+          </Text>
         </TouchableOpacity>
       </View>
       <CreateTask
