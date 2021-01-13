@@ -76,6 +76,12 @@ const FundList = (props) => {
   };
 
   const updateList = (item) => {
+    setCurrFund(
+      update(currFund, {
+        $set: currFund + [-item.amount, item.amount][item.is_revenue],
+      })
+    );
+    setMeta(meta, { total: { $set: meta.total++ } });
     setData(update(data, { $unshift: [item] }));
   };
 
