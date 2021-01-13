@@ -11,16 +11,16 @@ export const listTaskState = atom({
   key: "listTaskState",
   default: [
     {
-      name: getIntl().formatMessage(Messages.today),
+      name: 'today',
     },
     {
-      name: getIntl().formatMessage(Messages.future),
+      name: 'future',
     },
     {
-      name: getIntl().formatMessage(Messages.timed),
+      name: 'timed',
     },
     {
-      name: getIntl().formatMessage(Messages.no_time),
+      name: 'no_time',
     },
   ],
 });

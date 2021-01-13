@@ -305,7 +305,7 @@ export const get = async (uri, params = "", quiet) => {
       Device: deviceInfo,
       Accept: "application/json",
       Authorization: "Bearer " + token,
-      LANG: lang ? lang : "en",
+      lang: lang ? lang : "en",
       "Cache-Control": "Private, No-Cache",
       Pragma: "no-cache",
       Expires: 0,

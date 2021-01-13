@@ -357,7 +357,7 @@ const ListTask = (props) => {
             fontWeight: "bold",
           }}
         >
-          {tab.name}
+          {intl.formatMessage(Messages[tab.name])}
         </Text>
         {tab.data && tab.data.length > 0 ? (
           <View style={styles.dot}>
