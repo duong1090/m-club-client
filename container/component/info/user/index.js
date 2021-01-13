@@ -45,6 +45,7 @@ const UserInfo = (props) => {
     department: member.department ? member.department : null,
     position: member.position ? member.position : null,
   });
+  const [avatarId, setAvatarId] = useState(member.id ? member.id : null);
   const { showActionSheetWithOptions } = useActionSheet();
 
   //constant
@@ -158,6 +159,7 @@ const UserInfo = (props) => {
       .then((res) => {
         if (res && res.data) {
           console.log("updateAvatar:::", res.data);
+          setAvatarId(res.data);
           Toast.show(intl.formatMessage(Messages.update_success), Toast.SHORT);
         }
         hideSpinner();
@@ -259,7 +261,7 @@ const UserInfo = (props) => {
       contentContainerStyle={{ paddingBottom: space.bgPadding * 2 }}
     >
       <View style={styles.avatarBox}>
-        <Avatar size={scale(300)} data={member ? member : null} />
+        <Avatar size={scale(300)} data={avatarId} />
         <TouchableOpacity
           style={styles.cameraBox}
           onPress={() => optionGetImage()}
