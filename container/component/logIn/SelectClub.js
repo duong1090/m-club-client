@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
 
   item: {
     backgroundColor: "#fff",
-    padding: space.bgPadding,
+    padding: scale(20),
     borderRadius: scale(20),
     marginBottom: space.componentMargin,
     borderWidth: scale(2),
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
 
   titleItem: {
     ...defaultText,
-    marginBottom: space.componentMargin,
+    marginBottom: scale(10),
     fontSize: fontSize.size32,
     fontWeight: "bold",
   },

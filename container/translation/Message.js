@@ -63,7 +63,7 @@ export default defineMessages({
   },
   select_club: {
     id: "select_club",
-    defaultMessage: "Select your club",
+    defaultMessage: "Select club",
   },
   name: {
     id: "name",

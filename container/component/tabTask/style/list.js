@@ -56,6 +56,7 @@ export const styles = StyleSheet.create({
     height: "100%",
     flex: 1,
     alignItems: "center",
+    justifyContent: "center",
   },
   contentMemAvt: {
     position: "absolute",
@@ -183,7 +184,7 @@ export const styles = StyleSheet.create({
   childrenItemPriorLevel: (level) => ({
     height: scale(50),
     aspectRatio: 1,
-    backgroundColor: ["transparent", color.green, color.orange, color.red][
+    backgroundColor: [color.lightGrey, color.green, color.orange, color.red][
       level
     ],
     borderRadius: scale(15),

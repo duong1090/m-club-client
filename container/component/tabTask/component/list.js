@@ -137,7 +137,7 @@ const ListTask = (props) => {
       passProps = {
         onSelectItem: (value) => {
           let temp = { ...filter };
-          temp.member = temp.member.concat(value);
+          temp.member = value;
           setFilter(temp);
           doFilter(
             "user_ids",
@@ -221,7 +221,7 @@ const ListTask = (props) => {
                   style={[
                     styles.contentMemAvtMore,
                     styles.contentMemAvt,
-                    { right: (index - limit) * (AVATAR_SIZE / 2) },
+                    { right: (index - limit + 1) * (AVATAR_SIZE / 2) },
                   ]}
                 >
                   <Text style={styles.contentMemAvtMoreText}>
