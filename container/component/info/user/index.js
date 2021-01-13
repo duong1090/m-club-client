@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Avatar from "container/component/ui/avatar";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import {
   scale,
   color,
-  fontSize,
   space,
+  shadow,
   defaultText,
+  fontSize,
 } from "container/variables/common";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
@@ -19,6 +26,10 @@ import { showSpinner, hideSpinner } from "container/utils/router";
 import InputItem from "container/component/ui/inputItem";
 import { gotoRoute } from "container/utils/router";
 import { modals } from "container/constant/screen";
+import { Icon } from "native-base";
+import { useActionSheet } from "@expo/react-native-action-sheet";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import RNFetchBlob from "rn-fetch-blob";
 
 const UserInfo = (props) => {
   //props
@@ -31,13 +42,10 @@ const UserInfo = (props) => {
     address: member.address ? member.address : null,
     sex: SEX[member.sex ? member.sex : 0],
     birthday: member.birthday ? member.birthday : null,
-    department:
-      member.department && member.department.name
-        ? member.department.name
-        : null,
-    position:
-      member.position && member.position.name ? member.position.name : null,
+    department: member.department ? member.department : null,
+    position: member.position ? member.position : null,
   });
+  const { showActionSheetWithOptions } = useActionSheet();
 
   //constant
   const fields = [
@@ -98,8 +106,69 @@ const UserInfo = (props) => {
     },
   ];
 
-
   //function - event ------------------------------------------------------------------------------------------------------
+  const optionGetImage = () => {
+    const options = [
+      intl.formatMessage(Messages.take_photo),
+      intl.formatMessage(Messages.select_photo_from_library),
+      intl.formatMessage(Messages.cancel),
+    ];
+    showActionSheetWithOptions(
+      { options, cancelButtonIndex: 2 },
+      (buttonIndex) => {
+        if (buttonIndex == 0) takePhoto();
+        else if (buttonIndex == 1) selectPhoto();
+      }
+    );
+  };
+
+  const takePhoto = () => {
+    const options = {
+      mediaType: "photo",
+      maxWidth: scale(500),
+      maxHeight: scale(500),
+      quality: 1,
+      includeBase64: true,
+    };
+    launchCamera(options, (image) => {
+      if (image && image.base64) updateAvatar(image);
+    });
+  };
+
+  const selectPhoto = () => {
+    const options = {
+      mediaType: "photo",
+      maxWidth: scale(500),
+      maxHeight: scale(500),
+      quality: 1,
+      includeBase64: true,
+    };
+    launchImageLibrary(options, (image) => {
+      if (image && image.base64) updateAvatar(image);
+    });
+  };
+
+  const updateAvatar = (image) => {
+    showSpinner();
+
+    const params = new FormData();
+    params.append("image", image.base64);
+
+    postRequest(Config.API_URL.concat("member/update-avatar"), params)
+      .then((res) => {
+        if (res && res.data) {
+          console.log("updateAvatar:::", res.data);
+          Toast.show(intl.formatMessage(Messages.update_success), Toast.SHORT);
+        }
+        hideSpinner();
+      })
+      .catch((err) => {
+        hideSpinner();
+        console.error(err);
+        Toast.show(intl.formatMessage(Messages.update_fail), Toast.SHORT);
+      });
+  };
+
   const onPressField = (
     fieldName,
     api,
@@ -172,7 +241,7 @@ const UserInfo = (props) => {
           type={item.type ? item.type : null}
           key={index}
           style={styles.inputField}
-          label={item.title}
+          label={item.name}
           placeholder={item.placeholder ? item.placeholder : null}
           onPress={item.onPress ? item.onPress : null}
           onChangeText={item.onChangeText ? item.onChangeText : null}
@@ -185,17 +254,41 @@ const UserInfo = (props) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View>
-        <Avatar size={scale(150)} data={member ? member : null} />
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: space.bgPadding * 2 }}
+    >
+      <View style={styles.avatarBox}>
+        <Avatar size={scale(300)} data={member ? member : null} />
+        <TouchableOpacity
+          style={styles.cameraBox}
+          onPress={() => optionGetImage()}
+        >
+          <Icon name="camera" style={styles.cameraIcon} />
+        </TouchableOpacity>
       </View>
       <View>{fields.map((item, index) => renderContentItem(item, index))}</View>
+      <TouchableOpacity style={styles.doneBox} onPress={() => update()}>
+        <Text style={styles.titleSymbol}>
+          {intl.formatMessage(Messages.done)}
+        </Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    padding: space.bgPadding,
+  },
+  avatarBox: {
+    padding: scale(60),
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: color.backgroundColor,
+    marginBottom: space.componentMargin * 2,
+    borderRadius: space.border,
+  },
   itemContent: {
     marginBottom: space.componentMargin,
     paddingBottom: scale(10),
@@ -203,7 +296,32 @@ const styles = StyleSheet.create({
     borderColor: color.lightGrey,
   },
   inputField: {
-    marginBottom: scale(60),
+    marginBottom: space.componentMargin,
+  },
+  cameraBox: {
+    position: "absolute",
+    bottom: space.bgPadding,
+    right: space.bgPadding,
+  },
+  cameraIcon: {
+    color: color.info,
+    fontSize: scale(60),
+  },
+  doneBox: {
+    paddingVertical: scale(15),
+    paddingHorizontal: scale(20),
+    backgroundColor: color.warning,
+    borderRadius: scale(40),
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "flex-end",
+    ...shadow,
+  },
+  titleSymbol: {
+    ...defaultText,
+    color: "#fff",
+    fontSize: fontSize.sizeBigContent,
+    fontWeight: "bold",
   },
 });
 

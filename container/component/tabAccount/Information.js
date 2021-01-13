@@ -21,7 +21,7 @@ const Information = (props) => {
   const { member } = global.organization || {};
 
   const gotoEdit = () => {
-    // gotoRoute(screens.USER_INFO);
+    gotoRoute(screens.USER_INFO);
   };
 
   const gotoSetting = () => {
@@ -41,9 +41,9 @@ const Information = (props) => {
               <Text style={styles.position}>{member.position.name}</Text>
             ) : null}
           </View>
-          {/* <TouchableOpacity onPress={() => gotoEdit()}>
+          <TouchableOpacity onPress={() => gotoEdit()}>
             <Icon type="FontAwesome5" name="pen" style={styles.editIcon} />
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
       </View>
       <TouchableOpacity style={styles.settingBtn} onPress={() => gotoSetting()}>

@@ -144,7 +144,7 @@ android {
 
     defaultConfig {
         applicationId "com.mclub"
-        minSdkVersion 19
+        minSdkVersion 21
         multiDexEnabled true
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

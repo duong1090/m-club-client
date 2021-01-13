@@ -36,11 +36,15 @@ const Setting = (props) => {
     const options = [
       intl.formatMessage(Messages.vi),
       intl.formatMessage(Messages.en),
+      intl.formatMessage(Messages.cancel),
     ];
-    showActionSheetWithOptions({ options }, (buttonIndex) => {
-      if (buttonIndex == 0) setLanguage("vi");
-      else if (buttonIndex == 1) setLanguage("en");
-    });
+    showActionSheetWithOptions(
+      { options, cancelButtonIndex: 2 },
+      (buttonIndex) => {
+        if (buttonIndex == 0) setLanguage("vi");
+        else if (buttonIndex == 1) setLanguage("en");
+      }
+    );
   };
 
   //render ------------------------------------------------------------------------------

@@ -100,5 +100,7 @@
   "none": "Không có",
   "low": "Thấp",
   "medium": "Trung bình",
-  "high": "Cao"
+  "high": "Cao",
+  "take_photo": "Chụp hình",
+  "select_photo_from_library": "Chọn hình từ Thư viện"
 }

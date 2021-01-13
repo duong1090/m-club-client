@@ -413,4 +413,12 @@ export default defineMessages({
     id: "high",
     defaultMessage: "High",
   },
+  take_photo: {
+    id: "take_photo",
+    defaultMessage: "Take photo",
+  },
+  select_photo_from_library: {
+    id: "select_photo_from_library",
+    defaultMessage: "Select photo from library",
+  },
 });

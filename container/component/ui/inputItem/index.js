@@ -120,7 +120,7 @@ const InputItem = (props, ref) => {
           onFocus={onFocus ? onFocus : null}
           autoCorrect={autoCorrect}
           textAlign={textAlign ? textAlign : null}
-          keyboardType={keyboardType ? keyboardType : 'numeric'}
+          keyboardType={keyboardType ? keyboardType : "numeric"}
           maxLength={maxLength}
           onChangeText={onChange}
         />
@@ -150,8 +150,6 @@ const InputItem = (props, ref) => {
   };
 
   const renderButton = () => {
-    console.log("renderButton:::", value);
-
     return (
       <TouchableOpacity style={{ flex: 1 }} onPress={onPress}>
         <View style={[styles.wrapButton, inputStyle]}>
@@ -269,7 +267,7 @@ const styles = StyleSheet.create({
   card: {
     justifyContent: "center",
     height: scale(80),
-    backgroundColor: "#F5EDF6",
+    backgroundColor: color.input,
     borderRadius: scale(50),
     paddingHorizontal: scale(30),
     paddingVertical: scale(10),

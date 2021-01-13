@@ -108,9 +108,10 @@ const styles = StyleSheet.create({
   },
   welcome: {
     ...defaultText,
-    fontSize: fontSize.size50,
+    fontSize: fontSize.size40,
     color: color.fontColor,
     fontWeight: "bold",
+    textAlign: 'center',
     marginBottom: space.componentMargin,
     alignSelf: "center",
   },
