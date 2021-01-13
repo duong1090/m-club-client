@@ -102,5 +102,10 @@
   "medium": "Trung bình",
   "high": "Cao",
   "take_photo": "Chụp hình",
-  "select_photo_from_library": "Chọn hình từ Thư viện"
+  "select_photo_from_library": "Chọn hình từ Thư viện",
+  "desciption_home": "Ứng dụng giúp bạn dễ dàng quản lí và điều hành câu lạc bộ của mình trong tầm tay:",
+  "fund_management": "Quản lí tài chính",
+  "hr_management": "Quản lí nhân sự",
+  "task_management": "Giao việc",
+  "noti_management": "Thông báo"
 }

@@ -49,7 +49,16 @@ const TabNavigate = (props) => {
     );
   };
 
-  return <View style={styles.container}>{header()}</View>;
+  return <View style={styles.container}>
+    {header()}
+    <View style={styles.description}>
+      <Text> {intl.formatMessage(Messages.desciption_home)} </Text>
+      <Text>►   {intl.formatMessage(Messages.fund_management)}</Text>
+      <Text>►   {intl.formatMessage(Messages.hr_management)}</Text>
+      <Text>►   {intl.formatMessage(Messages.task_management)}</Text>
+      <Text>►   {intl.formatMessage(Messages.noti_management)}</Text>
+    </View>
+  </View>;
 };
 
 const styles = StyleSheet.create({
@@ -59,20 +68,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "100%",
   },
+  description: {
+    ...defaultText,
+    // backgroundColor: 'red',
+    // color: '#00aaaa',
+    marginTop: scale(70),
+    marginBottom: 0,
+    width: '70%',
+  },
   header: {
     height: scale(300),
     marginBottom: scale(100),
   },
   elTwoHeader: {
-    width: scale(250),
-    height: scale(250),
+    width: scale(420),
+    height: scale(420),
     justifyContent: "center",
     alignItems: "center",
     borderColor: color.fontColor,
   },
   logo: {
-    width: scale(250),
-    height: scale(250),
+    width: scale(420),
+    height: scale(420),
     resizeMode: "contain",
   },
   welcome: {

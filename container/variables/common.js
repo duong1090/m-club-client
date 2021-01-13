@@ -9,7 +9,8 @@ export const scale = (size) => ratio * size;
 export const verticalScale = (size) => (height / guidelineBaseHeight) * size;
 
 export const color = {
-  background: "#0275d8",
+  background: "#00aaaa",
+  // background: "#0275d8",
   input: "#F5EDF6",
   backgroundColor: "#F1F1F1",
   topBarButtonColor: "#3F3F3F",
@@ -26,7 +27,8 @@ export const color = {
   danger: "#DF3651",
   success: "#5cb85c",
   info: "#5bc0de",
-  primary: "#0275d8",
+  primary: "#00aaaa",
+  // primary: "#0275d8",
   border: "#707070",
   dark: "#000000",
   light: "#f7f7f7",

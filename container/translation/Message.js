@@ -421,4 +421,25 @@ export default defineMessages({
     id: "select_photo_from_library",
     defaultMessage: "Select photo from library",
   },
+  desciption_home: {
+    id: "desciption_home",
+    defaultMessage: "App help you easy to manage and operate your club in your hand:",
+  },
+  fund_management: {
+    id: "fund_management",
+    defaultMessage: "Fund management",
+  },
+  hr_management: {
+    id: "hr_management",
+    defaultMessage: "Human resource management",
+  },
+  task_management: {
+    id: "task_management",
+    defaultMessage: "Task management",
+  },
+  noti_management: {
+    id: "noti_management",
+    defaultMessage: "Notification",
+  },
+  
 });
