@@ -40,15 +40,16 @@ const InformationPage = (props) => {
   //effect
   useEffect(() => {
     if (clubList && clubList.length) {
+      let tmpCertificate = { ...certificate };
+      if (isByPass) tmpCertificate.is_bypass = 1;
+
       if (clubList.length == 1) {
-        let tmpCertificate = { ...certificate, club_id: clubList[0].id };
-        if (isByPass) tmpCertificate.is_bypass = 1;
-        console.log("Login:::useEffect:::", isByPass, tmpCertificate);
-        setCertificate({ ...tmpCertificate });
+        tmpCertificate.club_id = clubList[0].id;
         setActiveTab(TAB_INPUT_OTP);
       } else {
         setActiveTab(TAB_SELECT_CLUB);
       }
+      setCertificate({ ...tmpCertificate });
     }
   }, [clubList]);
 

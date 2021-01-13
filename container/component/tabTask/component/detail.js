@@ -202,9 +202,7 @@ const DetailTask = (props) => {
     console.log("confirmPickTime:::", date);
     setVisibleTimePicker(false);
     updateTask("deadline", {
-      end_date: moment(date).format(
-        intl.formatMessage(Messages.datetime_format)
-      ),
+      end_date: moment(date).format("YYYY-MM-DD HH:mm"),
     });
   };
 
@@ -449,7 +447,7 @@ const DetailTask = (props) => {
               onPress={() => gotoSelectPriority()}
               style={styles.contentPriorityBox(priorityLevel)}
             >
-              <Text style={styles.contentPriorityLevel}>
+              <Text style={styles.contentPriorityLevel(priorityLevel)}>
                 {PRIORITY_LEVEL[priorityLevel].name}
               </Text>
             </TouchableOpacity>
@@ -465,7 +463,11 @@ const DetailTask = (props) => {
               onPress={() => setVisibleTimePicker(true)}
               style={styles.contentDeadlineBox}
             >
-              <Text style={styles.contentDeadlineTime}>{deadline}</Text>
+              <Text style={styles.contentDeadlineTime}>
+                {deadline
+                  ? deadline
+                  : intl.formatMessage(Messages.set_deadline)}
+              </Text>
             </TouchableOpacity>
             <DateTimePickerModal
               mode="datetime"

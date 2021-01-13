@@ -15,7 +15,7 @@ const HeaderInfo = (props) => {
   const { style, backButton } = props;
 
   //organization
-  const { member } = global.organization;
+  const { member } = global.organization || {};
   return (
     <View style={[styles.container, style]}>
       {backButton ? (

@@ -385,4 +385,8 @@ export default defineMessages({
     id: "no_time",
     defaultMessage: " No time",
   },
+  set_deadline: {
+    id: "set_deadline",
+    defaultMessage: "Set deadline",
+  },
 });

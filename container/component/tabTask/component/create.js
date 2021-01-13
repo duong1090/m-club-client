@@ -101,7 +101,14 @@ const CreateTask = (props, ref) => {
     if (props.data && props.data.id) params.parent_id = props.data.id;
     if (name) params.name = name;
     if (dueDate) {
-      if (dueTime) params.end_date = `${dueDate} ${dueTime}`;
+      if (dueTime)
+        params.end_date = `${moment(
+          dueDate,
+          intl.formatMessage(Messages.due_date_format)
+        ).format("YYYY-MM-DD")} ${moment(
+          dueTime,
+          intl.formatMessage(Messages.due_time_format)
+        ).format("HH:mm")}`;
       else params.end_date = dueDate;
     }
     if (assignedMember.length)

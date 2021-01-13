@@ -166,17 +166,20 @@ export const styles = StyleSheet.create({
     marginRight: space.componentMargin,
   },
   contentPriorityBox: (level) => ({
-    backgroundColor: ["transparent", color.green, color.orange, color.red][
+    backgroundColor: [color.lightGrey, color.green, color.orange, color.red][
       level
     ],
     paddingHorizontal: scale(30),
     paddingVertical: scale(10),
     borderRadius: space.border,
+    borderStyle: level == 0 ? "dashed" : "solid",
+    borderWidth: level == 0 ? scale(2) : 0,
+    borderColor: color.grey,
   }),
-  contentPriorityLevel: {
+  contentPriorityLevel: (level) => ({
     ...defaultText,
-    color: "#fff",
-  },
+    color: level == 0 ? color.grey : "#fff",
+  }),
   contentDeadline: {
     flexDirection: "row",
     alignItems: "center",
