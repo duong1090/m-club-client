@@ -9,15 +9,6 @@ import { translationMessages } from "../translation/i18n";
 
 let Base64 = null;
 
-global.intl = createIntl(
-  {
-    locale: "en",
-    messages: translationMessages["en"],
-    textComponent: Text,
-  },
-  intlCache
-);
-
 const intlCache = createIntlCache();
 
 export const setApiToken = (token) => {
@@ -97,5 +88,16 @@ export const setIntl = async () => {
 };
 
 export const getIntl = () => {
-  return global.intl ? global.intl : null;
+  console.log("getIntl::::", global.intl);
+  if (!global.intl) {
+    global.intl = createIntl(
+      {
+        locale: "en",
+        messages: translationMessages["en"],
+        textComponent: Text,
+      },
+      intlCache
+    );
+  }
+  return global.intl;
 };
