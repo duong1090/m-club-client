@@ -6,6 +6,7 @@ import { gotoHome, gotoLogin } from "container/utils/router";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import { ORGANIZATION } from "../constant/storage";
 import OneSignal from "react-native-onesignal"; // Import package from node modules
+import moment from 'moment';
 
 export const doLogin = async (payload) => {
   showSpinner();
@@ -110,7 +111,8 @@ export const getOrganization = () => {
 export const getAvatarSource = (data = {}) => {
   if (data && (data.id || data.user_id)) {
     const id = data.id || data.user_id;
-    return Config.API_IMAGE.concat(`avatar/${id}.jpg`);
+    console.log('getAvatarSource:::', Config.API_IMAGE.concat(`avatar/${id}.jpg?${moment().unix()}`))
+    return Config.API_IMAGE.concat(`avatar/${id}.jpg?${moment().unix()}`);
   }
   return null;
   // return Config.API_IMAGE.concat(`avatar/ava.jpg`);

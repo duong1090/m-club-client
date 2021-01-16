@@ -22,6 +22,7 @@ import Messages from "container/translation/Message";
 import { gotoRoute } from "container/utils/router";
 import { screens } from "container/constant/screen";
 import { showSpinner, hideSpinner } from "container/utils/router";
+import { back } from "container/utils/router";
 
 const { width } = Dimensions.get("window");
 
@@ -100,7 +101,7 @@ const InformationPage = (props) => {
       .then((res) => {
         if (res) {
           console.log("doSignUp:::", res);
-          gotoRoute(screens.LOGIN);
+          back();
         }
         hideSpinner();
       })
@@ -232,17 +233,17 @@ const InformationPage = (props) => {
           </Text>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: "#2AC79C" }]}
-          onPress={() => doSignUp()}
-        >
-          <Text
-            style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "#2AC79C" }]}
+            onPress={() => doSignUp()}
           >
-            {intl.formatMessage(Messages.sign_up)}
-          </Text>
-        </TouchableOpacity>
-      )}
+            <Text
+              style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
+            >
+              {intl.formatMessage(Messages.sign_up)}
+            </Text>
+          </TouchableOpacity>
+        )}
 
       <View style={styles.signIn}>
         <Text

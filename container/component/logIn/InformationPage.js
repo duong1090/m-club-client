@@ -73,7 +73,7 @@ const InformationPage = (props) => {
   const renderTabs = () => {
     return (
       <Tabs
-        initialPage={0}
+        initialPage={activeTab}
         page={activeTab}
         locked
         renderTabBar={() => (

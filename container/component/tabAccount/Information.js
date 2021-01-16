@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import {
   scale,
@@ -19,9 +19,16 @@ const Information = (props) => {
   //props
   const { style, intl } = props;
   const { member } = global.organization || {};
+  const [avatar, setAvatar] = useState(member ? member : {})
+
+
+  const updateAvatar = () => {
+    console.log('updateAvatar:::')
+    setAvatar(JSON.parse(JSON.stringify(member)))
+  };
 
   const gotoEdit = () => {
-    gotoRoute(screens.USER_INFO);
+    gotoRoute(screens.USER_INFO, { updateCallback: updateAvatar });
   };
 
   const gotoSetting = () => {
@@ -31,7 +38,7 @@ const Information = (props) => {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.person}>
-        <Avatar style={styles.avatar} size={scale(150)} data={member} />
+        <Avatar style={styles.avatar} size={scale(150)} data={avatar} />
         <View style={styles.info}>
           <View>
             {member && member.name ? (

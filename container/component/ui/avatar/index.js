@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { Spinner } from "native-base";
 import {
@@ -11,24 +11,32 @@ import {
 import { getAvatarSource } from "container/action/user";
 import { useRecoilBridgeAcrossReactRoots_UNSTABLE } from "recoil";
 
-const Avatar = (props) => {
+const Avatar = (props, ref) => {
   //props
   const { style, size, data } = props;
   const [name, setName] = useState("A");
   const [avatar, setAvatar] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [, updateState] = useState();
+  const forceUpdate = useCallback(() => updateState({}), []);
 
   //effect
   useEffect(() => {
+    console.log('useEffect:::avatar', data)
     if (data) {
       getAvatar();
       if (data.name) setName(data.name[0].toUpperCase());
     }
   }, [data]);
+
   useEffect(() => {
 
     getAvatar();
   }, []);
+
+  useImperativeHandle(ref, () => ({
+    forceUpdate,
+  }))
 
   //#region function - event
   const getAvatar = async () => {
@@ -118,4 +126,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Avatar;
+export default forwardRef(Avatar);

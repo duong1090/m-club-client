@@ -33,7 +33,7 @@ import RNFetchBlob from "rn-fetch-blob";
 
 const UserInfo = (props) => {
   //props
-  const { intl } = props;
+  const { intl, updateCallback } = props;
   const { member } = global.organization || {};
   //state
   const [info, setInfo] = useState({
@@ -45,10 +45,9 @@ const UserInfo = (props) => {
     department: member.department ? member.department : null,
     position: member.position ? member.position : null,
   });
-  const [avatarId, setAvatarId] = useState(member.id ? member.id : null);
+  const [avatar, setAvatar] = useState(member ? member : {})
   const { showActionSheetWithOptions } = useActionSheet();
 
-  console.log("UserInfo:::", member, avatarId);
 
   //constant
   const fields = [
@@ -161,7 +160,8 @@ const UserInfo = (props) => {
       .then((res) => {
         if (res && res.data) {
           console.log("updateAvatar:::", res.data);
-          setAvatarId(update(avatarId, { $set: res.data }));
+          setAvatar(JSON.parse(JSON.stringify(member)));
+          updateCallback && updateCallback();
           Toast.show(intl.formatMessage(Messages.update_success), Toast.SHORT);
         }
         hideSpinner();
@@ -265,10 +265,7 @@ const UserInfo = (props) => {
       <View style={styles.avatarBox}>
         <Avatar
           size={scale(300)}
-          data={{
-            id: avatarId,
-            name: member && member.name ? member.name : null,
-          }}
+          data={avatar}
         />
         <TouchableOpacity
           style={styles.cameraBox}
