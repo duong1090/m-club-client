@@ -4,8 +4,13 @@ import { Navigation } from "react-native-navigation";
 import { loadInitialStatus } from "../action/initialize";
 import MainProvider from "../provider";
 import { setCurrentScreen, popNavigatorStack } from "../utils/router";
+import OneSignal from "react-native-onesignal"; // Import package from node modules
+import { gotoRoute } from "container/utils/router";
+
 
 //#region Register Screen ------------------------------------------------------------------------------------------------
+
+let pendingNotification = null;
 
 export const registerLazyScreen = () => {
   Navigation.registerComponent(
@@ -105,10 +110,69 @@ Navigation.events().registerComponentDidAppearListener(
   ({ componentId, componentName, passProps }) => {
     if (componentName != screens.SPINNER)
       setCurrentScreen(componentId, componentName, passProps);
+
+    //if pendingNotification != null open pending notification
+    //then set reset to null
+    if (pendingNotification) {
+      processOpenNotification(pendingNotification);
+      pendingNotification = null;
+    }
   }
 );
 
+const processOpenNotification = (passData) => {
+  gotoRoute(passData.route, {
+    data: { id: passData.id },
+    mode: "detail",
+  });
+};
+
+const configOneSignal = () => {
+  const onReceived = (notification) => {
+    console.log("OneSignal:::: onReceived");
+    console.log("Notification received: ", notification);
+  };
+  const onOpened = (openResult) => {
+    const { isAppInFocus } = openResult.notification;
+    const { additionalData } = openResult.notification.payload;
+
+    if (isAppInFocus) processOpenNotification(additionalData);
+    else pendingNotification = additionalData;
+
+    console.log("OneSignal:::: onOpened");
+    console.log("Message: ", openResult.notification.payload.body);
+    console.log("Data: ", openResult.notification.payload.additionalData);
+    console.log("isActive: ", openResult.notification.isAppInFocus);
+    console.log("openResult: ", openResult);
+  };
+
+  const onIds = (device) => {};
+  // const myiOSPromptCallback = (permission) => {
+  //   // do something with permission value
+  // }
+  //Remove this method to stop OneSignal Debugging
+  OneSignal.setLogLevel(6, 0);
+
+  // OneSignal.inFocusDisplaying(2); // Controls what should happen if a notification is received while the app is open. 2 means that the notification will go directly to the device's notification center.
+  const log = OneSignal.init("dfc57d2a-3657-4773-8073-2ff13aed2eb2", {
+    kOSSettingsKeyAutoPrompt: false,
+    kOSSettingsKeyInAppLaunchURL: false,
+    kOSSettingsKeyInFocusDisplayOption: 2,
+    // kOSSettingsKeyAutoPrompt: false,
+    // kOSSettingsKeyInAppLaunchURL: false,
+    // kOSSSettingsKeyPromptBeforeOpeningPushURL: false,
+  });
+  console.log("OneSignal:::: init", log);
+  OneSignal.enableSound(true);
+
+  OneSignal.inFocusDisplaying(2);
+  OneSignal.addEventListener("received", onReceived);
+  OneSignal.addEventListener("opened", onOpened);
+  OneSignal.addEventListener("ids", onIds);
+};
+
 const onAppLaunched = () => {
+  configOneSignal();
   Navigation.setRoot({
     root: {
       stack: {
