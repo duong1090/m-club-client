@@ -36,7 +36,7 @@ const TODAY = 0,
 const DEFAULT_FILTER = {
   is_done: 0,
   user_ids: [],
-  prior_level: 0,
+  prior_level: 4,
 };
 
 const ListTask = (props) => {
@@ -183,7 +183,9 @@ const ListTask = (props) => {
         style={styles.childrenItemHeader}
       >
         <View style={styles.childrenItemPriorLevel(item.prior_level)} />
-        <Text numberOfLines={1} style={styles.childrenItemName}>{item.name}</Text>
+        <Text numberOfLines={1} style={styles.childrenItemName}>
+          {item.name}
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => checkDoneTask(item, index, indexTab)}
@@ -333,12 +335,18 @@ const ListTask = (props) => {
             <Text style={styles.filterItemText}>
               {intl.formatMessage(Messages.priority)}
             </Text>
-            <View
-              style={[
-                styles.childrenItemPriorLevel(filter.prior_level),
-                { marginRight: 0 },
-              ]}
-            />
+            {filter.prior_level == 4 ? (
+              <Text style={{ ...defaultText, color: color.primary }}>
+                {intl.formatMessage(Messages.all)}
+              </Text>
+            ) : (
+              <View
+                style={[
+                  styles.childrenItemPriorLevel(filter.prior_level),
+                  { marginRight: 0 },
+                ]}
+              />
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity

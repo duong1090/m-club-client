@@ -19,6 +19,8 @@ import Messages from "container/translation/Message";
 import { injectIntl } from "react-intl";
 import { PRIORITY_LEVEL } from "container/constant/element";
 import update from "immutability-helper";
+import { Navigation } from "react-native-navigation";
+import { screens } from "container/constant/screen";
 
 const NotificationList = (props) => {
   //props
@@ -80,6 +82,17 @@ const NotificationList = (props) => {
     })
       .then((res) => {
         if (res) {
+          //merge unread notification number
+          console.log('doRead::::', global.numberOfNotification)
+          Navigation.mergeOptions(screens.TAB_NOTIFICATION, {
+            bottomTab: {
+              ...{
+                badge: global.numberOfNotification
+                  ? `${--global.numberOfNotification}`
+                  : null,
+              },
+            },
+          });
           setData(
             update(data, {
               [index]: { is_read: { $set: res.data ? true : false } },

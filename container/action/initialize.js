@@ -2,11 +2,9 @@ import { API_TOKEN, IS_RECENT_TIME } from "container/constant/storage";
 import { gotoLogin, gotoHome, gotoRoute } from "container/utils/router";
 import { setIntl } from "container/utils/common";
 import { getOrganization, logOut } from "../action/user";
-import { getNumberOfNotification } from "../action/application";
 import { ORGANIZATION, LANG } from "../constant/storage";
 import { setItem, getItem } from "../utils/storage";
-import { Navigation } from "react-native-navigation";
-import { screens } from "../constant/screen";
+
 
 export const loadInitialStatus = async () => {
   const apiToken = await getItem(API_TOKEN);
@@ -37,16 +35,6 @@ export const loadInitialStatus = async () => {
 
       await setIntl();
       await gotoHome();
-
-      const notiNumber = await getNumberOfNotification();
-      //merge unread notification number
-      if (notiNumber) {
-        Navigation.mergeOptions(screens.TAB_NOTIFICATION, {
-          bottomTab: {
-            ...{ badge: notiNumber ? `${notiNumber}` : null },
-          },
-        });
-      }
     } catch (err) {
       logOut();
     }

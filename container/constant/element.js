@@ -12,4 +12,5 @@ export const PRIORITY_LEVEL = [
   { id: 1, name: "low" },
   { id: 2, name: "medium" },
   { id: 3, name: "high" },
+  { id: 4, name: "all" },
 ];

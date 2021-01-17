@@ -142,7 +142,7 @@ const configOneSignal = () => {
         bottomTab: {
           ...{
             badge: global.numberOfNotification
-              ? `${global.numberOfNotification++}`
+              ? `${++global.numberOfNotification}`
               : null,
           },
         },

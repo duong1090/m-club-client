@@ -423,7 +423,8 @@ export default defineMessages({
   },
   desciption_home: {
     id: "desciption_home",
-    defaultMessage: "App help you easy to manage and operate your club in your hand:",
+    defaultMessage:
+      "App help you easy to manage and operate your club in your hand:",
   },
   fund_management: {
     id: "fund_management",
@@ -441,5 +442,8 @@ export default defineMessages({
     id: "noti_management",
     defaultMessage: "Notification",
   },
-  
+  all: {
+    id: "all",
+    defaultMessage: "All",
+  },
 });

@@ -7,6 +7,7 @@ import Messages from "container/translation/Message";
 import { Platform, Dimensions, PixelRatio, Vibration } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { getIntl } from "../utils/common";
+import { getUserInfo } from "../action/application";
 
 global.currentScreen = [];
 
@@ -165,9 +166,10 @@ export const gotoLogin = (options = {}) => {
 
 export const gotoHome = (params = {}) => {
   gotoRoute(screens.HOME, params);
+
 };
 
-const navigationHomeTab = () => {
+const navigationHomeTab = async () => {
   const defaultTabs = [
     bottomTabsByID[screens.TAB_NAVIGATE](),
     bottomTabsByID[screens.TAB_TASK](),
@@ -175,7 +177,7 @@ const navigationHomeTab = () => {
     bottomTabsByID[screens.TAB_ACCOUNT](),
   ];
 
-  Navigation.setRoot({
+  await Navigation.setRoot({
     root: {
       bottomTabs: {
         id: screens.HOME,
@@ -195,6 +197,8 @@ const navigationHomeTab = () => {
       },
     },
   });
+
+  await getUserInfo();
 };
 
 const showModal = (screen, config = {}) => {
