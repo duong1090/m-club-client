@@ -71,23 +71,23 @@ const MemberDetail = (props) => {
     return temp;
   };
 
-  const onDelete = () => {
-    showSpinner();
+  // const onDelete = () => {
+  //   showSpinner();
 
-    let params = {};
-    if (info && info.id) params.id = info.id;
-    postRequest(Config.API_URL.concat("member/delete"), params)
-      .then((res) => {
-        if (res && res.data) {
-          deleteSuccess();
-        }
-        hideSpinner();
-      })
-      .catch((err) => {
-        console.error(err);
-        hideSpinner();
-      });
-  };
+  //   let params = {};
+  //   if (info && info.id) params.id = info.id;
+  //   postRequest(Config.API_URL.concat("member/delete"), params)
+  //     .then((res) => {
+  //       if (res && res.data) {
+  //         deleteSuccess();
+  //       }
+  //       hideSpinner();
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       hideSpinner();
+  //     });
+  // };
 
   const deleteSuccess = () => {
     Toast.show(intl.formatMessage(Messages.delete_success), Toast.SHORT);
@@ -150,7 +150,6 @@ const MemberDetail = (props) => {
           title: intl.formatMessage(Messages.edit),
           onPress: () => gotoEdit(),
         }}
-        onDelete={() => onDelete()}
       />
     </View>
   );

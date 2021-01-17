@@ -8,7 +8,7 @@ import { Platform, Dimensions, PixelRatio, Vibration } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { getIntl } from "../utils/common";
 
-let currentScreen = null;
+global.currentScreen = [];
 
 const osVersion = DeviceInfo.getSystemVersion();
 const version = parseInt(osVersion);
@@ -309,7 +309,10 @@ export const gotoRoute = (screen, config = {}, isModal = false) => {
       if (isModal) {
         showModal(screen, config);
       } else {
-        let componentId = config.componentId || currentScreen.componentId;
+        let componentId =
+          config.componentId ||
+          (currentScreen.length &&
+            currentScreen[currentScreen.length - 1].componentId);
         Navigation.push(componentId, {
           component: {
             name: screen,
@@ -372,15 +375,19 @@ export const gotoRoute = (screen, config = {}, isModal = false) => {
 };
 
 export const setCurrentScreen = (componentId, componentName, passProps) => {
-  currentScreen = { componentId, componentName, passProps };
+  currentScreen.push({ componentId, componentName, passProps });
 };
 
 export const back = () => {
-  console.log("back::::", currentScreen);
-  if (currentScreen && modals[currentScreen.componentName]) {
-    Navigation.dismissModal(currentScreen.componentId);
-  } else {
-    Navigation.pop(currentScreen.componentId);
+  if (currentScreen && currentScreen.length) {
+    if (modals[currentScreen[currentScreen.length - 1].componentName]) {
+      Navigation.dismissModal(
+        currentScreen[currentScreen.length - 1].componentId
+      );
+    } else {
+      Navigation.pop(currentScreen[currentScreen.length - 1].componentId);
+    }
+    currentScreen.pop();
   }
 };
 

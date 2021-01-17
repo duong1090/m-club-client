@@ -22,7 +22,6 @@ const Avatar = (props, ref) => {
 
   //effect
   useEffect(() => {
-    console.log('useEffect:::avatar', data)
     if (data) {
       getAvatar();
       if (data.name) setName(data.name[0].toUpperCase());

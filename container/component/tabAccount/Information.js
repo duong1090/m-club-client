@@ -19,12 +19,11 @@ const Information = (props) => {
   //props
   const { style, intl } = props;
   const { member } = global.organization || {};
-  const [avatar, setAvatar] = useState(member ? member : {})
-
+  const [avatar, setAvatar] = useState(member ? member : {});
 
   const updateAvatar = () => {
-    console.log('updateAvatar:::')
-    setAvatar(JSON.parse(JSON.stringify(member)))
+    console.log("updateAvatar:::");
+    setAvatar(JSON.parse(JSON.stringify(member)));
   };
 
   const gotoEdit = () => {
@@ -40,7 +39,7 @@ const Information = (props) => {
       <View style={styles.person}>
         <Avatar style={styles.avatar} size={scale(150)} data={avatar} />
         <View style={styles.info}>
-          <View>
+          <View style={styles.memberInfo}>
             {member && member.name ? (
               <Text style={styles.name}>{member.name}</Text>
             ) : null}
@@ -48,7 +47,7 @@ const Information = (props) => {
               <Text style={styles.position}>{member.position.name}</Text>
             ) : null}
           </View>
-          <TouchableOpacity onPress={() => gotoEdit()}>
+          <TouchableOpacity style={styles.editInfo} onPress={() => gotoEdit()}>
             <Icon type="FontAwesome5" name="pen" style={styles.editIcon} />
           </TouchableOpacity>
         </View>
@@ -86,10 +85,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderTopRightRadius: space.border,
     borderBottomRightRadius: space.border,
-    padding: space.bgPadding / 2,
-    paddingLeft: space.bgPadding * 2,
-    paddingRight: space.bgPadding,
+
     ...shadow,
+  },
+  memberInfo: {
+    flex: 1,
+    margin: space.bgPadding / 2,
+    marginLeft: space.bgPadding * 2,
+    marginRight: space.bgPadding,
+  },
+  editInfo: {
+    height: scale(80),
+    width: scale(80),
+    justifyContent: "center",
+    alignItems: "center",
   },
   name: {
     ...defaultText,

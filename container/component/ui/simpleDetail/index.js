@@ -117,11 +117,13 @@ const SimpleDetail = (props) => {
         <View style={styles.content}>
           {body ? body(data) : renderBody()}
 
-          <TouchableOpacity style={styles.deleteBox} onPress={onDelete}>
-            <Text style={styles.titleSymbol}>
-              {intl.formatMessage(Messages.delete)}
-            </Text>
-          </TouchableOpacity>
+          {onDelete ? (
+            <TouchableOpacity style={styles.deleteBox} onPress={onDelete}>
+              <Text style={styles.titleSymbol}>
+                {intl.formatMessage(Messages.delete)}
+              </Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </View>
     </View>

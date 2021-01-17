@@ -7,6 +7,7 @@ export const highlighText = (
   style = {},
   arrReplace = []
 ) => {
+
   let tempText = text;
   let arrText = [];
 
@@ -21,9 +22,10 @@ export const highlighText = (
         arrText.push(<Text style={style}>{text}</Text>);
       } else {
         //in case replace text
-        const replace_split = text.split("_");
+        const replace_split = text.split("__");
         if (replace_split.length > 1 && arrReplace.length) {
           const index = replace_split[1];
+          
           arrText.push(
             <Text
               style={[style, { fontWeight: "bold" }, arrReplace[index].style]}

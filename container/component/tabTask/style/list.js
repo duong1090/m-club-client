@@ -190,6 +190,10 @@ export const styles = StyleSheet.create({
     borderRadius: scale(15),
     marginRight: scale(20),
   }),
+  childrenItemName: {
+    ...defaultText,
+    maxWidth: "90%",
+  },
   childrenItemBtnDone: {
     marginLeft: scale(10),
     paddingVertical: scale(10),

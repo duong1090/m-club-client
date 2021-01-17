@@ -42,7 +42,8 @@ const NotificationList = (props) => {
     getRequest(Config.API_URL.concat("notification/get"), { page })
       .then((res) => {
         if (res && res.data) {
-          setData(res.data.items);
+          if (page > 1) setData(data.concat(res.data.items));
+          else setData(res.data.items);
           setMeta(res.data.meta);
         }
         hideSpinner();
@@ -56,7 +57,8 @@ const NotificationList = (props) => {
   };
 
   const loadMore = () => {
-    if (page < meta.total_pages) {
+    console.log("loadMore:::", page, meta);
+    if (page < meta.total_page) {
       page++;
       getData();
     }
@@ -67,8 +69,8 @@ const NotificationList = (props) => {
 
     doRead(item, index);
     gotoRoute(item.target_route, {
-      data: { id: item.source_id },
-      mode: "detail",
+      data: { id: item.source_id ? item.source_id : null },
+      mode: item.source_id ? "detail" : "list",
     });
   };
 
@@ -147,8 +149,18 @@ const NotificationList = (props) => {
       >
         <View style={styles.item(item.is_read)}>
           <View style={styles.avatarBox}>
-            <Avatar size={AVATAR_SIZE} data={{ id: item.implement_user }} />
-            <View style={styles.avatarIconBox("task", { prior_level: 0 })}>
+            <Avatar
+              size={AVATAR_SIZE}
+              data={{
+                id: item.implement_user,
+                name: item.implement_name ? item.implement_name : null,
+              }}
+            />
+            <View
+              style={styles.avatarIconBox("task", {
+                noti_action: item.noti_action,
+              })}
+            >
               <ImageBackground
                 style={styles.avatarIconBackground}
                 source={require("container/asset/icon/bgr_grandient.png")}

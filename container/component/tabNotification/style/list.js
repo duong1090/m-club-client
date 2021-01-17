@@ -31,10 +31,8 @@ export const styles = StyleSheet.create({
 
     switch (type) {
       case "task":
-        if (options)
-          backgroundColor = [color.green, color.orange, color.red][
-            options.prior_level
-          ];
+        if (options && options.noti_action)
+          backgroundColor = color[options.noti_action];
         break;
     }
 

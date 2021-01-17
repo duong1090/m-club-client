@@ -34,9 +34,9 @@ const TODAY = 0,
   NO_TIME = 3;
 
 const DEFAULT_FILTER = {
-  isDone: false,
-  member: [],
-  priority: 0,
+  is_done: 0,
+  user_ids: [],
+  prior_level: 0,
 };
 
 const ListTask = (props) => {
@@ -125,7 +125,7 @@ const ListTask = (props) => {
       passProps = {
         onSelectItem: (value) => {
           let temp = { ...filter };
-          temp.priority = value.id;
+          temp.prior_level = value.id;
           setFilter(temp);
           doFilter("prior_level", value.id);
         },
@@ -137,14 +137,14 @@ const ListTask = (props) => {
       passProps = {
         onSelectItem: (value) => {
           let temp = { ...filter };
-          temp.member = value;
+          temp.user_ids = value;
           setFilter(temp);
           doFilter(
             "user_ids",
-            temp.member.map((item) => item.id)
+            temp.user_ids.map((item) => item.id)
           );
         },
-        selectedItem: filter.member,
+        selectedItem: filter.user_ids,
         api: "member/get",
         params: { type: "simple" },
         multiSelect: true,
@@ -156,7 +156,10 @@ const ListTask = (props) => {
   const doFilter = (type = "name", value) => {
     showSpinner();
     const params =
-      value || value != "" || value == 0 ? repairParams({ [type]: value }) : "";
+      value || value == 0
+        ? repairParams({ ...filter, [type]: value })
+        : repairParams({ ...filter });
+
     getRequest(Config.API_URL.concat("task/get").concat(`?${params}`))
       .then((res) => {
         if (res && res.data) getDataSuccess(res);
@@ -173,11 +176,14 @@ const ListTask = (props) => {
   const renderItemTask = (item, index, indexTab) => (
     <View style={styles.childrenItem}>
       <TouchableOpacity
-        onPress={() => gotoDetail(item, index)}
+        onPress={() => {
+          console.log("onPressRenderItemTask::::", item, index);
+          gotoDetail(item, index);
+        }}
         style={styles.childrenItemHeader}
       >
         <View style={styles.childrenItemPriorLevel(item.prior_level)} />
-        <Text numberOfLines={1}>{item.name}</Text>
+        <Text numberOfLines={1} style={styles.childrenItemName}>{item.name}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => checkDoneTask(item, index, indexTab)}
@@ -202,16 +208,16 @@ const ListTask = (props) => {
 
   const renderAvatar = () => {
     const limit = 3;
-    if (filter.member.length == 1) {
+    if (filter.user_ids.length == 1) {
       return (
         <View style={styles.contentMemAvtBox}>
           <Text numberOfLines={2} style={styles.contentMemName}>
-            {filter.member[0].name}
+            {filter.user_ids[0].name}
           </Text>
-          <Avatar size={AVATAR_SIZE} data={filter.member[0]} />
+          <Avatar size={AVATAR_SIZE} data={filter.user_ids[0]} />
         </View>
       );
-    } else if (filter.member.length > limit)
+    } else if (filter.user_ids.length > limit)
       return (
         <View style={styles.contentMemAvtBox}>
           {[...Array(limit + 1).keys()].map((item, index) => {
@@ -225,7 +231,7 @@ const ListTask = (props) => {
                   ]}
                 >
                   <Text style={styles.contentMemAvtMoreText}>
-                    {`+${filter.member.length - limit}`}
+                    {`+${filter.user_ids.length - limit}`}
                   </Text>
                 </View>
               );
@@ -237,13 +243,13 @@ const ListTask = (props) => {
                     { right: (limit + 1 - index) * (AVATAR_SIZE / 2) },
                   ]}
                   size={AVATAR_SIZE}
-                  data={filter.member[index]}
+                  data={filter.user_ids[index]}
                 />
               );
           })}
         </View>
       );
-    else if (filter.member.length == 0) {
+    else if (filter.user_ids.length == 0) {
       return (
         <View style={styles.contentMemAdd}>
           <Icon
@@ -256,12 +262,13 @@ const ListTask = (props) => {
     } else
       return (
         <View style={styles.contentMemAvtBox}>
-          {filter.member.map((item, index) => (
+          {filter.user_ids.map((item, index) => (
             <Avatar
               style={[
                 styles.contentMemAvt,
                 {
-                  right: (filter.member.length - 1 - index) * (AVATAR_SIZE / 2),
+                  right:
+                    (filter.user_ids.length - 1 - index) * (AVATAR_SIZE / 2),
                 },
               ]}
               size={AVATAR_SIZE}
@@ -290,24 +297,24 @@ const ListTask = (props) => {
           <TouchableOpacity
             style={styles.filterItem}
             onPress={() => {
-              setFilter({ ...filter, isDone: !filter.isDone });
-              doFilter("is_done", filter.isDone ? 0 : 1);
+              setFilter({ ...filter, is_done: filter.is_done ? 0 : 1 });
+              doFilter("is_done", filter.is_done ? 0 : 1);
             }}
           >
             <Text style={styles.filterItemText}>
               {intl.formatMessage(Messages.done)}
             </Text>
-            {filter.isDone ? (
+            {filter.is_done ? (
               <Icon
                 type="Ionicons"
                 name="md-checkmark-circle"
-                style={styles.childrenItemDone(filter.isDone)}
+                style={styles.childrenItemDone(filter.is_done)}
               />
             ) : (
               <Icon
                 type="Ionicons"
                 name="md-checkmark-circle-outline"
-                style={styles.childrenItemDone(filter.isDone)}
+                style={styles.childrenItemDone(filter.is_done)}
               />
             )}
           </TouchableOpacity>
@@ -328,7 +335,7 @@ const ListTask = (props) => {
             </Text>
             <View
               style={[
-                styles.childrenItemPriorLevel(filter.priority),
+                styles.childrenItemPriorLevel(filter.prior_level),
                 { marginRight: 0 },
               ]}
             />

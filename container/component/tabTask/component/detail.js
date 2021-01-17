@@ -204,7 +204,7 @@ const DetailTask = (props) => {
     console.log("confirmPickTime:::", date);
     setVisibleTimePicker(false);
     updateTask("deadline", {
-      end_date: moment(date).format("YYYY-MM-DD HH:mm"),
+      end_date: moment(date).format("DD-MM-YYYY HH:mm"),
     });
   };
 

@@ -10,7 +10,6 @@ export const verticalScale = (size) => (height / guidelineBaseHeight) * size;
 
 export const color = {
   background: "#00aaaa",
-  // background: "#0275d8",
   input: "#F5EDF6",
   backgroundColor: "#F1F1F1",
   topBarButtonColor: "#3F3F3F",
@@ -28,7 +27,6 @@ export const color = {
   success: "#5cb85c",
   info: "#5bc0de",
   primary: "#00aaaa",
-  // primary: "#0275d8",
   border: "#707070",
   dark: "#000000",
   light: "#f7f7f7",
@@ -39,6 +37,12 @@ export const color = {
   colorMandy: "#E24F63",
   lightGreen: "#d0ffd0",
   unread: "#ddefef",
+  change: "#f6c065",
+  remove: "#eb596e",
+  deadline: "#583d72",
+  create: "#00917c",
+  cancel: "#898b8a",
+  done: "#0278ae",
 };
 
 export const shadow = {

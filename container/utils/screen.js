@@ -7,7 +7,6 @@ import { setCurrentScreen, popNavigatorStack } from "../utils/router";
 import OneSignal from "react-native-onesignal"; // Import package from node modules
 import { gotoRoute } from "container/utils/router";
 
-
 //#region Register Screen ------------------------------------------------------------------------------------------------
 
 let pendingNotification = null;
@@ -108,6 +107,12 @@ const registerModalComponent = (routeName, Screen, defaultProps = {}) => {
 
 Navigation.events().registerComponentDidAppearListener(
   ({ componentId, componentName, passProps }) => {
+    console.log(
+      "registerComponentDidAppearListener::::",
+      componentId,
+      componentName,
+      passProps
+    );
     if (componentName != screens.SPINNER)
       setCurrentScreen(componentId, componentName, passProps);
 
@@ -122,8 +127,8 @@ Navigation.events().registerComponentDidAppearListener(
 
 const processOpenNotification = (passData) => {
   gotoRoute(passData.route, {
-    data: { id: passData.id },
-    mode: "detail",
+    data: { id: passData.id ? passData.id : null },
+    mode: passData.id ? "detail" : "list",
   });
 };
 
@@ -131,6 +136,19 @@ const configOneSignal = () => {
   const onReceived = (notification) => {
     console.log("OneSignal:::: onReceived");
     console.log("Notification received: ", notification);
+    const { isAppInFocus } = notification;
+    if (isAppInFocus) {
+      Navigation.mergeOptions(screens.TAB_NOTIFICATION, {
+        bottomTab: {
+          ...{
+            badge: global.numberOfNotification
+              ? `${global.numberOfNotification++}`
+              : null,
+          },
+        },
+      });
+    }
+
   };
   const onOpened = (openResult) => {
     const { isAppInFocus } = openResult.notification;

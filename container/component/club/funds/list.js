@@ -69,7 +69,7 @@ const FundList = (props) => {
   };
 
   const loadMore = () => {
-    if (page < meta.total_pages) {
+    if (page < meta.total_page) {
       page++;
       getData();
     }

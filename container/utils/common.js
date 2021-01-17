@@ -88,7 +88,6 @@ export const setIntl = async () => {
 };
 
 export const getIntl = () => {
-  console.log("getIntl::::", global.intl);
   if (!global.intl) {
     global.intl = createIntl(
       {

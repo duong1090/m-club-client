@@ -30,7 +30,7 @@ import update from "immutability-helper";
 import Config from "container/config/server.config";
 import { showSpinner, hideSpinner } from "container/utils/router";
 
-const DUE_DATE_FORMAT = "YYYY-MM-DD ";
+const DUE_DATE_FORMAT = "DD-MM-YYYY ";
 const DUE_TIME_FORMAT = "HH:mm:ss";
 const INDEX_LIST = { today: 0, future: 1, timed: 2, no_time: 3 };
 
@@ -217,7 +217,7 @@ const CreateTask = (props, ref) => {
           onConfirm={(date) => {
             setVisibleDueDate(false);
             setDueDate(
-              moment(date).format(intl.formatMessage(Messages.date_format))
+              moment(date).format(DUE_DATE_FORMAT)
             );
           }}
           onCancel={() => setVisibleDueDate(false)}

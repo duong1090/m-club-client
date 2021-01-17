@@ -111,7 +111,6 @@ export const getOrganization = () => {
 export const getAvatarSource = (data = {}) => {
   if (data && (data.id || data.user_id)) {
     const id = data.id || data.user_id;
-    console.log('getAvatarSource:::', Config.API_IMAGE.concat(`avatar/${id}.jpg?${moment().unix()}`))
     return Config.API_IMAGE.concat(`avatar/${id}.jpg?${moment().unix()}`);
   }
   return null;
