@@ -207,6 +207,8 @@ dependencies {
 
     implementation "androidx.browser:browser:1.2.0"
 
+    implementation "com.android.support:customtabs:25.1.0"
+
     implementation project(':lottie-react-native')
 
     implementation project(path: ":react-native-interactable")

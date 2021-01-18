@@ -189,7 +189,7 @@ const DetailTask = (props) => {
 
   const gotoSelectPriority = () => {
     let passProps = {
-      data: PRIORITY_LEVEL.map((item) => {
+      data: PRIORITY_LEVEL.filter((item) => item.id != 4).map((item) => {
         return { ...item, name: intl.formatMessage(Messages[item.name]) };
       }),
       onSelectItem: (value) => {

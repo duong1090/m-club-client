@@ -21,6 +21,7 @@ import { PRIORITY_LEVEL } from "container/constant/element";
 import update from "immutability-helper";
 import { Navigation } from "react-native-navigation";
 import { screens } from "container/constant/screen";
+import { getNumberOfNotification } from "container/action/application";
 
 const NotificationList = (props) => {
   //props
@@ -83,7 +84,7 @@ const NotificationList = (props) => {
       .then((res) => {
         if (res) {
           //merge unread notification number
-          console.log('doRead::::', global.numberOfNotification)
+          console.log("doRead::::", global.numberOfNotification);
           Navigation.mergeOptions(screens.TAB_NOTIFICATION, {
             bottomTab: {
               ...{
@@ -106,6 +107,7 @@ const NotificationList = (props) => {
   const handleRefresh = () => {
     setRefresh(true);
     getData();
+    getNumberOfNotification();
   };
 
   //render -----------------------------------------------------------------------------------------------
