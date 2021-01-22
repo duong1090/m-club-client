@@ -70,7 +70,7 @@ const NotificationList = (props) => {
   const onPressItem = (item, index) => {
     console.log("onPressItem::", item);
 
-    doRead(item, index);
+    if (!item.is_read) doRead(item, index);
     gotoRoute(item.target_route, {
       data: { id: item.source_id ? item.source_id : null },
       mode: item.source_id ? "detail" : "list",
