@@ -1,5 +1,5 @@
 // import { screens } from "container/constant/screen";
-import screens from "../constant/screen";
+import { screens, modals } from "../constant/screen";
 import { Navigation } from "react-native-navigation";
 import { color } from "container/variables/common";
 import { FormattedMessage } from "react-intl";
@@ -7,8 +7,9 @@ import Messages from "container/translation/Message";
 import { Platform, Dimensions, PixelRatio, Vibration } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { getIntl } from "../utils/common";
+import { getUserInfo } from "../action/application";
 
-let currentScreen = null;
+global.currentScreen = [];
 
 const osVersion = DeviceInfo.getSystemVersion();
 const version = parseInt(osVersion);
@@ -24,43 +25,21 @@ bottomTabsByID[screens.TAB_ACCOUNT] = () => ({
           id: screens.TAB_ACCOUNT,
           options: {
             layout: { backgroundColor: "#fff" },
-            topBar: {
-              visible: true,
-              leftButtonColor: color.topBarButtonColor,
-              rightButtonColor: color.topBarButtonColor,
-              rightButtons: [],
-              title: {
-                text: getIntl().formatMessage(Messages.tab_account),
-                alignment: "fill",
-              },
-              backButton: {
-                color: color.topBarButtonColor,
-              },
-              background: {
-                color: color.topBarBgColor,
-                translucent: true,
-                blur: false,
-              },
-            },
           },
         },
       },
     ],
     options: {
       topBar: {
-        background: {
-          color: color.topBarBgColor,
-          translucent: true,
-          blur: false,
-        },
+        visible: false,
       },
       bottomTabs: {
         titleDisplayMode: "alwaysShow",
       },
       bottomTab: {
         text: getIntl().formatMessage(Messages.tab_account),
-        // icon: require('@src/assets/icons/Tab_acc_in.png'),
-        // selectedIcon: require('@src/assets/icons/Tab_acc_act.png'),
+        icon: require("container/asset/icon/more.png"),
+        selectedIcon: require("container/asset/icon/more_select.png"),
         testID: screens.TAB_ACCOUNT,
       },
     },
@@ -76,43 +55,21 @@ bottomTabsByID[screens.TAB_NAVIGATE] = () => ({
           id: screens.TAB_NAVIGATE,
           options: {
             layout: { backgroundColor: "#fff" },
-            topBar: {
-              visible: true,
-              leftButtonColor: color.topBarButtonColor,
-              rightButtonColor: color.topBarButtonColor,
-              rightButtons: [],
-              title: {
-                text: getIntl().formatMessage(Messages.tab_navigate),
-                alignment: "fill",
-              },
-              backButton: {
-                color: color.topBarButtonColor,
-              },
-              background: {
-                color: color.topBarBgColor,
-                translucent: true,
-                blur: false,
-              },
-            },
           },
         },
       },
     ],
     options: {
       topBar: {
-        background: {
-          color: color.topBarBgColor,
-          translucent: true,
-          blur: false,
-        },
+        visible: false,
       },
       bottomTabs: {
         titleDisplayMode: "alwaysShow",
       },
       bottomTab: {
         text: getIntl().formatMessage(Messages.tab_navigate),
-        // icon: require('@src/assets/icons/Tab_acc_in.png'),
-        // selectedIcon: require('@src/assets/icons/Tab_acc_act.png'),
+        icon: require("container/asset/icon/navitage.png"),
+        selectedIcon: require("container/asset/icon/navitage_select.png"),
         testID: screens.TAB_NAVIGATE,
       },
     },
@@ -128,43 +85,21 @@ bottomTabsByID[screens.TAB_NOTIFICATION] = () => ({
           id: screens.TAB_NOTIFICATION,
           options: {
             layout: { backgroundColor: "#fff" },
-            topBar: {
-              visible: true,
-              leftButtonColor: color.topBarButtonColor,
-              rightButtonColor: color.topBarButtonColor,
-              rightButtons: [],
-              title: {
-                text: getIntl().formatMessage(Messages.tab_notification),
-                alignment: "fill",
-              },
-              backButton: {
-                color: color.topBarButtonColor,
-              },
-              background: {
-                color: color.topBarBgColor,
-                translucent: true,
-                blur: false,
-              },
-            },
           },
         },
       },
     ],
     options: {
       topBar: {
-        background: {
-          color: color.topBarBgColor,
-          translucent: true,
-          blur: false,
-        },
+        visible: false,
       },
       bottomTabs: {
         titleDisplayMode: "alwaysShow",
       },
       bottomTab: {
         text: getIntl().formatMessage(Messages.tab_notification),
-        // icon: require('@src/assets/icons/Tab_acc_in.png'),
-        // selectedIcon: require('@src/assets/icons/Tab_acc_act.png'),
+        icon: require("container/asset/icon/notification.png"),
+        selectedIcon: require("container/asset/icon/notification_select.png"),
         testID: screens.TAB_NOTIFICATION,
       },
     },
@@ -180,43 +115,21 @@ bottomTabsByID[screens.TAB_TASK] = () => ({
           id: screens.TAB_TASK,
           options: {
             layout: { backgroundColor: "#fff" },
-            topBar: {
-              visible: true,
-              leftButtonColor: color.topBarButtonColor,
-              rightButtonColor: color.topBarButtonColor,
-              rightButtons: [],
-              title: {
-                text: getIntl().formatMessage(Messages.tab_task),
-                alignment: "fill",
-              },
-              backButton: {
-                color: color.topBarButtonColor,
-              },
-              background: {
-                color: color.topBarBgColor,
-                translucent: true,
-                blur: false,
-              },
-            },
           },
         },
       },
     ],
     options: {
       topBar: {
-        background: {
-          color: color.topBarBgColor,
-          translucent: true,
-          blur: false,
-        },
+        visible: false,
       },
       bottomTabs: {
         titleDisplayMode: "alwaysShow",
       },
       bottomTab: {
         text: getIntl().formatMessage(Messages.tab_task),
-        // icon: require('@src/assets/icons/Tab_acc_in.png'),
-        // selectedIcon: require('@src/assets/icons/Tab_acc_act.png'),
+        icon: require("container/asset/icon/task.png"),
+        selectedIcon: require("container/asset/icon/task_select.png"),
         testID: screens.TAB_TASK,
       },
     },
@@ -253,9 +166,10 @@ export const gotoLogin = (options = {}) => {
 
 export const gotoHome = (params = {}) => {
   gotoRoute(screens.HOME, params);
+
 };
 
-const navigationHomeTab = () => {
+const navigationHomeTab = async () => {
   const defaultTabs = [
     bottomTabsByID[screens.TAB_NAVIGATE](),
     bottomTabsByID[screens.TAB_TASK](),
@@ -263,7 +177,7 @@ const navigationHomeTab = () => {
     bottomTabsByID[screens.TAB_ACCOUNT](),
   ];
 
-  Navigation.setRoot({
+  await Navigation.setRoot({
     root: {
       bottomTabs: {
         id: screens.HOME,
@@ -283,9 +197,13 @@ const navigationHomeTab = () => {
       },
     },
   });
+
+  await getUserInfo();
 };
 
 const showModal = (screen, config = {}) => {
+  console.log("showModal:::", config);
+
   const topBar =
     config.options && config.options.topBar ? config.options.topBar : {};
 
@@ -352,6 +270,9 @@ const showModal = (screen, config = {}) => {
               },
               topBar: {
                 ...topBar,
+                title: {
+                  alignment: "center",
+                },
               },
               statusBar: {
                 ...statusBar,
@@ -373,7 +294,7 @@ const showModal = (screen, config = {}) => {
   });
 };
 
-export const gotoRoute = (screen, config = {}) => {
+export const gotoRoute = (screen, config = {}, isModal = false) => {
   if (!config) config = {};
   try {
     const topBar =
@@ -389,10 +310,13 @@ export const gotoRoute = (screen, config = {}) => {
     if (screen == screens.HOME) {
       navigationHomeTab(config);
     } else {
-      if (screens[screen].isModal) {
+      if (isModal) {
         showModal(screen, config);
       } else {
-        let componentId = config.componentId || currentScreen.componentId;
+        let componentId =
+          config.componentId ||
+          (currentScreen.length &&
+            currentScreen[currentScreen.length - 1].componentId);
         Navigation.push(componentId, {
           component: {
             name: screen,
@@ -435,7 +359,7 @@ export const gotoRoute = (screen, config = {}) => {
                 ...topBar,
                 title: {
                   ...title,
-                  color: color.background,
+                  color: color.topBarTextColor,
                   alignment: "center",
                 },
                 backButton: {
@@ -455,13 +379,39 @@ export const gotoRoute = (screen, config = {}) => {
 };
 
 export const setCurrentScreen = (componentId, componentName, passProps) => {
-  currentScreen = { componentId, componentName, passProps };
+  currentScreen.push({ componentId, componentName, passProps });
 };
 
 export const back = () => {
-  if (currentScreen && screens[currentScreen.componentId].isModal) {
-    Navigation.dismissModal(currentScreen.componentId);
-  } else {
-    Navigation.pop(currentScreen.componentId);
+  if (currentScreen && currentScreen.length) {
+    if (modals[currentScreen[currentScreen.length - 1].componentName]) {
+      Navigation.dismissModal(
+        currentScreen[currentScreen.length - 1].componentId
+      );
+    } else {
+      Navigation.pop(currentScreen[currentScreen.length - 1].componentId);
+    }
+    currentScreen.pop();
   }
+};
+
+export const showSpinner = () => {
+  Navigation.showOverlay({
+    component: {
+      name: screens.SPINNER,
+      id: screens.SPINNER,
+      options: {
+        overlay: {
+          interceptTouchOutside: true,
+        },
+      },
+      passProps: {
+        show: true,
+      },
+    },
+  });
+};
+
+export const hideSpinner = () => {
+  Navigation.dismissOverlay(screens.SPINNER);
 };

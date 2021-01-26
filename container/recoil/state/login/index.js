@@ -9,3 +9,8 @@ export const certificateState = atom({
   key: "certificateState",
   default: {},
 });
+
+export const activeTabState = atom({
+  key: "activeTabState",
+  default: 0,
+});

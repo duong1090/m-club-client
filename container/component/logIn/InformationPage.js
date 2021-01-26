@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { injectIntl } from "react-intl";
 import { View, Text, StyleSheet } from "react-native";
+import { Tabs, Tab, ScrollableTab } from "native-base";
 import Messages from "container/translation/Message";
-import { scale, color, fontSize } from "container/variables/common";
+import {
+  scale,
+  color,
+  fontSize,
+  space,
+  defaultText,
+} from "container/variables/common";
 import InputPhone from "./InputPhone";
 import SelectClub from "./SelectClub";
 import InputOTP from "./InputOTP";
-import { clubListState, certificateState } from "container/recoil/state/login";
+import {
+  clubListState,
+  certificateState,
+  activeTabState,
+} from "container/recoil/state/login";
 import { useRecoilValue, useRecoilState } from "recoil";
+import Toast from "react-native-simple-toast";
 
 const TAB_INPUT_PHONE = 0;
 const TAB_SELECT_CLUB = 1;
@@ -17,57 +29,97 @@ const InformationPage = (props) => {
   const { style, intl } = props;
 
   //state
-  const [activeTab, setActiveTab] = useState(0);
+  const [isByPass, setIsByPass] = useState(false);
+  let countByPass = 0;
 
   //recoil state
+  const [activeTab, setActiveTab] = useRecoilState(activeTabState);
   const clubList = useRecoilValue(clubListState);
   const [certificate, setCertificate] = useRecoilState(certificateState);
 
+  //effect
   useEffect(() => {
-    console.log("Login:::useEffect:::", clubList);
     if (clubList && clubList.length) {
+      let tmpCertificate = { ...certificate };
+      if (isByPass) tmpCertificate.is_bypass = 1;
+
       if (clubList.length == 1) {
+        tmpCertificate.club_id = clubList[0].id;
         setActiveTab(TAB_INPUT_OTP);
-        setCertificate({ ...certificate, club_id: clubList[0].id });
       } else {
         setActiveTab(TAB_SELECT_CLUB);
       }
+      setCertificate({ ...tmpCertificate });
     }
   }, [clubList]);
 
+  //function - event
+  const doByPass = () => {
+    countByPass++;
+    console.log("doByPass:::", countByPass, isByPass);
+    if (countByPass >= 10) {
+      Toast.show("sua di khang :))", Toast.SHORT);
+      setIsByPass(true);
+    }
+  };
+
+  //render
   const tabs = [
     <InputPhone style={styles.inputPhone} />,
     <SelectClub style={styles.selectClub} />,
     <InputOTP style={styles.inputOTP} />,
   ];
 
+  const renderTabs = () => {
+    return (
+      <Tabs
+        initialPage={activeTab}
+        page={activeTab}
+        locked
+        renderTabBar={() => (
+          <ScrollableTab style={{ height: 0, borderWidth: 0 }} />
+        )}
+      >
+        {tabs.map((tab) => (
+          <Tab heading="" style={{ backgroundColor: "transparent" }}>
+            {tab}
+          </Tab>
+        ))}
+      </Tabs>
+    );
+  };
+
   return (
     <View style={[style, styles.container]}>
-      <Text style={styles.welcome}>
+      <Text onPress={() => doByPass()} style={styles.welcome}>
         {intl.formatMessage(Messages.welcome_to_mclub)}
       </Text>
-      {tabs[activeTab]}
+      {renderTabs()}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+  },
   inputPhone: {
-    width: "100%",
+    flex: 1,
   },
   welcome: {
-    fontSize: fontSize.size50,
+    ...defaultText,
+    fontSize: fontSize.size40,
     color: color.fontColor,
     fontWeight: "bold",
-    marginBottom: scale(30),
+    textAlign: 'center',
+    marginBottom: space.componentMargin,
     alignSelf: "center",
   },
   selectClub: {
-    width: "100%",
+    flex: 1,
   },
   inputOTP: {
-    width: "100%",
+    flex: 1,
   },
 });
 

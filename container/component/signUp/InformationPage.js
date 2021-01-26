@@ -11,11 +11,18 @@ import {
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import InputItem from "container/component/ui/inputItem";
-import { scale, color, fontSize } from "container/variables/common";
+import {
+  scale,
+  color,
+  fontSize,
+  defaultText,
+} from "container/variables/common";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
 import { gotoRoute } from "container/utils/router";
-import screens from "container/constant/screen";
+import { screens } from "container/constant/screen";
+import { showSpinner, hideSpinner } from "container/utils/router";
+import { back } from "container/utils/router";
 
 const { width } = Dimensions.get("window");
 
@@ -83,6 +90,7 @@ const InformationPage = (props) => {
   };
 
   const doSignUp = () => {
+    showSpinner();
     let params = {};
     if (clubName) params.club_name = clubName;
     if (clubCode) params.code = clubCode;
@@ -93,9 +101,14 @@ const InformationPage = (props) => {
       .then((res) => {
         if (res) {
           console.log("doSignUp:::", res);
+          back();
         }
+        hideSpinner();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        hideSpinner();
+      });
   };
 
   const gotoSignIn = () => {
@@ -133,6 +146,7 @@ const InformationPage = (props) => {
         >
           <Text
             style={{
+              ...defaultText,
               fontSize: fontSize.size32,
               color: color.fontColor,
               fontWeight: "bold",
@@ -212,24 +226,29 @@ const InformationPage = (props) => {
 
       {active == 0 ? (
         <TouchableOpacity style={styles.button} onPress={() => handleSlide()}>
-          <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
+          <Text
+            style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
+          >
             {intl.formatMessage(Messages.next)}
           </Text>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: "#2AC79C" }]}
-          onPress={() => doSignUp()}
-        >
-          <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
-            {intl.formatMessage(Messages.sign_up)}
-          </Text>
-        </TouchableOpacity>
-      )}
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "#2AC79C" }]}
+            onPress={() => doSignUp()}
+          >
+            <Text
+              style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
+            >
+              {intl.formatMessage(Messages.sign_up)}
+            </Text>
+          </TouchableOpacity>
+        )}
 
       <View style={styles.signIn}>
         <Text
           style={{
+            ...defaultText,
             color: color.fontColor,
             fontSize: fontSize.size28,
             fontWeight: "bold",
@@ -240,6 +259,7 @@ const InformationPage = (props) => {
         <TouchableOpacity onPress={() => gotoSignIn()}>
           <Text
             style={{
+              ...defaultText,
               color: color.background,
               fontSize: fontSize.size28,
               fontWeight: "bold",

@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, TextInput, Image, StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  Image,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { scale, color, fontSize } from "container/variables/common";
 import InformationPage from "./InformationPage";
 import InputItem from "container/component/ui/inputItem";
@@ -30,15 +37,22 @@ const LogIn = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {header()}
-      <InformationPage style={styles.information} />
-    </View>
+    <KeyboardAvoidingView
+      behavior="height"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+    >
+      <View style={styles.container}>
+        {header()}
+        <InformationPage style={styles.information} />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    height: "100%",
+  },
   header: {
     height: scale(300),
   },

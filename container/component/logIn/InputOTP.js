@@ -9,7 +9,12 @@ import {
 } from "react-native";
 import { useRecoilValue } from "recoil";
 import { certificateState } from "container/recoil/state/login";
-import { scale, color, fontSize } from "container/variables/common";
+import {
+  scale,
+  color,
+  fontSize,
+  defaultText,
+} from "container/variables/common";
 import Messages from "container/translation/Message";
 import InputItem from "container/component/ui/inputItem";
 import {
@@ -17,8 +22,7 @@ import {
   getIdToken,
 } from "container/action/authenticate";
 import { doLogin, loginSuccess } from "container/action/user";
-import screens from "container/constant/screen";
-import { gotoRoute } from "container/utils/router";
+import { showSpinner, hideSpinner } from "container/utils/router";
 
 const InputOTP = (props) => {
   const { intl, style } = props;
@@ -31,12 +35,29 @@ const InputOTP = (props) => {
 
   //function
   useEffect(() => {
-    signInWithPhoneNumber(certificate.phone)
-      .then((confirm) => {
-        if (confirm) setConfirmOTP(confirm);
-      })
-      .catch((err) => console.error(err));
-  }, []);
+    console.log('didUpdate::::', certificate)
+
+    //in case bypass, force login
+    if (certificate.is_bypass)
+      doLogin({
+        club_id: certificate.club_id,
+        is_bypass: certificate.is_bypass,
+        phone_number: certificate.phone,
+      });
+    //do authenticate by firebase
+    else {
+      showSpinner();
+      signInWithPhoneNumber(certificate.phone)
+        .then((confirm) => {
+          if (confirm) setConfirmOTP(confirm);
+          hideSpinner();
+        })
+        .catch((err) => {
+          console.error(err);
+          hideSpinner();
+        });
+    }
+  }, [certificate])
 
   const activeUser = async () => {
     if (confirmOTP && otp) {
@@ -50,7 +71,7 @@ const InputOTP = (props) => {
                 let payload = {};
                 if (certificate.phone) payload.phone_number = certificate.phone;
                 if (certificate.club_id) payload.club_id = certificate.club_id;
-                // payload.firebase_token = token;
+                payload.firebase_token = token;
                 doLogin(payload);
               }
             });
@@ -76,7 +97,9 @@ const InputOTP = (props) => {
         style={[styles.button, { backgroundColor: color.background }]}
         onPress={() => activeUser()}
       >
-        <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
+        <Text
+          style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
+        >
           {intl.formatMessage(Messages.sign_in)}
         </Text>
       </TouchableOpacity>
@@ -84,6 +107,7 @@ const InputOTP = (props) => {
       <View style={styles.signUp}>
         <Text
           style={{
+            ...defaultText,
             color: color.fontColor,
             fontSize: fontSize.size28,
             fontWeight: "bold",
@@ -91,9 +115,10 @@ const InputOTP = (props) => {
         >
           {intl.formatMessage(Messages.new_here)}{" "}
         </Text>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => { }}>
           <Text
             style={{
+              ...defaultText,
               color: color.background,
               fontSize: fontSize.size28,
               fontWeight: "bold",

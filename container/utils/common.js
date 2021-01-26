@@ -9,15 +9,6 @@ import { translationMessages } from "../translation/i18n";
 
 let Base64 = null;
 
-global.intl = createIntl(
-  {
-    locale: "en",
-    messages: translationMessages["en"],
-    textComponent: Text,
-  },
-  intlCache
-);
-
 const intlCache = createIntlCache();
 
 export const setApiToken = (token) => {
@@ -83,18 +74,29 @@ export const buildDeviceInfo = async () => {
 
 export const setIntl = async () => {
   const lang = await getItem(LANG);
+  console.log("setIntl::::", lang);
   const intl = createIntl(
     {
       locale: lang ? lang : "en",
+      key: lang ? lang : "en",
       messages: lang ? translationMessages[lang] : translationMessages["en"],
       textComponent: Text,
     },
     intlCache
   );
-  console.log("setIntl::::");
   global.intl = intl;
 };
 
 export const getIntl = () => {
-  return global.intl ? global.intl : null;
+  if (!global.intl) {
+    global.intl = createIntl(
+      {
+        locale: "en",
+        messages: translationMessages["en"],
+        textComponent: Text,
+      },
+      intlCache
+    );
+  }
+  return global.intl;
 };

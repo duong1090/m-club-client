@@ -68,8 +68,8 @@ const checkStatus = (response) => {
 
       response.json().then((json) => console.log("responesJSON:::", json));
 
-      error.response = response;
-      error.data = [response.statusText];
+      // error.response = response;
+      // error.data = [response.statusText];
       // notify(error);
       // console.log('status not acceptable ')
       // console.log(error);
@@ -79,6 +79,10 @@ const checkStatus = (response) => {
           : `${response.status}`;
         reject(error);
       });
+      error.message = response.statusText
+        ? `${response.statusText}`
+        : `${response.status}`;
+      reject(error);
     } else {
       // let rnfbResp = response.rawResp();
 
@@ -301,7 +305,7 @@ export const get = async (uri, params = "", quiet) => {
       Device: deviceInfo,
       Accept: "application/json",
       Authorization: "Bearer " + token,
-      LANG: lang ? lang : "en",
+      lang: lang ? lang : "en",
       "Cache-Control": "Private, No-Cache",
       Pragma: "no-cache",
       Expires: 0,
@@ -310,14 +314,12 @@ export const get = async (uri, params = "", quiet) => {
 
   console.log("apiConfig:::", config);
 
-  return fetch(uri, config)
-    .then(
-      checkStatus.bind({
-        request: get.bind(undefined, uri, true),
-        quiet: quiet,
-      })
-    )
-    .catch((err) => console.error("get:::catch:::", err));
+  return fetch(uri, config).then(
+    checkStatus.bind({
+      request: get.bind(undefined, uri, true),
+      quiet: quiet,
+    })
+  );
 };
 
 export const getRequest = (url, params) => {
@@ -337,7 +339,7 @@ export const getRequest = (url, params) => {
           if (error.message && error.message.indexOf("timed out")) {
             //TODO:
             // notify(error);
-            console.error("getRequest:::", error);
+            // console.error("getRequest:::", error);
           }
           if (
             error.message &&
