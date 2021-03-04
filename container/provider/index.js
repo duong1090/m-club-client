@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { RecoilRoot } from "recoil";
 import IntlMainProvider from "./intlProvider";
+import PrivilegeProvider from "./privilegeProvider";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { LogBox } from "react-native";
 
@@ -28,6 +29,7 @@ import { LogBox } from "react-native";
 
 const MainProvider = (props) => {
   const { children } = props;
+  const { user } = global.organization || {};
 
   //disable warning box
   useEffect(() => {
@@ -45,9 +47,11 @@ const MainProvider = (props) => {
   return (
     <RecoilRoot>
       {/* <PersistenceObserver /> */}
-      <ActionSheetProvider>
-        <IntlMainProvider>{React.Children.only(children)}</IntlMainProvider>
-      </ActionSheetProvider>
+      <PrivilegeProvider value={user.role}>
+        <ActionSheetProvider>
+          <IntlMainProvider>{React.Children.only(children)}</IntlMainProvider>
+        </ActionSheetProvider>
+      </PrivilegeProvider>
     </RecoilRoot>
   );
 };
