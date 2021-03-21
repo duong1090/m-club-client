@@ -9,7 +9,7 @@ import SimpleDetail from "container/component/ui/simpleDetail";
 import {
   currDepartmentState,
   listDepartmentState,
-} from "container/recoil/state/club/department";
+} from "../recoil";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";

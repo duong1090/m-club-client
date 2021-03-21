@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { injectIntl, FormattedMessage } from "react-intl";
 import { useRecoilState } from "recoil";
-import {
-  listMemberState,
-  currMemberState,
-} from "container/recoil/state/club/member";
+import { listMemberState, currMemberState } from "../recoil";
 import Messages from "container/translation/Message";
 import { View } from "react-native";
 import { postRequest, getRequest } from "container/utils/request";

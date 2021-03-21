@@ -15,7 +15,7 @@ import Avatar from "container/component/ui/avatar";
 import Config from "container/config/server.config";
 import { getRequest, postRequest } from "container/utils/request";
 import { useRecoilState } from "recoil";
-import { listTaskState, currTaskState } from "container/recoil/state/tabTask";
+import { listTaskState, currTaskState } from "../recoil";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import { highlighText } from "container/helper/format";
 import { getHumanDay } from "container/helper/time";

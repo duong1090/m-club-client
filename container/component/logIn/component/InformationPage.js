@@ -17,7 +17,7 @@ import {
   clubListState,
   certificateState,
   activeTabState,
-} from "container/recoil/state/login";
+} from "../recoil";
 import { useRecoilValue, useRecoilState } from "recoil";
 import Toast from "react-native-simple-toast";
 

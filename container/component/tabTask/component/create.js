@@ -25,7 +25,7 @@ import { gotoRoute } from "container/utils/router";
 import { modals } from "container/constant/screen";
 import { postRequest } from "container/utils/request";
 import { useRecoilState } from "recoil";
-import { listTaskState } from "container/recoil/state/tabTask";
+import { listTaskState } from "../recoil";
 import update from "immutability-helper";
 import Config from "container/config/server.config";
 import { showSpinner, hideSpinner } from "container/utils/router";

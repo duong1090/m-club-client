@@ -15,8 +15,8 @@ import {
 } from "container/variables/common";
 import { FormattedMessage } from "react-intl";
 import Messages from "container/translation/Message";
-import Information from "./Information";
-import ManageItem from "./ManageItem";
+import Information from "./component/Information";
+import ManageItem from "./component/ManageItem";
 import { gotoRoute } from "container/utils/router";
 import { screens } from "container/constant/screen";
 import { Icon } from "native-base";

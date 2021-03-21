@@ -7,7 +7,7 @@ import Config from "container/config/server.config";
 import {
   listMemberState,
   currMemberState,
-} from "container/recoil/state/club/member";
+} from "../recoil";
 import { useRecoilState } from "recoil";
 import SimpleDetail from "container/component/ui/simpleDetail";
 import { showSpinner, hideSpinner } from "container/utils/router";

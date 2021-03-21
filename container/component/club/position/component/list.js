@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
-  listDepartmentState,
-  currDepartmentState,
-} from "container/recoil/state/club/department";
+  listPositionState,
+  currPositionState,
+} from "../recoil";
 import { View } from "react-native";
 import { Icon } from "native-base";
 import { scale, defaultText } from "container/variables/common";
@@ -12,7 +12,7 @@ import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
 import debounce from "lodash/debounce";
 
-const DepartmentList = (props) => {
+const PositionList = (props) => {
   //props
   const { changeMode } = props;
   //state
@@ -22,8 +22,8 @@ const DepartmentList = (props) => {
   let page = 1;
 
   //recoil
-  const [data, setData] = useRecoilState(listDepartmentState);
-  const setCurrDepartment = useSetRecoilState(currDepartmentState);
+  const [data, setData] = useRecoilState(listPositionState);
+  const setCurrPosition = useSetRecoilState(currPositionState);
 
   //variables
   const debounceSearch = useRef(debounce((text) => onSearch(text), 200))
@@ -40,12 +40,11 @@ const DepartmentList = (props) => {
 
   //#region function - event
   const gotoRecord = (mode = "create") => {
-    // gotoRoute(screens.DEPARTMENT_EDIT, { mode });
     changeMode && changeMode(mode);
   };
 
   const onPressItem = (item) => {
-    setCurrDepartment(item);
+    setCurrPosition(item);
     changeMode && changeMode("detail");
   };
 
@@ -61,7 +60,7 @@ const DepartmentList = (props) => {
   const getList = (extraParams = {}) => {
     let params = { ...extraParams, page };
     setLoading(true);
-    getRequest(Config.API_URL.concat("department/get"), params)
+    getRequest(Config.API_URL.concat("position/get"), params)
       .then((res) => {
         if (res && res.data && res.data.items) {
           console.log("getList:::", res.data);
@@ -90,11 +89,11 @@ const DepartmentList = (props) => {
     }
   };
 
-  const onSearch = (text) => {
-    let params = {};
-    if (text != "") params.name = text;
-    getList(params);
-  };
+ const onSearch = (text) => {
+   let params = {};
+   if (text != "") params.name = text;
+   getList(params);
+ };
 
   //#endregion
 
@@ -109,7 +108,11 @@ const DepartmentList = (props) => {
         styleTextItem={{ fontWeight: "bold" }}
         onPressItem={(item) => onPressItem(item)}
         iconItem={
-          <Icon name="people" style={{ ...defaultText, fontSize: scale(30) }} />
+          <Icon
+            type="FontAwesome5"
+            name="user-tag"
+            style={{ ...defaultText, fontSize: scale(30) }}
+          />
         }
         loadMore={loadMore}
       />
@@ -117,4 +120,4 @@ const DepartmentList = (props) => {
   );
 };
 
-export default DepartmentList;
+export default PositionList;

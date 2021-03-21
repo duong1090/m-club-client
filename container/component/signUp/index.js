@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Image, KeyboardAvoidingView } from "react-native";
-import InformationPage from "./InformationPage";
+import InformationPage from "./component/InformationPage";
 import { scale, color } from "container/variables/common";
 
 const SignUp = () => {

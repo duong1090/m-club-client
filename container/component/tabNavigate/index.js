@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
 import { Image, StyleSheet, View, Text } from "react-native";
-import { getOrganization } from "container/action/user";
-import { useSetRecoilState } from "recoil";
-import { userState } from "container/recoil/state/user";
 import {
   scale,
   color,
@@ -15,8 +12,6 @@ import Messages from "container/translation/Message";
 
 const TabNavigate = (props) => {
   const { intl } = props;
-
-  const setUser = useSetRecoilState(userState);
 
   // useEffect(() => {
   //   getOrganization().then((res) => {

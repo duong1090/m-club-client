@@ -1,19 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import {
-  listMemberState,
-  currMemberState,
-} from "container/recoil/state/club/member";
+import { listDepartmentState, currDepartmentState } from "../recoil";
 import { View } from "react-native";
 import { Icon } from "native-base";
 import { scale, defaultText } from "container/variables/common";
 import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
-import Avatar from "container/component/ui/avatar";
 import debounce from "lodash/debounce";
 
-const MemberList = (props) => {
+const DepartmentList = (props) => {
   //props
   const { changeMode } = props;
   //state
@@ -23,8 +19,8 @@ const MemberList = (props) => {
   let page = 1;
 
   //recoil
-  const [data, setData] = useRecoilState(listMemberState);
-  const setCurrMember = useSetRecoilState(currMemberState);
+  const [data, setData] = useRecoilState(listDepartmentState);
+  const setCurrDepartment = useSetRecoilState(currDepartmentState);
 
   //variables
   const debounceSearch = useRef(debounce((text) => onSearch(text), 200))
@@ -37,6 +33,8 @@ const MemberList = (props) => {
 
   //#endregion
 
+  console.log();
+
   //#region function - event
   const gotoRecord = (mode = "create") => {
     // gotoRoute(screens.DEPARTMENT_EDIT, { mode });
@@ -44,7 +42,7 @@ const MemberList = (props) => {
   };
 
   const onPressItem = (item) => {
-    setCurrMember(item);
+    setCurrDepartment(item);
     changeMode && changeMode("detail");
   };
 
@@ -60,9 +58,10 @@ const MemberList = (props) => {
   const getList = (extraParams = {}) => {
     let params = { ...extraParams, page };
     setLoading(true);
-    getRequest(Config.API_URL.concat("member/get"), params)
+    getRequest(Config.API_URL.concat("department/get"), params)
       .then((res) => {
         if (res && res.data && res.data.items) {
+          console.log("getList:::", res.data);
           if (page > 1) {
             let temp = [...data];
             temp.concat(transform(res.data.items));
@@ -103,16 +102,11 @@ const MemberList = (props) => {
         onSearch={(text) => debounceSearch(text)}
         loading={loading}
         data={data}
-        iconHeader={(item) => <Avatar data={item} size={scale(80)} />}
         addNewItem={gotoRecord}
         styleTextItem={{ fontWeight: "bold" }}
         onPressItem={(item) => onPressItem(item)}
         iconItem={
-          <Icon
-            type="FontAwesome5"
-            name="user"
-            style={{ ...defaultText, fontSize: scale(30) }}
-          />
+          <Icon name="people" style={{ ...defaultText, fontSize: scale(30) }} />
         }
         loadMore={loadMore}
       />
@@ -120,4 +114,4 @@ const MemberList = (props) => {
   );
 };
 
-export default MemberList;
+export default DepartmentList;

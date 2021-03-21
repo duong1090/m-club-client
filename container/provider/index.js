@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { RecoilRoot } from "recoil";
 import IntlMainProvider from "./intlProvider";
 import PrivilegeProvider from "./privilegeProvider";
@@ -29,7 +29,14 @@ import { LogBox } from "react-native";
 
 const MainProvider = (props) => {
   const { children } = props;
-  const { user } = global.organization || {};
+  const { member } = global.organization || {};
+
+  console.log("MainProvider::::", global);
+
+  const [rolesState, setRoleState] = useState({
+    roles: member && member.roles ? member.roles : {},
+    updateRoles: (newRoles) => setRoleState({ ...rolesState, roles: newRoles }),
+  });
 
   //disable warning box
   useEffect(() => {
@@ -47,7 +54,7 @@ const MainProvider = (props) => {
   return (
     <RecoilRoot>
       {/* <PersistenceObserver /> */}
-      <PrivilegeProvider value={user.role}>
+      <PrivilegeProvider value={rolesState}>
         <ActionSheetProvider>
           <IntlMainProvider>{React.Children.only(children)}</IntlMainProvider>
         </ActionSheetProvider>

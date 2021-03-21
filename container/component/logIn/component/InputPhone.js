@@ -17,7 +17,7 @@ import {
 import Messages from "container/translation/Message";
 import InputItem from "container/component/ui/inputItem";
 import { preValidateLogin } from "container/action/user";
-import { clubListState, certificateState } from "container/recoil/state/login";
+import { clubListState, certificateState } from "../recoil";
 import { gotoRoute } from "container/utils/router";
 import { screens } from "container/constant/screen";
 import { showSpinner, hideSpinner } from "container/utils/router";

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Tabs, Tab, ScrollableTab } from "native-base";
-import List from "./list";
-import Detail from "./detail";
-import Record from "./record";
+import List from "./component/list";
+import Detail from "./component/detail";
+import Record from "./component/record";
 import { Navigation } from "react-native-navigation";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";

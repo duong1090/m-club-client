@@ -11,7 +11,7 @@ import {
 
 import { styles, AVATAR_SIZE } from "../style/list";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { listTaskState, currTaskState } from "container/recoil/state/tabTask";
+import { listTaskState, currTaskState } from "../recoil";
 import { Icon, Tabs, Tab, ScrollableTab, CheckBox } from "native-base";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";

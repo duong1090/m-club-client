@@ -4,7 +4,7 @@ import { useRecoilState } from "recoil";
 import {
   currPositionState,
   listPositionState,
-} from "container/recoil/state/club/position";
+} from "../recoil";
 import Messages from "container/translation/Message";
 import { View } from "react-native";
 import { postRequest } from "container/utils/request";

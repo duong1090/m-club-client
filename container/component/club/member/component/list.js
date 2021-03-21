@@ -1,18 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import {
-  listPositionState,
-  currPositionState,
-} from "container/recoil/state/club/position";
+import { listMemberState, currMemberState } from "../recoil";
 import { View } from "react-native";
 import { Icon } from "native-base";
 import { scale, defaultText } from "container/variables/common";
 import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
+import Avatar from "container/component/ui/avatar";
 import debounce from "lodash/debounce";
 
-const PositionList = (props) => {
+const MemberList = (props) => {
   //props
   const { changeMode } = props;
   //state
@@ -22,8 +20,8 @@ const PositionList = (props) => {
   let page = 1;
 
   //recoil
-  const [data, setData] = useRecoilState(listPositionState);
-  const setCurrPosition = useSetRecoilState(currPositionState);
+  const [data, setData] = useRecoilState(listMemberState);
+  const setCurrMember = useSetRecoilState(currMemberState);
 
   //variables
   const debounceSearch = useRef(debounce((text) => onSearch(text), 200))
@@ -36,15 +34,14 @@ const PositionList = (props) => {
 
   //#endregion
 
-  console.log();
-
   //#region function - event
   const gotoRecord = (mode = "create") => {
+    // gotoRoute(screens.DEPARTMENT_EDIT, { mode });
     changeMode && changeMode(mode);
   };
 
   const onPressItem = (item) => {
-    setCurrPosition(item);
+    setCurrMember(item);
     changeMode && changeMode("detail");
   };
 
@@ -60,10 +57,9 @@ const PositionList = (props) => {
   const getList = (extraParams = {}) => {
     let params = { ...extraParams, page };
     setLoading(true);
-    getRequest(Config.API_URL.concat("position/get"), params)
+    getRequest(Config.API_URL.concat("member/get"), params)
       .then((res) => {
         if (res && res.data && res.data.items) {
-          console.log("getList:::", res.data);
           if (page > 1) {
             let temp = [...data];
             temp.concat(transform(res.data.items));
@@ -89,11 +85,11 @@ const PositionList = (props) => {
     }
   };
 
- const onSearch = (text) => {
-   let params = {};
-   if (text != "") params.name = text;
-   getList(params);
- };
+  const onSearch = (text) => {
+    let params = {};
+    if (text != "") params.name = text;
+    getList(params);
+  };
 
   //#endregion
 
@@ -104,13 +100,14 @@ const PositionList = (props) => {
         onSearch={(text) => debounceSearch(text)}
         loading={loading}
         data={data}
+        iconHeader={(item) => <Avatar data={item} size={scale(80)} />}
         addNewItem={gotoRecord}
         styleTextItem={{ fontWeight: "bold" }}
         onPressItem={(item) => onPressItem(item)}
         iconItem={
           <Icon
             type="FontAwesome5"
-            name="user-tag"
+            name="user"
             style={{ ...defaultText, fontSize: scale(30) }}
           />
         }
@@ -120,4 +117,4 @@ const PositionList = (props) => {
   );
 };
 
-export default PositionList;
+export default MemberList;

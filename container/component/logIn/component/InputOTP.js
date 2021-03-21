@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import { useRecoilValue } from "recoil";
-import { certificateState } from "container/recoil/state/login";
+import { certificateState } from "../recoil";
 import {
   scale,
   color,

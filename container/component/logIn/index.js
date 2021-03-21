@@ -8,7 +8,7 @@ import {
   Platform,
 } from "react-native";
 import { scale, color, fontSize } from "container/variables/common";
-import InformationPage from "./InformationPage";
+import InformationPage from "./component/InformationPage";
 import InputItem from "container/component/ui/inputItem";
 
 const LogIn = () => {
