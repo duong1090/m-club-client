@@ -27,6 +27,7 @@ import { gotoRoute } from "container/utils/router";
 import { modals, screens } from "container/constant/screen";
 import { PRIORITY_LEVEL } from "container/constant/element";
 import Avatar from "container/component/ui/avatar";
+import EmptyData from "container/component/ui/emptyData";
 
 const TODAY = 0,
   FUTURE = 1,
@@ -407,11 +408,7 @@ const ListTask = (props) => {
             // onEndReached={() => loadMore(index)}
           />
         ) : (
-          <View style={styles.boxEmpty}>
-            <Text style={styles.textEmpty}>
-              {intl.formatMessage(Messages.empty_data)}
-            </Text>
-          </View>
+          <EmptyData />
         )}
       </Tab>
     );

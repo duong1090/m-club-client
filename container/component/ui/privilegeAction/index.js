@@ -8,8 +8,13 @@ const PrivilegeAction = (props) => {
   //render
   return (
     <PrivilegeContext.Consumer>
-      {(checkKeys) => {
-        if (checkKeys[privilegeKey])
+      {(privilege) => {
+        const { roles, isRoot } = privilege;
+
+        if (
+          (privilegeKey.value == "is_root" && isRoot) ||
+          roles[privilegeKey.value]
+        )
           return <React.Fragment>{children}</React.Fragment>;
         else return null;
       }}

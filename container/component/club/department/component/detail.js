@@ -6,14 +6,12 @@ import { useRecoilState } from "recoil";
 import { scale, color, defaultText } from "container/variables/common";
 import { Icon } from "native-base";
 import SimpleDetail from "container/component/ui/simpleDetail";
-import {
-  currDepartmentState,
-  listDepartmentState,
-} from "../recoil";
+import { currDepartmentState, listDepartmentState } from "../recoil";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import Toast from "react-native-simple-toast";
+import { normalRole } from "container/constant/role";
 
 const DepartmentDetail = (props) => {
   //props
@@ -90,6 +88,10 @@ const DepartmentDetail = (props) => {
           onPress: () => gotoEdit(),
         }}
         onDelete={() => onDelete()}
+        privilege={{
+          delete: normalRole.DEPT_DELETE,
+          update: normalRole.DEPT_UPDATE,
+        }}
       />
     </View>
   );

@@ -9,19 +9,19 @@ export const scale = (size) => ratio * size;
 export const verticalScale = (size) => (height / guidelineBaseHeight) * size;
 
 export const color = {
-  background: "#00aaaa",
+  background: "#15A89E",
   input: "#F5EDF6",
-  backgroundColor: "#F1F1F1",
-  topBarButtonColor: "#3F3F3F",
-  topBarTextColor: "#3F3F3F",
-  topBarBgColor: "#fff",
+  backgroundColor: "#F4F5F8",
+  topBarButtonColor: "#FFF",
+  topBarTextColor: "#FFF",
+  topBarBgColor: "#15A89E",
   text: "#3F3F3F",
   action: "#9A41AB",
   fontColor: "#707070",
   disable: "#9F9F9F",
   hint: "#BBBBBB",
-  grey: "#858585",
-  lightGrey: "#ddd",
+  grey: "#B0B0B0",
+  lightGrey: "#d3d3d3",
   warning: "#f0ad4e",
   danger: "#DF3651",
   success: "#5cb85c",
@@ -49,12 +49,12 @@ export const shadow = {
   shadowColor: "#000",
   shadowOffset: {
     width: 0,
-    height: 1,
+    height: 5,
   },
-  shadowOpacity: 0.22,
-  shadowRadius: 2.22,
+  shadowOpacity: 0.34,
+  shadowRadius: 6.27,
 
-  elevation: 3,
+  elevation: 10,
 };
 
 export const space = {

@@ -14,6 +14,7 @@ import { showSpinner, hideSpinner } from "container/utils/router";
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import Toast from "react-native-simple-toast";
+import { normalRole } from "container/constant/role";
 
 const PositionDetail = (props) => {
   //props
@@ -90,6 +91,10 @@ const PositionDetail = (props) => {
           onPress: () => gotoEdit(),
         }}
         onDelete={() => onDelete()}
+        privilege={{
+          delete: normalRole.POS_DELETE,
+          update: normalRole.POS_UPDATE,
+        }}
       />
     </View>
   );

@@ -23,6 +23,8 @@ import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
 import { Icon } from "native-base";
 import update from "immutability-helper";
+import { normalRole } from "container/constant/role";
+import PrivilegeAction from "container/component/ui/privilegeAction";
 
 const FundList = (props) => {
   //props
@@ -171,17 +173,19 @@ const FundList = (props) => {
 
       {renderTable()}
 
-      <View style={styles.btnUpdateBox}>
-        <TouchableOpacity
-          onPress={() => openCreateFund()}
-          style={styles.btnUpdate}
-        >
-          <Icon type="FontAwesome5" name="pen" style={styles.btnUpdateIcon} />
-          <Text style={styles.btnUpdateText}>
-            {intl.formatMessage(Messages.update)}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <PrivilegeAction privilegeKey={normalRole.FUND_UPDATE}>
+        <View style={styles.btnUpdateBox}>
+          <TouchableOpacity
+            onPress={() => openCreateFund()}
+            style={styles.btnUpdate}
+          >
+            <Icon type="FontAwesome5" name="pen" style={styles.btnUpdateIcon} />
+            <Text style={styles.btnUpdateText}>
+              {intl.formatMessage(Messages.update)}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </PrivilegeAction>
 
       <CreateFund ref={createFundRef} updateCallback={updateList} />
       <FundDetail ref={detailFundRef} />
@@ -312,7 +316,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   btnUpdate: {
-    backgroundColor: color.primary,
+    backgroundColor: color.done,
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: scale(5),

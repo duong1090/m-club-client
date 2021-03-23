@@ -11,6 +11,7 @@ import {
 } from "container/variables/common";
 import { Icon } from "native-base";
 import Messages from "container/translation/Message";
+import PrivilegeAction from "container/component/ui/privilegeAction";
 
 const SimpleDetail = (props) => {
   const {
@@ -26,6 +27,7 @@ const SimpleDetail = (props) => {
     backButton,
     updateButton,
     onDelete,
+    privilege,
   } = props;
 
   // render
@@ -103,13 +105,15 @@ const SimpleDetail = (props) => {
           </TouchableOpacity>
         ) : null}
         {updateButton ? (
-          <TouchableOpacity
-            onPress={() => updateButton.onPress()}
-            style={[styles.backButton, { backgroundColor: color.success }]}
-          >
-            <Icon name="edit" type="Entypo" style={styles.actionIcon} />
-            <Text style={styles.actionText}>{updateButton.title}</Text>
-          </TouchableOpacity>
+          <PrivilegeAction privilegeKey={privilege.update}>
+            <TouchableOpacity
+              onPress={() => updateButton.onPress()}
+              style={[styles.backButton, { backgroundColor: color.success }]}
+            >
+              <Icon name="edit" type="Entypo" style={styles.actionIcon} />
+              <Text style={styles.actionText}>{updateButton.title}</Text>
+            </TouchableOpacity>
+          </PrivilegeAction>
         ) : null}
       </View>
       <View style={styles.card}>
@@ -118,11 +122,13 @@ const SimpleDetail = (props) => {
           {body ? body(data) : renderBody()}
 
           {onDelete ? (
-            <TouchableOpacity style={styles.deleteBox} onPress={onDelete}>
-              <Text style={styles.titleSymbol}>
-                {intl.formatMessage(Messages.delete)}
-              </Text>
-            </TouchableOpacity>
+            <PrivilegeAction privilegeKey={privilege.delete}>
+              <TouchableOpacity style={styles.deleteBox} onPress={onDelete}>
+                <Text style={styles.titleSymbol}>
+                  {intl.formatMessage(Messages.delete)}
+                </Text>
+              </TouchableOpacity>
+            </PrivilegeAction>
           ) : null}
         </View>
       </View>

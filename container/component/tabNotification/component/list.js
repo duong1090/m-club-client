@@ -22,6 +22,7 @@ import update from "immutability-helper";
 import { Navigation } from "react-native-navigation";
 import { screens } from "container/constant/screen";
 import { getNumberOfNotification } from "container/action/application";
+import EmptyData from "container/component/ui/emptyData";
 
 const NotificationList = (props) => {
   //props
@@ -121,16 +122,6 @@ const NotificationList = (props) => {
     );
   };
 
-  const renderEmpty = () => {
-    return (
-      <View style={styles.emptyBox}>
-        <Text style={styles.emptyText}>
-          {intl.formatMessage(Messages.empty_data)}
-        </Text>
-      </View>
-    );
-  };
-
   const renderIconType = () => {
     return require("container/asset/icon/task_noti.png");
   };
@@ -209,7 +200,7 @@ const NotificationList = (props) => {
         onEndReached={loadMore}
         refreshing={refresh}
         onRefresh={handleRefresh}
-        ListEmptyComponent={renderEmpty()}
+        ListEmptyComponent={<EmptyData />}
         ListHeaderComponent={renderHeader()}
       />
     </View>

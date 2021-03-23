@@ -22,53 +22,8 @@ import { screens } from "container/constant/screen";
 import { Icon } from "native-base";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import { logOut } from "container/action/user";
-
-const DEFAULT_MANAGE_LIST = [
-  {
-    title: <FormattedMessage {...Messages.member} />,
-    type: screens.MEMBER,
-    icon: (
-      <Icon
-        type="FontAwesome5"
-        name="user"
-        style={{ ...defaultText, fontSize: scale(50) }}
-      />
-    ),
-  },
-  {
-    title: <FormattedMessage {...Messages.department} />,
-    type: screens.DEPARTMENT,
-    icon: (
-      <Icon
-        type="FontAwesome5"
-        name="users"
-        style={{ ...defaultText, fontSize: scale(50) }}
-      />
-    ),
-  },
-  {
-    title: <FormattedMessage {...Messages.position} />,
-    type: screens.POSITION,
-    icon: (
-      <Icon
-        type="FontAwesome5"
-        name="user-tag"
-        style={{ ...defaultText, fontSize: scale(50) }}
-      />
-    ),
-  },
-  {
-    title: <FormattedMessage {...Messages.funds} />,
-    type: screens.FUNDS,
-    icon: (
-      <Icon
-        type="FontAwesome5"
-        name="wallet"
-        style={{ ...defaultText, fontSize: scale(50) }}
-      />
-    ),
-  },
-];
+import { normalRole, isRoot } from "container/constant/role";
+import PrivilegeAction from "container/component/ui/privilegeAction";
 
 const TabAccount = (props) => {
   //function - event
@@ -89,21 +44,59 @@ const TabAccount = (props) => {
   };
 
   //render
+
+  const DEFAULT_MANAGE_LIST = [
+    {
+      title: <FormattedMessage {...Messages.member} />,
+      type: screens.MEMBER,
+      icon: <Icon type="FontAwesome5" name="user" style={styles.iconList} />,
+      privilege: normalRole.MEM_VIEW,
+    },
+    {
+      title: <FormattedMessage {...Messages.department} />,
+      type: screens.DEPARTMENT,
+      icon: <Icon type="FontAwesome5" name="users" style={styles.iconList} />,
+      privilege: normalRole.DEPT_VIEW,
+    },
+    {
+      title: <FormattedMessage {...Messages.position} />,
+      type: screens.POSITION,
+      icon: (
+        <Icon type="FontAwesome5" name="user-tag" style={styles.iconList} />
+      ),
+      privilege: normalRole.POS_VIEW,
+    },
+    {
+      title: <FormattedMessage {...Messages.funds} />,
+      type: screens.FUNDS,
+      icon: <Icon type="FontAwesome5" name="wallet" style={styles.iconList} />,
+      privilege: normalRole.FUND_VIEW,
+    },
+    {
+      title: <FormattedMessage {...Messages.role} />,
+      type: screens.ROLE,
+      icon: <Icon type="FontAwesome5" name="wallet" style={styles.iconList} />,
+      privilege: isRoot,
+    },
+  ];
+
   const renderManageList = () => {
     return (
       <FlatList
         columnWrapperStyle={{ flexWrap: "wrap" }}
-        style={styles.manageList}
+        contentContainerStyle={styles.manageList}
         numColumns={2}
         data={DEFAULT_MANAGE_LIST}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (
-          <ManageItem
-            data={item}
-            onPress={() => gotoManageItem(item.type)}
-            style={index % 2 ? { marginLeft: space.componentMargin } : null}
-            icon={item.icon}
-          />
+          <PrivilegeAction privilegeKey={item.privilege}>
+            <ManageItem
+              data={item}
+              onPress={() => gotoManageItem(item.type)}
+              style={index % 2 ? { marginLeft: space.componentMargin } : null}
+              icon={item.icon}
+            />
+          </PrivilegeAction>
         )}
       />
     );
@@ -178,6 +171,11 @@ const styles = StyleSheet.create({
     fontSize: scale(30),
     color: "#fff",
     marginRight: scale(10),
+  },
+  iconList: {
+    ...defaultText,
+    fontSize: scale(50),
+    color: color.background,
   },
 });
 

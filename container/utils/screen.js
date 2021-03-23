@@ -72,6 +72,12 @@ export const registerLazyScreen = () => {
     screens.SPLASH_SCREEN,
     require("container/component/splashScreen").default
   );
+
+  registerComponent(
+    screens.ROLE,
+    require("container/component/club/role").default
+  );
+
   //#endregion
 
   //#region modal
@@ -148,7 +154,6 @@ const configOneSignal = () => {
         },
       });
     }
-
   };
   const onOpened = (openResult) => {
     const { isAppInFocus } = openResult.notification;

@@ -11,6 +11,7 @@ import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
 import debounce from "lodash/debounce";
+import { normalRole } from "container/constant/role";
 
 const PositionList = (props) => {
   //props
@@ -115,6 +116,9 @@ const PositionList = (props) => {
           />
         }
         loadMore={loadMore}
+        privilege={{
+          create: normalRole.POS_CREATE,
+        }}
       />
     </View>
   );

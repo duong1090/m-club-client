@@ -12,6 +12,7 @@
   "dependencies": {
     "@expo/react-native-action-sheet": "^3.8.0",
     "@react-native-community/async-storage": "^1.12.1",
+    "@react-native-community/checkbox": "^0.5.7",
     "@react-native-community/datetimepicker": "^3.0.8",
     "@react-native-community/toolbar-android": "^0.1.0-rc.2",
     "@react-native-firebase/app": "^9.0.0",

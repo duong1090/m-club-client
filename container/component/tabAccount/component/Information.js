@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   avatar: {
-    elevation: 4,
+    elevation: 11,
   },
   info: {
     marginLeft: -space.bgPadding,
@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: space.border,
     borderBottomRightRadius: space.border,
 
-    ...shadow,
   },
   memberInfo: {
     flex: 1,

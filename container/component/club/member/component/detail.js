@@ -20,6 +20,8 @@ import {
   space,
   fontSize,
 } from "container/variables/common";
+import { normalRole } from "container/constant/role";
+
 
 const MemberDetail = (props) => {
   //props
@@ -149,6 +151,10 @@ const MemberDetail = (props) => {
         updateButton={{
           title: intl.formatMessage(Messages.edit),
           onPress: () => gotoEdit(),
+        }}
+        privilege={{
+          delete: normalRole.DEPT_DELETE,
+          update: normalRole.DEPT_UPDATE,
         }}
       />
     </View>

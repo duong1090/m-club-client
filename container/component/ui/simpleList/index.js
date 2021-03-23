@@ -17,10 +17,10 @@ import {
   space,
   defaultText,
 } from "container/variables/common";
-import ActionButton from "react-native-action-button";
 import { showSpinner, hideSpinner } from "container/utils/router";
-import EntypoIcon from "react-native-vector-icons/Entypo";
 import { Icon } from "native-base";
+import EmptyData from "container/component/ui/emptyData";
+import PrivilegeAction from "container/component/ui/privilegeAction";
 
 const SimpleList = (props) => {
   const {
@@ -35,6 +35,7 @@ const SimpleList = (props) => {
     loadMore,
     iconHeader,
     onSearch,
+    privilege,
   } = props;
 
   //effect
@@ -68,29 +69,21 @@ const SimpleList = (props) => {
     );
   };
 
-  const renderEmpty = () => {
-    return (
-      <View style={styles.boxEmpty}>
-        <Text style={styles.textEmpty}>
-          {intl.formatMessage(Messages.empty_data)}
-        </Text>
-      </View>
-    );
-  };
-
   const renderBtnAdd = () => {
     return (
-      <View style={styles.actionButtonBox}>
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => addNewItem()}
-        >
-          <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
-          <Text style={styles.actionButtonText}>
-            {intl.formatMessage(Messages.add)}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <PrivilegeAction privilegeKey={privilege.create}>
+        <View style={styles.actionButtonBox}>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => addNewItem()}
+          >
+            <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
+            <Text style={styles.actionButtonText}>
+              {intl.formatMessage(Messages.add)}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </PrivilegeAction>
     );
   };
 
@@ -99,17 +92,15 @@ const SimpleList = (props) => {
       <View style={styles.searchBox}>
         <SearchBox onSearch={onSearch} />
       </View>
-      {data && data.length ? (
+      {loading ? null : (
         <FlatList
-          style={styles.body}
+          contentContainerStyle={styles.body}
           data={data}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => renderItem(item)}
-          contentContainerStyle={{ paddingBottom: scale(30) }}
           onEndReached={loadMore}
+          ListEmptyComponent={<EmptyData />}
         />
-      ) : loading ? null : (
-        renderEmpty()
       )}
       {addNewItem ? renderBtnAdd() : null}
     </View>

@@ -36,6 +36,7 @@ const MainProvider = (props) => {
   const [rolesState, setRoleState] = useState({
     roles: member && member.roles ? member.roles : {},
     updateRoles: (newRoles) => setRoleState({ ...rolesState, roles: newRoles }),
+    isRoot: member && member.is_root ? true : false,
   });
 
   //disable warning box

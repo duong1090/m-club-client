@@ -108,5 +108,14 @@
   "hr_management": "Quản lí nhân sự",
   "task_management": "Giao việc",
   "noti_management": "Thông báo",
-  "all": "Tất cả"
+  "all": "Tất cả",
+  "role": "Phân quyền",
+  "is_header": "Chủ Câu lạc bộ",
+  "create_title": "Tạo {title}",
+  "update_title": "Cập nhật {title}",
+  "delete_title": "Xóa {title}",
+  "view_title": "Xem {title}",
+  "project": "Dự án",
+  "select_group": "Chọn nhóm",
+  "select_title": "Chọn {title}"
 }

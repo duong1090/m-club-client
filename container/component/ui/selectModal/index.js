@@ -18,6 +18,7 @@ import { getRequest } from "container/utils/request";
 import { back } from "container/utils/router";
 import Avatar from "container/component/ui/avatar";
 import { fontSize } from "../../../variables/common";
+import EmptyData from "container/component/ui/emptyData";
 
 const SelectModal = (props) => {
   //props
@@ -171,7 +172,7 @@ const SelectModal = (props) => {
       </View>
       {loading ? (
         <Spinner />
-      ) : data && data.length ? (
+      ) : (
         <View>
           <FlatList
             style={{ ...styles.container, ...style }}
@@ -180,13 +181,8 @@ const SelectModal = (props) => {
             keyExtractor={(item) => item.id}
             onEndReachedThreshold={0.5}
             onEndReached={loadMore}
+            ListEmptyComponent={<EmptyData />}
           />
-        </View>
-      ) : (
-        <View style={styles.textBox}>
-          <Text style={styles.text}>
-            {intl.formatMessage(Messages.empty_data)}
-          </Text>
         </View>
       )}
     </Container>

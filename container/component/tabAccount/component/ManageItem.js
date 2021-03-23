@@ -30,9 +30,6 @@ const styles = StyleSheet.create({
     borderRadius: scale(20),
     padding: space.bgPadding,
     marginBottom: space.componentMargin,
-    borderWidth: scale(2),
-    borderColor: color.lightGrey,
-    // borderStyle: "dashed",
     ...shadow,
   },
   icon: {

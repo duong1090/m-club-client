@@ -446,4 +446,40 @@ export default defineMessages({
     id: "all",
     defaultMessage: "All",
   },
+  role: {
+    id: "role",
+    defaultMessage: "Role",
+  },
+  is_header: {
+    id: "is_header",
+    defaultMessage: "Is header",
+  },
+  create_title: {
+    id: "create_title",
+    defaultMessage: "Create {title}",
+  },
+  update_title: {
+    id: "update_title",
+    defaultMessage: "Update {title}",
+  },
+  delete_title: {
+    id: "delete_title",
+    defaultMessage: "Delete {title}",
+  },
+  view_title: {
+    id: "view_title",
+    defaultMessage: "View {title}",
+  },
+  project: {
+    id: "project",
+    defaultMessage: "Project",
+  },
+  select_group: {
+    id: "select_group",
+    defaultMessage: "Select group",
+  },
+  select_title: {
+    id: "select_title",
+    defaultMessage: "Select {title}",
+  },
 });

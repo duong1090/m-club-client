@@ -9,6 +9,7 @@ import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
 import Avatar from "container/component/ui/avatar";
 import debounce from "lodash/debounce";
+import { normalRole } from "container/constant/role";
 
 const MemberList = (props) => {
   //props
@@ -112,6 +113,9 @@ const MemberList = (props) => {
           />
         }
         loadMore={loadMore}
+        privilege={{
+          create: normalRole.MEM_CREATE,
+        }}
       />
     </View>
   );
