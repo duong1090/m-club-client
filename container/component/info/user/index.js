@@ -29,11 +29,12 @@ import { modals } from "container/constant/screen";
 import { Icon } from "native-base";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import { Navigation } from "react-native-navigation";
 import RNFetchBlob from "rn-fetch-blob";
 
 const UserInfo = (props) => {
   //props
-  const { intl, updateCallback } = props;
+  const { intl, updateCallback, componentId } = props;
   const { member } = global.organization || {};
   //state
   const [info, setInfo] = useState({
@@ -45,9 +46,18 @@ const UserInfo = (props) => {
     department: member.department ? member.department : null,
     position: member.position ? member.position : null,
   });
-  const [avatar, setAvatar] = useState(member ? member : {})
+  const [avatar, setAvatar] = useState(member ? member : {});
   const { showActionSheetWithOptions } = useActionSheet();
 
+  //default option topBar
+  Navigation.mergeOptions(componentId, {
+    topBar: {
+      visible: true,
+      title: {
+        text: intl.formatMessage(Messages.user_info),
+      },
+    },
+  });
 
   //constant
   const fields = [
@@ -75,7 +85,13 @@ const UserInfo = (props) => {
       fieldName: "sex",
       type: "button",
       placeholder: intl.formatMessage(Messages.sex_placeholder),
-      onPress: () => onPressField("sex", null, null, SEX, info.sex),
+      modalObj: {
+        key: "sex",
+        externalData: SEX,
+        selectedData: info.sex,
+        onDone: (value) => onChangeField("sex", value),
+        // multiSelect: true,
+      },
     },
     {
       name: intl.formatMessage(Messages.birthday),
@@ -95,16 +111,26 @@ const UserInfo = (props) => {
       fieldName: "department",
       type: "button",
       placeholder: intl.formatMessage(Messages.department_placeholder),
-      onPress: () =>
-        onPressField("department", "department/get", {}, null, info.department),
+      modalObj: {
+        key: "department",
+        api: "department/get",
+        params: {},
+        selectedData: info.department,
+        onDone: (value) => onChangeField("department", value),
+      },
     },
     {
       name: intl.formatMessage(Messages.position),
       fieldName: "position",
       type: "button",
       placeholder: intl.formatMessage(Messages.position_placeholder),
-      onPress: () =>
-        onPressField("position", "position/get", {}, null, info.department),
+      modalObj: {
+        key: "position",
+        api: "position/get",
+        params: {},
+        selectedData: info.position,
+        onDone: (value) => onChangeField("position", value),
+      },
     },
   ];
 
@@ -173,28 +199,6 @@ const UserInfo = (props) => {
       });
   };
 
-  const onPressField = (
-    fieldName,
-    api,
-    params = {},
-    data,
-    selectedItem = []
-  ) => {
-    let props = {
-      onSelectItem: (value) => onChangeField(fieldName, value),
-      selectedItem,
-    };
-
-    if (data) {
-      props.data = data;
-    } else if (api) {
-      props.api = api;
-      props.params = params;
-    }
-
-    gotoRoute(modals.SELECT_MODAL, props, true);
-  };
-
   const onChangeField = (fieldName, value) => {
     let temp = { ...info };
     temp[fieldName] = value;
@@ -252,6 +256,7 @@ const UserInfo = (props) => {
           onChangeDate={item.onChangeDate ? item.onChangeDate : null}
           value={info && info[item.fieldName] ? info[item.fieldName] : null}
           mode={item.mode ? item.mode : null}
+          modalObj={item.modalObj ? item.modalObj : null}
         />
       </View>
     );
@@ -263,10 +268,7 @@ const UserInfo = (props) => {
       contentContainerStyle={{ paddingBottom: space.bgPadding * 2 }}
     >
       <View style={styles.avatarBox}>
-        <Avatar
-          size={scale(300)}
-          data={avatar}
-        />
+        <Avatar size={scale(300)} data={avatar} />
         <TouchableOpacity
           style={styles.cameraBox}
           onPress={() => optionGetImage()}

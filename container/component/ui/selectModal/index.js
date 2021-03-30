@@ -1,230 +1,93 @@
-import React, { useState, useEffect } from "react";
-import { injectIntl } from "react-intl";
+import React, {
+  useState,
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
+import Modal from "react-native-modal";
+import { View, TouchableOpacity, Text } from "react-native";
+import styles from "./styles";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import List from "./component/list";
 import Messages from "container/translation/Message";
-import {
-  View,
-  FlatList,
-  Text,
-  TouchableOpacity,
-  Image,
-  TouchableWithoutFeedback,
-} from "react-native";
-import { Icon } from "native-base";
-import { Container } from "native-base";
-import Spinner from "container/component/ui/spinner";
-import { scale, color, defaultText, space } from "container/variables/common";
-import Config from "container/config/server.config";
-import { getRequest } from "container/utils/request";
-import { back } from "container/utils/router";
-import Avatar from "container/component/ui/avatar";
-import { fontSize } from "../../../variables/common";
-import EmptyData from "container/component/ui/emptyData";
+import { getIntl } from "container/utils/common";
 
-const SelectModal = (props) => {
+const SelectModal = (props, ref) => {
   //props
-  const {
-    isMember,
-    intl,
-    style,
-    multiSelect,
-    optionIndexName,
-    api,
-    params,
-    onSelectItem,
-    componentId,
-    title,
-  } = props;
+  const { type, titleSubmit, title, onDone } = props;
 
   //state
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [selectedItem, setSelectedItem] = useState([]);
-  let page = 1;
-  let meta = {};
+  const [visible, setVisible] = useState(false);
 
-  //#region  effect
-  useEffect(() => {
-    if (props.data && props.data.length) setData(props.data);
-    else getData();
-  }, [props.data]);
+  //ref
+  const childrenRef = useRef(null);
 
-  useEffect(() => {
-    if (props.selectedItem) setSelectedItem(props.selectedItem);
-  }, [props.selectedItem]);
-  //#endregion
+  //hooks
+  useImperativeHandle(ref, () => ({
+    show,
+    hide,
+  }));
 
-  //#region  function
-  const getData = (page = 1) => {
-    setLoading(true);
-    getRequest(Config.API_URL.concat(api), { ...params, page }).then((res) => {
-      setLoading(false);
-      let tempData = [...data];
-      if (res && res.data) {
-        if (res.data.items) {
-          if (page > 1) tempData = tempData.concat(res.data.items);
-          else tempData = res.data.items;
-          meta = res.data.meta;
-        } else {
-          if (page > 1) tempData = tempData.concat(res.data);
-          else tempData = res.data;
-        }
-        setData(tempData);
-      }
-    });
+  //function -----------------------------------------------------------------------------------------------
+
+  const show = () => {
+    setVisible(true);
   };
 
-  const onPress = (item) => {
-    if (multiSelect) {
-      let temp = [...selectedItem];
-      let indexItem = -1;
-      temp.find((i, index) => {
-        if (i.id == item.id) {
-          indexItem = index;
-          return;
-        }
-      });
-      if (indexItem > -1) {
-        temp.splice(indexItem, 1);
-      } else {
-        temp.push(item);
-      }
-      setSelectedItem(temp);
-    } else {
-      onSelectItem && onSelectItem(item);
-      back();
+  const hide = () => {
+    setVisible(false);
+  };
+
+  const onSubmit = () => {
+    setVisible(false);
+    const value = childrenRef ? childrenRef.current.getValues() : null;
+    if (value) onDone && onDone(value);
+  };
+
+  //render -------------------------------------------------------------------------------------------------
+  const renderContent = () => {
+    switch (type) {
+      case "list":
+        return (
+          <List {...props} style={styles.contentWrapper} ref={childrenRef} />
+        );
     }
-  };
-
-  const loadMore = () => {
-    page++;
-    if (meta.total_page && page <= meta.total_page) this.getData(page);
-  };
-
-  const onMultiSelectDone = () => {
-    onSelectItem && onSelectItem(selectedItem);
-    back();
-  };
-  //#endregion
-
-  //render
-  const renderItem = ({ item }) => {
-    console.log("renderItem:::", selectedItem);
-    let isSelected = false;
-
-    if (multiSelect) {
-      selectedItem.find((i) => {
-        if (i.id == item.id) {
-          isSelected = true;
-          return;
-        }
-      });
-    } else if (selectedItem) {
-      if (selectedItem.id == item.id) {
-        isSelected = true;
-      }
-    }
-
-    return (
-      <TouchableOpacity onPress={() => onPress(item)} style={styles.rowItem}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          {isMember ? (
-            <Avatar
-              style={{ marginRight: space.itemMargin }}
-              data={item}
-              size={scale(80)}
-            />
-          ) : null}
-          <Text style={styles.text}>
-            {item.title
-              ? item.title
-              : optionIndexName
-              ? item[optionIndexName]
-              : item.name}
-          </Text>
-        </View>
-        {isSelected ? (
-          <Icon
-            name="ios-checkmark"
-            style={{
-              fontSize: scale(50),
-              color: color.warning,
-            }}
-          />
-        ) : null}
-      </TouchableOpacity>
-    );
   };
 
   return (
-    <Container style={{ backgroundColor: "#fff" }}>
-      <View style={styles.header}>
-        <TouchableWithoutFeedback onPress={() => back()}>
-          <Image
-            source={require("container/asset/icon/icon_topbar_close.png")}
-          />
-        </TouchableWithoutFeedback>
-        <Text style={styles.title}>
-          {title || intl.formatMessage(Messages.select)}
-        </Text>
-        <TouchableWithoutFeedback onPress={() => onMultiSelectDone()}>
-          <Text style={styles.done}>{intl.formatMessage(Messages.done)}</Text>
-        </TouchableWithoutFeedback>
-      </View>
-      {loading ? (
-        <Spinner />
-      ) : (
-        <View>
-          <FlatList
-            style={{ ...styles.container, ...style }}
-            data={data}
-            renderItem={props.renderItem ? props.renderItem : renderItem}
-            keyExtractor={(item) => item.id}
-            onEndReachedThreshold={0.5}
-            onEndReached={loadMore}
-            ListEmptyComponent={<EmptyData />}
-          />
+    <Modal
+      propagateSwipe
+      isVisible={visible}
+      style={styles.modalWrapper}
+      backdropOpacity={0.8}
+      // onSwipeComplete={() => setVisible(false)}
+      onBackdropPress={() => setVisible(false)}
+      // useNativeDriverForBackdrop={true}
+      useNativeDriver={true}
+      swipeDirection={["down"]}
+    >
+      <View style={styles.modalView}>
+        <View style={styles.headerView}>
+          <Text style={styles.headerText}>
+            {title ? title : getIntl().formatMessage(Messages.select)}
+          </Text>
+          <TouchableOpacity
+            style={styles.closeIconWrapper}
+            onPress={() => setVisible(false)}
+          >
+            <FontAwesome5 name="times" style={styles.closeIcon} regular />
+          </TouchableOpacity>
         </View>
-      )}
-    </Container>
+        <View style={styles.bodyBox}>{renderContent()}</View>
+        <TouchableOpacity style={styles.btnStyle} onPress={() => onSubmit()}>
+          <Text style={styles.btnText}>
+            {titleSubmit ? titleSubmit : getIntl().formatMessage(Messages.done)}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </Modal>
   );
+  return;
 };
 
-const styles = {
-  header: {
-    padding: space.bgPadding,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: scale(40),
-  },
-  title: {
-    ...defaultText,
-    fontSize: fontSize.sizeTitle,
-    fontWeight: "bold",
-  },
-  done: {
-    ...defaultText,
-    color: color.success,
-  },
-  rowItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: scale(25),
-    paddingHorizontal: space.bgPadding,
-    borderBottomWidth: scale(2),
-    borderBottomColor: color.lightGrey,
-    backgroundColor: "#fff",
-  },
-  container: {},
-  textBox: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: space.componentMargin,
-  },
-  text: {
-    ...defaultText,
-  },
-};
-
-export default injectIntl(SelectModal);
+export default forwardRef(SelectModal);

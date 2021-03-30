@@ -21,6 +21,7 @@ import { showSpinner, hideSpinner } from "container/utils/router";
 import { Icon } from "native-base";
 import EmptyData from "container/component/ui/emptyData";
 import PrivilegeAction from "container/component/ui/privilegeAction";
+import ActionButton from "container/component/ui/actionButton";
 
 const SimpleList = (props) => {
   const {
@@ -69,24 +70,6 @@ const SimpleList = (props) => {
     );
   };
 
-  const renderBtnAdd = () => {
-    return (
-      <PrivilegeAction privilegeKey={privilege.create}>
-        <View style={styles.actionButtonBox}>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => addNewItem()}
-          >
-            <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
-            <Text style={styles.actionButtonText}>
-              {intl.formatMessage(Messages.add)}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </PrivilegeAction>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.searchBox}>
@@ -102,7 +85,16 @@ const SimpleList = (props) => {
           ListEmptyComponent={<EmptyData />}
         />
       )}
-      {addNewItem ? renderBtnAdd() : null}
+      {addNewItem ? (
+        <ActionButton
+          title={intl.formatMessage(Messages.add)}
+          icon={
+            <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
+          }
+          style={styles.actionButtonBox}
+          onPress={() => addNewItem()}
+        />
+      ) : null}
     </View>
   );
 };

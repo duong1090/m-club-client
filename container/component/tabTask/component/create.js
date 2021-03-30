@@ -21,14 +21,13 @@ import Messages from "container/translation/Message";
 import moment from "moment";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Avatar from "container/component/ui/avatar";
-import { gotoRoute } from "container/utils/router";
-import { modals } from "container/constant/screen";
 import { postRequest } from "container/utils/request";
 import { useRecoilState } from "recoil";
 import { listTaskState } from "../recoil";
 import update from "immutability-helper";
 import Config from "container/config/server.config";
 import { showSpinner, hideSpinner } from "container/utils/router";
+import SelectModal from "container/component/ui/selectModal";
 
 const DUE_DATE_FORMAT = "YYYY-MM-DD ";
 const DUE_TIME_FORMAT = "HH:mm:ss";
@@ -49,6 +48,7 @@ const CreateTask = (props, ref) => {
   //variables
   const bottomPopUpRef = useRef(null);
   const descriptionRef = useRef(null);
+  const modalSelectRef = useRef(null);
   const dueDateColor =
     dueDate ||
     (dueTime && moment(dueDate, DUE_DATE_FORMAT).isBefore(new Date()))
@@ -113,18 +113,7 @@ const CreateTask = (props, ref) => {
   };
 
   const openEmployeePicker = () => {
-    let passProps = {
-      onSelectItem: (value) => {
-        console.log("onSelectItem:::", value, assignedMember);
-        setAssignMember(value);
-      },
-      selectedItem: assignedMember,
-      api: "member/get",
-      params: { type: "simple" },
-      multiSelect: true,
-      isMember: true,
-    };
-    gotoRoute(modals.SELECT_MODAL, passProps, true);
+    modalSelectRef && modalSelectRef.current.show();
   };
 
   const openDatePicker = () => {
@@ -216,9 +205,7 @@ const CreateTask = (props, ref) => {
           isVisible={visibleDueDate}
           onConfirm={(date) => {
             setVisibleDueDate(false);
-            setDueDate(
-              moment(date).format(DUE_DATE_FORMAT)
-            );
+            setDueDate(moment(date).format(DUE_DATE_FORMAT));
           }}
           onCancel={() => setVisibleDueDate(false)}
         />
@@ -315,6 +302,17 @@ const CreateTask = (props, ref) => {
             </View>
           </View>
         )}
+        <SelectModal
+          key={"assigned_member"}
+          type="list"
+          ref={modalSelectRef}
+          onDone={(value) => setAssignMember(value)}
+          api="member/get"
+          params={{ type: "simple" }}
+          multiSelect={true}
+          selectedData={assignedMember}
+          isMember={true}
+        />
       </TouchableOpacity>
     );
   };
@@ -344,7 +342,11 @@ const CreateTask = (props, ref) => {
 
   const renderDescription = () => {
     return (
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
         <Textarea
           ref={descriptionRef}
           autoCorrect={false}
@@ -365,12 +367,8 @@ const CreateTask = (props, ref) => {
   return (
     <BottomPopUp
       ref={bottomPopUpRef}
-      isUseKeyBoard
-      height={scale(400)}
-      animateToY={scale(-700)}
-      limitAnimateY={scale(-800)}
       body={
-        <View style={{ width: "100%" }}>
+        <View style={{ height: scale(500), marginBottom: scale(30) }}>
           {renderName()}
           <View style={styles.blockItem}>
             {renderAssignedMember()}

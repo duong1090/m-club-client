@@ -25,6 +25,7 @@ import { Icon } from "native-base";
 import update from "immutability-helper";
 import { normalRole } from "container/constant/role";
 import PrivilegeAction from "container/component/ui/privilegeAction";
+import ActionButton from "container/component/ui/actionButton";
 
 const FundList = (props) => {
   //props
@@ -174,17 +175,15 @@ const FundList = (props) => {
       {renderTable()}
 
       <PrivilegeAction privilegeKey={normalRole.FUND_UPDATE}>
-        <View style={styles.btnUpdateBox}>
-          <TouchableOpacity
-            onPress={() => openCreateFund()}
-            style={styles.btnUpdate}
-          >
+        <ActionButton
+          title={intl.formatMessage(Messages.update)}
+          style={styles.btnUpdateBox}
+          icon={
             <Icon type="FontAwesome5" name="pen" style={styles.btnUpdateIcon} />
-            <Text style={styles.btnUpdateText}>
-              {intl.formatMessage(Messages.update)}
-            </Text>
-          </TouchableOpacity>
-        </View>
+          }
+          color={color.done}
+          onPress={() => openCreateFund()}
+        />
       </PrivilegeAction>
 
       <CreateFund ref={createFundRef} updateCallback={updateList} />

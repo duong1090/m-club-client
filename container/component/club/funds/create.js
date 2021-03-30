@@ -26,7 +26,6 @@ import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import { showSpinner, hideSpinner } from "container/utils/router";
 
-
 const RADIO_BUTTON = { revenue: 1, pay: 0 };
 
 const CreateFund = (props, ref) => {
@@ -147,7 +146,7 @@ const CreateFund = (props, ref) => {
 
   const renderReason = () => {
     return (
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <View style={{ flex: 1 }}>
         <Textarea
           onChangeText={(text) => setReason(text)}
           rowSpan={3}
@@ -165,12 +164,8 @@ const CreateFund = (props, ref) => {
   return (
     <BottomPopUp
       ref={bottomPopUpRef}
-      isUseKeyBoard
-      height={scale(400)}
-      animateToY={scale(-700)}
-      limitAnimateY={scale(-800)}
       body={
-        <View style={{ width: "100%" }}>
+        <View style={{ height: scale(500), marginBottom: scale(30) }}>
           <View
             style={{
               flexDirection: "row",

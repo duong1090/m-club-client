@@ -93,4 +93,18 @@ export const styles = StyleSheet.create({
   headerText: {
     ...defaultText,
   },
+
+  actionButtonBox: {
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: scale(15),
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  actionButtonIcon: {
+    fontSize: scale(30),
+    color: "#fff",
+  },
 });

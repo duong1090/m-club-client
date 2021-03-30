@@ -20,7 +20,7 @@ import { showSpinner, hideSpinner } from "container/utils/router";
 import { highlighText } from "container/helper/format";
 import { getHumanDay } from "container/helper/time";
 import { gotoRoute } from "container/utils/router";
-import { modals, screens } from "container/constant/screen";
+import { screens } from "container/constant/screen";
 import moment from "moment";
 import { injectIntl } from "react-intl";
 import update from "immutability-helper";
@@ -32,6 +32,7 @@ import { scale } from "../../../variables/common";
 import { PRIORITY_LEVEL } from "container/constant/element";
 import { back } from "container/utils/router";
 import { Navigation } from "react-native-navigation";
+import SelectModal from "container/component/ui/selectModal";
 
 const UPDATE_API = {
   member: "task/update-assigned-member",
@@ -76,6 +77,8 @@ const DetailTask = (props) => {
   const createTaskRef = useRef(null);
   const nameInputRef = useRef(null);
   const desInputRef = useRef(null);
+  const selectMemberRef = useRef(null);
+  const selectPriorityRef = useRef(null);
   const updateMethod = {
     member: setMember,
     name: setName,
@@ -172,32 +175,11 @@ const DetailTask = (props) => {
   };
 
   const gotoSelectMember = () => {
-    let passProps = {
-      onSelectItem: (value) => {
-        updateTask("member", {
-          assigned_member_ids: value.map((item) => item.id),
-        });
-      },
-      selectedItem: member,
-      api: "member/get",
-      params: { type: "simple" },
-      multiSelect: true,
-      isMember: true,
-    };
-    gotoRoute(modals.SELECT_MODAL, passProps, true);
+    selectMemberRef && selectMemberRef.current.show();
   };
 
   const gotoSelectPriority = () => {
-    let passProps = {
-      data: PRIORITY_LEVEL.filter((item) => item.id != 4).map((item) => {
-        return { ...item, name: intl.formatMessage(Messages[item.name]) };
-      }),
-      onSelectItem: (value) => {
-        updateTask("prior_level", { prior_level: value.id });
-      },
-      selectedItem: PRIORITY_LEVEL[priorityLevel],
-    };
-    gotoRoute(modals.SELECT_MODAL, passProps, true);
+    selectPriorityRef && selectPriorityRef.current.show();
   };
 
   const confirmPickTime = (date) => {
@@ -695,6 +677,31 @@ const DetailTask = (props) => {
           temp.push(value);
           setChildren(temp);
         }}
+      />
+      <SelectModal
+        ref={selectMemberRef}
+        key={"select_member"}
+        onDone={(value) =>
+          updateTask("member", {
+            assigned_member_ids: value.map((item) => item.id),
+          })
+        }
+        selectedData={member}
+        api="member/get"
+        params={{ type: "simple" }}
+        multiSelect={true}
+        isMember={true}
+      />
+      <SelectModal
+        ref={selectPriorityRef}
+        key={"select_priority"}
+        externalData={PRIORITY_LEVEL.filter((item) => item.id != 4).map(
+          (item) => {
+            return { ...item, name: intl.formatMessage(Messages[item.name]) };
+          }
+        )}
+        onDone={(value) => updateTask("prior_level", { prior_level: value.id })}
+        selectedData={PRIORITY_LEVEL[priorityLevel]}
       />
     </View>
   );

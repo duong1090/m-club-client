@@ -482,4 +482,12 @@ export default defineMessages({
     id: "select_title",
     defaultMessage: "Select {title}",
   },
+  title: {
+    id: "title",
+    defaultMessage: "Title",
+  },
+  user_info: {
+    id: "user_info",
+    defaultMessage: "User information",
+  },
 });

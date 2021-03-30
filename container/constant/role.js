@@ -86,6 +86,12 @@ export const normalRole = {
     }),
     value: "FUND_VIEW",
   },
+  NOTI_CREATE: {
+    name: getIntl().formatMessage(Messages.create_title, {
+      title: getIntl().formatMessage(Messages.tab_notification).toLowerCase(),
+    }),
+    value: "NOTI_CREATE",
+  },
   PROJECT_CREATE: {
     name: getIntl().formatMessage(Messages.create_title, {
       title: getIntl().formatMessage(Messages.project).toLowerCase(),

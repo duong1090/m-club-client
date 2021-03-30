@@ -1,6 +1,6 @@
 // const server = "192.168.0.122:8888";
 // const server = "113.162.169.208:1000";
-// const server = "113.162.171.255:1000";
+// const server = "192.168.0.109:8888";
 // const server = "tanca.ddns.net:8887";
 //android emulator server
 const server = "10.0.2.2:8888";

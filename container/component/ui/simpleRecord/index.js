@@ -74,6 +74,7 @@ const SimpleRecord = (props) => {
                       data && data[item.fieldName] ? data[item.fieldName] : null
                     }
                     mode={item.mode ? item.mode : null}
+                    modalObj={item.modalObj ? item.modalObj : null}
                   />
                 ))
               : null}

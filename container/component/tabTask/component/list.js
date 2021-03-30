@@ -28,6 +28,8 @@ import { modals, screens } from "container/constant/screen";
 import { PRIORITY_LEVEL } from "container/constant/element";
 import Avatar from "container/component/ui/avatar";
 import EmptyData from "container/component/ui/emptyData";
+import ActionButton from "container/component/ui/actionButton";
+import SelectModal from "container/component/ui/selectModal";
 
 const TODAY = 0,
   FUTURE = 1,
@@ -51,6 +53,8 @@ const ListTask = (props) => {
 
   //variables
   const createTaskRef = useRef(null);
+  const selectMemberRef = useRef(null);
+  const selectPriorityRef = useRef(null);
   const debounceSearch = useRef(debounce((text) => doFilter("name", text), 200))
     .current;
 
@@ -121,37 +125,10 @@ const ListTask = (props) => {
   };
 
   const openFilter = (type) => {
-    let passProps = {};
     if (type == "priority")
-      passProps = {
-        onSelectItem: (value) => {
-          let temp = { ...filter };
-          temp.prior_level = value.id;
-          setFilter(temp);
-          doFilter("prior_level", value.id);
-        },
-        data: PRIORITY_LEVEL.map((item) => {
-          return { ...item, name: intl.formatMessage(Messages[item.name]) };
-        }),
-      };
+      selectPriorityRef && selectPriorityRef.current.show();
     else if (type == "member")
-      passProps = {
-        onSelectItem: (value) => {
-          let temp = { ...filter };
-          temp.user_ids = value;
-          setFilter(temp);
-          doFilter(
-            "user_ids",
-            temp.user_ids.map((item) => item.id)
-          );
-        },
-        selectedItem: filter.user_ids,
-        api: "member/get",
-        params: { type: "simple" },
-        multiSelect: true,
-        isMember: true,
-      };
-    gotoRoute(modals.SELECT_MODAL, passProps, true);
+      selectMemberRef && selectMemberRef.current.show();
   };
 
   const doFilter = (type = "name", value) => {
@@ -427,29 +404,55 @@ const ListTask = (props) => {
     );
   };
 
-  const renderBtnAdd = () => {
-    return (
-      <View style={styles.actionButtonBox}>
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => openCreatePopUp()}
-        >
-          <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
-          <Text style={styles.actionButtonText}>
-            {intl.formatMessage(Messages.add)}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
   return (
     <View style={[styles.container, style]}>
       <HeaderInfo />
       {renderFilter()}
       {renderTabs()}
-      {renderBtnAdd()}
+      <ActionButton
+        title={intl.formatMessage(Messages.add)}
+        style={styles.actionButtonBox}
+        icon={
+          <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
+        }
+        fontStyle={styles.actionButtonText}
+        onPress={() => openCreatePopUp()}
+      />
       <CreateTask ref={createTaskRef} />
+      <SelectModal
+        type="list"
+        ref={selectMemberRef}
+        key={"select_member"}
+        onDone={(value) => {
+          let temp = { ...filter };
+          temp.user_ids = value;
+          setFilter(temp);
+          doFilter(
+            "user_ids",
+            temp.user_ids.map((item) => item.id)
+          );
+        }}
+        selectedData={filter.user_ids}
+        api="member/get"
+        params={{ type: "simple" }}
+        multiSelect={true}
+        isMember={true}
+      />
+      <SelectModal
+        type="list"
+        ref={selectPriorityRef}
+        key={"select_priority"}
+        externalData={PRIORITY_LEVEL.map((item) => {
+          return { ...item, name: intl.formatMessage(Messages[item.name]) };
+        })}
+        onDone={(value) => {
+          let temp = { ...filter };
+          temp.prior_level = value.id;
+          setFilter(temp);
+          doFilter("prior_level", value.id);
+        }}
+        selectedData={PRIORITY_LEVEL[filter.prior_level]}
+      />
     </View>
   );
 };

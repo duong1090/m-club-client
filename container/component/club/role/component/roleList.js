@@ -36,6 +36,7 @@ const RoleList = (props) => {
   //state
   const [data, setData] = useState([]);
   const [backUpData, setBackUpData] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   //recoil
   const currItem = useRecoilValue(currItemState);
@@ -54,6 +55,10 @@ const RoleList = (props) => {
   useEffect(() => {
     updateData();
   }, [data]);
+
+  useEffect(() => {
+    onSelectAll();
+  }, [selectAll]);
 
   //function ------------------------------------------------------------------------------
 
@@ -126,6 +131,15 @@ const RoleList = (props) => {
     setCurrTab(tab);
   };
 
+  const onSelectAll = () => {
+    const temp = data.map((item) => {
+      let tempItem = { ...item };
+      tempItem.checked = selectAll;
+      return tempItem;
+    });
+    setData(temp);
+  };
+
   //render --------------------------------------------------------------------------------
 
   const renderItem = (item, index) => {
@@ -187,10 +201,29 @@ const RoleList = (props) => {
     );
   };
 
+  const renderTool = () => {
+    return (
+      <View style={styles.toolBox}>
+        <CheckBox
+          disabled={false}
+          value={selectAll}
+          tintColors={{ true: color.done }}
+          onChange={() => setSelectAll(!selectAll)}
+        />
+        <Text style={styles.textTool}>
+          {intl.formatMessage(Messages.select_title, {
+            title: intl.formatMessage(Messages.all).toLowerCase(),
+          })}
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       {renderAction()}
       {renderHeader()}
+      {renderTool()}
       <FlatList
         contentContainerStyle={styles.listBox}
         data={data}
@@ -227,6 +260,22 @@ const styles = StyleSheet.create({
 
   avatarItem: {
     marginRight: scale(20),
+  },
+
+  toolBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderTopWidth: scale(2),
+    borderColor: color.lightGrey,
+    paddingVertical: scale(5),
+    paddingHorizontal: scale(20),
+    ...shadow,
+  },
+
+  textTool: {
+    ...defaultText,
+    color: color.fontColor,
   },
 
   itemBox: (index) => ({

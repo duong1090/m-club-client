@@ -6,7 +6,7 @@ import { gotoHome, gotoLogin } from "container/utils/router";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import { ORGANIZATION } from "../constant/storage";
 import OneSignal from "react-native-onesignal"; // Import package from node modules
-import moment from 'moment';
+import moment from "moment";
 
 export const doLogin = async (payload) => {
   showSpinner();
@@ -35,10 +35,7 @@ export const loginSuccess = async (token) => {
     setItem(ORGANIZATION, JSON.stringify(data));
     console.log("organizationnn", data);
     if (data.member && data.club) {
-      OneSignal.sendTags({
-        mem_id: data.member.id,
-        club_id: data.club.id,
-      });
+      OneSignal.sendTags(data.member);
     }
   } else {
     const temp = await getItem(ORGANIZATION);

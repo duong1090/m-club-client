@@ -117,5 +117,7 @@
   "view_title": "Xem {title}",
   "project": "Dự án",
   "select_group": "Chọn nhóm",
-  "select_title": "Chọn {title}"
+  "select_title": "Chọn {title}",
+  "title": "Tiêu đề",
+  "user_info": "Thông tin người dùng"
 }

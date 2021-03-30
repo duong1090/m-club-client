@@ -73,7 +73,11 @@ const MemberRecord = (props) => {
       fieldName: "sex",
       type: "button",
       placeholder: intl.formatMessage(Messages.sex_placeholder),
-      onPress: () => onPressField("sex", null, null, SEX, info.sex),
+      modalObj: {
+        externalData: SEX,
+        selectedData: info.sex,
+        onDone: (value) => onChangeField("sex", value),
+      },
     },
     {
       name: <FormattedMessage {...Messages.birthday} />,
@@ -94,41 +98,28 @@ const MemberRecord = (props) => {
       fieldName: "department",
       type: "button",
       placeholder: intl.formatMessage(Messages.department_placeholder),
-      onPress: () =>
-        onPressField("department", "department/get", {}, null, info.department),
+      modalObj: {
+        api: "department/get",
+        params: {},
+        selectedData: info.department,
+        onDone: (value) => onChangeField("department", value),
+      },
     },
     {
       name: <FormattedMessage {...Messages.position} />,
       fieldName: "position",
       type: "button",
       placeholder: intl.formatMessage(Messages.position_placeholder),
-      onPress: () =>
-        onPressField("position", "position/get", {}, null, info.department),
+      modalObj: {
+        api: "position/get",
+        params: {},
+        selectedData: info.position,
+        onDone: (value) => onChangeField("position", value),
+      },
     },
   ];
 
   //#region function - event
-  const onPressField = (
-    fieldName,
-    api,
-    params = {},
-    data,
-    selectedItem = []
-  ) => {
-    let props = {
-      onSelectItem: (value) => onChangeField(fieldName, value),
-      selectedItem,
-    };
-
-    if (data) {
-      props.data = data;
-    } else if (api) {
-      props.api = api;
-      props.params = params;
-    }
-
-    gotoRoute(modals.SELECT_MODAL, props, true);
-  };
 
   const onChangeField = (fieldName, value) => {
     let temp = { ...info };

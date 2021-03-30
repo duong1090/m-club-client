@@ -24,6 +24,7 @@ import { showSpinner, hideSpinner } from "container/utils/router";
 import { logOut } from "container/action/user";
 import { normalRole, isRoot } from "container/constant/role";
 import PrivilegeAction from "container/component/ui/privilegeAction";
+import ActionButton from "container/component/ui/actionButton";
 
 const TabAccount = (props) => {
   //function - event
@@ -102,31 +103,23 @@ const TabAccount = (props) => {
     );
   };
 
-  const renderBtnLogOut = () => {
-    return (
-      <View style={styles.actionButtonBox}>
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => doLogOut()}
-        >
+  return (
+    <View style={styles.container}>
+      <Information style={styles.information} />
+      {renderManageList()}
+      <ActionButton
+        title={intl.formatMessage(Messages.log_out)}
+        icon={
           <Icon
             name="sign-out-alt"
             type="FontAwesome5"
             style={styles.actionButtonIcon}
           />
-          <Text style={styles.actionButtonText}>
-            {intl.formatMessage(Messages.log_out)}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
-  return (
-    <View style={styles.container}>
-      <Information style={styles.information} />
-      {renderManageList()}
-      {renderBtnLogOut()}
+        }
+        color={color.danger}
+        style={styles.actionButtonBox}
+        onPress={() => doLogOut()}
+      />
     </View>
   );
 };

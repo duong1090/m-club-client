@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   FlatList,
   ImageBackground,
@@ -23,6 +23,11 @@ import { Navigation } from "react-native-navigation";
 import { screens } from "container/constant/screen";
 import { getNumberOfNotification } from "container/action/application";
 import EmptyData from "container/component/ui/emptyData";
+import CreateNotification from "./create";
+import PrivilegeAction from "container/component/ui/privilegeAction";
+import { normalRole } from "container/constant/role";
+import ActionButton from "container/component/ui/actionButton";
+import { Icon } from "native-base";
 
 const NotificationList = (props) => {
   //props
@@ -34,6 +39,7 @@ const NotificationList = (props) => {
 
   //variables
   let page = 1;
+  const createRef = useRef(null);
 
   //effect -----------------------------------------------------------------------------------------------
   useEffect(() => {
@@ -109,6 +115,10 @@ const NotificationList = (props) => {
     setRefresh(true);
     getData();
     getNumberOfNotification();
+  };
+
+  const openCreateNotification = () => {
+    createRef && createRef.current.show();
   };
 
   //render -----------------------------------------------------------------------------------------------
@@ -203,6 +213,17 @@ const NotificationList = (props) => {
         ListEmptyComponent={<EmptyData />}
         ListHeaderComponent={renderHeader()}
       />
+      {/* <PrivilegeAction privilegeKey={normalRole.NOTI_CREATE}> */}
+        <ActionButton
+          title={intl.formatMessage(Messages.create)}
+          style={styles.actionButtonBox}
+          icon={
+            <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
+          }
+          onPress={() => openCreateNotification()}
+        />
+        <CreateNotification ref={createRef} />
+      {/* </PrivilegeAction> */}
     </View>
   );
 };

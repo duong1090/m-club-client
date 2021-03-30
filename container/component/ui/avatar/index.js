@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { Spinner } from "native-base";
 import {
@@ -13,7 +19,7 @@ import { useRecoilBridgeAcrossReactRoots_UNSTABLE } from "recoil";
 
 const Avatar = (props, ref) => {
   //props
-  const { style, size, data } = props;
+  const { style, size, data, noShadow } = props;
   const [name, setName] = useState("A");
   const [avatar, setAvatar] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -29,13 +35,12 @@ const Avatar = (props, ref) => {
   }, [data]);
 
   useEffect(() => {
-
     getAvatar();
   }, []);
 
   useImperativeHandle(ref, () => ({
     forceUpdate,
-  }))
+  }));
 
   //#region function - event
   const getAvatar = async () => {
@@ -59,7 +64,7 @@ const Avatar = (props, ref) => {
   return (
     <View
       style={[
-        styles.container,
+        noShadow ? styles.containerNoShadow : styles.container,
         style,
         size ? { width: size, height: size, borderRadius: size / 2 } : null,
         { backgroundColor: getColorByName(name) },
@@ -102,6 +107,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: color.background,
     ...shadow,
+  },
+  containerNoShadow: {
+    width: scale(100),
+    height: scale(100),
+    borderRadius: scale(50),
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: color.background,
   },
   avatar: {
     position: "absolute",

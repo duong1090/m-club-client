@@ -25,6 +25,7 @@ import { injectIntl } from "react-intl";
 import { Icon } from "native-base";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
+import SelectModal from "container/component/ui/selectModal";
 
 const InputItem = (props, ref) => {
   const {
@@ -44,12 +45,13 @@ const InputItem = (props, ref) => {
     label,
     intl,
     noIcon,
-    onPress,
     required,
     mode,
     onChangeDate,
+    modalObj,
   } = props;
   const inputRef = useRef(null);
+  const modalRef = useRef(null);
 
   //state
   const [visible, setVisible] = useState(false);
@@ -150,8 +152,25 @@ const InputItem = (props, ref) => {
   };
 
   const renderButton = () => {
+    const {
+      title,
+      onDone,
+      externalData,
+      api,
+      params,
+      multiSelect,
+      selectedData,
+      key,
+      isMember,
+    } = modalObj || {};
+
     return (
-      <TouchableOpacity style={{ flex: 1 }} onPress={onPress}>
+      <TouchableOpacity
+        style={{ flex: 1 }}
+        onPress={() => {
+          modalRef && modalRef.current.show();
+        }}
+      >
         <View style={[styles.wrapButton, inputStyle]}>
           {value ? (
             <Text
@@ -178,6 +197,19 @@ const InputItem = (props, ref) => {
               style={{ color: color.hint, fontSize: scale(40) }}
             />
           ) : null}
+          <SelectModal
+            key={key}
+            type="list"
+            ref={modalRef}
+            title={title}
+            onDone={onDone}
+            externalData={externalData}
+            api={api}
+            params={params}
+            multiSelect={multiSelect}
+            selectedData={selectedData}
+            isMember={isMember}
+          />
         </View>
       </TouchableOpacity>
     );

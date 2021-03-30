@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
     fontSize: fontSize.sizeBigContent,
   },
   image: {
-    width: scale(300),
-    height: scale(300),
+    width: scale(200),
+    height: scale(200),
     resizeMode: "contain",
   },
 });
