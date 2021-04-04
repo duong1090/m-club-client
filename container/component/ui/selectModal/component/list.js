@@ -36,8 +36,6 @@ const List = (props, ref) => {
   //variables
   let page = 1;
 
-  console.log("List::::::::", props);
-
   //hooks
   useEffect(() => {
     if (externalData && externalData.length) setInternalData(externalData);
@@ -84,7 +82,9 @@ const List = (props, ref) => {
   };
 
   const getValues = () => {
-    return selectedData.length == 1 ? selectedData[0] : selectedData;
+    return !multiSelect && selectedData.length == 1
+      ? selectedData[0]
+      : selectedData;
   };
 
   //render ---------------------------------------------------------------------------------------------------

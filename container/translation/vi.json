@@ -119,5 +119,6 @@
   "select_group": "Chọn nhóm",
   "select_title": "Chọn {title}",
   "title": "Tiêu đề",
-  "user_info": "Thông tin người dùng"
+  "user_info": "Thông tin người dùng",
+  "pls_fill_required": "Vui lòng điền toàn bộ ô bắt buộc"
 }

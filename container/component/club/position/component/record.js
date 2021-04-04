@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { injectIntl, FormattedMessage } from "react-intl";
 import { useRecoilState } from "recoil";
-import {
-  currPositionState,
-  listPositionState,
-} from "../recoil";
+import { currPositionState, listPositionState } from "../recoil";
 import Messages from "container/translation/Message";
 import { View } from "react-native";
 import { postRequest } from "container/utils/request";
@@ -15,6 +12,7 @@ import SimpleRecord from "container/component/ui/simpleRecord";
 
 const DEFAULT_INFO = {
   name: "",
+  department: null,
 };
 
 const PositionRecord = (props) => {
@@ -49,6 +47,19 @@ const PositionRecord = (props) => {
       placeholder: intl.formatMessage(Messages.name_placeholder),
       onChangeText: (value) => onChangeField("name", value),
     },
+    {
+      name: <FormattedMessage {...Messages.department} />,
+      fieldName: "department",
+      placeholder: intl.formatMessage(Messages.department_placeholder),
+      type: "button",
+      modalObj: {
+        key: "department",
+        api: "department/get",
+        params: {},
+        selectedData: info.department,
+        onDone: (value) => onChangeField("department", value),
+      },
+    },
   ];
 
   //#region function - event
@@ -73,13 +84,14 @@ const PositionRecord = (props) => {
     let params = {};
     if (mode == "edit" && data.id) params.id = data.id;
     if (info.name) params.name = info.name;
+    if (info.department) params.department_id = info.department.id;
     return params;
   };
 
   const create = () => {
     showSpinner();
     const params = prepareParams();
-    postRequest(Config.API_URL.concat("position/create"), info)
+    postRequest(Config.API_URL.concat("position/create"), params)
       .then((res) => {
         if (res && res.data) createSuccess(res.data);
         hideSpinner();

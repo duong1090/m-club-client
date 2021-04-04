@@ -138,7 +138,6 @@ const SimpleDetail = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: space.bgPadding,
     backgroundColor: color.backgroundColor,
     height: "100%",
   },
@@ -146,6 +145,7 @@ const styles = StyleSheet.create({
     padding: space.bgPadding,
   },
   card: {
+    margin: space.componentMargin,
     backgroundColor: "#fff",
     borderRadius: space.border,
     ...shadow,
@@ -240,6 +240,7 @@ const styles = StyleSheet.create({
   actionBox: {
     flexDirection: "row",
     justifyContent: "space-between",
+    margin: space.componentMargin,
   },
   deleteBox: {
     paddingVertical: scale(15),

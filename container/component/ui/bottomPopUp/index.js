@@ -23,7 +23,7 @@ const Screen = {
 };
 
 const BottomPopUp = (props, ref) => {
-  const { body, toolbar, title } = props;
+  const { body, toolbar, title, reset } = props;
 
   //state
   const [visible, setVisible] = useState(false);
@@ -40,7 +40,7 @@ const BottomPopUp = (props, ref) => {
   };
 
   const hide = () => {
-    console.log("hide:::popup");
+    reset && reset();
     setVisible(false);
   };
 
@@ -51,8 +51,8 @@ const BottomPopUp = (props, ref) => {
       isVisible={visible}
       style={styles.modalWrapper}
       backdropOpacity={0.8}
-      onSwipeComplete={() => setVisible(false)}
-      onBackdropPress={() => setVisible(false)}
+      onSwipeComplete={() => hide()}
+      onBackdropPress={() => hide()}
       useNativeDriverForBackdrop={true}
       swipeDirection={["down"]}
     >

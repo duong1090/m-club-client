@@ -9,11 +9,20 @@ import styles from "../style/create";
 import InputItem from "container/component/ui/inputItem";
 import { getIntl } from "container/utils/common";
 import Messages from "container/translation/Message";
-import { gotoRoute } from "container/utils/router";
-import { modals } from "container/constant/screen";
-import { TextInput, View, TouchableOpacity, Text } from "react-native";
-import { scale, color, fontSize } from "container/variables/common";
+import { TextInput, View, TouchableOpacity, Text, Image } from "react-native";
+import {
+  scale,
+  color,
+  fontSize,
+  defaultText,
+  space,
+} from "container/variables/common";
 import { Textarea } from "native-base";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from "moment";
+import { showSpinner, hideSpinner } from "container/utils/router";
+import { postRequest } from "container/utils/request";
+import Config from "container/config/server.config";
 
 const DEFAULT_VALUE = {
   department: null,
@@ -23,9 +32,25 @@ const DEFAULT_VALUE = {
   description: null,
 };
 
+const DUE_DATE_FORMAT = "YYYY-MM-DD ";
+const DUE_TIME_FORMAT = "HH:mm:ss";
+const ICON_SIZE = scale(60);
+const intl = getIntl();
+
 const CreateNotification = (props, ref) => {
   //state
   const [formValue, setFormValue] = useState(DEFAULT_VALUE);
+  const [dueDate, setDueDate] = useState(null);
+  const [dueTime, setDueTime] = useState(null);
+  const [visibleDueDate, setVisibleDueDate] = useState(false);
+  const [visibleDueTime, setVisibleDueTime] = useState(false);
+
+  //variables
+  const dueDateColor =
+    dueDate ||
+    (dueTime && moment(dueDate, DUE_DATE_FORMAT).isBefore(new Date()))
+      ? color.colorMandy
+      : color.hint;
 
   //hooks
   useImperativeHandle(ref, () => ({
@@ -44,18 +69,13 @@ const CreateNotification = (props, ref) => {
 
   const hide = () => {
     bottomPopUpRef.current.hide();
+    resetFields();
   };
 
-  const onPressField = (fieldName, api, selectedItem = []) => {
-    let props = {
-      onSelectItem: (value) => onChangeField(fieldName, value),
-      selectedItem,
-      api,
-      isMember: fieldName == "member" ? true : false,
-      params: { type: "simple" },
-    };
-
-    gotoRoute(modals.SELECT_MODAL, props, true);
+  const resetFields = () => {
+    setFormValue(DEFAULT_VALUE);
+    setDueDate(null);
+    setDueTime(null);
   };
 
   const onChangeField = (fieldName, value) => {
@@ -64,46 +84,187 @@ const CreateNotification = (props, ref) => {
     setFormValue(temp);
   };
 
+  const prepareParams = () => {
+    const { department, position, member, title, description } = formValue;
+    let params = {};
+
+    console.log("prepareParams:::", formValue);
+
+    if (department && department.length)
+      params.department_ids = department.map((item) => item.id);
+    if (position && position.length)
+      params.position_ids = position.map((item) => item.id);
+    if (member && member.length)
+      params.member_ids = member.map((item) => item.id);
+    if (title) params.title = title;
+    if (description) params.content = description;
+    if (dueDate) {
+      if (dueTime) params.time_schedule = `${dueDate} ${dueTime}`;
+      else params.time_schedule = dueDate;
+    }
+
+    return params;
+  };
+
+  const create = () => {
+    showSpinner();
+    let params = prepareParams();
+
+    postRequest(Config.API_URL.concat("notification/push"), params)
+      .then((res) => {
+        if (res && res.data) {
+          //success
+          console.log("create:::notification:::", res.data);
+        }
+        hideSpinner();
+      })
+      .catch((err) => {
+        console.error(err);
+        hideSpinner();
+      });
+  };
+
   //render ----------------------------------------------------------------------------------------
 
   const INPUT = [
     {
       fieldName: "department",
       type: "button",
-      placeholder: getIntl().formatMessage(Messages.department_placeholder),
+      placeholder: intl.formatMessage(Messages.department_placeholder),
       modalObj: {
         api: "department/get",
         params: {},
-        onDone: (value) => onChangeField("department", value),
+        onDone: (value) => {
+          console.log("doneroine::::", value);
+          onChangeField("department", value);
+        },
+        multiSelect: true,
       },
       key: "department",
     },
     {
       fieldName: "position",
       type: "button",
-      placeholder: getIntl().formatMessage(Messages.position_placeholder),
+      placeholder: intl.formatMessage(Messages.position_placeholder),
       modalObj: {
         api: "position/get",
         params: {},
         onDone: (value) => onChangeField("position", value),
+        multiSelect: true,
       },
       key: "position",
     },
     {
       fieldName: "member",
       type: "button",
-      placeholder: getIntl().formatMessage(Messages.select_title, {
-        title: getIntl().formatMessage(Messages.member).toLowerCase(),
+      placeholder: intl.formatMessage(Messages.select_title, {
+        title: intl.formatMessage(Messages.member).toLowerCase(),
       }),
       modalObj: {
         api: "member/get",
         params: { type: "simple" },
         onDone: (value) => onChangeField("member", value),
         isMember: true,
+        multiSelect: true,
       },
       key: "member",
     },
   ];
+
+  const renderDeadline = () => {
+    return (
+      <View style={styles.deadlineBox}>
+        {renderDueDate()}
+        {dueDate ? renderDueTime() : null}
+      </View>
+    );
+  };
+
+  const renderDueTime = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => setVisibleDueTime(true)}
+        style={styles.dueDateWrap}
+      >
+        <Image
+          style={{ width: ICON_SIZE, height: ICON_SIZE }}
+          source={require("container/asset/icon/dukien.png")}
+        />
+        <View style={{ marginLeft: scale(15) }}>
+          <Text style={{ ...defaultText, fontSize: fontSize.size26 }}>
+            {intl.formatMessage(Messages.due_time)}
+          </Text>
+          {dueTime ? (
+            <Text
+              style={{
+                ...defaultText,
+                fontSize: fontSize.size26,
+                fontWeight: "bold",
+                color: dueDateColor,
+              }}
+            >
+              {moment(dueTime, DUE_TIME_FORMAT).format(
+                intl.formatMessage(Messages.due_time_format)
+              )}
+            </Text>
+          ) : null}
+        </View>
+        <DateTimePickerModal
+          mode="time"
+          isVisible={visibleDueTime}
+          onConfirm={(date) => {
+            setVisibleDueTime(false);
+            setDueTime(moment(date).format(DUE_TIME_FORMAT));
+          }}
+          onCancel={() => setVisibleDueTime(false)}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const renderDueDate = () => {
+    return (
+      <TouchableOpacity
+        require
+        onPress={() => setVisibleDueDate(true)}
+        style={styles.dueDateWrap}
+      >
+        <Image
+          style={{ width: ICON_SIZE, height: ICON_SIZE }}
+          source={require("container/asset/icon/unassign-hanchot.png")}
+        />
+        <View style={{ marginLeft: scale(15) }}>
+          <Text style={{ ...defaultText, fontSize: fontSize.size26 }}>
+            {intl.formatMessage(Messages.due_date)}
+          </Text>
+          {dueDate ? (
+            <Text
+              font-size-22
+              bold
+              style={{
+                ...defaultText,
+                fontSize: fontSize.size26,
+                color: dueDateColor,
+              }}
+            >
+              {moment(dueDate, DUE_DATE_FORMAT).format(
+                intl.formatMessage(Messages.due_date_format)
+              )}
+            </Text>
+          ) : null}
+        </View>
+        <DateTimePickerModal
+          mode="date"
+          isVisible={visibleDueDate}
+          onConfirm={(date) => {
+            setVisibleDueDate(false);
+            setDueDate(moment(date).format(DUE_DATE_FORMAT));
+          }}
+          onCancel={() => setVisibleDueDate(false)}
+        />
+      </TouchableOpacity>
+    );
+  };
 
   const renderPicker = () => {
     return (
@@ -116,11 +277,7 @@ const CreateNotification = (props, ref) => {
             required={item.required ? item.required : false}
             placeholder={item.placeholder ? item.placeholder : null}
             onPress={item.onPress ? item.onPress : null}
-            value={
-              formValue && formValue[item.fieldName]
-                ? formValue[item.fieldName]
-                : null
-            }
+            value={formValue[item.fieldName]}
             modalObj={item.modalObj}
           />
         ))}
@@ -135,9 +292,10 @@ const CreateNotification = (props, ref) => {
         autoFocus
         autoCorrect={false}
         maxLength={200}
-        placeholder={getIntl().formatMessage(Messages.title)}
+        placeholder={intl.formatMessage(Messages.title)}
         style={{
           fontSize: fontSize.size32,
+          marginBottom: space.itemMargin,
         }}
         blurOnSubmit={false}
         returnKeyType="next"
@@ -171,18 +329,20 @@ const CreateNotification = (props, ref) => {
   return (
     <BottomPopUp
       ref={bottomPopUpRef}
-      title={getIntl().formatMessage(Messages.create_title, {
-        title: getIntl().formatMessage(Messages.tab_notification).toLowerCase(),
+      reset={resetFields}
+      title={intl.formatMessage(Messages.create_title, {
+        title: intl.formatMessage(Messages.tab_notification).toLowerCase(),
       })}
       body={
         <View style={styles.bodyBox}>
           {renderPicker()}
           {renderTitle()}
+          {renderDeadline()}
           {renderDescription()}
         </View>
       }
       toolbar={() => (
-        <TouchableOpacity onPress={() => {}} style={styles.createButton}>
+        <TouchableOpacity onPress={() => create()} style={styles.createButton}>
           <Text style={styles.textCreateButton}>
             {intl.formatMessage(Messages.create)}
           </Text>

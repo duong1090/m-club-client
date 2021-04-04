@@ -16,15 +16,29 @@ import {
   space,
   defaultText,
 } from "container/variables/common";
-import { Icon, Content, Container } from "native-base";
+import { Icon } from "native-base";
 import InputItem from "container/component/ui/inputItem";
+import Toast from "react-native-simple-toast";
 
 const SimpleRecord = (props) => {
   const { mode, intl, header, data, fields, onSubmit, backButton } = props;
 
   console.log("SimpleRecord:::", data);
 
-  //render
+  //function -----------------------------------------------------------------------------------------
+
+  const preValidate = () => {
+    const notFillRequired =
+      fields.findIndex((item) => item.required && !data[item.fieldName]) >= 0
+        ? true
+        : false;
+
+    if (notFillRequired)
+      Toast.show(intl.formatMessage(Messages.pls_fill_required), Toast.LONG);
+    else onSubmit();
+  };
+
+  //render -------------------------------------------------------------------------------------------
   return (
     <ScrollView style={styles.container}>
       {backButton ? (
@@ -79,7 +93,10 @@ const SimpleRecord = (props) => {
                 ))
               : null}
           </View>
-          <TouchableOpacity style={styles.doneBox} onPress={onSubmit}>
+          <TouchableOpacity
+            style={styles.doneBox}
+            onPress={() => preValidate()}
+          >
             <Text style={styles.titleSymbol}>
               {intl.formatMessage(Messages.done)}
             </Text>
@@ -92,7 +109,6 @@ const SimpleRecord = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: space.bgPadding,
     backgroundColor: color.backgroundColor,
     height: "100%",
   },
@@ -100,6 +116,7 @@ const styles = StyleSheet.create({
     padding: space.bgPadding,
   },
   card: {
+    margin: space.componentMargin,
     backgroundColor: "#fff",
     borderRadius: space.border,
     marginBottom: space.bgPadding * 2,
@@ -147,7 +164,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     alignSelf: "flex-start",
-    marginBottom: space.itemMargin,
+    margin: space.componentMargin,
+    marginBottom: 0,
     borderColor: color.text,
     backgroundColor: color.primary,
     paddingHorizontal: scale(20),

@@ -490,4 +490,8 @@ export default defineMessages({
     id: "user_info",
     defaultMessage: "User information",
   },
+  pls_fill_required: {
+    id: "pls_fill_required",
+    defaultMessage: "Please fill all of require field",
+  },
 });

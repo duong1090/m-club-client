@@ -26,6 +26,7 @@ import { Icon } from "native-base";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import SelectModal from "container/component/ui/selectModal";
+import { reduce } from "lodash";
 
 const InputItem = (props, ref) => {
   const {
@@ -164,6 +165,20 @@ const InputItem = (props, ref) => {
       isMember,
     } = modalObj || {};
 
+    //transform value to show
+    const transformValue = value
+      ? Array.isArray(value)
+        ? value.reduce((str, item, index) => {
+            const title = item.name || item.title || "";
+
+            if (index > 0) str += `, ${title}`;
+            else str += title;
+
+            return str;
+          }, "")
+        : value.name || value.title || ""
+      : null;
+
     return (
       <TouchableOpacity
         style={{ flex: 1 }}
@@ -172,13 +187,13 @@ const InputItem = (props, ref) => {
         }}
       >
         <View style={[styles.wrapButton, inputStyle]}>
-          {value ? (
+          {transformValue ? (
             <Text
               style={{ ...defaultText }}
               numberOfLines={1}
               ellipsizeMode={"tail"}
             >
-              {value.name || value.title || ""}
+              {transformValue}
             </Text>
           ) : (
             <Text
@@ -207,7 +222,7 @@ const InputItem = (props, ref) => {
             api={api}
             params={params}
             multiSelect={multiSelect}
-            selectedData={selectedData}
+            selectedData={value ? value : selectedData}
             isMember={isMember}
           />
         </View>

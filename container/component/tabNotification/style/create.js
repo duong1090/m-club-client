@@ -7,9 +7,8 @@ import {
   defaultText,
 } from "container/variables/common";
 
-
 export default StyleSheet.create({
-  bodyBox: { height: scale(700), marginBottom: scale(30) },
+  bodyBox: { height: scale(800), marginBottom: scale(30) },
   createButton: {
     paddingVertical: scale(10),
     paddingHorizontal: scale(20),
@@ -27,4 +26,16 @@ export default StyleSheet.create({
     marginBottom: space.componentMargin,
   },
   pickerBox: {},
+
+  deadlineBox: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  dueDateWrap: {
+    marginRight: scale(50),
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });

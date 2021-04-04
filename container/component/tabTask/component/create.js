@@ -69,6 +69,15 @@ const CreateTask = (props, ref) => {
 
   const hide = () => {
     bottomPopUpRef.current.hide();
+    resetFields();
+  };
+
+  const resetFields = () => {
+    setAssignMember([]);
+    setDueDate(null);
+    setDueTime(null);
+    setName(null);
+    setDescription(null);
   };
 
   const createTask = () => {
