@@ -41,7 +41,7 @@ const DepartmentDetail = (props) => {
 
     let params = {};
     if (data && data.id) params.id = data.id;
-    postRequest(Config.API_URL.concat("department/delete"), params)
+    postRequest("department/delete", params)
       .then((res) => {
         if (res && res.data) {
           deleteSuccess();

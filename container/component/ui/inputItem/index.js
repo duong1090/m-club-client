@@ -22,7 +22,7 @@ import {
 } from "container/variables/common";
 import Messages from "container/translation/Message";
 import { injectIntl } from "react-intl";
-import { Icon } from "native-base";
+import { Icon, Textarea } from "native-base";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import SelectModal from "container/component/ui/selectModal";
@@ -50,6 +50,9 @@ const InputItem = (props, ref) => {
     mode,
     onChangeDate,
     modalObj,
+    rowSpan,
+    formatValue,
+    note,
   } = props;
   const inputRef = useRef(null);
   const modalRef = useRef(null);
@@ -152,31 +155,29 @@ const InputItem = (props, ref) => {
     );
   };
 
+  const formatterValue = (value) => {
+    return formatValue
+      ? moment(value.name || value.title || value || "").format(formatValue)
+      : value.name || value.title || value || "";
+  };
+
   const renderButton = () => {
-    const {
-      title,
-      onDone,
-      externalData,
-      api,
-      params,
-      multiSelect,
-      selectedData,
-      key,
-      isMember,
-    } = modalObj || {};
+    const { selectedData } = modalObj || {};
+
+    console.log("");
 
     //transform value to show
     const transformValue = value
       ? Array.isArray(value)
         ? value.reduce((str, item, index) => {
-            const title = item.name || item.title || "";
+            const title = formatterValue(item);
 
             if (index > 0) str += `, ${title}`;
             else str += title;
 
             return str;
           }, "")
-        : value.name || value.title || ""
+        : formatterValue(value)
       : null;
 
     return (
@@ -208,22 +209,14 @@ const InputItem = (props, ref) => {
           )}
           {!noIcon ? (
             <Icon
-              name="caret-down"
+              name="caret-forward"
               style={{ color: color.hint, fontSize: scale(40) }}
             />
           ) : null}
           <SelectModal
-            key={key}
-            type="list"
             ref={modalRef}
-            title={title}
-            onDone={onDone}
-            externalData={externalData}
-            api={api}
-            params={params}
-            multiSelect={multiSelect}
+            {...modalObj}
             selectedData={value ? value : selectedData}
-            isMember={isMember}
           />
         </View>
       </TouchableOpacity>
@@ -280,6 +273,20 @@ const InputItem = (props, ref) => {
     );
   };
 
+  const renderTextArea = () => {
+    return (
+      <Textarea
+        style={[styles.textAreaInput, inputStyle]}
+        rowSpan={rowSpan ? rowSpan : 5}
+        placeholder={placeholder ? placeholder : ""}
+        placeholderTextColor={color.hint}
+        onChangeText={onChange}
+        value={value}
+        autoCorrect={autoCorrect}
+      />
+    );
+  };
+
   const renderItem = () => {
     switch (type) {
       case "otp":
@@ -291,6 +298,8 @@ const InputItem = (props, ref) => {
       case "date_picker":
         return renderDateTimePicker();
         break;
+      case "text_area":
+        return renderTextArea();
       default:
         return renderInput();
     }
@@ -304,20 +313,24 @@ const InputItem = (props, ref) => {
           {required ? <View style={styles.dot} /> : null}
         </View>
       ) : null}
-      <View style={styles.card}>{renderItem()}</View>
+      <View style={styles.card(type)}>{renderItem()}</View>
+      {note ? <Text style={styles.textNote}>{note}</Text> : null}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {},
-  card: {
-    justifyContent: "center",
-    height: scale(80),
-    backgroundColor: color.input,
-    borderRadius: scale(50),
-    paddingHorizontal: scale(30),
-    paddingVertical: scale(10),
+  card: (type) => {
+    let style = {
+      justifyContent: "center",
+      backgroundColor: color.input,
+      borderRadius: scale(50),
+      paddingHorizontal: scale(30),
+      paddingVertical: scale(10),
+    };
+    if (type != "text_area") style.height = scale(80);
+    return style;
   },
   textInput: {
     ...defaultText,
@@ -369,6 +382,21 @@ const styles = StyleSheet.create({
     backgroundColor: color.danger,
     borderRadius: scale(8),
     marginLeft: scale(10),
+  },
+  textAreaInput: {
+    ...defaultText,
+    fontSize: fontSize.size28,
+    paddingLeft: 0,
+    paddingRight: 0,
+    color: color.text,
+  },
+  textNote: {
+    ...defaultText,
+    fontSize: fontSize.size26,
+    color: color.grey,
+    fontStyle: "italic",
+    marginLeft: scale(30),
+    marginTop: scale(5),
   },
 });
 

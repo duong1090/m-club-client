@@ -494,4 +494,92 @@ export default defineMessages({
     id: "pls_fill_required",
     defaultMessage: "Please fill all of require field",
   },
+  event: {
+    id: "event",
+    defaultMessage: "Event",
+  },
+  start_date: {
+    id: "start_date",
+    defaultMessage: "Start date",
+  },
+  end_date: {
+    id: "end_date",
+    defaultMessage: "End date",
+  },
+  link: {
+    id: "link",
+    defaultMessage: "Link",
+  },
+  place: {
+    id: "place",
+    defaultMessage: "Place",
+  },
+  content: {
+    id: "content",
+    defaultMessage: "Content",
+  },
+  example: {
+    id: "example",
+    defaultMessage: "Example",
+  },
+  price: {
+    id: "price",
+    defaultMessage: "Price",
+  },
+  price_event_note: {
+    id: "price_event_note",
+    defaultMessage: "Ticket fee or any activity fee of event",
+  },
+  image: {
+    id: "image",
+    defaultMessage: "Image",
+  },
+  time_format: {
+    id: "time_format",
+    defaultMessage: "hh:mm A",
+  },
+  interested: {
+    id: "interested",
+    defaultMessage: "Interested",
+  },
+  going: {
+    id: "going",
+    defaultMessage: "Going",
+  },
+  event_by: {
+    id: "event_by",
+    defaultMessage: "Event by",
+  },
+  happening: {
+    id: "happening",
+    defaultMessage: "Happening",
+  },
+  in_minutes: {
+    id: "in_minutes",
+    defaultMessage: "In {number} minutes",
+  },
+  in_hours: {
+    id: "in_hours",
+    defaultMessage: "In {number} hours",
+  },
+  on_days: {
+    id: "on_days",
+    defaultMessage: "On {number} days",
+  },
+  hosted_by: {
+    id: "hosted_by",
+    defaultMessage: "Hosted by",
+  },
+  view: {
+    id: "view",
+    defaultMessage: "View",
+  },
+  free: {
+    id: "free",
+    defaultMessage: "Free",
+  },
+  verification: {
+    id: "verification",
+    defaultMessage: "Verification",
+  },
 });

@@ -9,6 +9,7 @@ import { View, TouchableOpacity, Text } from "react-native";
 import styles from "./styles";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import List from "./component/list";
+import Date from "./component/date";
 import Messages from "container/translation/Message";
 import { getIntl } from "container/utils/common";
 
@@ -48,6 +49,14 @@ const SelectModal = (props, ref) => {
   const renderContent = () => {
     switch (type) {
       case "list":
+        return (
+          <List {...props} style={styles.contentWrapper} ref={childrenRef} />
+        );
+      case "date":
+        return (
+          <Date {...props} style={styles.contentWrapper} ref={childrenRef} />
+        );
+      default:
         return (
           <List {...props} style={styles.contentWrapper} ref={childrenRef} />
         );

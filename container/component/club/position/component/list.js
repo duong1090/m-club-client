@@ -61,7 +61,7 @@ const PositionList = (props) => {
   const getList = (extraParams = {}) => {
     let params = { ...extraParams, page };
     setLoading(true);
-    getRequest(Config.API_URL.concat("position/get"), params)
+    getRequest("position/get", params)
       .then((res) => {
         if (res && res.data && res.data.items) {
           console.log("getList:::", res.data);

@@ -51,10 +51,12 @@ const BottomPopUp = (props, ref) => {
       isVisible={visible}
       style={styles.modalWrapper}
       backdropOpacity={0.8}
-      onSwipeComplete={() => hide()}
+      // onSwipeComplete={() => hide()}
       onBackdropPress={() => hide()}
-      useNativeDriverForBackdrop={true}
-      swipeDirection={["down"]}
+      // useNativeDriverForBackdrop={true}
+      useNativeDriver={true}
+      // swipeDirection={["down"]}
+      propagateSwipe
     >
       <View style={styles.bodyWrapper}>
         {title ? (
@@ -91,10 +93,10 @@ const styles = StyleSheet.create({
 
   bodyWrapper: {
     backgroundColor: "#fff",
-    borderTopLeftRadius: scale(50),
-    borderTopRightRadius: scale(50),
+    borderTopLeftRadius: scale(30),
+    borderTopRightRadius: scale(30),
     paddingHorizontal: scale(30),
-    paddingVertical: scale(60),
+    paddingVertical: scale(30),
   },
   titleBox: {
     justifyContent: "center",

@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { injectIntl, FormattedMessage } from "react-intl";
 import { useRecoilState } from "recoil";
-import {
-  listDepartmentState,
-  currDepartmentState,
-} from "../recoil";
+import { listDepartmentState, currDepartmentState } from "../recoil";
 import Messages from "container/translation/Message";
 import { View } from "react-native";
 import { postRequest } from "container/utils/request";
@@ -79,7 +76,7 @@ const DepartmentRecord = (props) => {
   const create = () => {
     showSpinner();
     const params = prepareParams();
-    postRequest(Config.API_URL.concat("department/create"), params)
+    postRequest("department/create", params)
       .then((res) => {
         if (res && res.data) createSuccess(res.data);
         hideSpinner();
@@ -111,7 +108,7 @@ const DepartmentRecord = (props) => {
   const update = () => {
     showSpinner();
     const params = prepareParams();
-    postRequest(Config.API_URL.concat("department/update"), params)
+    postRequest("department/update", params)
       .then((res) => {
         if (res && res.data) updateSuccess(res.data);
         hideSpinner();

@@ -15,6 +15,7 @@ export const screens = {
   SETTING: "SETTING",
   SPLASH_SCREEN: "SPLASH_SCREEN",
   ROLE: "ROLE",
+  EVENT: "EVENT",
 };
 
 export const modals = {

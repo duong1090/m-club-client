@@ -83,7 +83,7 @@ const CreateTask = (props, ref) => {
   const createTask = () => {
     showSpinner();
     const params = prepareParams();
-    postRequest(Config.API_URL.concat("task/create"), params)
+    postRequest("task/create", params)
       .then((res) => {
         if (res && res.data) {
           props.callbackCreate && props.callbackCreate(res.data);

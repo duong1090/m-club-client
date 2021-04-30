@@ -91,7 +91,7 @@ const PositionRecord = (props) => {
   const create = () => {
     showSpinner();
     const params = prepareParams();
-    postRequest(Config.API_URL.concat("position/create"), params)
+    postRequest("position/create", params)
       .then((res) => {
         if (res && res.data) createSuccess(res.data);
         hideSpinner();
@@ -123,7 +123,7 @@ const PositionRecord = (props) => {
   const update = () => {
     showSpinner();
     const params = prepareParams();
-    postRequest(Config.API_URL.concat("position/update"), params)
+    postRequest("position/update", params)
       .then((res) => {
         if (res && res.data) updateSuccess(res.data);
         hideSpinner();

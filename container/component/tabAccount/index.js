@@ -79,6 +79,12 @@ const TabAccount = (props) => {
       icon: <Icon type="FontAwesome5" name="wallet" style={styles.iconList} />,
       privilege: isRoot,
     },
+    {
+      title: <FormattedMessage {...Messages.event} />,
+      type: screens.EVENT,
+      icon: <Icon type="MaterialIcons" name="event" style={styles.iconList} />,
+      privilege: normalRole.EVENT_VIEW,
+    },
   ];
 
   const renderManageList = () => {

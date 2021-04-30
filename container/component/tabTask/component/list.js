@@ -71,7 +71,7 @@ const ListTask = (props) => {
 
   const getData = () => {
     showSpinner();
-    getRequest(Config.API_URL.concat("task/get"))
+    getRequest("task/get")
       .then((res) => {
         if (res && res.data) getDataSuccess(res);
         hideSpinner();
@@ -111,12 +111,10 @@ const ListTask = (props) => {
         ? data[indexTab].data[index].is_done
         : 0;
     params.is_done = isDone ? 0 : 1;
-    postRequest(Config.API_URL.concat("task/update-task-status"), params).then(
-      (res) => {
-        if (res) {
-        }
+    postRequest("task/update-task-status", params).then((res) => {
+      if (res) {
       }
-    );
+    });
     setData(
       update(data, {
         [indexTab]: { data: { [index]: { is_done: { $set: !isDone } } } },
@@ -138,7 +136,7 @@ const ListTask = (props) => {
         ? repairParams({ ...filter, [type]: value })
         : repairParams({ ...filter });
 
-    getRequest(Config.API_URL.concat("task/get").concat(`?${params}`))
+    getRequest("task/get".concat(`?${params}`))
       .then((res) => {
         if (res && res.data) getDataSuccess(res);
         hideSpinner();

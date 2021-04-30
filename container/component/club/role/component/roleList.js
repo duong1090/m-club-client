@@ -68,7 +68,7 @@ const RoleList = (props) => {
     if (currItem.id) params.target_id = currItem.id;
 
     showSpinner();
-    getRequest(Config.API_URL.concat("role/get"), params)
+    getRequest("role/get", params)
       .then((res) => {
         if (res && res.data != null) {
           getDataSuccess(res.data);
@@ -110,7 +110,7 @@ const RoleList = (props) => {
     if (currType) params.type = currType;
     if (currItem.id) params.target_id = currItem.id;
 
-    postRequest(Config.API_URL.concat("role/update"), params)
+    postRequest("role/update", params)
       .then((res) => {
         if (res && res.data) {
         } else {

@@ -63,7 +63,7 @@ const CreateFund = (props, ref) => {
     if (amount) params.amount = amount;
     params.is_revenue = isRevenue;
 
-    postRequest(Config.API_URL.concat("fund/update"), params)
+    postRequest("fund/update", params)
       .then((res) => {
         if (res && res.data) {
           updateCallback && updateCallback(res.data);

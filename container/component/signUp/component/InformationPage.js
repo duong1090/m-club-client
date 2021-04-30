@@ -97,7 +97,7 @@ const InformationPage = (props) => {
     if (phone) params.phone = phone;
     if (adminName) params.mem_name = adminName;
 
-    postRequest(Config.API_URL.concat("auth/sign-up"), params)
+    postRequest("auth/sign-up", params)
       .then((res) => {
         if (res) {
           console.log("doSignUp:::", res);
@@ -233,17 +233,17 @@ const InformationPage = (props) => {
           </Text>
         </TouchableOpacity>
       ) : (
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: "#2AC79C" }]}
-            onPress={() => doSignUp()}
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: "#2AC79C" }]}
+          onPress={() => doSignUp()}
+        >
+          <Text
+            style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
           >
-            <Text
-              style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
-            >
-              {intl.formatMessage(Messages.sign_up)}
-            </Text>
-          </TouchableOpacity>
-        )}
+            {intl.formatMessage(Messages.sign_up)}
+          </Text>
+        </TouchableOpacity>
+      )}
 
       <View style={styles.signIn}>
         <Text

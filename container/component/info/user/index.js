@@ -182,7 +182,7 @@ const UserInfo = (props) => {
     const params = new FormData();
     params.append("image", image.base64);
 
-    postRequest(Config.API_URL.concat("member/update-avatar"), params)
+    postRequest("member/update-avatar", params)
       .then((res) => {
         if (res && res.data) {
           console.log("updateAvatar:::", res.data);
@@ -225,7 +225,7 @@ const UserInfo = (props) => {
   const update = () => {
     showSpinner();
     const params = prepareParams();
-    postRequest(Config.API_URL.concat("member/update"), params)
+    postRequest("member/update", params)
       .then((res) => {
         if (res && res.data) updateSuccess();
         hideSpinner();

@@ -22,6 +22,7 @@ export const color = {
   hint: "#BBBBBB",
   grey: "#B0B0B0",
   lightGrey: "#d3d3d3",
+  lightGreyPlus: "#e8e8e8",
   warning: "#f0ad4e",
   danger: "#DF3651",
   success: "#5cb85c",

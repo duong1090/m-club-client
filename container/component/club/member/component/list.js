@@ -58,7 +58,7 @@ const MemberList = (props) => {
   const getList = (extraParams = {}) => {
     let params = { ...extraParams, page };
     setLoading(true);
-    getRequest(Config.API_URL.concat("member/get"), params)
+    getRequest("member/get", params)
       .then((res) => {
         if (res && res.data && res.data.items) {
           if (page > 1) {

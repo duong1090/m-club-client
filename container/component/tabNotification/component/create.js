@@ -110,7 +110,7 @@ const CreateNotification = (props, ref) => {
     showSpinner();
     let params = prepareParams();
 
-    postRequest(Config.API_URL.concat("notification/push"), params)
+    postRequest("notification/push", params)
       .then((res) => {
         if (res && res.data) {
           //success

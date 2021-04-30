@@ -6,10 +6,7 @@ import { useRecoilState } from "recoil";
 import { scale, color, defaultText } from "container/variables/common";
 import { Icon } from "native-base";
 import SimpleDetail from "container/component/ui/simpleDetail";
-import {
-  currPositionState,
-  listPositionState,
-} from "../recoil";
+import { currPositionState, listPositionState } from "../recoil";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
@@ -44,7 +41,7 @@ const PositionDetail = (props) => {
 
     let params = {};
     if (data && data.id) params.id = data.id;
-    postRequest(Config.API_URL.concat("position/delete"), params)
+    postRequest("position/delete", params)
       .then((res) => {
         if (res && res.data) {
           deleteSuccess();

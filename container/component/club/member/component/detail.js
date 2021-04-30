@@ -4,10 +4,7 @@ import { injectIntl } from "react-intl";
 import { View, Text, StyleSheet } from "react-native";
 import { postRequest, getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import {
-  listMemberState,
-  currMemberState,
-} from "../recoil";
+import { listMemberState, currMemberState } from "../recoil";
 import { useRecoilState } from "recoil";
 import SimpleDetail from "container/component/ui/simpleDetail";
 import { showSpinner, hideSpinner } from "container/utils/router";
@@ -21,7 +18,6 @@ import {
   fontSize,
 } from "container/variables/common";
 import { normalRole } from "container/constant/role";
-
 
 const MemberDetail = (props) => {
   //props
@@ -43,7 +39,7 @@ const MemberDetail = (props) => {
     console.log("getDetail:::", info);
     showSpinner();
     let params = { id: info.id };
-    getRequest(Config.API_URL.concat("member/detail"), params)
+    getRequest("member/detail", params)
       .then((res) => {
         if (res && res.data) {
           setInfo(transform(res.data));
@@ -78,7 +74,7 @@ const MemberDetail = (props) => {
 
   //   let params = {};
   //   if (info && info.id) params.id = info.id;
-  //   postRequest(Config.API_URL.concat("member/delete"), params)
+  //   postRequest("member/delete"), params
   //     .then((res) => {
   //       if (res && res.data) {
   //         deleteSuccess();

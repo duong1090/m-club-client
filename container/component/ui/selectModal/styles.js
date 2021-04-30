@@ -15,8 +15,8 @@ export default StyleSheet.create({
   },
 
   modalView: {
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
+    borderTopLeftRadius: scale(30),
+    borderTopRightRadius: scale(30),
     backgroundColor: "white",
   },
 

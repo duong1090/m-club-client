@@ -6,12 +6,25 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
 } from "react-native";
 import { scale, color, fontSize } from "container/variables/common";
 import InformationPage from "./component/InformationPage";
 import InputItem from "container/component/ui/inputItem";
+import { API_URL } from "container/constant/storage";
+import { setItem } from "container/utils/storage";
 
 const LogIn = () => {
+  const [visibleURLInput, setVisibleURLInput] = useState(0);
+
+  const doChangeApiURL = (text) => {
+    setItem(API_URL, text);
+  };
+
+  const doCountApiURL = () => {
+    setVisibleURLInput(visibleURLInput + 1);
+  };
+
   const header = () => {
     return (
       <View style={styles.header}>
@@ -25,12 +38,23 @@ const LogIn = () => {
             bottom: 0,
           }}
         >
-          <View style={styles.elTwoHeader}>
+          {visibleURLInput >= 10 ? (
+            <InputItem
+              style={{ width: "100%", padding: scale(30) }}
+              placeholder="API URL"
+              onChangeText={(text) => doChangeApiURL(text)}
+            />
+          ) : null}
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.elTwoHeader}
+            onPress={() => doCountApiURL()}
+          >
             <Image
               style={styles.logo}
               source={require("container/asset/image/Mclub-cirLogo.png")}
             />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     );

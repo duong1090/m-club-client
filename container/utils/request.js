@@ -2,7 +2,8 @@ import { getApiToken } from "./common";
 import { buildDeviceInfo } from "./common";
 import { Text, Alert } from "react-native";
 import { getItem } from "./storage";
-import { LANG, API_TOKEN } from "container/constant/storage";
+import Config, { formatURL } from "container/config/server.config";
+import { LANG, API_TOKEN, API_URL } from "container/constant/storage";
 
 const constants = {
   APP_JSON_HEADER: "application/json",
@@ -139,7 +140,14 @@ const checkStatus = (response) => {
 //#region POST
 
 const postUpload = async (uri, method = "POST", data, quiet) => {
-  console.log("postUpload");
+  const apiURL = await getItem(API_URL);
+
+  if (apiURL) uri = formatURL(apiURL).concat(uri);
+  else uri = Config.API_URL.concat(uri);
+
+  console.log("************* postRequest **********:");
+  console.log(uri);
+  console.log(data);
 
   const token = await getItem(API_TOKEN);
   const lang = await getItem(LANG);
@@ -182,6 +190,15 @@ const postUpload = async (uri, method = "POST", data, quiet) => {
 };
 
 const postPut = async (uri, method = "POST", data, quiet) => {
+  const apiURL = await getItem(API_URL);
+
+  if (apiURL) uri = formatURL(apiURL).concat(uri);
+  else uri = Config.API_URL.concat(uri);
+
+  console.log("************* postRequest **********:");
+  console.log(uri);
+  console.log(data);
+
   const token = await getItem(API_TOKEN);
   const lang = await getItem(LANG);
   const config = {
@@ -225,9 +242,6 @@ export const postRequest = (url, params) => {
   return new Promise((resolve, reject) => {
     try {
       // sleep(5000);
-      console.log("************* postRequest **********:");
-      console.log(url);
-      console.log(params);
       post(url, params)
         .then((data) => {
           console.log("************* postRequest #### SUCCESSED:", url);
@@ -272,8 +286,14 @@ export const postRequest = (url, params) => {
 
 export const get = async (uri, params = "", quiet) => {
   const token = await getItem(API_TOKEN);
-  console.log("tokkenenene", token);
   const lang = await getItem(LANG);
+  const apiURL = await getItem(API_URL);
+
+  if (apiURL) uri = formatURL(apiURL).concat(uri);
+  else uri = Config.API_URL.concat(uri);
+
+  console.log("************* getRequest **********:");
+  console.log(uri);
 
   if (params) {
     var esc = encodeURIComponent;
@@ -282,7 +302,7 @@ export const get = async (uri, params = "", quiet) => {
       .join("&");
     if (query) uri = uri + "?" + query;
   }
-  console.log("getRequest ++++++++");
+
   const deviceInfo = await buildDeviceInfo();
   console.log("get", uri, params, deviceInfo);
   console.log("token:::::", token);
@@ -325,8 +345,6 @@ export const get = async (uri, params = "", quiet) => {
 export const getRequest = (url, params) => {
   return new Promise((resolve, reject) => {
     try {
-      console.log("************* getRequest **********:");
-      console.log(url);
       get(url, params)
         .then((data) => {
           console.log(`************* getRequest ${url}   #### SUCCESSED:`);

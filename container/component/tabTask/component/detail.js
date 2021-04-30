@@ -119,7 +119,7 @@ const DetailTask = (props) => {
 
   const getData = () => {
     showSpinner();
-    getRequest(Config.API_URL.concat("task/detail"), { id: currTask.id })
+    getRequest("task/detail", { id: currTask.id })
       .then((res) => {
         if (res && res.data) {
           console.log("getDetailTask:::", res.data);
@@ -146,7 +146,7 @@ const DetailTask = (props) => {
 
     let params = {};
     if (currTask && currTask.id) params.id = currTask.id;
-    postRequest(Config.API_URL.concat(UPDATE_API[field]), {
+    postRequest(UPDATE_API[field], {
       ...params,
       ...extraParams,
     })
@@ -194,7 +194,7 @@ const DetailTask = (props) => {
     showSpinner();
     let params = {};
     if (currTask && currTask.id) params.id = currTask.id;
-    postRequest(Config.API_URL.concat("task/delete"), params)
+    postRequest("task/delete", params)
       .then((res) => {
         if (res && res.data) {
           // changeMode && changeMode("list");

@@ -158,7 +158,7 @@ const MemberRecord = (props) => {
   const create = () => {
     showSpinner();
     const params = prepareParams();
-    postRequest(Config.API_URL.concat("member/create"), params)
+    postRequest("member/create", params)
       .then((res) => {
         if (res && res.data) createSuccess(res.data);
         hideSpinner();
@@ -190,7 +190,7 @@ const MemberRecord = (props) => {
   const update = () => {
     showSpinner();
     const params = prepareParams();
-    postRequest(Config.API_URL.concat("member/update"), params)
+    postRequest("member/update", params)
       .then((res) => {
         if (res && res.data) updateSuccess(res.data);
         hideSpinner();

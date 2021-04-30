@@ -77,6 +77,10 @@ export const registerLazyScreen = () => {
     screens.ROLE,
     require("container/component/club/role").default
   );
+  registerComponent(
+    screens.EVENT,
+    require("container/component/club/event").default
+  );
 
   //#endregion
 

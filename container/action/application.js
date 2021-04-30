@@ -4,7 +4,7 @@ import { Navigation } from "react-native-navigation";
 import { screens } from "../constant/screen";
 
 export const getNumberOfNotification = () => {
-  getRequest(Config.API_URL.concat("notification/get"), {
+  getRequest("notification/get", {
     type: "count-unread",
   })
     .then((res) => {

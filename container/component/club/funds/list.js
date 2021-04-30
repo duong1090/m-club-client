@@ -56,7 +56,7 @@ const FundList = (props) => {
 
   const getData = () => {
     showSpinner();
-    getRequest(Config.API_URL.concat("fund/get"), { page })
+    getRequest("fund/get", { page })
       .then((res) => {
         if (res && res.data) {
           setData(res.data.items);

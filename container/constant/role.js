@@ -104,6 +104,12 @@ export const normalRole = {
     }),
     value: "PROJECT_VIEW",
   },
+  EVENT_VIEW: {
+    name: getIntl().formatMessage(Messages.view_title, {
+      title: getIntl().formatMessage(Messages.event).toLowerCase(),
+    }),
+    value: "EVENT_VIEW",
+  },
 };
 
 export const isRoot = {

@@ -55,7 +55,7 @@ const ItemPicker = (props) => {
       member: "member/get",
     }[currType];
 
-    getRequest(Config.API_URL.concat(api), params)
+    getRequest(api, params)
       .then((res) => {
         if (res && res.data && res.data.items) {
           if (page > 1) {

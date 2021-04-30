@@ -11,7 +11,7 @@ import moment from "moment";
 export const doLogin = async (payload) => {
   showSpinner();
   return new Promise((resolve, reject) => {
-    postRequest(Config.API_URL.concat("auth/login"), payload)
+    postRequest("auth/login", payload)
       .then((res) => {
         if (res && res.data) {
           loginSuccess(res.data);
@@ -47,7 +47,7 @@ export const preValidateLogin = (payload) => {
   const { phone } = payload;
 
   return new Promise((resolve, reject) => {
-    getRequest(Config.API_URL.concat("auth/get-club-by-phone"), { phone })
+    getRequest("auth/get-club-by-phone", { phone })
       .then((res) => {
         if (res && res.data) {
           resolve(res.data);
@@ -91,7 +91,7 @@ const removeUserInfo = () => {
 
 export const getOrganization = () => {
   return new Promise((resolve, reject) => {
-    getRequest(Config.API_URL.concat("auth/organization"))
+    getRequest("auth/organization")
       .then((res) => {
         if (res && res.data) {
           console.log("getOrganization:::", res.data);
@@ -111,5 +111,5 @@ export const getAvatarSource = (data = {}) => {
     return Config.API_IMAGE.concat(`avatar/${id}.jpg?${moment().unix()}`);
   }
   return null;
-  // return Config.API_IMAGE.concat(`avatar/ava.jpg`);
+  // return Config().API_IMAGE.concat(`avatar/ava.jpg`);
 };

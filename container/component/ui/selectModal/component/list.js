@@ -59,7 +59,7 @@ const List = (props, ref) => {
     const finalParams = { ...params, extendParams };
     const { page } = extendParams;
 
-    getRequest(Config.API_URL.concat(api), finalParams).then((res) => {
+    getRequest(api, finalParams).then((res) => {
       if (res && res.data) {
         const { items } = res.data;
 

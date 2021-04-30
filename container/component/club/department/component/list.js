@@ -59,7 +59,7 @@ const DepartmentList = (props) => {
   const getList = (extraParams = {}) => {
     let params = { ...extraParams, page };
     setLoading(true);
-    getRequest(Config.API_URL.concat("department/get"), params)
+    getRequest("department/get", params)
       .then((res) => {
         if (res && res.data && res.data.items) {
           console.log("getList:::", res.data);

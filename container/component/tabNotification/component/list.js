@@ -49,7 +49,7 @@ const NotificationList = (props) => {
 
   //function - event -------------------------------------------------------------------------------------
   const getData = () => {
-    getRequest(Config.API_URL.concat("notification/get"), { page })
+    getRequest("notification/get", { page })
       .then((res) => {
         if (res && res.data) {
           if (page > 1) setData(data.concat(res.data.items));
@@ -85,7 +85,7 @@ const NotificationList = (props) => {
   };
 
   const doRead = (item, index) => {
-    postRequest(Config.API_URL.concat("notification/read"), {
+    postRequest("notification/read", {
       id: item.id,
     })
       .then((res) => {
@@ -213,7 +213,7 @@ const NotificationList = (props) => {
         ListEmptyComponent={<EmptyData />}
         ListHeaderComponent={renderHeader()}
       />
-      {/* <PrivilegeAction privilegeKey={normalRole.NOTI_CREATE}> */}
+      <PrivilegeAction privilegeKey={normalRole.NOTI_CREATE}>
         <ActionButton
           title={intl.formatMessage(Messages.create)}
           style={styles.actionButtonBox}
@@ -223,7 +223,7 @@ const NotificationList = (props) => {
           onPress={() => openCreateNotification()}
         />
         <CreateNotification ref={createRef} />
-      {/* </PrivilegeAction> */}
+      </PrivilegeAction>
     </View>
   );
 };
