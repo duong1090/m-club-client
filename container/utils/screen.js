@@ -81,6 +81,11 @@ export const registerLazyScreen = () => {
     screens.EVENT,
     require("container/component/club/event").default
   );
+  registerComponent(
+    screens.EVENT_QRCODE,
+    require("container/component/club/event_qrcode").default
+  );
+
 
   //#endregion
 

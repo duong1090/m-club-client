@@ -42,8 +42,12 @@ import Messages from "container/translation/Message";
 import { Icon } from "native-base";
 import Modal from "react-native-modal";
 import update from "immutability-helper";
+import { gotoRoute } from "../../../../utils/router";
+import { screens } from "container/constant/screen";
+
 const { width } = Dimensions.get("window");
 const intl = getIntl();
+
 
 const Detail = (props, ref) => {
   //props
@@ -78,6 +82,10 @@ const Detail = (props, ref) => {
     setVisible(false);
   };
 
+  const gotoAttandencePage = () => {
+    gotoRoute(screens.EVENT_QRCODE)
+  }
+
   const onChangeData = (fieldName, value) => {
     if (fieldName && value != null) {
       setData(update(data, { [fieldName]: { $set: value } }));
@@ -97,7 +105,9 @@ const Detail = (props, ref) => {
       id: data.id ? data.id : null,
       [fieldName]: data[fieldName],
     };
-    postRequest("event/update", params);
+    postRequest("event/update", params).then(res => {
+      if (res && res.data) callBackUpdate(res.data);
+    });
   };
 
   const callBackUpdate = (resData) => {
@@ -173,8 +183,8 @@ const Detail = (props, ref) => {
   const renderImage = () => {
     const images = data.image_paths
       ? data.image_paths.map((item) =>
-          Config.API_IMAGE.concat(`event/${item}.jpg`)
-        )
+        Config.API_IMAGE.concat(`event/${item}.jpg`)
+      )
       : null;
 
     return (
@@ -269,6 +279,12 @@ const Detail = (props, ref) => {
         onPress: () => setCurrMode(currMode == "edit" ? "view" : "edit"),
         disabled: false,
       },
+      {
+        title: intl.formatMessage(Messages.attendance),
+        icon: { name: "calendar-check-o", type: "FontAwesome" },
+        onPress: () => gotoAttandencePage(),
+        disabled: false,
+      },
     ];
 
     return (
@@ -276,16 +292,16 @@ const Detail = (props, ref) => {
         {ACTIONS.map((item) => {
           const isActive =
             item.key &&
-            data[item.key] &&
-            data[item.key].findIndex((i) => i.id == currMember.id) >= 0
+              data[item.key] &&
+              data[item.key].findIndex((i) => i.id == currMember.id) >= 0
               ? true
               : false;
 
           const colorIcon = item.disabled
             ? color.disable
             : isActive
-            ? color.background
-            : color.text;
+              ? color.background
+              : color.text;
 
           return (
             <TouchableOpacity

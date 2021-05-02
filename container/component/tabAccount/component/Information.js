@@ -30,6 +30,9 @@ const Information = (props) => {
     gotoRoute(screens.USER_INFO, { updateCallback: updateAvatar });
   };
 
+  const gotoView = () => {
+    gotoRoute(screens.USER_INFO, { mode: 'list', updateCallback: updateAvatar });
+  };
   const gotoSetting = () => {
     gotoRoute(screens.SETTING);
   };
@@ -37,7 +40,9 @@ const Information = (props) => {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.person}>
-        <Avatar style={styles.avatar} size={scale(150)} data={avatar} />
+        <TouchableOpacity style={styles.avatar} onPress={() => gotoEdit()}>
+          <Avatar style={styles.avatar} size={scale(150)} data={avatar} />
+        </TouchableOpacity>
         <View style={styles.info}>
           <View style={styles.memberInfo}>
             {member && member.name ? (

@@ -582,4 +582,8 @@ export default defineMessages({
     id: "verification",
     defaultMessage: "Verification",
   },
+  attendance: {
+    id: "attendance",
+    defaultMessage: "Attendance",
+  },
 });

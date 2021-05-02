@@ -16,6 +16,7 @@ export const screens = {
   SPLASH_SCREEN: "SPLASH_SCREEN",
   ROLE: "ROLE",
   EVENT: "EVENT",
+  EVENT_QRCODE: "EVENT_QRCODE",
 };
 
 export const modals = {

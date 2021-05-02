@@ -31,6 +31,7 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import { Navigation } from "react-native-navigation";
 import RNFetchBlob from "rn-fetch-blob";
+import QRCode from 'react-native-qrcode-svg';
 
 const UserInfo = (props) => {
   //props
@@ -268,7 +269,12 @@ const UserInfo = (props) => {
       contentContainerStyle={{ paddingBottom: space.bgPadding * 2 }}
     >
       <View style={styles.avatarBox}>
-        <Avatar size={scale(300)} data={avatar} />
+        <View style={styles.qrcode_avatar}>
+          <QRCode
+            value={member.id}
+          />
+          <Avatar size={scale(300)} data={avatar} />
+        </View>
         <TouchableOpacity
           style={styles.cameraBox}
           onPress={() => optionGetImage()}
@@ -287,6 +293,14 @@ const UserInfo = (props) => {
 };
 
 const styles = StyleSheet.create({
+  qrcode_avatar: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '90%',
+    
+  },
   container: {
     padding: space.bgPadding,
   },

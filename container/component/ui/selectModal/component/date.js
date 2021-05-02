@@ -33,6 +33,8 @@ const DateType = (props, ref) => {
 
   useEffect(() => {
     if (valuePicker) {
+      console.log('caiquanquegiv', valuePicker)
+
       switch (typePicker) {
         case "date":
           setDate(new Date(valuePicker));
