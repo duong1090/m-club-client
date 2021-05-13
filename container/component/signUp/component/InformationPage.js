@@ -1,107 +1,112 @@
-import React, { useState } from "react";
-import {
-  Animated,
-  View,
-  TouchableOpacity,
-  Text,
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
-import { postRequest } from "container/utils/request";
-import Config from "container/config/server.config";
+import { Tabs, Tab, ScrollableTab } from "native-base";
+import React, { useEffect, useState } from "react";
 import InputItem from "container/component/ui/inputItem";
+import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import update from "immutability-helper";
+import { showSpinner, hideSpinner } from "container/utils/router";
+import Messages from "container/translation/Message";
+import { injectIntl } from "react-intl";
+import { signInWithPhoneNumber } from "container/action/authenticate";
+import Toast from "react-native-simple-toast";
+import { loginSuccess } from "container/action/user";
 import {
   scale,
   color,
   fontSize,
   defaultText,
+  space,
+  shadow,
 } from "container/variables/common";
-import { injectIntl } from "react-intl";
-import Messages from "container/translation/Message";
-import { gotoRoute } from "container/utils/router";
-import { screens } from "container/constant/screen";
-import { showSpinner, hideSpinner } from "container/utils/router";
-import { back } from "container/utils/router";
 
-const { width } = Dimensions.get("window");
+const DEFAULT_INFO = {
+  club_name: null,
+  code: null,
+  phone: null,
+  mem_name: null,
+};
 
-const LAYOUT_SIZE = width - scale(120);
-const TITLE_X = (LAYOUT_SIZE - scale(200)) / 2 - scale(15);
+const VERIFY_TAB = 2;
 
 const InformationPage = (props) => {
-  const { style, intl } = props;
+  //props
+  const { intl } = props;
+  //state
+  const [info, setInfo] = useState(DEFAULT_INFO);
+  const [otp, setOTP] = useState(null);
+  const [confirmOTP, setConfirmOTP] = useState(null);
+  const [currTab, setCurrTab] = useState(0);
 
-  const [clubName, setClubName] = useState(null);
-  const [clubCode, setClubCode] = useState(null);
-  const [phone, setPhone] = useState(null);
-  const [adminName, setAdminName] = useState(null);
-  const [slideAnimation, setSlideAnimation] = useState({
-    active: 0,
-    titleX: new Animated.Value(0),
-    titleSize: 0,
-    translateXTabOne: new Animated.Value(0),
-    translateXTabTwo: new Animated.Value(LAYOUT_SIZE),
-  });
+  //hooks -------------------------------------------------------------------------------------
+  useEffect(() => {
+    if (currTab == VERIFY_TAB) onVerifyPhone();
+  }, [currTab]);
 
-  const {
-    active,
-    translateXTabOne,
-    translateXTabTwo,
-    titleX,
-    titleSize,
-  } = slideAnimation;
+  //function ----------------------------------------------------------------------------------
+  const onChangeInfo = (fieldName, value) => {
+    setInfo(update(info, { [fieldName]: { $set: value } }));
+  };
 
-  const handleSlide = async () => {
-    if (active === 0) {
-      Animated.parallel([
-        Animated.spring(translateXTabOne, {
-          toValue: -LAYOUT_SIZE,
-          duration: 100,
-          useNativeDriver: true,
-        }).start(),
-        Animated.spring(translateXTabTwo, {
-          toValue: -LAYOUT_SIZE,
-          duration: 100,
-          useNativeDriver: true,
-        }).start(),
-        Animated.spring(titleX, {
-          toValue: scale(230),
-          duration: 100,
-          useNativeDriver: true,
-        }).start(),
-      ]);
+  const onNext = () => {
+    if (currTab >= VERIFY_TAB - 1) {
+      if (validateForm()) setCurrTab(VERIFY_TAB);
+      console.log("onNext:::", validateForm());
     } else {
-      Animated.parallel([
-        Animated.spring(translateXTabOne, {
-          toValue: 0,
-          duration: 100,
-          useNativeDriver: true,
-        }).start(),
-        Animated.spring(translateXTabTwo, {
-          toValue: 0,
-          duration: 100,
-          useNativeDriver: true,
-        }).start(),
-      ]);
+      setCurrTab(currTab + 1);
     }
+  };
 
-    await setSlideAnimation({ ...slideAnimation, active: active ? 0 : 1 });
+  const onBack = () => {
+    setCurrTab(currTab <= 0 ? 0 : currTab - 1);
+  };
+
+  const validateForm = () => {
+    const dataIndex = Object.keys(info).findIndex(
+      (key) => !info[key] || info[key] == ""
+    );
+
+    //if has not already filled all field
+    if (dataIndex >= 0) {
+      Toast.show(intl.formatMessage(Messages.pls_fill_required), Toast.LONG);
+      return false;
+    }
+    return true;
+  };
+
+  const onVerifyPhone = () => {
+    showSpinner();
+    signInWithPhoneNumber(info.phone)
+      .then((confirm) => {
+        if (confirm) setConfirmOTP(confirm);
+        hideSpinner();
+      })
+      .catch((err) => {
+        console.error(err);
+        hideSpinner();
+      });
+  };
+
+  const activePhone = () => {
+    if (confirmOTP && otp) {
+      showSpinner();
+      confirmOTP
+        .confirm(otp)
+        .then((result) => {
+          if (result) {
+            doSignUp();
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          hideSpinner();
+        });
+    }
   };
 
   const doSignUp = () => {
-    showSpinner();
-    let params = {};
-    if (clubName) params.club_name = clubName;
-    if (clubCode) params.code = clubCode;
-    if (phone) params.phone = phone;
-    if (adminName) params.mem_name = adminName;
-
-    postRequest("auth/sign-up", params)
+    postRequest("auth/sign-up", info)
       .then((res) => {
-        if (res) {
-          console.log("doSignUp:::", res);
-          back();
+        if (res && res.data) {
+          loginSuccess(res.data);
         }
         hideSpinner();
       })
@@ -111,219 +116,282 @@ const InformationPage = (props) => {
       });
   };
 
-  const gotoSignIn = () => {
-    gotoRoute(screens.LOGIN);
+  //render ------------------------------------------------------------------------------------
+  const renderHeading = () => {
+    return (
+      <Text style={styles.textTitle}>
+        {intl.formatMessage(Messages.sign_up)}
+      </Text>
+    );
+  };
+
+  const renderPagination = () => {
+    return (
+      <View style={styles.paginationBox}>
+        {TABS.map((tab, index) =>
+          index > 0 ? (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                flex: 1,
+              }}
+            >
+              <View style={styles.line(currTab, index)} />
+              <View style={styles.numberBox(currTab, index)}>
+                <Text style={styles.textPagination(currTab, index)}>
+                  {index + 1}
+                </Text>
+              </View>
+            </View>
+          ) : (
+            <View style={styles.numberBox(currTab, index)}>
+              <Text style={styles.textPagination(currTab, index)}>
+                {index + 1}
+              </Text>
+            </View>
+          )
+        )}
+      </View>
+    );
+  };
+
+  const renderSubmit = () => {
+    const isVerify = currTab >= TABS.length - 1;
+
+    return (
+      <View style={styles.buttonBox}>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            {
+              borderTopLeftRadius: space.border * 2,
+              borderBottomLeftRadius: space.border * 2,
+              borderRightWidth: scale(2),
+              borderColor: color.lightGrey,
+            },
+          ]}
+          onPress={() => onBack()}
+        >
+          <Text
+            style={[
+              styles.textSubmit,
+              currTab == 0 ? { color: color.lightGrey } : null,
+            ]}
+          >
+            {intl.formatMessage(Messages.back)}
+          </Text>
+        </TouchableOpacity>
+        {isVerify ? (
+          <TouchableOpacity
+            style={[
+              styles.button,
+              {
+                borderTopRightRadius: space.border * 2,
+                borderBottomRightRadius: space.border * 2,
+              },
+            ]}
+            onPress={() => activePhone()}
+          >
+            <Text style={[styles.textSubmit, { color: color.success }]}>
+              {intl.formatMessage(Messages.done)}
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={[
+              styles.button,
+              {
+                borderTopRightRadius: space.border * 2,
+                borderBottomRightRadius: space.border * 2,
+              },
+            ]}
+            onPress={() => onNext()}
+          >
+            <Text style={[styles.textSubmit, { color: color.blue }]}>
+              {intl.formatMessage(Messages.next)}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  };
+
+  const renderClubInfo = () => {
+    return (
+      <React.Fragment>
+        <InputItem
+          style={styles.input}
+          placeholder={intl.formatMessage(Messages.club_name)}
+          onChangeText={(text) => onChangeInfo("club_name", text)}
+          value={info.club_name}
+        />
+
+        <InputItem
+          placeholder={intl.formatMessage(Messages.club_code)}
+          onChangeText={(code) => onChangeInfo("code", code)}
+          value={info.code}
+        />
+      </React.Fragment>
+    );
+  };
+
+  const renderAdminInfo = () => {
+    return (
+      <React.Fragment>
+        <InputItem
+          style={styles.input}
+          placeholder={intl.formatMessage(Messages.admin_name)}
+          onChangeText={(text) => onChangeInfo("mem_name", text)}
+          value={info.mem_name}
+        />
+
+        <InputItem
+          placeholder={intl.formatMessage(Messages.phone)}
+          onChangeText={(phone) => onChangeInfo("phone", phone)}
+          value={info.phone}
+          keyboardType="numeric"
+        />
+      </React.Fragment>
+    );
+  };
+
+  const renderOTP = () => {
+    return (
+      <InputItem
+        inputStyle={{ fontSize: fontSize.size36 }}
+        style={styles.input}
+        type="otp"
+        textAlign="center"
+        placeholder={intl.formatMessage(Messages.otp)}
+        onChangeText={(code) => setOTP(code)}
+        value={otp ? otp : undefined}
+      />
+    );
+  };
+
+  const TABS = [
+    {
+      heading: intl.formatMessage(Messages.club_information),
+      render: renderClubInfo(),
+    },
+    {
+      heading: intl.formatMessage(Messages.admin_information),
+      render: renderAdminInfo(),
+    },
+    {
+      heading: intl.formatMessage(Messages.verification),
+      render: renderOTP(),
+    },
+  ];
+
+  const renderTab = () => {
+    return (
+      <Tabs
+        initialPage={0}
+        page={currTab}
+        renderTabBar={() => (
+          <ScrollableTab style={{ height: 0, borderWidth: 0 }} />
+        )}
+      >
+        {TABS.map((tab) => (
+          <Tab heading="">
+            <View style={styles.headingBox}>
+              <Text style={styles.textHeading}>{tab.heading}</Text>
+            </View>
+            <View style={styles.bodyBox}>{tab.render}</View>
+          </Tab>
+        ))}
+      </Tabs>
+    );
   };
 
   return (
-    <View style={[style, styles.container]}>
-      <View>
-        <View style={styles.progress}>
-          <View style={[styles.circle, { backgroundColor: "#37CE27" }]} />
-          <View style={[styles.line]} />
-          <View
-            style={[
-              styles.circle,
-              { backgroundColor: active == 0 ? "#CCCCCC" : "#37CE27" },
-            ]}
-          />
-        </View>
-
-        <Animated.View
-          style={[
-            styles.title,
-            {
-              left: TITLE_X - titleSize / 2,
-              transform: [{ translateX: titleX }],
-            },
-          ]}
-          onLayout={(event) =>
-            setSlideAnimation({
-              ...slideAnimation,
-              titleSize: event.nativeEvent.layout.width,
-            })
-          }
-        >
-          <Text
-            style={{
-              ...defaultText,
-              fontSize: fontSize.size32,
-              color: color.fontColor,
-              fontWeight: "bold",
-            }}
-          >
-            {active == 0
-              ? intl.formatMessage(Messages.club_information)
-              : intl.formatMessage(Messages.admin_information)}
-          </Text>
-          <View style={styles.miniCircle} />
-        </Animated.View>
-      </View>
-
-      <ScrollView>
-        <View style={{ flexDirection: "row" }}>
-          <Animated.View
-            style={{
-              width: "100%",
-              transform: [
-                {
-                  translateX: translateXTabOne,
-                },
-              ],
-            }}
-            onLayout={(event) =>
-              setSlideAnimation({
-                ...slideAnimation,
-                xTabOne: event.nativeEvent.layout.x,
-              })
-            }
-          >
-            <InputItem
-              style={styles.input}
-              placeholder={intl.formatMessage(Messages.club_name)}
-              onChangeText={(text) => setClubName(text)}
-              value={clubName}
-            />
-
-            <InputItem
-              placeholder={intl.formatMessage(Messages.club_code)}
-              onChangeText={(code) => setClubCode(code)}
-              value={clubCode}
-            />
-          </Animated.View>
-
-          <Animated.View
-            style={{
-              width: "100%",
-              transform: [
-                {
-                  translateX: translateXTabTwo,
-                },
-              ],
-            }}
-            onLayout={(event) =>
-              setSlideAnimation({
-                ...slideAnimation,
-                xTabTwo: event.nativeEvent.layout.x,
-              })
-            }
-          >
-            <InputItem
-              style={styles.input}
-              placeholder={intl.formatMessage(Messages.admin_name)}
-              onChangeText={(text) => setAdminName(text)}
-              value={adminName}
-            />
-
-            <InputItem
-              placeholder={intl.formatMessage(Messages.phone)}
-              onChangeText={(code) => setPhone(code)}
-              value={phone}
-            />
-          </Animated.View>
-        </View>
-      </ScrollView>
-
-      {active == 0 ? (
-        <TouchableOpacity style={styles.button} onPress={() => handleSlide()}>
-          <Text
-            style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
-          >
-            {intl.formatMessage(Messages.next)}
-          </Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: "#2AC79C" }]}
-          onPress={() => doSignUp()}
-        >
-          <Text
-            style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
-          >
-            {intl.formatMessage(Messages.sign_up)}
-          </Text>
-        </TouchableOpacity>
-      )}
-
-      <View style={styles.signIn}>
-        <Text
-          style={{
-            ...defaultText,
-            color: color.fontColor,
-            fontSize: fontSize.size28,
-            fontWeight: "bold",
-          }}
-        >
-          {intl.formatMessage(Messages.have_an_account)}{" "}
-        </Text>
-        <TouchableOpacity onPress={() => gotoSignIn()}>
-          <Text
-            style={{
-              ...defaultText,
-              color: color.background,
-              fontSize: fontSize.size28,
-              fontWeight: "bold",
-            }}
-          >
-            {intl.formatMessage(Messages.sign_in_now)}
-          </Text>
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
+      {renderHeading()}
+      {renderPagination()}
+      {renderTab()}
+      {renderSubmit()}
     </View>
   );
 };
 
+export default injectIntl(InformationPage);
+
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+  },
   input: {
     marginBottom: scale(40),
+  },
+  buttonBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: space.componentMargin,
+    marginBottom: space.componentMargin,
+    borderRadius: space.border * 2,
+    backgroundColor: color.light,
+    ...shadow,
   },
   button: {
     flexDirection: "row",
     height: scale(80),
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  textSubmit: {
+    ...defaultText,
+    fontSize: fontSize.size30,
+    fontWeight: "bold",
+  },
+  textTitle: {
+    ...defaultText,
+    fontSize: fontSize.sizeTitle,
+    fontWeight: "bold",
+    alignSelf: "center",
+    marginBottom: space.componentMargin,
+  },
+  headingBox: {
+    backgroundColor: "#fff",
+    margin: space.componentMargin,
     borderRadius: scale(40),
-    backgroundColor: color.background,
+    paddingVertical: space.itemMargin,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: scale(80),
+    ...shadow,
   },
-  progress: {
-    flex: 0,
+  textHeading: {
+    ...defaultText,
+    fontSize: fontSize.sizeContent,
+  },
+  bodyBox: {
+    margin: space.componentMargin,
+  },
+  paginationBox: {
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    margin: space.componentMargin,
+    marginBottom: scale(60),
+  },
+  numberBox: (currTab, index) => ({
+    width: scale(60),
+    aspectRatio: 1,
+    borderRadius: scale(30),
+    backgroundColor: index <= currTab ? color.success : color.lightGrey,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: scale(100),
-  },
-  circle: {
-    width: scale(30),
-    height: scale(30),
-    borderRadius: scale(15),
-  },
-  line: {
-    width: scale(200),
-    borderWidth: scale(2),
-    borderColor: "#DEAEAE",
-  },
-  title: {
-    position: "absolute",
-    left: 0,
-    top: scale(-80),
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: scale(15),
-  },
-  miniCircle: {
-    width: scale(15),
-    height: scale(15),
-    borderRadius: scale(15),
-    backgroundColor: "#9A41AB",
-    marginTop: scale(10),
-  },
-  signIn: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: scale(100),
-  },
+  }),
+  line: (currTab, index) => ({
+    flex: 1,
+    borderBottomWidth: scale(4),
+    borderColor: index <= currTab ? color.success : color.lightGrey,
+  }),
+  textPagination: (currTab, index) => ({
+    ...defaultText,
+    fontSize: fontSize.size32,
+    color: "#fff",
+  }),
 });
-
-export default injectIntl(InformationPage);

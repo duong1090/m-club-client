@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Image, KeyboardAvoidingView } from "react-native";
+// import InformationPage from "./component/InformationPage";
 import InformationPage from "./component/InformationPage";
 import { scale, color } from "container/variables/common";
 
@@ -39,10 +40,12 @@ const SignUp = () => {
 };
 
 const styles = {
-  container: {},
+  container: {
+    height: "100%",
+  },
   header: {
     height: scale(300),
-    marginBottom: scale(100),
+    marginBottom: scale(30),
   },
   elOneHeader: {
     height: scale(220),

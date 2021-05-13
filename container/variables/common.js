@@ -44,6 +44,7 @@ export const color = {
   create: "#00917c",
   cancel: "#898b8a",
   done: "#0278ae",
+  blue: "#0275d8",
 };
 
 export const shadow = {

@@ -73,16 +73,7 @@ const BottomPopUp = (props, ref) => {
 
 const styles = StyleSheet.create({
   toolbar: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "#fff",
-    //height: 40,
-    paddingHorizontal: space.bgPadding,
-    paddingVertical: space.bgPadding / 2,
     flexDirection: "row",
-    justifyContent: "flex-end",
     alignItems: "center",
   },
 

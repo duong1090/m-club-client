@@ -45,36 +45,37 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   contentAction: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingRight: space.bgPadding,
+    padding: space.bgPadding,
   },
   contentBtnDone: (isDone) => ({
     flexDirection: "row",
     justifyContent: "center",
-    paddingVertical: scale(10),
-    paddingHorizontal: scale(20),
+    paddingVertical: space.itemMargin,
+    marginBottom: space.itemMargin,
     backgroundColor: isDone ? color.success : "#fff",
     borderRadius: space.border,
   }),
   textDone: (isDone) => ({
+    ...defaultText,
     color: isDone ? "#fff" : color.text,
   }),
-  contentDoneIcon: (isDone) => ({
-    color: isDone ? "#fff" : color.text,
+  contentDoneIcon: {
+    color: "#fff",
     fontSize: scale(30),
-    marginLeft: scale(10),
-  }),
+    position: "absolute",
+    right: space.componentMargin,
+    top: space.itemMargin,
+    bottom: space.itemMargin,
+  },
 
   textDelete: {
+    ...defaultText,
     color: "#fff",
   },
   contentBtnDelete: {
     flexDirection: "row",
     justifyContent: "center",
-    marginHorizontal: scale(10),
-    paddingVertical: scale(10),
-    paddingHorizontal: scale(20),
+    paddingVertical: space.itemMargin,
     backgroundColor: color.red,
     borderRadius: space.border,
   },
@@ -186,6 +187,8 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: scale(20),
     paddingHorizontal: scale(20),
+    borderBottomWidth: scale(2),
+    borderColor: color.hint,
   },
   contentDeadlineText: {
     ...defaultText,
@@ -196,9 +199,50 @@ export const styles = StyleSheet.create({
     borderColor: color.danger,
     paddingVertical: scale(10),
   },
-  contentDeadlineTime: {
+  contentDeadlineTime: (deadline) => ({
     ...defaultText,
-    color: color.danger,
+    color: deadline ? color.danger : color.grey,
+    fontSize: fontSize.size24,
+  }),
+  contentLabel: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: scale(20),
+    paddingHorizontal: scale(20),
+  },
+  contentLabelText: {
+    ...defaultText,
+    fontWeight: "bold",
+    marginRight: space.componentMargin,
+  },
+  contentLabelBox: {
+    paddingVertical: scale(10),
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  labelBox: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    margin: scale(-5),
+  },
+  labelItem: (color) => ({
+    borderRadius: space.border,
+    backgroundColor: color,
+    paddingHorizontal: space.itemMargin,
+    paddingVertical: scale(10),
+    margin: scale(5),
+  }),
+  labelItemText: {
+    ...defaultText,
+    color: "#fff",
+    fontSize: fontSize.size22,
+  },
+  contentLabelDetail: {
+    ...defaultText,
+    color: color.grey,
     fontSize: fontSize.size24,
   },
   contentDescriptionBox: {

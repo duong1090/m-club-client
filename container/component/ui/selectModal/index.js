@@ -12,10 +12,11 @@ import List from "./component/list";
 import Date from "./component/date";
 import Messages from "container/translation/Message";
 import { getIntl } from "container/utils/common";
+import { color } from "../../../variables/common";
 
 const SelectModal = (props, ref) => {
   //props
-  const { type, titleSubmit, title, onDone } = props;
+  const { type, titleSubmit, title, onDone, quickCreate } = props;
 
   //state
   const [visible, setVisible] = useState(false);
@@ -27,6 +28,7 @@ const SelectModal = (props, ref) => {
   useImperativeHandle(ref, () => ({
     show,
     hide,
+    childrenRef,
   }));
 
   //function -----------------------------------------------------------------------------------------------
@@ -46,6 +48,22 @@ const SelectModal = (props, ref) => {
   };
 
   //render -------------------------------------------------------------------------------------------------
+  const renderHeader = () => {
+    return (
+      <View style={styles.headerView}>
+        <Text style={styles.headerText}>
+          {title ? title : getIntl().formatMessage(Messages.select)}
+        </Text>
+        <TouchableOpacity
+          style={styles.closeIconWrapper}
+          onPress={() => setVisible(false)}
+        >
+          <FontAwesome5 name="times" style={styles.closeIcon} regular />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   const renderContent = () => {
     switch (type) {
       case "list":
@@ -76,17 +94,7 @@ const SelectModal = (props, ref) => {
       swipeDirection={["down"]}
     >
       <View style={styles.modalView}>
-        <View style={styles.headerView}>
-          <Text style={styles.headerText}>
-            {title ? title : getIntl().formatMessage(Messages.select)}
-          </Text>
-          <TouchableOpacity
-            style={styles.closeIconWrapper}
-            onPress={() => setVisible(false)}
-          >
-            <FontAwesome5 name="times" style={styles.closeIcon} regular />
-          </TouchableOpacity>
-        </View>
+        {renderHeader()}
         <View style={styles.bodyBox}>{renderContent()}</View>
         <TouchableOpacity style={styles.btnStyle} onPress={() => onSubmit()}>
           <Text style={styles.btnText}>

@@ -3,8 +3,16 @@ import React, {
   useEffect,
   useImperativeHandle,
   forwardRef,
+  useRef,
 } from "react";
-import { FlatList, StyleSheet, Text, View, ScrollView } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import Config from "container/config/server.config";
 import { getRequest } from "container/utils/request";
 // import CheckBox from "@src/components/ui/checkbox";
@@ -22,19 +30,32 @@ import CheckBox from "@react-native-community/checkbox";
 import RadioButton from "container/component/ui/radioButton";
 import EmptyData from "container/component/ui/emptyData";
 import Avatar from "container/component/ui/avatar";
+import update from "immutability-helper";
+import Messages from "container/translation/Message";
+import { getIntl } from "container/utils/common";
 
 const { height } = Dimensions.get("window");
 
 const List = (props, ref) => {
   //props
-  const { externalData, api, params, multiSelect, isMember } = props;
+  const {
+    externalData,
+    api,
+    params,
+    multiSelect,
+    isMember,
+    QuickCreateModal,
+    onLoadMore,
+  } = props;
 
   //state
   const [internalData, setInternalData] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
+  const [meta, setMeta] = useState({});
 
   //variables
-  let page = 1;
+  const createRef = useRef(null);
+  const page = useRef(1);
 
   //hooks
   useEffect(() => {
@@ -55,20 +76,25 @@ const List = (props, ref) => {
 
   //function -------------------------------------------------------------------------------------------------
 
-  const getData = (extendParams = {}) => {
-    const finalParams = { ...params, extendParams };
-    const { page } = extendParams;
+  const getData = (page = 1) => {
+    const finalParams = { ...params };
 
     getRequest(api, finalParams).then((res) => {
       if (res && res.data) {
-        const { items } = res.data;
-
+        const { items, meta } = res.data;
+        if (meta) setMeta(meta);
         if (items) {
           if (page && page > 1) setInternalData(internalData.concat(items));
           else setInternalData(items);
         } else setInternalData(res.data);
       }
     });
+  };
+
+  const onDeleteItem = (index) => {
+    const tempData = [...internalData];
+    tempData.splice(index, 1);
+    setInternalData(tempData);
   };
 
   const checkOneItem = (item) => {
@@ -85,6 +111,26 @@ const List = (props, ref) => {
     return !multiSelect && selectedData.length == 1
       ? selectedData[0]
       : selectedData;
+  };
+
+  const openCreateModal = () => {
+    createRef && createRef.current.show();
+  };
+
+  const createCallback = (value) => {
+    setInternalData(update(internalData, { $unshift: [value] }));
+  };
+
+  const updateCallback = (value) => {
+    const dataIndex = internalData.findIndex((item) => item.id == value.id);
+    setInternalData(update(internalData, { [dataIndex]: { $set: value } }));
+  };
+
+  const loadMore = () => {
+    if (meta.total_page && page.current < meta.total_page) {
+      page.current++;
+      getData(page.current);
+    }
   };
 
   //render ---------------------------------------------------------------------------------------------------
@@ -125,17 +171,49 @@ const List = (props, ref) => {
     );
   };
 
+  const renderQuickAdd = () => {
+    return (
+      <TouchableOpacity
+        style={styles.quickAddBox}
+        onPress={() => openCreateModal()}
+      >
+        <Text style={styles.btnText}>
+          {getIntl().formatMessage(Messages.add)}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <FlatList
-          contentContainerStyle={styles.listWrapper(internalData)}
+          contentContainerStyle={[
+            styles.listWrapper(internalData),
+            props.renderItem ? { borderWidth: 0 } : null,
+          ]}
           data={internalData}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => renderItem(item, index)}
+          renderItem={({ item, index }) =>
+            props.renderItem
+              ? props.renderItem(item, index, createRef)
+              : renderItem(item, index)
+          }
           ListEmptyComponent={<EmptyData />}
+          onEndReached={onLoadMore ? onLoadMore() : loadMore()}
+          onEndReachedThreshold={0.5}
         />
       </ScrollView>
+
+      {QuickCreateModal ? renderQuickAdd() : null}
+
+      {QuickCreateModal ? (
+        <QuickCreateModal
+          ref={createRef}
+          updateCallback={updateCallback}
+          createCallback={createCallback}
+        />
+      ) : null}
     </View>
   );
 };
@@ -149,8 +227,8 @@ const styles = StyleSheet.create({
     marginHorizontal: space.componentMargin,
     marginTop: scale(30),
     borderRadius: scale(20),
-    borderWidth: data.length ? scale(2) : 0,
-    borderColor: "#cbcbcb",
+    borderWidth: data.length ? scale(1) : 0,
+    borderColor: color.grey,
   }),
 
   listItem: (index) => {
@@ -158,17 +236,31 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       paddingVertical: scale(20),
       paddingHorizontal: scale(30),
-      borderColor: "#cbcbcb",
+      borderColor: color.grey,
       justifyContent: "space-between",
       alignItems: "center",
     };
-    if (index > 0) obj.borderTopWidth = scale(2);
+    if (index > 0) obj.borderTopWidth = scale(1);
 
     return obj;
   },
   textItem: {
     ...defaultText,
   },
+
+  quickAddBox: {
+    flexDirection: "row",
+    paddingVertical: space.itemMargin,
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: space.componentMargin,
+    marginTop: space.componentMargin,
+    borderRadius: space.border,
+    borderColor: color.grey,
+    borderWidth: scale(1),
+    borderStyle: "dashed",
+  },
+  btnText: { ...defaultText, color: color.grey, fontWeight: "bold" },
 });
 
 export default forwardRef(List);

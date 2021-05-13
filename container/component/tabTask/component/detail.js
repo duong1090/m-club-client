@@ -10,9 +10,7 @@ import {
 } from "react-native";
 import { styles, AVATAR_SIZE } from "../style/detail";
 import { Icon } from "native-base";
-import HeaderInfo from "../ui/HeaderInfo";
 import Avatar from "container/component/ui/avatar";
-import Config from "container/config/server.config";
 import { getRequest, postRequest } from "container/utils/request";
 import { useRecoilState } from "recoil";
 import { listTaskState, currTaskState } from "../recoil";
@@ -33,6 +31,7 @@ import { PRIORITY_LEVEL } from "container/constant/element";
 import { back } from "container/utils/router";
 import { Navigation } from "react-native-navigation";
 import SelectModal from "container/component/ui/selectModal";
+import LabelSelectModal from "../ui/labelSelectModal";
 
 const UPDATE_API = {
   member: "task/update-assigned-member",
@@ -40,6 +39,7 @@ const UPDATE_API = {
   deadline: "task/update-task-dealine",
   prior_level: "task/update-task-prior",
   is_done: "task/update-task-status",
+  label: "task/update-label",
 };
 const INDEX_LIST = { today: 0, future: 1, timed: 2, no_time: 3 };
 
@@ -56,6 +56,7 @@ const DetailTask = (props) => {
   const [children, setChildren] = useState([]);
   const [activities, setActivities] = useState([]);
   const [isDone, setIsDone] = useState(false);
+  const [label, setLabel] = useState([]);
   const [visibleActivity, setVisibleActivity] = useState(false);
   const [visibleTimePicker, setVisibleTimePicker] = useState(false);
   const [visibleNameIcon, setVisibleNameIcon] = useState(true);
@@ -79,12 +80,14 @@ const DetailTask = (props) => {
   const desInputRef = useRef(null);
   const selectMemberRef = useRef(null);
   const selectPriorityRef = useRef(null);
+  const selectLabelRef = useRef(null);
   const updateMethod = {
     member: setMember,
     name: setName,
     deadline: setDeadline,
     prior_level: setPriorityLevel,
     is_done: setIsDone,
+    label: setLabel,
   };
 
   //effect -------------------------------------------------------------------------------
@@ -143,7 +146,7 @@ const DetailTask = (props) => {
 
   const updateTask = (field, extraParams) => {
     console.log("updateTask:::", field, extraParams);
-
+    showSpinner();
     let params = {};
     if (currTask && currTask.id) params.id = currTask.id;
     postRequest(UPDATE_API[field], {
@@ -168,9 +171,12 @@ const DetailTask = (props) => {
               })
             );
         }
+        hideSpinner()
       })
       .catch((err) => {
         console.error(err);
+        hideSpinner();
+
       });
   };
 
@@ -449,7 +455,7 @@ const DetailTask = (props) => {
               onPress={() => setVisibleTimePicker(true)}
               style={styles.contentDeadlineBox}
             >
-              <Text style={styles.contentDeadlineTime}>
+              <Text style={styles.contentDeadlineTime(deadline)}>
                 {deadline
                   ? deadline
                   : intl.formatMessage(Messages.set_deadline)}
@@ -462,8 +468,51 @@ const DetailTask = (props) => {
               onCancel={() => setVisibleTimePicker(false)}
             />
           </View>
+
+          <View style={styles.contentLabel}>
+            <View style={styles.rowView}>
+              <View style={styles.dot} />
+              <Text style={styles.contentLabelText}>
+                {intl.formatMessage(Messages.label)}
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => selectLabelRef.current.show()}
+              style={styles.contentLabelBox}
+            >
+              {label.length ? (
+                renderLabel()
+              ) : (
+                <Text style={styles.contentLabelDetail}>
+                  {intl.formatMessage(Messages.select_title, {
+                    title: intl.formatMessage(Messages.label).toLowerCase(),
+                  })}
+                </Text>
+              )}
+            </TouchableOpacity>
+            <LabelSelectModal
+              ref={selectLabelRef}
+              onDone={(labels) => {
+                updateTask("label", {
+                  label_ids: labels.map((item) => item.id),
+                });
+              }}
+            />
+          </View>
         </View>
         {renderDescription()}
+      </View>
+    );
+  };
+
+  const renderLabel = () => {
+    return (
+      <View style={styles.labelBox}>
+        {label.map((item) => (
+          <View style={styles.labelItem(item.color)}>
+            <Text style={styles.labelItemText}>{item.title}</Text>
+          </View>
+        ))}
       </View>
     );
   };
@@ -507,7 +556,9 @@ const DetailTask = (props) => {
         <View style={styles.childrenEmptyButton}>
           <Icon name="add" style={styles.childrenEmptyIcon} />
         </View>
-        <Text style={styles.childrenEmptyText}>Thêm</Text>
+        <Text style={styles.childrenEmptyText}>
+          {intl.formatMessage(Messages.add)}
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -620,11 +671,13 @@ const DetailTask = (props) => {
           <Text style={styles.textDone(isDone)}>
             {intl.formatMessage(Messages.done)}
           </Text>
-          <Icon
-            type="FontAwesome5"
-            name="check"
-            style={styles.contentDoneIcon(isDone)}
-          />
+          {isDone ? (
+            <Icon
+              type="FontAwesome5"
+              name="check"
+              style={styles.contentDoneIcon}
+            />
+          ) : null}
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => onDelete()}
@@ -633,11 +686,6 @@ const DetailTask = (props) => {
           <Text style={styles.textDelete}>
             {intl.formatMessage(Messages.delete)}
           </Text>
-          <Icon
-            type="FontAwesome5"
-            name="trash"
-            style={styles.contentDeleteIcon}
-          />
         </TouchableOpacity>
       </View>
     );
@@ -648,7 +696,6 @@ const DetailTask = (props) => {
         style={[styles.container, style]}
         contentContainerStyle={{ paddingBottom: scale(100) }}
       >
-        <HeaderInfo />
         {renderContent()}
         {renderChildren()}
         {renderButtonAction()}

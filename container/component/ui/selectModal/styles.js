@@ -28,7 +28,12 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
   },
 
-  headerText: { textAlign: "center", fontSize: 17, fontWeight: "600" },
+  headerText: {
+    ...defaultText,
+    textAlign: "center",
+    fontSize: 17,
+    fontWeight: "600",
+  },
 
   closeIconWrapper: { position: "absolute", right: 24 },
 
@@ -42,15 +47,15 @@ export default StyleSheet.create({
 
   btnStyle: {
     marginHorizontal: space.componentMargin,
-    marginVertical: space.itemMargin,
-    borderRadius: scale(40),
-    backgroundColor: color.background,
-    height: scale(80),
+    marginBottom: space.itemMargin,
+    borderRadius: space.border,
+    backgroundColor: color.success,
+    paddingVertical: space.itemMargin,
     alignItems: "center",
     justifyContent: "center",
   },
 
   bodyBox: {},
 
-  btnText: { color: "#ffffff", fontWeight: "600" },
+  btnText: { ...defaultText, color: "#ffffff", fontWeight: "bold" },
 });

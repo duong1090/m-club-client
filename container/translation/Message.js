@@ -586,4 +586,12 @@ export default defineMessages({
     id: "attendance",
     defaultMessage: "Attendance",
   },
+  back: {
+    id: "back",
+    defaultMessage: "Back",
+  },
+  label: {
+    id: "label",
+    defaultMessage: "Label",
+  },
 });

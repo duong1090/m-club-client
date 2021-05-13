@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     let style = {
       justifyContent: "center",
       backgroundColor: color.input,
-      borderRadius: scale(50),
+      borderRadius: space.border,
       paddingHorizontal: scale(30),
       paddingVertical: scale(10),
     };

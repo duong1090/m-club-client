@@ -150,14 +150,13 @@ const styles = StyleSheet.create({
     marginBottom: space.componentMargin,
   },
   doneBox: {
-    paddingVertical: scale(15),
-    paddingHorizontal: scale(20),
+    paddingVertical: space.itemMargin,
+    paddingHorizontal: space.bgPadding,
+    marginTop: space.componentMargin,
     backgroundColor: color.warning,
-    borderRadius: scale(40),
+    borderRadius: space.border,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "flex-end",
-    ...shadow,
   },
   backButton: {
     alignItems: "center",

@@ -243,14 +243,11 @@ const styles = StyleSheet.create({
     margin: space.componentMargin,
   },
   deleteBox: {
-    paddingVertical: scale(15),
-    paddingHorizontal: scale(20),
+    paddingVertical: space.itemMargin,
     backgroundColor: color.danger,
-    borderRadius: scale(40),
+    borderRadius: space.border,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "flex-end",
-    ...shadow,
   },
   titleSymbol: {
     ...defaultText,
