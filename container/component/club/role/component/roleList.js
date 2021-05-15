@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   FlatList,
   TouchableOpacity,
@@ -28,6 +28,8 @@ import { DEFAULT_TYPE } from "./typeList";
 import { Icon } from "native-base";
 import EmptyData from "container/component/ui/emptyData";
 import Avatar from "container/component/ui/avatar";
+import PrivilegeContext from "container/context/privilege";
+import { isLoginUser } from "container/utils/user";
 
 const RoleList = (props) => {
   //props
@@ -44,8 +46,7 @@ const RoleList = (props) => {
   const setCurrTab = useSetRecoilState(currTabState);
 
   //variables
-  const { member } = global.organization || {};
-  const { roles } = member || {};
+  const privilegeContext = useContext(PrivilegeContext);
 
   //hooks ---------------------------------------------------------------------------------
   useEffect(() => {
@@ -113,6 +114,9 @@ const RoleList = (props) => {
     postRequest("role/update", params)
       .then((res) => {
         if (res && res.data) {
+          if (currType == "member" && isLoginUser(currItem)) {
+            privilegeContext.updateRoles(res.data.role_keys);
+          }
         } else {
           setData(backUpData);
         }

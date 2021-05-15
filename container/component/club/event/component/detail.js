@@ -1,5 +1,6 @@
 import React, {
   forwardRef,
+  useContext,
   useImperativeHandle,
   useRef,
   useState,
@@ -44,10 +45,10 @@ import Modal from "react-native-modal";
 import update from "immutability-helper";
 import { gotoRoute } from "../../../../utils/router";
 import { screens } from "container/constant/screen";
-
+import ModalContext from "container/context/modal";
 const { width } = Dimensions.get("window");
-const intl = getIntl();
 
+const intl = getIntl();
 
 const Detail = (props, ref) => {
   //props
@@ -66,6 +67,7 @@ const Detail = (props, ref) => {
     price: useRef(null),
     content: useRef(null),
   };
+  const modalContext = useContext(ModalContext);
 
   //hooks
   useImperativeHandle(ref, () => ({
@@ -83,8 +85,8 @@ const Detail = (props, ref) => {
   };
 
   const gotoAttandencePage = () => {
-    gotoRoute(screens.EVENT_QRCODE)
-  }
+    gotoRoute(screens.EVENT_QRCODE);
+  };
 
   const onChangeData = (fieldName, value) => {
     if (fieldName && value != null) {
@@ -105,7 +107,7 @@ const Detail = (props, ref) => {
       id: data.id ? data.id : null,
       [fieldName]: data[fieldName],
     };
-    postRequest("event/update", params).then(res => {
+    postRequest("event/update", params).then((res) => {
       if (res && res.data) callBackUpdate(res.data);
     });
   };
@@ -141,6 +143,8 @@ const Detail = (props, ref) => {
     }
   };
 
+  const onDeleteEvent = () => {};
+
   const openPhotoLibrary = () => {
     ImagePicker.openPicker({
       multiple: true,
@@ -148,6 +152,26 @@ const Detail = (props, ref) => {
     }).then((images) => {
       if (images && images.length) addImage(images);
     });
+  };
+
+  const gotoCreateTask = () => {};
+
+  const openOptionSetting = () => {
+    const actions = [
+      {
+        title: intl.formatMessage(Messages.create_title, {
+          title: intl.formatMessage(Messages.tab_task).toLowerCase(),
+        }),
+        onPress: () => gotoCreateTask(),
+      },
+      {
+        title: intl.formatMessage(Messages.delete),
+        onPress: () => onDeleteEvent(),
+        type: "danger",
+      },
+    ];
+
+    modalContext.showActionSheet({ actions });
   };
 
   //render ----------------------------------------------------------------------------
@@ -161,13 +185,28 @@ const Detail = (props, ref) => {
             style={styles.controlIcon}
           />
         </TouchableOpacity>
-        {currMode == "edit" ? (
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          {currMode == "edit" ? (
+            <TouchableOpacity
+              onPress={() => openPhotoLibrary()}
+              style={styles.backButton}
+            >
+              <Icon
+                name="plus"
+                type="Entypo"
+                style={[
+                  styles.controlIcon,
+                  { fontSize: scale(45), paddingLeft: scale(5) },
+                ]}
+              />
+            </TouchableOpacity>
+          ) : null}
           <TouchableOpacity
-            onPress={() => openPhotoLibrary()}
-            style={styles.backButton}
+            onPress={() => openOptionSetting()}
+            style={[styles.backButton, { marginLeft: scale(10) }]}
           >
             <Icon
-              name="plus"
+              name="dots-three-horizontal"
               type="Entypo"
               style={[
                 styles.controlIcon,
@@ -175,7 +214,7 @@ const Detail = (props, ref) => {
               ]}
             />
           </TouchableOpacity>
-        ) : null}
+        </View>
       </View>
     );
   };
@@ -183,8 +222,8 @@ const Detail = (props, ref) => {
   const renderImage = () => {
     const images = data.image_paths
       ? data.image_paths.map((item) =>
-        Config.API_IMAGE.concat(`event/${item}.jpg`)
-      )
+          Config.API_IMAGE.concat(`event/${item}.jpg`)
+        )
       : null;
 
     return (
@@ -292,16 +331,16 @@ const Detail = (props, ref) => {
         {ACTIONS.map((item) => {
           const isActive =
             item.key &&
-              data[item.key] &&
-              data[item.key].findIndex((i) => i.id == currMember.id) >= 0
+            data[item.key] &&
+            data[item.key].findIndex((i) => i.id == currMember.id) >= 0
               ? true
               : false;
 
           const colorIcon = item.disabled
             ? color.disable
             : isActive
-              ? color.background
-              : color.text;
+            ? color.background
+            : color.text;
 
           return (
             <TouchableOpacity

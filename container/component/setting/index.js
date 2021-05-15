@@ -1,5 +1,5 @@
 import { Icon } from "native-base";
-import React from "react";
+import React, { useContext } from "react";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
@@ -14,10 +14,11 @@ import {
 import { Navigation } from "react-native-navigation";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { setLanguage } from "container/action/setting";
+import ModalContext from "container/context/modal";
 
 const Setting = (props) => {
   const { intl, componentId } = props;
-  const { showActionSheetWithOptions } = useActionSheet();
+  const modalContext = useContext(ModalContext);
 
   console.log("Setting:::", global);
 
@@ -33,18 +34,17 @@ const Setting = (props) => {
 
   //function - event --------------------------------------------------------------------
   const changeLanguage = () => {
-    const options = [
-      intl.formatMessage(Messages.vi),
-      intl.formatMessage(Messages.en),
-      intl.formatMessage(Messages.cancel),
+    const actions = [
+      {
+        title: intl.formatMessage(Messages.vi),
+        onPress: () => setLanguage("vi"),
+      },
+      {
+        title: intl.formatMessage(Messages.en),
+        onPress: () => setLanguage("en"),
+      },
     ];
-    showActionSheetWithOptions(
-      { options, cancelButtonIndex: 2 },
-      (buttonIndex) => {
-        if (buttonIndex == 0) setLanguage("vi");
-        else if (buttonIndex == 1) setLanguage("en");
-      }
-    );
+    modalContext.showActionSheet({ actions });
   };
 
   //render ------------------------------------------------------------------------------

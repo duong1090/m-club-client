@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: scale(20),
     padding: space.bgPadding,
-    marginBottom: space.componentMargin,
+    marginHorizontal: space.bgPadding / 2,
+    marginVertical: space.bgPadding / 2,
     ...shadow,
   },
   icon: {

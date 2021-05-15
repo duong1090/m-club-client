@@ -34,6 +34,7 @@ import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import { showSpinner, hideSpinner } from "container/utils/router";
 import update from "immutability-helper";
+import EmptyData from "container/component/ui/emptyData";
 
 const List = (props) => {
   const { intl } = props;
@@ -208,6 +209,7 @@ const List = (props) => {
         renderItem={({ item, index }) => renderItem(item, index)}
         onEndReachedThreshold={0.5}
         onEndReached={loadMore}
+        ListEmptyComponent={<EmptyData />}
       />
       <ActionButton
         title={intl.formatMessage(Messages.create)}

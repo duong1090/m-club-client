@@ -100,7 +100,6 @@ const TabAccount = (props) => {
             <ManageItem
               data={item}
               onPress={() => gotoManageItem(item.type)}
-              style={index % 2 ? { marginLeft: space.componentMargin } : null}
               icon={item.icon}
             />
           </PrivilegeAction>
@@ -140,7 +139,7 @@ const styles = StyleSheet.create({
   },
   manageList: {
     flex: 1,
-    padding: space.bgPadding,
+    padding: space.bgPadding / 2,
     borderTopWidth: scale(4),
     borderColor: color.backgroundColor,
   },

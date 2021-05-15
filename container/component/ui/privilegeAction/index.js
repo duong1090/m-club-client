@@ -10,6 +10,7 @@ const PrivilegeAction = (props) => {
     <PrivilegeContext.Consumer>
       {(privilege) => {
         const { roles, isRoot } = privilege;
+        console.log("PrivilegeContext.Consumer:::", roles, privilegeKey);
 
         if (
           (privilegeKey.value == "is_root" && isRoot) ||

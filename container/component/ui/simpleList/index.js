@@ -86,14 +86,16 @@ const SimpleList = (props) => {
         />
       )}
       {addNewItem ? (
-        <ActionButton
-          title={intl.formatMessage(Messages.add)}
-          icon={
-            <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
-          }
-          style={styles.actionButtonBox}
-          onPress={() => addNewItem()}
-        />
+        <PrivilegeAction privilegeKey={privilege.create}>
+          <ActionButton
+            title={intl.formatMessage(Messages.add)}
+            icon={
+              <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
+            }
+            style={styles.actionButtonBox}
+            onPress={() => addNewItem()}
+          />
+        </PrivilegeAction>
       ) : null}
     </View>
   );

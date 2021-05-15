@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { RecoilRoot } from "recoil";
-import IntlMainProvider from "./intlProvider";
-import PrivilegeProvider from "./privilegeProvider";
+import IntlMainProvider from "./component/intl";
+import PrivilegeProvider from "./component/privilege";
+import ModalProvider from "./component/modal";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
+
 import { LogBox } from "react-native";
 
 // const PersistenceObserver = () => {
@@ -31,13 +33,13 @@ const MainProvider = (props) => {
   const { children } = props;
   const { member } = global.organization || {};
 
-  console.log("MainProvider::::", global);
-
   const [rolesState, setRoleState] = useState({
     roles: member && member.roles ? member.roles : {},
     updateRoles: (newRoles) => setRoleState({ ...rolesState, roles: newRoles }),
     isRoot: member && member.is_root ? true : false,
   });
+
+  console.log("MainProvider::::", global, rolesState);
 
   //disable warning box
   useEffect(() => {
@@ -56,9 +58,11 @@ const MainProvider = (props) => {
     <RecoilRoot>
       {/* <PersistenceObserver /> */}
       <PrivilegeProvider value={rolesState}>
-        <ActionSheetProvider>
-          <IntlMainProvider>{React.Children.only(children)}</IntlMainProvider>
-        </ActionSheetProvider>
+        <ModalProvider>
+          <ActionSheetProvider>
+            <IntlMainProvider>{React.Children.only(children)}</IntlMainProvider>
+          </ActionSheetProvider>
+        </ModalProvider>
       </PrivilegeProvider>
     </RecoilRoot>
   );

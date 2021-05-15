@@ -1,7 +1,7 @@
 import React from "react";
 import { IntlProvider } from "react-intl";
 import { Text, Platform } from "react-native";
-import { translationMessages } from "../translation/i18n";
+import { translationMessages } from "../../translation/i18n";
 
 const IntlMainProvider = (props) => {
   const { children } = props;
