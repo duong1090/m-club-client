@@ -10,10 +10,7 @@ import { StyleSheet } from "react-native";
 
 export const AVATAR_SIZE = scale(60);
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: color.backgroundColor,
-  },
+  container: {},
   //#region content
   content: {
     backgroundColor: "#fff",
@@ -52,7 +49,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: space.itemMargin,
     marginBottom: space.itemMargin,
-    backgroundColor: isDone ? color.success : "#fff",
+    backgroundColor: isDone ? color.success : color.lightGrey,
     borderRadius: space.border,
   }),
   textDone: (isDone) => ({
@@ -259,12 +256,14 @@ export const styles = StyleSheet.create({
 
   //#region children
   children: {
-    padding: space.bgPadding,
     marginBottom: space.componentMargin,
-    backgroundColor: "#ddd",
+    paddingBottom: space.bgPadding * 2,
+    backgroundColor: color.backgroundColor,
   },
   childrenHeader: {
     flexDirection: "row",
+    margin: space.componentMargin,
+
     justifyContent: "space-between",
   },
   childrenTitleBox: {
@@ -320,7 +319,8 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: scale(20),
     paddingVertical: scale(10),
-    marginBottom: space.itemMargin,
+    marginTop: 0,
+    margin: space.componentMargin,
     ...shadow,
   },
   childrenItemHeader: {
@@ -429,5 +429,16 @@ export const styles = StyleSheet.create({
   editBox: {
     width: scale(24),
     height: scale(24),
+  },
+  modalWrapper: {
+    margin: 0,
+    justifyContent: "flex-end",
+  },
+  modalBody: {
+    height: "85%",
+    backgroundColor: "#fff",
+    paddingTop: space.componentMargin,
+    borderTopLeftRadius: space.border,
+    borderTopRightRadius: space.border,
   },
 });

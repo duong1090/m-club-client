@@ -3,24 +3,21 @@ import { API_TOKEN, LANG } from "container/constant/storage";
 import { getRequest, postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import { gotoHome, gotoLogin } from "container/utils/router";
-import { showSpinner, hideSpinner } from "container/utils/router";
 import { ORGANIZATION } from "../constant/storage";
 import OneSignal from "react-native-onesignal"; // Import package from node modules
 import moment from "moment";
 
 export const doLogin = async (payload) => {
-  showSpinner();
   return new Promise((resolve, reject) => {
     postRequest("auth/login", payload)
       .then((res) => {
         if (res && res.data) {
           loginSuccess(res.data);
-          hideSpinner();
         }
+        resolve();
       })
       .catch((err) => {
         reject(err);
-        hideSpinner();
       });
   });
 };

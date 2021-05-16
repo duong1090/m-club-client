@@ -1,14 +1,15 @@
 import { Tabs, Tab, ScrollableTab } from "native-base";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import InputItem from "container/component/ui/inputItem";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import update from "immutability-helper";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from 'container/context/modal';
 import Messages from "container/translation/Message";
 import { injectIntl } from "react-intl";
-import { signInWithPhoneNumber } from "container/action/authenticate";
 import Toast from "react-native-simple-toast";
+import { signInWithPhoneNumber } from "container/action/authenticate";
 import { loginSuccess } from "container/action/user";
+
 import {
   scale,
   color,
@@ -35,6 +36,9 @@ const InformationPage = (props) => {
   const [otp, setOTP] = useState(null);
   const [confirmOTP, setConfirmOTP] = useState(null);
   const [currTab, setCurrTab] = useState(0);
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //hooks -------------------------------------------------------------------------------------
   useEffect(() => {
@@ -330,7 +334,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: space.componentMargin,
     marginBottom: space.componentMargin,
-    borderRadius: space.border * 2,
+    borderRadius: space.border,
     backgroundColor: color.light,
     ...shadow,
   },
@@ -356,7 +360,7 @@ const styles = StyleSheet.create({
   headingBox: {
     backgroundColor: "#fff",
     margin: space.componentMargin,
-    borderRadius: scale(40),
+    borderRadius: space.border,
     paddingVertical: space.itemMargin,
     justifyContent: "center",
     alignItems: "center",

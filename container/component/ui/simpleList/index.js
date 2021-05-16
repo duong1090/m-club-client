@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   TouchableOpacity,
   View,
@@ -17,7 +17,7 @@ import {
   space,
   defaultText,
 } from "container/variables/common";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from "container/context/modal";
 import { Icon } from "native-base";
 import EmptyData from "container/component/ui/emptyData";
 import PrivilegeAction from "container/component/ui/privilegeAction";
@@ -38,6 +38,9 @@ const SimpleList = (props) => {
     onSearch,
     privilege,
   } = props;
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //effect
   useEffect(() => {

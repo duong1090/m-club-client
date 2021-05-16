@@ -3,6 +3,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useState,
+  useContext,
 } from "react";
 import {
   View,
@@ -24,7 +25,7 @@ import Messages from "container/translation/Message";
 import { Icon, Textarea } from "native-base";
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from "container/context/modal";
 
 const RADIO_BUTTON = { revenue: 1, pay: 0 };
 
@@ -39,6 +40,9 @@ const CreateFund = (props, ref) => {
 
   //variables
   const bottomPopUpRef = useRef(null);
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //effect
   useImperativeHandle(ref, () => ({

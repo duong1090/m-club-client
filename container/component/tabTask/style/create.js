@@ -31,9 +31,9 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   createButton: {
-    paddingVertical: scale(10),
-    paddingHorizontal: scale(20),
-    alignSelf: "flex-end",
+    flex: 1,
+    paddingVertical: space.itemMargin,
+    paddingHorizontal: space.componentMargin,
     borderRadius: space.border,
     backgroundColor: color.primary,
     justifyContent: "center",
@@ -71,5 +71,20 @@ export const styles = StyleSheet.create({
     maxWidth: "75%",
     fontWeight: "bold",
     marginLeft: space.itemMargin,
+  },
+  byObjBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: space.itemMargin,
+  },
+  byObjDot: {
+    width: scale(20),
+    aspectRatio: 1,
+    borderRadius: scale(10),
+    backgroundColor: color.success,
+    marginRight: scale(10),
+  },
+  byObjText: {
+    ...defaultText,
   },
 });

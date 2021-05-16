@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   FlatList,
   Image,
@@ -32,7 +32,7 @@ import { currEventState, listEventState, modeState } from "../recoil";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from "container/context/modal";
 import update from "immutability-helper";
 import EmptyData from "container/component/ui/emptyData";
 
@@ -48,6 +48,9 @@ const List = (props) => {
   //variables
   let page = 1;
   const { member: currMember } = global.organization || {};
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //ref
   const createEventRef = useRef(null);

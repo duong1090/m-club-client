@@ -1,7 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+  useContext,
+} from "react";
 import {
   FlatList,
-  Modal,
   ScrollView,
   Text,
   TextInput,
@@ -14,13 +20,11 @@ import Avatar from "container/component/ui/avatar";
 import { getRequest, postRequest } from "container/utils/request";
 import { useRecoilState } from "recoil";
 import { listTaskState, currTaskState } from "../recoil";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from "container/context/modal";
 import { highlighText } from "container/helper/format";
 import { getHumanDay } from "container/helper/time";
-import { gotoRoute } from "container/utils/router";
-import { screens } from "container/constant/screen";
 import moment from "moment";
-import { injectIntl } from "react-intl";
+import { getIntl } from "container/utils/common";
 import update from "immutability-helper";
 import Messages from "container/translation/Message";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -29,9 +33,9 @@ import CreateTask from "./create";
 import { scale } from "../../../variables/common";
 import { PRIORITY_LEVEL } from "container/constant/element";
 import { back } from "container/utils/router";
-import { Navigation } from "react-native-navigation";
 import SelectModal from "container/component/ui/selectModal";
 import LabelSelectModal from "../ui/labelSelectModal";
+import Modal from "react-native-modal";
 
 const UPDATE_API = {
   member: "task/update-assigned-member",
@@ -43,10 +47,13 @@ const UPDATE_API = {
 };
 const INDEX_LIST = { today: 0, future: 1, timed: 2, no_time: 3 };
 
-const DetailTask = (props) => {
+const intl = getIntl();
+
+const DetailTask = (props, ref) => {
   //props
-  const { style, intl, changeMode, setListTask, listTask, componentId } = props;
+  const { style, setListTask, listTask } = props;
   //state
+  const [visible, setVisible] = useState(false);
   const [name, setName] = useState(null);
   const [parent, setParent] = useState(null);
   const [member, setMember] = useState([]);
@@ -64,15 +71,8 @@ const DetailTask = (props) => {
   const [currTask, setCurrTask] = useRecoilState(currTaskState);
   // const [listTask, setListTask] = useRecoilState(listTaskState);
 
-  //default option topBar
-  Navigation.mergeOptions(componentId, {
-    topBar: {
-      visible: true,
-      title: {
-        text: intl.formatMessage(Messages.tab_task),
-      },
-    },
-  });
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //variables
   const createTaskRef = useRef(null);
@@ -100,7 +100,21 @@ const DetailTask = (props) => {
     if (props.data) setCurrTask(props.data);
   }, [props.data]);
 
+  useImperativeHandle(ref, () => ({
+    show,
+    hide,
+  }));
+
   //function - event ---------------------------------------------------------------------
+  const show = (data) => {
+    setVisible(true);
+    if (data && data.id) setCurrTask(data);
+  };
+
+  const hide = () => {
+    setVisible(false);
+  };
+
   const openCreatePopUp = () => {
     createTaskRef.current.show();
   };
@@ -171,12 +185,11 @@ const DetailTask = (props) => {
               })
             );
         }
-        hideSpinner()
+        hideSpinner();
       })
       .catch((err) => {
         console.error(err);
         hideSpinner();
-
       });
   };
 
@@ -257,7 +270,9 @@ const DetailTask = (props) => {
   };
 
   const gotoChildTask = (item) => {
-    gotoRoute(screens.TAB_TASK, { data: item, mode: "detail" });
+    // gotoRoute(screens.TAB_TASK, { data: item, mode: "detail" });
+    showSpinner();
+    setCurrTask(item);
   };
 
   //render -----------------------------------------------------------------------------
@@ -493,9 +508,11 @@ const DetailTask = (props) => {
             <LabelSelectModal
               ref={selectLabelRef}
               onDone={(labels) => {
-                updateTask("label", {
-                  label_ids: labels.map((item) => item.id),
-                });
+                if (labels) {
+                  updateTask("label", {
+                    label_ids: labels.map((item) => item.id),
+                  });
+                }
               }}
             />
           </View>
@@ -691,67 +708,79 @@ const DetailTask = (props) => {
     );
   };
   return (
-    <View style={{ flex: 1 }}>
-      <ScrollView
-        style={[styles.container, style]}
-        contentContainerStyle={{ paddingBottom: scale(100) }}
-      >
-        {renderContent()}
-        {renderChildren()}
-        {renderButtonAction()}
-        {renderActivity()}
-      </ScrollView>
-      <View style={styles.activityButtonBox}>
-        <TouchableOpacity
-          onPress={() => setVisibleActivity(true)}
-          style={styles.activityButton}
+    <Modal
+      isVisible={visible}
+      style={styles.modalWrapper}
+      backdropOpacity={0.8}
+      onBackdropPress={() => hide()}
+      useNativeDriver={true}
+      propagateSwipe
+    >
+      <View style={styles.modalBody}>
+        <ScrollView
+          style={[styles.container, style]}
+          contentContainerStyle={{ paddingBottom: scale(100) }}
         >
-          <Icon
-            type="FontAwesome5"
-            name="book"
-            style={styles.activityButtonIcon}
-          />
-          <Text style={styles.activityButtonText}>
-            {intl.formatMessage(Messages.activity)}
-          </Text>
-        </TouchableOpacity>
+          {renderContent()}
+          {renderChildren()}
+          {renderButtonAction()}
+          {renderActivity()}
+        </ScrollView>
+        <View style={styles.activityButtonBox}>
+          <TouchableOpacity
+            onPress={() => setVisibleActivity(true)}
+            style={styles.activityButton}
+          >
+            <Icon
+              type="FontAwesome5"
+              name="book"
+              style={styles.activityButtonIcon}
+            />
+            <Text style={styles.activityButtonText}>
+              {intl.formatMessage(Messages.activity)}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <CreateTask
+          ref={createTaskRef}
+          data={currTask}
+          callbackCreate={(value) => {
+            let temp = [...children];
+            temp.push(value);
+            setChildren(temp);
+          }}
+        />
+        <SelectModal
+          ref={selectMemberRef}
+          key={"select_member"}
+          onDone={(value) => {
+            if (value)
+              updateTask("member", {
+                assigned_member_ids: value.map((item) => item.id),
+              });
+          }}
+          selectedData={member}
+          api="member/get"
+          params={{ type: "simple" }}
+          multiSelect={true}
+          isMember={true}
+        />
+        <SelectModal
+          ref={selectPriorityRef}
+          key={"select_priority"}
+          externalData={PRIORITY_LEVEL.filter((item) => item.id != 4).map(
+            (item) => {
+              return { ...item, name: intl.formatMessage(Messages[item.name]) };
+            }
+          )}
+          onDone={(value) => {
+            if (value) updateTask("prior_level", { prior_level: value.id });
+          }}
+          selectedData={PRIORITY_LEVEL[priorityLevel]}
+        />
       </View>
-      <CreateTask
-        ref={createTaskRef}
-        data={currTask}
-        callbackCreate={(value) => {
-          let temp = [...children];
-          temp.push(value);
-          setChildren(temp);
-        }}
-      />
-      <SelectModal
-        ref={selectMemberRef}
-        key={"select_member"}
-        onDone={(value) =>
-          updateTask("member", {
-            assigned_member_ids: value.map((item) => item.id),
-          })
-        }
-        selectedData={member}
-        api="member/get"
-        params={{ type: "simple" }}
-        multiSelect={true}
-        isMember={true}
-      />
-      <SelectModal
-        ref={selectPriorityRef}
-        key={"select_priority"}
-        externalData={PRIORITY_LEVEL.filter((item) => item.id != 4).map(
-          (item) => {
-            return { ...item, name: intl.formatMessage(Messages[item.name]) };
-          }
-        )}
-        onDone={(value) => updateTask("prior_level", { prior_level: value.id })}
-        selectedData={PRIORITY_LEVEL[priorityLevel]}
-      />
-    </View>
+    </Modal>
   );
 };
 
-export default injectIntl(DetailTask);
+export default forwardRef(DetailTask);

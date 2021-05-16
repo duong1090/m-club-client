@@ -3,7 +3,6 @@ import { RecoilRoot } from "recoil";
 import IntlMainProvider from "./component/intl";
 import PrivilegeProvider from "./component/privilege";
 import ModalProvider from "./component/modal";
-import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 
 import { LogBox } from "react-native";
 
@@ -59,9 +58,7 @@ const MainProvider = (props) => {
       {/* <PersistenceObserver /> */}
       <PrivilegeProvider value={rolesState}>
         <ModalProvider>
-          <ActionSheetProvider>
-            <IntlMainProvider>{React.Children.only(children)}</IntlMainProvider>
-          </ActionSheetProvider>
+          <IntlMainProvider>{React.Children.only(children)}</IntlMainProvider>
         </ModalProvider>
       </PrivilegeProvider>
     </RecoilRoot>

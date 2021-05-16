@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { injectIntl } from "react-intl";
 import {
   Animated,
@@ -11,22 +11,26 @@ import { useSetRecoilState } from "recoil";
 import {
   scale,
   color,
+  space,
   fontSize,
   defaultText,
 } from "container/variables/common";
 import Messages from "container/translation/Message";
 import InputItem from "container/component/ui/inputItem";
-import { preValidateLogin } from "container/action/user";
 import { clubListState, certificateState } from "../recoil";
 import { gotoRoute } from "container/utils/router";
 import { screens } from "container/constant/screen";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from 'container/context/modal';
+import {preValidateLogin} from 'container/action/user';
 
 const InputPhone = (props) => {
   const { intl, style } = props;
   const [phone, setPhone] = useState(null);
   const setClubList = useSetRecoilState(clubListState);
   const setCertificate = useSetRecoilState(certificateState);
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   const checkLogin = () => {
     setCertificate({ phone });
@@ -106,7 +110,7 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: "row",
     height: scale(80),
-    borderRadius: scale(40),
+    borderRadius: space.border,
     backgroundColor: color.background,
     justifyContent: "center",
     alignItems: "center",

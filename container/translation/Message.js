@@ -594,4 +594,12 @@ export default defineMessages({
     id: "label",
     defaultMessage: "Label",
   },
+  more: {
+    id: "more",
+    defaultMessage: "More",
+  },
+  add_filter: {
+    id: "add_filter",
+    defaultMessage: "Add filter",
+  },
 });

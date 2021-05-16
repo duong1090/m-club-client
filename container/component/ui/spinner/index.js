@@ -1,11 +1,35 @@
-import React from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { View } from "react-native";
 import { scale } from "container/variables/common";
 import LottieView from "lottie-react-native";
+import Modal from "react-native-modal";
 
-const Spinner = () => {
+const Spinner = (props, ref) => {
+  const [visible, setVisible] = useState(false);
+
+  const show = () => {
+    setVisible(true);
+  };
+
+  const hide = () => {
+    setVisible(false);
+  };
+
+  useImperativeHandle(ref, () => ({
+    show,
+    hide,
+  }));
+
   return (
-    <View style={overlay}>
+    <Modal
+      isVisible={visible}
+      backdropOpacity={0}
+      style={overlay}
+      animationIn="zoomInDown"
+      animationOut="zoomOutUp"
+      animationInTiming={1}
+      animationOutTiming={1}
+    >
       <View
         style={{
           backgroundColor: "rgba(0,0,0,0.6)",
@@ -31,19 +55,13 @@ const Spinner = () => {
           />
         </View>
       </View>
-    </View>
+    </Modal>
   );
 };
 
 const overlay = {
-  position: "absolute",
-  top: 0,
-  bottom: 0,
-  right: 0,
-  left: 0,
   alignItems: "center",
   justifyContent: "center",
-  zIndex: 1000,
 };
 
-export default Spinner;
+export default forwardRef(Spinner);

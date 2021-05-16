@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Messages from "container/translation/Message";
 import { injectIntl } from "react-intl";
 import { View, Text, StyleSheet } from "react-native";
@@ -7,7 +7,7 @@ import Config from "container/config/server.config";
 import { listMemberState, currMemberState } from "../recoil";
 import { useRecoilState } from "recoil";
 import SimpleDetail from "container/component/ui/simpleDetail";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from 'container/context/modal';
 import { SEX } from "container/constant/element";
 import Avatar from "container/component/ui/avatar";
 import {
@@ -24,6 +24,9 @@ const MemberDetail = (props) => {
   const { intl, data, changeMode } = props;
   //state
   const [isGetData, setIsGetData] = useState(true);
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //recoil
   const [info, setInfo] = useRecoilState(currMemberState);

@@ -18,11 +18,7 @@ import {
   defaultText,
 } from "container/variables/common";
 import Messages from "container/translation/Message";
-import {
-  clubListState,
-  certificateState,
-  activeTabState,
-} from "../recoil";
+import { clubListState, certificateState, activeTabState } from "../recoil";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import update from "immutability-helper";
 
@@ -133,7 +129,7 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: "row",
     height: scale(80),
-    borderRadius: scale(40),
+    borderRadius: space.border,
     backgroundColor: color.background,
     justifyContent: "center",
     alignItems: "center",

@@ -44,7 +44,7 @@ const SelectModal = (props, ref) => {
   const onSubmit = () => {
     setVisible(false);
     const value = childrenRef ? childrenRef.current.getValues() : null;
-    if (value) onDone && onDone(value);
+    onDone && onDone(value);
   };
 
   //render -------------------------------------------------------------------------------------------------

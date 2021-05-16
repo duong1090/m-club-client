@@ -26,9 +26,39 @@ export const styles = StyleSheet.create({
   },
   filterAdvanced: {
     marginTop: scale(10),
-    flexDirection: "row",
+  },
+  filterWrapper: {
     backgroundColor: color.backgroundColor,
     borderRadius: space.border,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  dynamicFilterList: {
+    marginTop: scale(10),
+  },
+
+  dynamicFilterDot: {
+    width: scale(20),
+    aspectRatio: 1,
+    borderRadius: scale(10),
+    backgroundColor: color.success,
+    marginRight: scale(20),
+  },
+
+  dynamicFilterBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: scale(15),
+  },
+  dynamicFilterText: {
+    ...defaultText,
+    color: color.disable,
+  },
+
+  dynamicFilterIcon: {
+    fontSize: scale(30),
+    color: color.grey,
   },
   filterItem: {
     flex: 1,

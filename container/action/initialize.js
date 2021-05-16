@@ -1,10 +1,10 @@
 import { API_TOKEN, IS_RECENT_TIME } from "container/constant/storage";
 import { gotoLogin, gotoHome, gotoRoute } from "container/utils/router";
 import { setIntl } from "container/utils/common";
-import { getOrganization, logOut } from "../action/user";
-import { getNumberOfNotification } from "../action/application";
-import { ORGANIZATION, LANG } from "../constant/storage";
-import { setItem, getItem } from "../utils/storage";
+import { getOrganization, logOut } from "./user";
+import { getNumberOfNotification } from "./application";
+import { ORGANIZATION, LANG } from "container/constant/storage";
+import { setItem, getItem } from "container/utils/storage";
 import { Navigation } from "react-native-navigation";
 import { screens } from "../constant/screen";
 import OneSignal from "react-native-onesignal"; // Import package from node modules

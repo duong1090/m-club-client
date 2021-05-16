@@ -19,7 +19,14 @@ const ActionSheet = (props) => {
       {actions.map((item, index) => (
         <TouchableOpacity
           style={styles.itemAction(index)}
-          onPress={item.onPress}
+          onPress={
+            item.onPress
+              ? () => {
+                  item.onPress();
+                  hide();
+                }
+              : () => hide()
+          }
         >
           <Text style={styles.itemText(item.type)}>{item.title}</Text>
         </TouchableOpacity>

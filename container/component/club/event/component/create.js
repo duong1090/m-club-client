@@ -1,5 +1,6 @@
 import React, {
   forwardRef,
+  useContext,
   useImperativeHandle,
   useRef,
   useState,
@@ -31,7 +32,7 @@ import { postRequest } from "container/utils/request";
 import ImagePicker from "react-native-image-crop-picker";
 import update from "immutability-helper";
 import Toast from "react-native-simple-toast";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from "container/context/modal";
 import { listEventState } from "../recoil";
 import { useRecoilState } from "recoil";
 
@@ -55,6 +56,9 @@ const Create = (props, ref) => {
 
   //recoil
   const [list, setList] = useRecoilState(listEventState);
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //ref
   const bottomPopUpRef = useRef(null);

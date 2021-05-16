@@ -154,7 +154,12 @@ const Detail = (props, ref) => {
     });
   };
 
-  const gotoCreateTask = () => {};
+  const gotoCreateTask = () => {
+    gotoRoute(screens.TAB_TASK, {
+      mode: "create",
+      passData: { id: data.id, type: "event", name: data.name },
+    });
+  };
 
   const openOptionSetting = () => {
     const actions = [
@@ -163,6 +168,10 @@ const Detail = (props, ref) => {
           title: intl.formatMessage(Messages.tab_task).toLowerCase(),
         }),
         onPress: () => gotoCreateTask(),
+      },
+      {
+        title: intl.formatMessage(Messages.attendance),
+        onPress: () => gotoAttandencePage(),
       },
       {
         title: intl.formatMessage(Messages.delete),
@@ -201,19 +210,6 @@ const Detail = (props, ref) => {
               />
             </TouchableOpacity>
           ) : null}
-          <TouchableOpacity
-            onPress={() => openOptionSetting()}
-            style={[styles.backButton, { marginLeft: scale(10) }]}
-          >
-            <Icon
-              name="dots-three-horizontal"
-              type="Entypo"
-              style={[
-                styles.controlIcon,
-                { fontSize: scale(45), paddingLeft: scale(5) },
-              ]}
-            />
-          </TouchableOpacity>
         </View>
       </View>
     );
@@ -319,9 +315,9 @@ const Detail = (props, ref) => {
         disabled: false,
       },
       {
-        title: intl.formatMessage(Messages.attendance),
-        icon: { name: "calendar-check-o", type: "FontAwesome" },
-        onPress: () => gotoAttandencePage(),
+        title: intl.formatMessage(Messages.more),
+        icon: { name: "dots-three-horizontal", type: "Entypo" },
+        onPress: () => openOptionSetting(),
         disabled: false,
       },
     ];
@@ -633,7 +629,7 @@ const styles = StyleSheet.create({
     marginBottom: space.componentMargin,
   },
   actionIconBox: {
-    width: scale(100),
+    width: scale(80),
     aspectRatio: 1,
     borderRadius: scale(50),
     backgroundColor: color.lightGreyPlus,
@@ -644,7 +640,7 @@ const styles = StyleSheet.create({
   actionIcon: (iconColor) => {
     return {
       ...defaultText,
-      fontSize: scale(50),
+      fontSize: scale(40),
       color: iconColor,
     };
   },

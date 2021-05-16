@@ -38,7 +38,7 @@ const GeneralModal = (props, ref) => {
   const renderContent = () => {
     switch (type) {
       case "actionSheet":
-        return <ActionSheet {...childOptions} hide={hide} />;
+        return <ActionSheet {...childOptions} hide={() => hide()} />;
     }
   };
 

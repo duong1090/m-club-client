@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   FlatList,
   ImageBackground,
@@ -10,7 +10,7 @@ import {
 import { styles, AVATAR_SIZE } from "../style/list";
 import { gotoRoute } from "container/utils/router";
 import Avatar from "container/component/ui/avatar";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from 'container/context/modal';
 import { postRequest, getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import { getHumanDay } from "container/helper/time";
@@ -21,21 +21,24 @@ import { PRIORITY_LEVEL } from "container/constant/element";
 import update from "immutability-helper";
 import { Navigation } from "react-native-navigation";
 import { screens } from "container/constant/screen";
-import { getNumberOfNotification } from "container/action/application";
 import EmptyData from "container/component/ui/emptyData";
 import CreateNotification from "./create";
 import PrivilegeAction from "container/component/ui/privilegeAction";
 import { normalRole } from "container/constant/role";
 import ActionButton from "container/component/ui/actionButton";
 import { Icon } from "native-base";
+import { getNumberOfNotification } from "container/action/application";
 
 const NotificationList = (props) => {
   //props
   const { intl } = props;
   //state
-  const [data, setData] = useState([]);
   const [meta, setMeta] = useState({});
+  const [data, setData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //variables
   let page = 1;

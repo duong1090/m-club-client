@@ -1,7 +1,6 @@
 import React from "react";
 import { screens, modals } from "../constant/screen";
 import { Navigation } from "react-native-navigation";
-import { loadInitialStatus } from "../action/initialize";
 import MainProvider from "../provider";
 import { setCurrentScreen, popNavigatorStack } from "../utils/router";
 import OneSignal from "react-native-onesignal"; // Import package from node modules
@@ -221,7 +220,6 @@ const onAppLaunched = () => {
       },
     },
   });
-  setTimeout(loadInitialStatus, 2500);
 };
 
 Navigation.events().registerAppLaunchedListener(onAppLaunched);

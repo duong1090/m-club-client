@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -20,13 +20,16 @@ import ManageItem from "./component/ManageItem";
 import { gotoRoute } from "container/utils/router";
 import { screens } from "container/constant/screen";
 import { Icon } from "native-base";
-import { showSpinner, hideSpinner } from "container/utils/router";
-import { logOut } from "container/action/user";
+import ModalContext from 'container/context/modal';
 import { normalRole, isRoot } from "container/constant/role";
 import PrivilegeAction from "container/component/ui/privilegeAction";
 import ActionButton from "container/component/ui/actionButton";
+import {logOut} from 'container/action/user';
 
 const TabAccount = (props) => {
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
+
   //function - event
   const gotoManageItem = (type) => {
     gotoRoute(type);

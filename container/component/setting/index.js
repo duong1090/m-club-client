@@ -12,15 +12,12 @@ import {
   shadow,
 } from "container/variables/common";
 import { Navigation } from "react-native-navigation";
-import { useActionSheet } from "@expo/react-native-action-sheet";
-import { setLanguage } from "container/action/setting";
 import ModalContext from "container/context/modal";
+import { setLanguage } from "container/action/setting";
 
 const Setting = (props) => {
   const { intl, componentId } = props;
   const modalContext = useContext(ModalContext);
-
-  console.log("Setting:::", global);
 
   //default option topBar
   Navigation.mergeOptions(componentId, {

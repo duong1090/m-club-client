@@ -4,6 +4,7 @@ import React, {
   useImperativeHandle,
   useEffect,
   useState,
+  useContext,
 } from "react";
 import BottomPopUp from "container/component/ui/bottomPopUp";
 import {
@@ -26,7 +27,7 @@ import { useRecoilState } from "recoil";
 import { listTaskState } from "../recoil";
 import update from "immutability-helper";
 import Config from "container/config/server.config";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from "container/context/modal";
 import SelectModal from "container/component/ui/selectModal";
 
 const DUE_DATE_FORMAT = "YYYY-MM-DD ";
@@ -35,6 +36,8 @@ const INDEX_LIST = { today: 0, future: 1, timed: 2, no_time: 3 };
 
 const CreateTask = (props, ref) => {
   //props
+  const { passData } = props;
+
   //state
   const [assignedMember, setAssignMember] = useState([]);
   const [dueDate, setDueDate] = useState(null);
@@ -44,6 +47,10 @@ const CreateTask = (props, ref) => {
   const [name, setName] = useState(null);
   const [description, setDescription] = useState(null);
   const [listTask, setListTask] = useRecoilState(listTaskState);
+  const [byObject, setByObject] = useState(null);
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //variables
   const bottomPopUpRef = useRef(null);
@@ -62,6 +69,12 @@ const CreateTask = (props, ref) => {
     hide,
   }));
 
+  useEffect(() => {
+    if (props.passData) setByObject(props.passData);
+
+    console.log("useEffect:::", props.passData);
+  }, [props.passData]);
+
   //function - event
   const show = () => {
     bottomPopUpRef.current.show();
@@ -78,6 +91,7 @@ const CreateTask = (props, ref) => {
     setDueTime(null);
     setName(null);
     setDescription(null);
+    setByObject(null);
   };
 
   const createTask = () => {
@@ -118,6 +132,14 @@ const CreateTask = (props, ref) => {
     if (assignedMember.length)
       params.assigned_mem_ids = assignedMember.map((item) => item.id);
     if (description) params.description = description;
+
+    if (byObject && byObject.id) {
+      switch (byObject.type) {
+        case "event":
+          params.event_id = byObject.id;
+          break;
+      }
+    }
     return params;
   };
 
@@ -315,7 +337,9 @@ const CreateTask = (props, ref) => {
           key={"assigned_member"}
           type="list"
           ref={modalSelectRef}
-          onDone={(value) => setAssignMember(value)}
+          onDone={(value) => {
+            if (value) setAssignMember(value);
+          }}
           api="member/get"
           params={{ type: "simple" }}
           multiSelect={true}
@@ -373,11 +397,32 @@ const CreateTask = (props, ref) => {
     );
   };
 
+  const renderByObject = () => {
+    let title = "";
+    switch (byObject.type) {
+      case "event":
+        title = intl.formatMessage(Messages.event);
+        break;
+    }
+
+    return (
+      <View style={styles.byObjBox}>
+        <View style={styles.byObjDot}></View>
+        <Text style={[styles.byObjText, { fontWeight: "bold" }]}>
+          {title}
+          {": "}
+        </Text>
+        <Text style={styles.byObjText}>{byObject.name}</Text>
+      </View>
+    );
+  };
+
   return (
     <BottomPopUp
       ref={bottomPopUpRef}
       body={
         <View style={{ height: scale(500), marginBottom: scale(30) }}>
+          {byObject ? renderByObject() : null}
           {renderName()}
           <View style={styles.blockItem}>
             {renderAssignedMember()}

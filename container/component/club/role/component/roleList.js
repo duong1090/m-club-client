@@ -15,7 +15,7 @@ import update from "immutability-helper";
 import { normalRole } from "container/constant/role";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from 'container/context/modal';
 import {
   scale,
   color,
@@ -45,7 +45,8 @@ const RoleList = (props) => {
   const currType = useRecoilValue(currTypeState);
   const setCurrTab = useSetRecoilState(currTabState);
 
-  //variables
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
   const privilegeContext = useContext(PrivilegeContext);
 
   //hooks ---------------------------------------------------------------------------------

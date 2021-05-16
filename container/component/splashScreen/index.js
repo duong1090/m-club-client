@@ -1,18 +1,17 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { scale } from "container/variables/common";
 import LottieView from "lottie-react-native";
+import { loadInitialStatus } from "container/action/initialize";
 
 const SplashScreen = () => {
+  useEffect(() => {
+    setTimeout(loadInitialStatus, 1000);
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.imageBox}>
-        {/* <LottieView
-          source={require("container/asset/lottie/progress.json")}
-          style={styles.logoLottie}
-          autoPlay
-          loop
-        /> */}
         <Image
           style={styles.logo}
           source={require("container/asset/image/MclubLogo.png")}

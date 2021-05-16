@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { injectIntl } from "react-intl";
 import {
   Animated,
@@ -11,18 +11,20 @@ import { useRecoilValue } from "recoil";
 import { certificateState } from "../recoil";
 import {
   scale,
+  space,
   color,
   fontSize,
   defaultText,
 } from "container/variables/common";
 import Messages from "container/translation/Message";
 import InputItem from "container/component/ui/inputItem";
+import ModalContext from 'container/context/modal';
 import {
   signInWithPhoneNumber,
   getIdToken,
 } from "container/action/authenticate";
-import { doLogin, loginSuccess } from "container/action/user";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import { doLogin } from "container/action/user";
+
 
 const InputOTP = (props) => {
   const { intl, style } = props;
@@ -33,17 +35,29 @@ const InputOTP = (props) => {
   //recoil
   const certificate = useRecoilValue(certificateState);
 
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
+
   //function
   useEffect(() => {
-    console.log('didUpdate::::', certificate)
+    console.log("didUpdate::::", certificate);
 
     //in case bypass, force login
-    if (certificate.is_bypass)
+    if (certificate.is_bypass) {
+      showSpinner();
       doLogin({
         club_id: certificate.club_id,
         is_bypass: certificate.is_bypass,
         phone_number: certificate.phone,
-      });
+      })
+        .then((res) => {
+          hideSpinner();
+        })
+        .catch((err) => {
+          console.error(err);
+          hideSpinner();
+        });
+    }
     //do authenticate by firebase
     else {
       showSpinner();
@@ -57,7 +71,7 @@ const InputOTP = (props) => {
           hideSpinner();
         });
     }
-  }, [certificate])
+  }, [certificate]);
 
   const activeUser = async () => {
     if (confirmOTP && otp) {
@@ -115,7 +129,7 @@ const InputOTP = (props) => {
         >
           {intl.formatMessage(Messages.new_here)}{" "}
         </Text>
-        <TouchableOpacity onPress={() => { }}>
+        <TouchableOpacity onPress={() => {}}>
           <Text
             style={{
               ...defaultText,
@@ -140,7 +154,7 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: "row",
     height: scale(80),
-    borderRadius: scale(40),
+    borderRadius: space.border,
     backgroundColor: color.background,
     justifyContent: "center",
     alignItems: "center",

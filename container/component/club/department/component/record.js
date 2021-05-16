@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { injectIntl, FormattedMessage } from "react-intl";
 import { useRecoilState } from "recoil";
 import { listDepartmentState, currDepartmentState } from "../recoil";
@@ -6,7 +6,7 @@ import Messages from "container/translation/Message";
 import { View } from "react-native";
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from "container/context/modal";
 import Toast from "react-native-simple-toast";
 import SimpleRecord from "container/component/ui/simpleRecord";
 
@@ -23,6 +23,9 @@ const DepartmentRecord = (props) => {
   //recoil
   const [data, setData] = useRecoilState(currDepartmentState);
   const [list, setList] = useRecoilState(listDepartmentState);
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //#region effect
   useEffect(() => {

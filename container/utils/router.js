@@ -7,7 +7,6 @@ import Messages from "container/translation/Message";
 import { Platform, Dimensions, PixelRatio, Vibration } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { getIntl } from "../utils/common";
-import { getUserInfo } from "../action/application";
 
 global.currentScreen = [];
 
@@ -16,7 +15,14 @@ const version = parseInt(osVersion);
 
 let bottomTabsByID = {};
 
-bottomTabsByID[screens.TAB_ACCOUNT] = () => ({
+const NAVIGATION_SCREENS = [
+  screens.TAB_NAVIGATE,
+  screens.TAB_TASK,
+  screens.TAB_NOTIFICATION,
+  screens.TAB_ACCOUNT,
+];
+
+bottomTabsByID[screens.TAB_ACCOUNT] = (passProps) => ({
   stack: {
     children: [
       {
@@ -26,6 +32,7 @@ bottomTabsByID[screens.TAB_ACCOUNT] = () => ({
           options: {
             layout: { backgroundColor: "#fff" },
           },
+          passProps,
         },
       },
     ],
@@ -46,7 +53,7 @@ bottomTabsByID[screens.TAB_ACCOUNT] = () => ({
   },
 });
 
-bottomTabsByID[screens.TAB_NAVIGATE] = () => ({
+bottomTabsByID[screens.TAB_NAVIGATE] = (passProps) => ({
   stack: {
     children: [
       {
@@ -56,6 +63,7 @@ bottomTabsByID[screens.TAB_NAVIGATE] = () => ({
           options: {
             layout: { backgroundColor: "#fff" },
           },
+          passProps,
         },
       },
     ],
@@ -76,7 +84,7 @@ bottomTabsByID[screens.TAB_NAVIGATE] = () => ({
   },
 });
 
-bottomTabsByID[screens.TAB_NOTIFICATION] = () => ({
+bottomTabsByID[screens.TAB_NOTIFICATION] = (passProps) => ({
   stack: {
     children: [
       {
@@ -86,6 +94,7 @@ bottomTabsByID[screens.TAB_NOTIFICATION] = () => ({
           options: {
             layout: { backgroundColor: "#fff" },
           },
+          passProps,
         },
       },
     ],
@@ -106,7 +115,7 @@ bottomTabsByID[screens.TAB_NOTIFICATION] = () => ({
   },
 });
 
-bottomTabsByID[screens.TAB_TASK] = () => ({
+bottomTabsByID[screens.TAB_TASK] = (passProps) => ({
   stack: {
     children: [
       {
@@ -116,6 +125,7 @@ bottomTabsByID[screens.TAB_TASK] = () => ({
           options: {
             layout: { backgroundColor: "#fff" },
           },
+          passProps,
         },
       },
     ],
@@ -166,15 +176,16 @@ export const gotoLogin = (options = {}) => {
 
 export const gotoHome = (params = {}) => {
   gotoRoute(screens.HOME, params);
-
 };
 
-const navigationHomeTab = async () => {
+const navigationHomeTab = async (passProps = {}, screenIndex = 0) => {
+  console.log("navigationHomeTab:::", screenIndex);
+
   const defaultTabs = [
-    bottomTabsByID[screens.TAB_NAVIGATE](),
-    bottomTabsByID[screens.TAB_TASK](),
-    bottomTabsByID[screens.TAB_NOTIFICATION](),
-    bottomTabsByID[screens.TAB_ACCOUNT](),
+    bottomTabsByID[screens.TAB_NAVIGATE](passProps),
+    bottomTabsByID[screens.TAB_TASK](passProps),
+    bottomTabsByID[screens.TAB_NOTIFICATION](passProps),
+    bottomTabsByID[screens.TAB_ACCOUNT](passProps),
   ];
 
   await Navigation.setRoot({
@@ -186,7 +197,7 @@ const navigationHomeTab = async () => {
             orientation: ["portrait"],
           },
           bottomTabs: {
-            currentTabIndex: 0,
+            currentTabIndex: screenIndex,
             tabsAttachMode:
               Platform.OS === "ios" && version <= 10
                 ? "together"
@@ -197,8 +208,6 @@ const navigationHomeTab = async () => {
       },
     },
   });
-
-  await getUserInfo();
 };
 
 const showModal = (screen, config = {}) => {
@@ -309,6 +318,9 @@ export const gotoRoute = (screen, config = {}, isModal = false) => {
 
     if (screen == screens.HOME) {
       navigationHomeTab(config);
+    } else if (NAVIGATION_SCREENS.find((i) => i == screen)) {
+      const screenIndex = NAVIGATION_SCREENS.findIndex((i) => i == screen);
+      navigationHomeTab(config, screenIndex);
     } else {
       if (isModal) {
         showModal(screen, config);
@@ -396,6 +408,7 @@ export const back = () => {
 };
 
 export const showSpinner = () => {
+  console.log("showSpinner");
   Navigation.showOverlay({
     component: {
       name: screens.SPINNER,
@@ -413,5 +426,6 @@ export const showSpinner = () => {
 };
 
 export const hideSpinner = () => {
+  console.log("hideSpinner");
   Navigation.dismissOverlay(screens.SPINNER);
 };

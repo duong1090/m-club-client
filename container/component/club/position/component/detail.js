@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
 import { View, StyleSheet } from "react-native";
@@ -7,7 +7,7 @@ import { scale, color, defaultText } from "container/variables/common";
 import { Icon } from "native-base";
 import SimpleDetail from "container/component/ui/simpleDetail";
 import { currPositionState, listPositionState } from "../recoil";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from 'container/context/modal';
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import Toast from "react-native-simple-toast";
@@ -20,6 +20,9 @@ const PositionDetail = (props) => {
   //recoil
   const [data, setData] = useRecoilState(currPositionState);
   const [list, setList] = useRecoilState(listPositionState);
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //#region effect
   useEffect(() => {

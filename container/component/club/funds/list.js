@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -16,7 +16,7 @@ import {
 } from "container/variables/common";
 import { postRequest, getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from 'container/context/modal';
 import CreateFund from "./create";
 import FundDetail from "./detail";
 import { injectIntl } from "react-intl";
@@ -39,6 +39,9 @@ const FundList = (props) => {
   const createFundRef = useRef(null);
   const detailFundRef = useRef(null);
   let page = 1;
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //effect -------------------------------------------------------------------------------------------------------------------------------
   useEffect(() => {

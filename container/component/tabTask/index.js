@@ -1,67 +1,71 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View, StyleSheet } from "react-native";
 import ListTask from "./component/list";
 import DetailTask from "./component/detail";
-import { color, shadow } from "container/variables/common";
-import { Tabs, Tab, Container, ScrollableTab } from "native-base";
+import { scale, shadow, defaultText } from "container/variables/common";
+import { Icon } from "native-base";
+import { injectIntl } from "react-intl";
+import ActionButton from "container/component/ui/actionButton";
+import CreateTask from "./component/create";
+import Messages from "container/translation/Message";
 
 const TabTask = (props) => {
-  console.log("TabTask:::", props);
+  const { intl } = props;
   //state
-  const [mode, setMode] = useState(props.mode ? props.mode : "list");
+
+  //variables
+  const createTaskRef = useRef(null);
+  const detailTaskRef = useRef(null);
 
   //effect
   useEffect(() => {
     if (props.mode) {
-      console.log("didUpdate:::", props.mode);
-      setMode(props.mode);
+      switch (props.mode) {
+        case "detail":
+          openDetailPopUp();
+          break;
+        case "create":
+          openCreatePopUp();
+          break;
+      }
     }
   }, [props.mode]);
 
-  //change mode to switch screen
-  const onChangeMode = (mode = "list") => {
-    console.log("onChangeMode:::", mode);
-    setMode(mode);
+  //function -------------------------------------------------------------------------------------
+  const openCreatePopUp = () => {
+    createTaskRef.current && createTaskRef.current.show(props.passData);
   };
 
-  //render
+  const openDetailPopUp = () => {
+    detailTaskRef.current && detailTaskRef.current.show(props.data);
+  };
 
-  const renderMode = (mode) => {
-    const activeTab = mode == "detail" ? 1 : 0;
-    console.log("renderMode:::", mode, activeTab);
+  //render ----------------------------------------------------------------------------------------
+
+  const renderContent = () => {
     return (
-      <Tabs
-        initialPage={activeTab}
-        page={activeTab}
-        locked
-        onChangeTab={(e) => {
-          switch (e.i) {
-            case 0:
-              setMode("list");
-              break;
-            case 1:
-              setMode("detail");
-              break;
+      <React.Fragment>
+        <ListTask openDetail={() => openDetailPopUp()} />
+        <CreateTask ref={createTaskRef} {...props} />
+        <ActionButton
+          title={intl.formatMessage(Messages.add)}
+          style={styles.actionButtonBox}
+          icon={
+            <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />
           }
-        }}
-        renderTabBar={() => <ScrollableTab style={{ height: 0 }} />}
-      >
-        <Tab heading="" style={{ backgroundColor: "transparent" }}>
-          <ListTask changeMode={onChangeMode} mode={mode} />
-        </Tab>
-        <Tab heading="" style={{ backgroundColor: "transparent" }}>
-          <DetailTask
-            changeMode={onChangeMode}
-            mode={mode}
-            data={props.data}
-            {...props}
-          />
-        </Tab>
-      </Tabs>
+          fontStyle={styles.actionButtonText}
+          onPress={() => openCreatePopUp()}
+        />
+        <DetailTask
+          ref={detailTaskRef}
+          openDetail={() => openDetailPopUp()}
+          {...props}
+        />
+      </React.Fragment>
     );
   };
 
-  return <View style={styles.container}>{renderMode(mode)}</View>;
+  return <View style={styles.container}>{renderContent()}</View>;
 };
 
 const styles = StyleSheet.create({
@@ -69,6 +73,23 @@ const styles = StyleSheet.create({
     height: "100%",
     ...shadow,
   },
+  actionButtonBox: {
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: scale(15),
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  actionButtonText: {
+    ...defaultText,
+    color: "#fff",
+  },
+  actionButtonIcon: {
+    fontSize: scale(30),
+    color: "#fff",
+  },
 });
 
-export default TabTask;
+export default injectIntl(TabTask);

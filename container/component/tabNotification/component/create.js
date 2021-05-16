@@ -3,6 +3,7 @@ import React, {
   useRef,
   forwardRef,
   useImperativeHandle,
+  useContext,
 } from "react";
 import BottomPopUp from "container/component/ui/bottomPopUp";
 import styles from "../style/create";
@@ -20,7 +21,7 @@ import {
 import { Textarea } from "native-base";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from 'container/context/modal';
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 
@@ -44,6 +45,9 @@ const CreateNotification = (props, ref) => {
   const [dueTime, setDueTime] = useState(null);
   const [visibleDueDate, setVisibleDueDate] = useState(false);
   const [visibleDueTime, setVisibleDueTime] = useState(false);
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //variables
   const dueDateColor =

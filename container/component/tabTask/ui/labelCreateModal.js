@@ -1,5 +1,6 @@
 import React, {
   forwardRef,
+  useContext,
   useImperativeHandle,
   useRef,
   useState,
@@ -25,7 +26,7 @@ import {
 import { getIntl } from "container/utils/common";
 import Messages from "container/translation/Message";
 import { postRequest } from "container/utils/request";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from "container/context/modal";
 
 const { height } = Dimensions.get("window");
 
@@ -57,6 +58,9 @@ const LabelCreateModal = (props, ref) => {
   //state
   const [formValue, setFormValue] = useState(DEFAULT_FORM_VALUE);
   const [mode, setMode] = useState("create");
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //variables
   const bottomPopUpRef = useRef(null);

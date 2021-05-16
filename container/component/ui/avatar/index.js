@@ -4,6 +4,7 @@ import React, {
   useCallback,
   forwardRef,
   useImperativeHandle,
+  useContext,
 } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { Spinner } from "native-base";
@@ -14,8 +15,7 @@ import {
   defaultText,
   shadow,
 } from "container/variables/common";
-import { getAvatarSource } from "container/action/user";
-import { useRecoilBridgeAcrossReactRoots_UNSTABLE } from "recoil";
+import {getAvatarSource} from 'container/action/user';
 
 const Avatar = (props, ref) => {
   //props

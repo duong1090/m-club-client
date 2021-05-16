@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Avatar from "container/component/ui/avatar";
 import {
   ScrollView,
@@ -22,7 +22,7 @@ import Toast from "react-native-simple-toast";
 import moment from "moment";
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import { showSpinner, hideSpinner } from "container/utils/router";
+import ModalContext from 'container/context/modal';
 import InputItem from "container/component/ui/inputItem";
 import { gotoRoute } from "container/utils/router";
 import { modals } from "container/constant/screen";
@@ -49,6 +49,9 @@ const UserInfo = (props) => {
   });
   const [avatar, setAvatar] = useState(member ? member : {});
   const { showActionSheetWithOptions } = useActionSheet();
+
+  //context
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //default option topBar
   Navigation.mergeOptions(componentId, {
@@ -270,9 +273,7 @@ const UserInfo = (props) => {
     >
       <View style={styles.avatarBox}>
         <View style={styles.qrcode_avatar}>
-          <QRCode
-            value={member.id}
-          />
+          <QRCode value={member.id} />
           <Avatar size={scale(300)} data={avatar} />
         </View>
         <TouchableOpacity
