@@ -1,4 +1,4 @@
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -7,6 +7,23 @@ const ratio = width / guidelineBaseWidth;
 
 export const scale = (size) => ratio * size;
 export const verticalScale = (size) => (height / guidelineBaseHeight) * size;
+
+//Guideline sizes are based on standard ~5" screen mobile device
+
+export const isIphoneX =
+  Platform.OS === "ios" &&
+  !Platform.isPad &&
+  !Platform.isTVOS &&
+  (height === 780 ||
+    width === 780 ||
+    height === 812 ||
+    width === 812 ||
+    height === 844 ||
+    width === 844 ||
+    height === 896 ||
+    width === 896 ||
+    height === 926 ||
+    width === 926);
 
 export const color = {
   background: "#15A89E",

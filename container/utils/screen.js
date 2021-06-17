@@ -5,6 +5,7 @@ import MainProvider from "../provider";
 import { setCurrentScreen, popNavigatorStack } from "../utils/router";
 import OneSignal from "react-native-onesignal"; // Import package from node modules
 import { gotoRoute } from "container/utils/router";
+import { SafeAreaView } from "react-native";
 
 //#region Register Screen ------------------------------------------------------------------------------------------------
 
@@ -12,7 +13,7 @@ let pendingNotification = null;
 
 export const registerLazyScreen = () => {
   Navigation.registerComponent(
-    screens.SPINNER,
+    modals.SPINNER,
     () => require("container/component/ui/spinner").default
   );
 
@@ -80,11 +81,10 @@ export const registerLazyScreen = () => {
     screens.EVENT,
     require("container/component/club/event").default
   );
-  registerComponent(
-    screens.EVENT_QRCODE,
-    require("container/component/club/event_qrcode").default
+  registerModalComponent(
+    modals.GENERAL_MODAL,
+    require("container/component/ui/generalModal").default
   );
-
 
   //#endregion
 
@@ -93,6 +93,12 @@ export const registerLazyScreen = () => {
     modals.SELECT_MODAL,
     require("container/component/ui/selectModal").default
   );
+
+  // registerModalComponent(
+  //   modals.SPINNER,
+  //   require("container/component/ui/spinner").default
+  // );
+
   //#endregion
 };
 
@@ -106,7 +112,13 @@ const registerComponent = (
 
   Navigation.registerComponent(routeName, () => (props) => (
     <MainProvider>
-      <Screen {...props} {...defaultProps} />
+      {isModalScreen ? (
+        <Screen {...props} {...defaultProps} />
+      ) : (
+        <SafeAreaView>
+          <Screen {...props} {...defaultProps} />
+        </SafeAreaView>
+      )}
     </MainProvider>
   ));
 };
@@ -127,8 +139,8 @@ Navigation.events().registerComponentDidAppearListener(
       componentName,
       passProps
     );
-    if (componentName != screens.SPINNER)
-      setCurrentScreen(componentId, componentName, passProps);
+    // if (componentName != screens.SPINNER)
+    setCurrentScreen(componentId, componentName, passProps);
 
     //if pendingNotification != null open pending notification
     //then set reset to null

@@ -30,7 +30,9 @@ bottomTabsByID[screens.TAB_ACCOUNT] = (passProps) => ({
           name: screens.TAB_ACCOUNT,
           id: screens.TAB_ACCOUNT,
           options: {
-            layout: { backgroundColor: "#fff" },
+            layout: {
+              componentBackgroundColor: "#fff",
+            },
           },
           passProps,
         },
@@ -40,6 +42,7 @@ bottomTabsByID[screens.TAB_ACCOUNT] = (passProps) => ({
       topBar: {
         visible: false,
       },
+
       bottomTabs: {
         titleDisplayMode: "alwaysShow",
       },
@@ -61,7 +64,9 @@ bottomTabsByID[screens.TAB_NAVIGATE] = (passProps) => ({
           name: screens.TAB_NAVIGATE,
           id: screens.TAB_NAVIGATE,
           options: {
-            layout: { backgroundColor: "#fff" },
+            layout: {
+              componentBackgroundColor: color.background,
+            },
           },
           passProps,
         },
@@ -92,7 +97,9 @@ bottomTabsByID[screens.TAB_NOTIFICATION] = (passProps) => ({
           name: screens.TAB_NOTIFICATION,
           id: screens.TAB_NOTIFICATION,
           options: {
-            layout: { backgroundColor: "#fff" },
+            layout: {
+              componentBackgroundColor: "#fff",
+            },
           },
           passProps,
         },
@@ -123,7 +130,9 @@ bottomTabsByID[screens.TAB_TASK] = (passProps) => ({
           name: screens.TAB_TASK,
           id: screens.TAB_TASK,
           options: {
-            layout: { backgroundColor: "#fff" },
+            layout: {
+              componentBackgroundColor: "#fff",
+            },
           },
           passProps,
         },
@@ -211,7 +220,7 @@ const navigationHomeTab = async (passProps = {}, screenIndex = 0) => {
 };
 
 const showModal = (screen, config = {}) => {
-  console.log("showModal:::", config);
+  console.log("showModal:::", screen, config);
 
   const topBar =
     config.options && config.options.topBar ? config.options.topBar : {};
@@ -224,12 +233,14 @@ const showModal = (screen, config = {}) => {
       children: [
         {
           component: {
+            id: screen,
             name: screen,
             passProps: config,
             options: {
               layout: {
                 backgroundColor: "transparent",
                 screenBackgroundColor: "transparent",
+                componentBackgroundColor: "transparent",
               },
               modalPresentationStyle: Platform.select({
                 ios: "overCurrentContext",
@@ -238,40 +249,47 @@ const showModal = (screen, config = {}) => {
               screenBackgroundColor: "transparent",
               animations: {
                 showModal: {
-                  enabled: Platform.select({ ios: false, android: true }),
+                  enabled: Platform.select({ ios: true, android: true }),
                   ...Platform.select({
                     android: {
                       alpha: {
                         from: 0,
                         to: 1,
-                        duration: 200,
+                        duration: 100,
                         startDelay: 0,
-                        interpolation: "accelerate",
+                        // interpolation: "accelerate",
                       },
                     },
                     ios: {
-                      content: {
-                        alpha: {
-                          from: 0,
-                          to: 1,
-                          duration: 200,
-                          startDelay: 0,
-                          interpolation: "accelerate",
-                        },
+                      alpha: {
+                        from: 0,
+                        to: 1,
+                        duration: 100,
+                        startDelay: 0,
+                        interpolation: "accelerate",
                       },
                     },
                   }),
                 },
                 dismissModal: {
-                  enabled: Platform.select({ ios: false, android: true }),
+                  enabled: Platform.select({ ios: true, android: true }),
                   ...Platform.select({
                     android: {
                       alpha: {
                         from: 1,
                         to: 0,
-                        duration: 200,
+                        duration: 100,
                         startDelay: 0,
-                        interpolation: "accelerate",
+                        // interpolation: "accelerate",
+                      },
+                    },
+                    ios: {
+                      alpha: {
+                        from: 1,
+                        to: 0,
+                        duration: 100,
+                        startDelay: 0,
+                        // interpolation: "accelerate",
                       },
                     },
                   }),
@@ -304,6 +322,10 @@ const showModal = (screen, config = {}) => {
 };
 
 export const gotoRoute = (screen, config = {}, isModal = false) => {
+  console.log("gotoRoute::::", screen, config);
+
+  const currentScreen = global.currentScreen;
+
   if (!config) config = {};
   try {
     const topBar =
@@ -332,6 +354,7 @@ export const gotoRoute = (screen, config = {}, isModal = false) => {
         Navigation.push(componentId, {
           component: {
             name: screen,
+            id: screen,
             passProps: {
               ...config,
             },
@@ -342,7 +365,7 @@ export const gotoRoute = (screen, config = {}, isModal = false) => {
                 ...statusBar,
               },
               layout: {
-                componentBackgroundColor: "#fff",
+                componentBackgroundColor: color.backgroundColor,
                 backgroundColor: "#fff",
                 screenBackgroundColor: "#fff",
               },
@@ -357,6 +380,7 @@ export const gotoRoute = (screen, config = {}, isModal = false) => {
                 visible: false,
               },
               topBar: {
+                visible: true,
                 animate: true,
                 leftButtonColor: color.topBarButtonColor,
                 rightButtonColor: color.topBarButtonColor,
@@ -391,10 +415,12 @@ export const gotoRoute = (screen, config = {}, isModal = false) => {
 };
 
 export const setCurrentScreen = (componentId, componentName, passProps) => {
-  currentScreen.push({ componentId, componentName, passProps });
+  global.currentScreen.push({ componentId, componentName, passProps });
 };
 
 export const back = () => {
+  console.log("back::::::");
+
   if (currentScreen && currentScreen.length) {
     if (modals[currentScreen[currentScreen.length - 1].componentName]) {
       Navigation.dismissModal(
@@ -403,7 +429,7 @@ export const back = () => {
     } else {
       Navigation.pop(currentScreen[currentScreen.length - 1].componentId);
     }
-    currentScreen.pop();
+    global.currentScreen.pop();
   }
 };
 
@@ -411,12 +437,14 @@ export const showSpinner = () => {
   console.log("showSpinner");
   Navigation.showOverlay({
     component: {
-      name: screens.SPINNER,
-      id: screens.SPINNER,
+      name: modals.SPINNER,
+      id: modals.SPINNER,
       options: {
         overlay: {
           interceptTouchOutside: true,
+          zIndex: 9999999,
         },
+        layout: { componentBackgroundColor: "transparent" },
       },
       passProps: {
         show: true,
@@ -427,5 +455,5 @@ export const showSpinner = () => {
 
 export const hideSpinner = () => {
   console.log("hideSpinner");
-  Navigation.dismissOverlay(screens.SPINNER);
+  Navigation.dismissOverlay(modals.SPINNER);
 };

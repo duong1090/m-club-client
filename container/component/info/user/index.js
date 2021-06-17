@@ -22,7 +22,7 @@ import Toast from "react-native-simple-toast";
 import moment from "moment";
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import ModalContext from 'container/context/modal';
+import ModalContext from "container/context/modal";
 import InputItem from "container/component/ui/inputItem";
 import { gotoRoute } from "container/utils/router";
 import { modals } from "container/constant/screen";
@@ -30,8 +30,9 @@ import { Icon } from "native-base";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import { Navigation } from "react-native-navigation";
-import RNFetchBlob from "rn-fetch-blob";
-import QRCode from 'react-native-qrcode-svg';
+import ModalPopUp from "container/component/ui/modalPopUp";
+import QRCode from "react-native-qrcode-svg";
+import { QR_MEMBER } from "../../../constant/qrdecode";
 
 const UserInfo = (props) => {
   //props
@@ -48,10 +49,18 @@ const UserInfo = (props) => {
     position: member.position ? member.position : null,
   });
   const [avatar, setAvatar] = useState(member ? member : {});
+  const [qrVisible, setQRVisible] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
 
   //context
   const { showSpinner, hideSpinner } = useContext(ModalContext);
+
+  //event button navigation
+  Navigation.events().registerNavigationButtonPressedListener(
+    ({ buttonId }) => {
+      if (buttonId == "qr_code") setQRVisible(true);
+    }
+  );
 
   //default option topBar
   Navigation.mergeOptions(componentId, {
@@ -60,6 +69,12 @@ const UserInfo = (props) => {
       title: {
         text: intl.formatMessage(Messages.user_info),
       },
+      rightButtons: [
+        {
+          id: "qr_code",
+          icon: require("container/asset/icon/qr_code.png"),
+        },
+      ],
     },
   });
 
@@ -272,8 +287,7 @@ const UserInfo = (props) => {
       contentContainerStyle={{ paddingBottom: space.bgPadding * 2 }}
     >
       <View style={styles.avatarBox}>
-        <View style={styles.qrcode_avatar}>
-          <QRCode value={member.id} />
+        <View style={styles.avatar}>
           <Avatar size={scale(300)} data={avatar} />
         </View>
         <TouchableOpacity
@@ -289,18 +303,32 @@ const UserInfo = (props) => {
           {intl.formatMessage(Messages.done)}
         </Text>
       </TouchableOpacity>
+      <ModalPopUp
+        title={intl.formatMessage(Messages.your_qr_code)}
+        visible={qrVisible}
+        transparent
+        animationType="fade"
+        width="90%"
+        maskClose={() => {
+          setQRVisible(false);
+        }}
+        onClose={() => {
+          setQRVisible(false);
+        }}
+      >
+        <View style={styles.qrBox}>
+          <QRCode value={`${QR_MEMBER},${member.id}`} size={scale(400)} />
+        </View>
+      </ModalPopUp>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  qrcode_avatar: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '90%',
-    
+  avatar: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
   container: {
     padding: space.bgPadding,
@@ -346,6 +374,11 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: fontSize.sizeBigContent,
     fontWeight: "bold",
+  },
+  qrBox: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: space.componentMargin * 2,
   },
 });
 

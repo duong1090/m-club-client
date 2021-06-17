@@ -196,9 +196,8 @@ const CreateFund = (props, ref) => {
 
 const styles = StyleSheet.create({
   createButton: {
-    paddingVertical: scale(10),
-    paddingHorizontal: scale(20),
-    alignSelf: "flex-end",
+    flex: 1,
+    padding: scale(20),
     borderRadius: space.border,
     backgroundColor: color.primary,
     justifyContent: "center",

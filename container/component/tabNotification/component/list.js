@@ -10,7 +10,7 @@ import {
 import { styles, AVATAR_SIZE } from "../style/list";
 import { gotoRoute } from "container/utils/router";
 import Avatar from "container/component/ui/avatar";
-import ModalContext from 'container/context/modal';
+import ModalContext from "container/context/modal";
 import { postRequest, getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import { getHumanDay } from "container/helper/time";
@@ -46,12 +46,13 @@ const NotificationList = (props) => {
 
   //effect -----------------------------------------------------------------------------------------------
   useEffect(() => {
-    showSpinner();
     getData();
   }, []);
 
   //function - event -------------------------------------------------------------------------------------
   const getData = () => {
+    showSpinner();
+
     getRequest("notification/get", { page })
       .then((res) => {
         if (res && res.data) {

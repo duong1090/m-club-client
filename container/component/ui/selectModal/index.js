@@ -86,7 +86,7 @@ const SelectModal = (props, ref) => {
       propagateSwipe
       isVisible={visible}
       style={styles.modalWrapper}
-      backdropOpacity={0.8}
+      backdropOpacity={0.5}
       // onSwipeComplete={() => setVisible(false)}
       onBackdropPress={() => setVisible(false)}
       // useNativeDriverForBackdrop={true}

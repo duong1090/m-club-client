@@ -35,6 +35,8 @@ import Toast from "react-native-simple-toast";
 import ModalContext from "container/context/modal";
 import { listEventState } from "../recoil";
 import { useRecoilState } from "recoil";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { isIphoneX } from "../../../../variables/common";
 
 const intl = getIntl();
 const DEFAULT_VALUE = {
@@ -291,7 +293,7 @@ const Create = (props, ref) => {
 
   const renderSelectType = () => {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, padding: scale(15) }}>
         {renderType(
           "Online",
           { name: "globe", type: "FontAwesome" },
@@ -471,7 +473,11 @@ const Create = (props, ref) => {
       title={intl.formatMessage(Messages.create_title, {
         title: intl.formatMessage(Messages.event).toLowerCase(),
       })}
-      body={<View style={styles.bodyBox}>{renderBody()}</View>}
+      body={
+        <KeyboardAwareScrollView>
+          <View style={styles.bodyBox}>{renderBody()}</View>
+        </KeyboardAwareScrollView>
+      }
     />
   );
 };
@@ -482,7 +488,7 @@ const styles = StyleSheet.create({
   bodyBox: {
     height: scale(800),
     marginHorizontal: -space.componentMargin,
-    marginBottom: -space.componentMargin,
+    marginBottom: isIphoneX ? 0 : -space.componentMargin,
   },
   createButton: {
     flex: 1,
@@ -497,6 +503,7 @@ const styles = StyleSheet.create({
   textCreateButton: {
     ...defaultText,
     color: "#fff",
+    height: scale(40),
   },
 
   typeBox: {

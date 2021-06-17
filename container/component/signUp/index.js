@@ -1,10 +1,20 @@
 import React, { useState } from "react";
-import { View, Image, KeyboardAvoidingView } from "react-native";
-// import InformationPage from "./component/InformationPage";
+import { View, Image } from "react-native";
+import { Navigation } from "react-native-navigation";
 import InformationPage from "./component/InformationPage";
 import { scale, color } from "container/variables/common";
 
-const SignUp = () => {
+const SignUp = (props) => {
+  //props
+  const { componentId } = props;
+
+  //default option topBar
+  Navigation.mergeOptions(componentId, {
+    topBar: {
+      visible: false,
+    },
+  });
+
   const header = () => {
     return (
       <View style={styles.header}>
@@ -30,12 +40,10 @@ const SignUp = () => {
   };
 
   return (
-    <KeyboardAvoidingView keyboardVerticalOffset={50} behavior="position">
-      <View style={styles.container}>
-        {header()}
-        <InformationPage style={styles.information} />
-      </View>
-    </KeyboardAvoidingView>
+    <View style={styles.container}>
+      {header()}
+      <InformationPage style={styles.information} />
+    </View>
   );
 };
 

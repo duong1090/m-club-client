@@ -1,14 +1,22 @@
 import { Tabs, Tab, ScrollableTab } from "native-base";
 import React, { useContext, useEffect, useState } from "react";
 import InputItem from "container/component/ui/inputItem";
-import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  KeyboardAvoidingView,
+} from "react-native";
 import update from "immutability-helper";
-import ModalContext from 'container/context/modal';
+import ModalContext from "container/context/modal";
 import Messages from "container/translation/Message";
 import { injectIntl } from "react-intl";
 import Toast from "react-native-simple-toast";
 import { signInWithPhoneNumber } from "container/action/authenticate";
 import { loginSuccess } from "container/action/user";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { postRequest } from "container/utils/request";
 
 import {
   scale,
@@ -311,12 +319,12 @@ const InformationPage = (props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
       {renderHeading()}
       {renderPagination()}
       {renderTab()}
       {renderSubmit()}
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 

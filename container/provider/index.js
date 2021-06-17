@@ -4,7 +4,7 @@ import IntlMainProvider from "./component/intl";
 import PrivilegeProvider from "./component/privilege";
 import ModalProvider from "./component/modal";
 
-import { LogBox } from "react-native";
+import { LogBox, SafeAreaView } from "react-native";
 
 // const PersistenceObserver = () => {
 //   useRecoilTransactionObserver_UNSTABLE(({ snapshot }) => {

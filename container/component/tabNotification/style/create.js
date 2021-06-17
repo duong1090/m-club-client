@@ -10,9 +10,8 @@ import {
 export default StyleSheet.create({
   bodyBox: { height: scale(800), marginBottom: scale(30) },
   createButton: {
-    paddingVertical: scale(10),
-    paddingHorizontal: scale(20),
-    alignSelf: "flex-end",
+    flex: 1,
+    padding: scale(20),
     borderRadius: space.border,
     backgroundColor: color.primary,
     justifyContent: "center",

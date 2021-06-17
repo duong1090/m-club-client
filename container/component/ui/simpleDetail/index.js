@@ -98,7 +98,7 @@ const SimpleDetail = (props) => {
         {backButton ? (
           <TouchableOpacity
             onPress={() => backButton.onPress()}
-            style={[styles.backButton, { backgroundColor: color.primary }]}
+            style={styles.backButton}
           >
             <Icon name="caret-back" style={styles.actionIcon} />
             <Text style={styles.actionText}>{backButton.title}</Text>
@@ -108,9 +108,13 @@ const SimpleDetail = (props) => {
           <PrivilegeAction privilegeKey={privilege.update}>
             <TouchableOpacity
               onPress={() => updateButton.onPress()}
-              style={[styles.backButton, { backgroundColor: color.success }]}
+              style={styles.backButton}
             >
-              <Icon name="edit" type="Entypo" style={styles.actionIcon} />
+              <Icon
+                name="edit"
+                type="Entypo"
+                style={[styles.actionIcon, { marginRight: scale(5) }]}
+              />
               <Text style={styles.actionText}>{updateButton.title}</Text>
             </TouchableOpacity>
           </PrivilegeAction>
@@ -143,21 +147,18 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: space.bgPadding,
+    flex: 1,
   },
   card: {
-    margin: space.componentMargin,
     backgroundColor: "#fff",
-    borderRadius: space.border,
-    ...shadow,
+    flex: 1,
   },
   header: {
     width: "100%",
     justifyContent: "center",
     alignItems: "flex-start",
-    backgroundColor: color.background,
+    backgroundColor: color.backgroundColor,
     marginBottom: space.componentMargin,
-    borderTopLeftRadius: space.border,
-    borderTopRightRadius: space.border,
   },
   title: {
     flexDirection: "row",
@@ -177,7 +178,6 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     ...defaultText,
-    color: "#fff",
     fontSize: fontSize.sizeTitle,
     fontWeight: "bold",
   },
@@ -209,10 +209,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   itemContent: {
-    marginBottom: space.componentMargin,
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingBottom: scale(10),
+    paddingVertical: space.bgPadding,
     borderBottomWidth: scale(2),
     borderColor: color.lightGrey,
   },
@@ -220,18 +219,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    marginBottom: space.itemMargin,
-    borderColor: color.text,
-    paddingHorizontal: scale(20),
-    paddingVertical: scale(5),
-    borderRadius: space.border,
-    ...shadow,
   },
   actionText: {
     ...defaultText,
-    fontSize: fontSize.size28,
+    fontSize: fontSize.size26,
+    fontWeight: "bold",
     color: "#fff",
-    marginLeft: scale(5),
   },
   actionIcon: {
     fontSize: scale(25),
@@ -240,20 +233,22 @@ const styles = StyleSheet.create({
   actionBox: {
     flexDirection: "row",
     justifyContent: "space-between",
-    margin: space.componentMargin,
+    backgroundColor: color.grey,
+    paddingHorizontal: space.componentMargin / 2,
+    paddingVertical: scale(20),
   },
   deleteBox: {
     paddingVertical: space.itemMargin,
-    backgroundColor: color.danger,
     borderRadius: space.border,
+    borderStyle: 'dashed',
+    borderWidth: scale(1),
+    borderColor: color.danger,
     justifyContent: "center",
     alignItems: "center",
   },
   titleSymbol: {
     ...defaultText,
-    color: "#fff",
-    fontSize: fontSize.sizeBigContent,
-    fontWeight: "bold",
+    color: color.danger,
   },
 });
 

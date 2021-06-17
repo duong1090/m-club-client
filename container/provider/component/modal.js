@@ -1,22 +1,32 @@
 import React, { useRef } from "react";
 import ModalContext from "container/context/modal";
-import GeneralModal from "container/component/ui/generalModal";
-import Spinner from "container/component/ui/spinner";
+import {
+  back,
+  gotoRoute,
+  showSpinner as showLoading,
+  hideSpinner as hideLoading,
+} from "../../utils/router";
+import { modals } from "../../constant/screen";
+import { Navigation } from "react-native-navigation";
 
 const ModalProvider = (props) => {
-  const modalRef = useRef(null);
-  const spinnerRef = useRef(null);
-
   const showActionSheet = (options) => {
-    modalRef.current && modalRef.current.show({ type: "actionSheet", options });
+    console.log("showActionSheet:::", options);
+
+    gotoRoute(modals.GENERAL_MODAL, { options, type: "actionSheet" }, true);
   };
 
   const showSpinner = () => {
-    spinnerRef.current && spinnerRef.current.show();
+    console.log("showSpinnerNe::::");
+    // gotoRoute(modals.SPINNER, {}, true);
+    showLoading();
   };
 
   const hideSpinner = () => {
-    spinnerRef.current && spinnerRef.current.hide();
+    console.log("hideSpinnerNe::::");
+
+    // Navigation.dismissModal(modals.SPINNER);
+    hideLoading();
   };
 
   const getContext = () => {
@@ -30,8 +40,6 @@ const ModalProvider = (props) => {
   return (
     <ModalContext.Provider value={getContext()}>
       {props.children}
-      <GeneralModal ref={modalRef} />
-      <Spinner ref={spinnerRef} />
     </ModalContext.Provider>
   );
 };

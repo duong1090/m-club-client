@@ -40,24 +40,31 @@ const SimpleRecord = (props) => {
 
   //render -------------------------------------------------------------------------------------------
   return (
-    <ScrollView style={styles.container}>
-      {backButton ? (
+    <View style={styles.container}>
+      <View style={styles.actionBox}>
+        {backButton ? (
+          <TouchableOpacity
+            onPress={() => backButton.onPress()}
+            style={styles.backButton}
+          >
+            <Icon name="chevron-back" style={styles.backIcon} />
+            <Text style={styles.backText}>{backButton.title}</Text>
+          </TouchableOpacity>
+        ) : null}
         <TouchableOpacity
-          onPress={() => backButton.onPress()}
+          onPress={() => preValidate()}
           style={styles.backButton}
         >
-          <Icon name="caret-back" style={styles.backIcon} />
-          <Text style={styles.backText}>{backButton.title}</Text>
+          <Icon name="check" type="Feather" style={styles.backIcon} />
+          <Text style={styles.backText}>
+            {intl.formatMessage(Messages.done)}
+          </Text>
         </TouchableOpacity>
-      ) : null}
+      </View>
 
       <View style={styles.card}>
         <View style={styles.symbol}>
-          <Icon
-            type="MaterialCommunityIcons"
-            name="pencil"
-            style={styles.iconSymbol}
-          />
+          <Icon type="Entypo" name="edit" style={styles.iconSymbol} />
           {mode === "edit" ? (
             <Text style={styles.titleSymbol}>
               {intl.formatMessage(Messages.edit)}
@@ -69,7 +76,7 @@ const SimpleRecord = (props) => {
           ) : null}
         </View>
 
-        <View style={styles.content}>
+        <ScrollView style={styles.content}>
           {header ? header(data) : null}
           <View>
             {fields && fields.length
@@ -84,6 +91,7 @@ const SimpleRecord = (props) => {
                     onPress={item.onPress ? item.onPress : null}
                     onChangeText={item.onChangeText ? item.onChangeText : null}
                     onChangeDate={item.onChangeDate ? item.onChangeDate : null}
+                    keyboardType={item.keyboardType ? item.keyboardType : null}
                     value={
                       data && data[item.fieldName] ? data[item.fieldName] : null
                     }
@@ -93,37 +101,25 @@ const SimpleRecord = (props) => {
                 ))
               : null}
           </View>
-          <TouchableOpacity
-            style={styles.doneBox}
-            onPress={() => preValidate()}
-          >
-            <Text style={styles.titleSymbol}>
-              {intl.formatMessage(Messages.done)}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        </ScrollView>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: color.backgroundColor,
+    backgroundColor: "#fff",
     height: "100%",
   },
   content: {
     padding: space.bgPadding,
+    flex: 1,
   },
   card: {
-    margin: space.componentMargin,
-    backgroundColor: "#fff",
-    borderRadius: space.border,
-    marginBottom: space.bgPadding * 2,
-    ...shadow,
+    flex: 1,
   },
   iconSymbol: {
-    color: "#fff",
     fontSize: scale(39),
     alignItems: "center",
     marginRight: scale(10),
@@ -133,16 +129,13 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingVertical: scale(20),
     paddingHorizontal: scale(20),
-    borderTopLeftRadius: scale(20),
-    borderTopRightRadius: scale(20),
-    backgroundColor: color.background,
+    backgroundColor: color.backgroundColor,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: scale(20),
   },
   titleSymbol: {
     ...defaultText,
-    color: "#fff",
     fontSize: fontSize.sizeBigContent,
     fontWeight: "bold",
   },
@@ -163,23 +156,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     alignSelf: "flex-start",
-    margin: space.componentMargin,
-    marginBottom: 0,
-    borderColor: color.text,
-    backgroundColor: color.primary,
-    paddingHorizontal: scale(20),
-    paddingVertical: scale(5),
-    borderRadius: space.border,
   },
   backText: {
     ...defaultText,
-    fontSize: fontSize.size28,
+    fontSize: fontSize.size26,
     color: "#fff",
     marginLeft: scale(5),
   },
   backIcon: {
     fontSize: scale(25),
     color: "#fff",
+  },
+  actionBox: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: color.grey,
+    paddingHorizontal: space.componentMargin / 2,
+    paddingVertical: scale(20),
   },
 });
 

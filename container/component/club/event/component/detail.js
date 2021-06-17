@@ -14,6 +14,7 @@ import {
   ScrollView,
   FlatList,
   TextInput,
+  Platform,
 } from "react-native";
 import { currEventState, listEventState } from "../recoil";
 import { useRecoilState } from "recoil";
@@ -46,7 +47,11 @@ import update from "immutability-helper";
 import { gotoRoute } from "../../../../utils/router";
 import { screens } from "container/constant/screen";
 import ModalContext from "container/context/modal";
-const { width } = Dimensions.get("window");
+import { Navigation } from "react-native-navigation";
+import { elevation } from "../../../../constant/screen";
+import Attendance from "./attendance";
+import { QR_EVENT } from "../../../../constant/qrdecode";
+import QRCode from "react-native-qrcode-svg";
 
 const intl = getIntl();
 
@@ -67,6 +72,7 @@ const Detail = (props, ref) => {
     price: useRef(null),
     content: useRef(null),
   };
+  const attendanceRef = useRef(null);
   const modalContext = useContext(ModalContext);
 
   //hooks
@@ -78,14 +84,24 @@ const Detail = (props, ref) => {
   //functions -------------------------------------------------------------------------
   const show = () => {
     setVisible(true);
+    Navigation.mergeOptions(screens.EVENT, {
+      topBar: {
+        visible: false,
+      },
+    });
   };
 
   const hide = () => {
     setVisible(false);
+    Navigation.mergeOptions(screens.EVENT, {
+      topBar: {
+        visible: true,
+      },
+    });
   };
 
-  const gotoAttandencePage = () => {
-    gotoRoute(screens.EVENT_QRCODE);
+  const gotoAttendancePage = () => {
+    attendanceRef.current && attendanceRef.current.show();
   };
 
   const onChangeData = (fieldName, value) => {
@@ -171,7 +187,7 @@ const Detail = (props, ref) => {
       },
       {
         title: intl.formatMessage(Messages.attendance),
-        onPress: () => gotoAttandencePage(),
+        onPress: () => gotoAttendancePage(),
       },
       {
         title: intl.formatMessage(Messages.delete),
@@ -531,17 +547,36 @@ const Detail = (props, ref) => {
     );
   };
 
+  const renderQRCode = () => {
+    return (
+      <View style={styles.contentBox}>
+        <Text style={styles.titleContent}>
+          {intl.formatMessage(Messages.event_qr_code)}
+        </Text>
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <QRCode value={`${QR_EVENT},${data.id}`} size={scale(400)} />
+        </View>
+      </View>
+    );
+  };
+
+  const renderModal = () => {
+    return (
+      <React.Fragment>
+        <Attendance ref={attendanceRef} />
+      </React.Fragment>
+    );
+  };
+
   return (
     <Modal
       isVisible={visible}
       style={styles.modalWrapper}
-      backdropOpacity={0.8}
-      // onSwipeComplete={() => hide()}
+      backdropOpacity={0.5}
       onBackdropPress={() => hide()}
-      // useNativeDriverForBackdrop={true}
       useNativeDriver={true}
-      // swipeDirection={["down"]}
       propagateSwipe
+      coverScreen={false}
     >
       <ScrollView style={styles.container}>
         {renderImage()}
@@ -551,6 +586,8 @@ const Detail = (props, ref) => {
         {renderHost()}
         {renderGoingList()}
         {renderInterestedList()}
+        {renderQRCode()}
+        {renderModal()}
       </ScrollView>
     </Modal>
   );
@@ -561,11 +598,12 @@ export default forwardRef(Detail);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: color.backgroundColor,
   },
   modalWrapper: {
     margin: 0,
     justifyContent: "flex-end",
+    elevation: elevation.MODAL,
   },
   dotImage: {
     width: scale(15),

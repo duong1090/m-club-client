@@ -602,4 +602,28 @@ export default defineMessages({
     id: "add_filter",
     defaultMessage: "Add filter",
   },
+  check_in_successfully: {
+    id: "check_in_successfully",
+    defaultMessage: "Check in successfully",
+  },
+  attendance_event_note: {
+    id: "attendance_event_note",
+    defaultMessage: "Check in for an ongoing event",
+  },
+  your_qr_code: {
+    id: "your_qr_code",
+    defaultMessage: "Your QR Code",
+  },
+  event_qr_code: {
+    id: "event_qr_code",
+    defaultMessage: "Event QR code",
+  },
+  student_id: {
+    id: "student_id",
+    defaultMessage: "Student ID",
+  },
+  student_id_placeholder: {
+    id: "student_id_placeholder",
+    defaultMessage: "Enter student ID",
+  },
 });

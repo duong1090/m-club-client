@@ -44,21 +44,23 @@ const TabNavigate = (props) => {
     );
   };
 
-  return <View style={styles.container}>
-    {header()}
-    <View style={styles.description}>
-      <Text> {intl.formatMessage(Messages.desciption_home)} </Text>
-      <Text>►   {intl.formatMessage(Messages.fund_management)}</Text>
-      <Text>►   {intl.formatMessage(Messages.hr_management)}</Text>
-      <Text>►   {intl.formatMessage(Messages.task_management)}</Text>
-      <Text>►   {intl.formatMessage(Messages.noti_management)}</Text>
+  return (
+    <View style={styles.container}>
+      {header()}
+      <View style={styles.description}>
+        <Text> {intl.formatMessage(Messages.desciption_home)} </Text>
+        <Text>► {intl.formatMessage(Messages.fund_management)}</Text>
+        <Text>► {intl.formatMessage(Messages.hr_management)}</Text>
+        <Text>► {intl.formatMessage(Messages.task_management)}</Text>
+        <Text>► {intl.formatMessage(Messages.noti_management)}</Text>
+      </View>
     </View>
-  </View>;
+  );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: color.backgroundColor,
+    backgroundColor: '#fff',
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
     // color: '#00aaaa',
     marginTop: scale(70),
     marginBottom: 0,
-    width: '70%',
+    width: "70%",
   },
   header: {
     height: scale(300),

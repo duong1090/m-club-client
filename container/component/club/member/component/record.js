@@ -6,7 +6,7 @@ import Messages from "container/translation/Message";
 import { View } from "react-native";
 import { postRequest, getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import ModalContext from 'container/context/modal';
+import ModalContext from "container/context/modal";
 import Toast from "react-native-simple-toast";
 import SimpleRecord from "container/component/ui/simpleRecord";
 import { gotoRoute } from "container/utils/router";
@@ -24,6 +24,7 @@ const DEFAULT_INFO = {
   birthday: moment().format(getIntl().formatMessage(Messages.date_format)),
   department: null,
   position: null,
+  identification: null,
 };
 
 const MemberRecord = (props) => {
@@ -60,10 +61,17 @@ const MemberRecord = (props) => {
       onChangeText: (value) => onChangeField("name", value),
     },
     {
+      name: <FormattedMessage {...Messages.student_id} />,
+      fieldName: "identification",
+      placeholder: intl.formatMessage(Messages.student_id_placeholder),
+      onChangeText: (value) => onChangeField("identification", value),
+    },
+    {
       name: <FormattedMessage {...Messages.phone} />,
       fieldName: "phone",
       placeholder: intl.formatMessage(Messages.phone_placeholder),
       onChangeText: (value) => onChangeField("phone", value),
+      keyboardType: "numeric",
     },
     {
       name: <FormattedMessage {...Messages.address} />,

@@ -2,23 +2,44 @@ import React, { useState, useEffect, useRef } from "react";
 import { View, StyleSheet } from "react-native";
 import ListTask from "./component/list";
 import DetailTask from "./component/detail";
-import { scale, shadow, defaultText } from "container/variables/common";
+import { scale, shadow, defaultText, color } from "container/variables/common";
 import { Icon } from "native-base";
 import { injectIntl } from "react-intl";
 import ActionButton from "container/component/ui/actionButton";
 import CreateTask from "./component/create";
 import Messages from "container/translation/Message";
+import { Navigation } from "react-native-navigation";
 
 const TabTask = (props) => {
-  const { intl } = props;
+  const { intl, componentId } = props;
   //state
 
   //variables
   const createTaskRef = useRef(null);
   const detailTaskRef = useRef(null);
 
+  useEffect(() => {
+    Navigation.mergeOptions(props.componentId, {
+      layout: {
+        componentBackgroundColor: color.background,
+      },
+    });
+    if (props.mode) {
+      switch (props.mode) {
+        case "detail":
+          openDetailPopUp();
+          break;
+        case "create":
+          openCreatePopUp();
+          break;
+      }
+    }
+  }, []);
+
   //effect
   useEffect(() => {
+    console.log("TabTask::::useEffect", props);
+
     if (props.mode) {
       switch (props.mode) {
         case "detail":

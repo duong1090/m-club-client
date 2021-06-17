@@ -7,6 +7,7 @@ import {
   defaultText,
   space,
 } from "container/variables/common";
+import { elevation } from "../../../constant/screen";
 
 const ActionButton = (props) => {
   const { title, icon, style, color, fontColor, fontStyle, onPress } = props;
@@ -41,6 +42,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(20),
     borderRadius: space.border,
     ...shadow,
+    elevation: 0,
   }),
   actionButtonText: (fontColor) => ({
     ...defaultText,

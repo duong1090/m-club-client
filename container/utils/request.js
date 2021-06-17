@@ -4,6 +4,7 @@ import { Text, Alert } from "react-native";
 import { getItem } from "./storage";
 import Config, { formatURL } from "container/config/server.config";
 import { LANG, API_TOKEN, API_URL } from "container/constant/storage";
+import Toast from "react-native-simple-toast";
 
 const constants = {
   APP_JSON_HEADER: "application/json",
@@ -31,6 +32,8 @@ const showServerError = (error, cb) => {
   //hideSpinner();
 
   console.error("showServerError:::", message, statusCode);
+
+  Toast.show(error.message ? error.message : "Lỗi server", Toast.LONG);
 
   //TODO: declare showSystemAlert
   // showSystemAlert({
@@ -143,7 +146,7 @@ const postUpload = async (uri, method = "POST", data, quiet) => {
   const apiURL = await getItem(API_URL);
 
   if (apiURL) uri = formatURL(apiURL).concat(uri);
-  else uri = Config.API_URL.concat(uri);
+  else uri = Config().API_URL.concat(uri);
 
   console.log("************* postRequest **********:");
   console.log(uri);
@@ -193,7 +196,7 @@ const postPut = async (uri, method = "POST", data, quiet) => {
   const apiURL = await getItem(API_URL);
 
   if (apiURL) uri = formatURL(apiURL).concat(uri);
-  else uri = Config.API_URL.concat(uri);
+  else uri = Config().API_URL.concat(uri);
 
   console.log("************* postRequest **********:");
   console.log(uri);
@@ -290,7 +293,7 @@ export const get = async (uri, params = "", quiet) => {
   const apiURL = await getItem(API_URL);
 
   if (apiURL) uri = formatURL(apiURL).concat(uri);
-  else uri = Config.API_URL.concat(uri);
+  else uri = Config().API_URL.concat(uri);
 
   console.log("************* getRequest **********:");
   console.log(uri);

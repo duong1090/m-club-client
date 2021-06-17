@@ -64,10 +64,6 @@ const ListTask = (props) => {
 
   //effect
   useEffect(() => {
-    getData();
-  }, []);
-
-  useEffect(() => {
     doFilter("dynamic");
   }, [filter.dynamic]);
 

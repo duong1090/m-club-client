@@ -35,6 +35,8 @@ import Config from "container/config/server.config";
 import ModalContext from "container/context/modal";
 import update from "immutability-helper";
 import EmptyData from "container/component/ui/emptyData";
+import { gotoRoute } from "../../../../utils/router";
+import { screens } from "container/constant/screen";
 
 const List = (props) => {
   const { intl } = props;

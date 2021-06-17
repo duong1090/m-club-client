@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -20,11 +20,12 @@ import ManageItem from "./component/ManageItem";
 import { gotoRoute } from "container/utils/router";
 import { screens } from "container/constant/screen";
 import { Icon } from "native-base";
-import ModalContext from 'container/context/modal';
+import ModalContext from "container/context/modal";
 import { normalRole, isRoot } from "container/constant/role";
 import PrivilegeAction from "container/component/ui/privilegeAction";
 import ActionButton from "container/component/ui/actionButton";
-import {logOut} from 'container/action/user';
+import { logOut } from "container/action/user";
+import { Navigation } from "react-native-navigation";
 
 const TabAccount = (props) => {
   //context
@@ -34,6 +35,14 @@ const TabAccount = (props) => {
   const gotoManageItem = (type) => {
     gotoRoute(type);
   };
+
+  useEffect(() => {
+    Navigation.mergeOptions(props.componentId, {
+      layout: {
+        componentBackgroundColor: color.background,
+      },
+    });
+  }, []);
 
   const doLogOut = () => {
     showSpinner();
@@ -134,7 +143,7 @@ const TabAccount = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: "100%",
     backgroundColor: color.backgroundColor,
   },
   information: {

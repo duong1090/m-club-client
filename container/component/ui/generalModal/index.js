@@ -1,5 +1,10 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import Modal from "react-native-modal";
 import ActionSheet from "./component/actionSheet";
 import {
@@ -8,64 +13,45 @@ import {
   defaultText,
   fontSize,
 } from "container/variables/common";
+import { back } from "../../../utils/router";
 
 const GeneralModal = (props, ref) => {
-  const [visible, setVisible] = useState(false);
-  const [type, setType] = useState(null);
-  const [childOptions, setChildOptions] = useState({});
+  const { type, options } = props;
 
-  //hooks ---------------------------------------------------------------------------------------------
-  useImperativeHandle(ref, () => ({
-    show,
-    hide,
-  }));
-
-  //function ------------------------------------------------------------------------------------------
-  const show = (object) => {
-    const { type, options } = object;
-    setType(type);
-    setChildOptions(options);
-
-    setVisible(true);
-  };
-
-  const hide = () => {
-    setVisible(false);
-  };
+  console.log("GeneralModal", props);
 
   //render --------------------------------------------------------------------------------------------\
 
   const renderContent = () => {
+    console.log("renderContent::::", type, options);
+
     switch (type) {
       case "actionSheet":
-        return <ActionSheet {...childOptions} hide={() => hide()} />;
+        return <ActionSheet {...options} hide={() => back()} />;
     }
   };
 
   return (
-    <Modal
-      isVisible={visible}
-      style={styles.modalWrapper}
-      backdropOpacity={0.8}
-      onBackdropPress={() => hide()}
-      useNativeDriver={true}
-      animationIn="zoomInDown"
-      animationOut="zoomOutUp"
-    >
+    <TouchableOpacity style={styles.modalWrapper} onPress={() => back()}>
       <View style={styles.container}>{renderContent()}</View>
-    </Modal>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   modalWrapper: {
-    margin: space.componentMargin,
+    width: "100%",
+    height: "100%",
     justifyContent: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    paddingHorizontal: space.componentMargin,
+    elevation: 2,
   },
   container: {
     backgroundColor: "#fff",
     borderRadius: space.border,
+    elevation: 2,
   },
 });
 
-export default forwardRef(GeneralModal);
+export default GeneralModal;

@@ -711,7 +711,7 @@ const DetailTask = (props, ref) => {
     <Modal
       isVisible={visible}
       style={styles.modalWrapper}
-      backdropOpacity={0.8}
+      backdropOpacity={0.5}
       onBackdropPress={() => hide()}
       useNativeDriver={true}
       propagateSwipe

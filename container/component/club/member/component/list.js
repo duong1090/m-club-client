@@ -101,7 +101,7 @@ const MemberList = (props) => {
         onSearch={(text) => debounceSearch(text)}
         loading={loading}
         data={data}
-        iconHeader={(item) => <Avatar data={item} size={scale(80)} />}
+        iconHeader={(item) => <Avatar data={item} size={scale(80)} noShadow/>}
         addNewItem={gotoRecord}
         styleTextItem={{ fontWeight: "bold" }}
         onPressItem={(item) => onPressItem(item)}

@@ -7,7 +7,6 @@ export const screens = {
   LOGIN: "LOGIN",
   SIGNUP: "SIGNUP",
   MEMBER: "MEMBER",
-  SPINNER: "SPINNER",
   DEPARTMENT: "DEPARTMENT",
   POSITION: "POSITION",
   FUNDS: "FUNDS",
@@ -16,9 +15,16 @@ export const screens = {
   SPLASH_SCREEN: "SPLASH_SCREEN",
   ROLE: "ROLE",
   EVENT: "EVENT",
-  EVENT_QRCODE: "EVENT_QRCODE",
 };
 
 export const modals = {
   SELECT_MODAL: "SELECT_MODAL",
+  SPINNER: "SPINNER",
+  GENERAL_MODAL: "GENERAL_MODAL",
+};
+
+export const elevation = {
+  MODAL: 3,
+  SPINNER: 3,
+  ACTION_BUTTON: 2,
 };

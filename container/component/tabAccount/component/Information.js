@@ -31,7 +31,10 @@ const Information = (props) => {
   };
 
   const gotoView = () => {
-    gotoRoute(screens.USER_INFO, { mode: 'list', updateCallback: updateAvatar });
+    gotoRoute(screens.USER_INFO, {
+      mode: "list",
+      updateCallback: updateAvatar,
+    });
   };
   const gotoSetting = () => {
     gotoRoute(screens.SETTING);
@@ -39,10 +42,14 @@ const Information = (props) => {
 
   return (
     <View style={[styles.container, style]}>
+      <TouchableOpacity style={styles.settingBtn} onPress={() => gotoSetting()}>
+        <Text style={styles.setting}>
+          {intl.formatMessage(Messages.setting)}
+        </Text>
+        <Icon name="settings-sharp" style={styles.settingIcon} />
+      </TouchableOpacity>
+
       <View style={styles.person}>
-        <TouchableOpacity style={styles.avatar} onPress={() => gotoEdit()}>
-          <Avatar style={styles.avatar} size={scale(150)} data={avatar} />
-        </TouchableOpacity>
         <View style={styles.info}>
           <View style={styles.memberInfo}>
             {member && member.name ? (
@@ -56,22 +63,17 @@ const Information = (props) => {
             <Icon type="FontAwesome5" name="pen" style={styles.editIcon} />
           </TouchableOpacity>
         </View>
+        <TouchableOpacity style={styles.avatar} onPress={() => gotoEdit()}>
+          <Avatar size={scale(150)} data={avatar} />
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.settingBtn} onPress={() => gotoSetting()}>
-        <Text style={styles.setting}>
-          {intl.formatMessage(Messages.setting)}
-        </Text>
-        <Icon name="settings-sharp" style={styles.settingIcon} />
-      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: space.bgPadding / 2,
-    backgroundColor: "#fff",
-    ...shadow,
+    backgroundColor: color.background,
   },
   person: {
     flexDirection: "row",
@@ -79,23 +81,25 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   avatar: {
-    elevation: 11,
+    position: "absolute",
+    left: scale(30),
+    top: 0,
   },
   info: {
-    marginLeft: -space.bgPadding,
-    backgroundColor: color.primary,
+    backgroundColor: "#fff",
     flex: 1,
+    height: scale(120),
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderTopRightRadius: space.border,
-    borderBottomRightRadius: space.border,
-
+    marginTop: scale(75),
+    borderBottomWidth: scale(1),
+    borderColor: color.grey,
   },
   memberInfo: {
     flex: 1,
     margin: space.bgPadding / 2,
-    marginLeft: space.bgPadding * 2,
+    marginLeft: space.bgPadding * 2 + scale(150),
     marginRight: space.bgPadding,
   },
   editInfo: {
@@ -107,7 +111,6 @@ const styles = StyleSheet.create({
   name: {
     ...defaultText,
     fontSize: fontSize.size36,
-    color: "#fff",
     fontWeight: "bold",
   },
   position: {
@@ -117,21 +120,22 @@ const styles = StyleSheet.create({
   },
   editIcon: {
     fontSize: fontSize.size24,
-    color: "#fff",
   },
   settingBtn: {
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "flex-end",
+    marginRight: space.bgPadding,
+    marginTop: space.itemMargin,
   },
   setting: {
     ...defaultText,
-    color: color.primary,
+    color: "#fff",
     marginRight: scale(10),
   },
   settingIcon: {
     fontSize: fontSize.size24,
-    color: color.primary,
+    color: "#fff",
   },
 });
 

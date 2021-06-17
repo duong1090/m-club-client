@@ -1,35 +1,37 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
-import { View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Animated, View } from "react-native";
 import { scale } from "container/variables/common";
 import LottieView from "lottie-react-native";
-import Modal from "react-native-modal";
 
-const Spinner = (props, ref) => {
-  const [visible, setVisible] = useState(false);
+const Spinner = () => {
+  const opacity = useState(new Animated.Value(0))[0];
 
-  const show = () => {
-    setVisible(true);
+  const fadeIn = () => {
+    console.log("fadeIn:::::");
+
+    Animated.timing(opacity, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
   };
 
-  const hide = () => {
-    setVisible(false);
+  const fadeOut = () => {
+    console.log("fadeOut:::::");
+
+    Animated.timing(opacity, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
   };
 
-  useImperativeHandle(ref, () => ({
-    show,
-    hide,
-  }));
+  useEffect(() => {
+    fadeIn();
+  }, []);
 
   return (
-    <Modal
-      isVisible={visible}
-      backdropOpacity={0}
-      style={overlay}
-      animationIn="zoomInDown"
-      animationOut="zoomOutUp"
-      animationInTiming={1}
-      animationOutTiming={1}
-    >
+    <Animated.View style={[overlay, { opacity }]}>
       <View
         style={{
           backgroundColor: "rgba(0,0,0,0.6)",
@@ -55,13 +57,19 @@ const Spinner = (props, ref) => {
           />
         </View>
       </View>
-    </Modal>
+    </Animated.View>
   );
 };
 
 const overlay = {
+  position: "absolute",
+  top: 0,
+  bottom: 0,
+  right: 0,
+  left: 0,
   alignItems: "center",
   justifyContent: "center",
+  zIndex: 1000,
 };
 
-export default forwardRef(Spinner);
+export default Spinner;

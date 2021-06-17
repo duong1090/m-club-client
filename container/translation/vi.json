@@ -146,5 +146,11 @@
   "back": "Quay lại",
   "label": "Nhãn",
   "more": "Thêm",
-  "add_filter": "Thêm bộ lọc"
+  "add_filter": "Thêm bộ lọc",
+  "check_in_successfully": "Điểm danh thành công",
+  "attendance_event_note": "Điểm danh cho một sự kiện đang diễn ra",
+  "your_qr_code": "Mã QR của bạn",
+  "event_qr_code": "Mã QR sự kiện",
+  "student_id": "Mã sinh viên",
+  "student_id_placeholder": "Nhập mã sinh viên"
 }

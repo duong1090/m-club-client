@@ -50,7 +50,7 @@ const BottomPopUp = (props, ref) => {
     <Modal
       isVisible={visible}
       style={styles.modalWrapper}
-      backdropOpacity={0.8}
+      backdropOpacity={0.5}
       // onSwipeComplete={() => hide()}
       onBackdropPress={() => hide()}
       // useNativeDriverForBackdrop={true}
@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: scale(30),
     paddingHorizontal: scale(30),
     paddingVertical: scale(30),
+    overflow: "visible",
   },
   titleBox: {
     justifyContent: "center",

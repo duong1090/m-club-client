@@ -9,6 +9,18 @@ import { Navigation } from "react-native-navigation";
 import { screens } from "../constant/screen";
 import OneSignal from "react-native-onesignal"; // Import package from node modules
 
+const TAG_ONE_SIGNAL = [
+  "id",
+  "club_id",
+  "department_id",
+  "position_id",
+  "is_root",
+  "phone",
+  "identification",
+  "sex",
+  "lang",
+];
+
 export const loadInitialStatus = async () => {
   const apiToken = await getItem(API_TOKEN);
 
@@ -21,7 +33,12 @@ export const loadInitialStatus = async () => {
         setItem(ORGANIZATION, JSON.stringify(org));
         //register onesignal tab
         if (org.member && org.club) {
-          OneSignal.sendTags(org.member);
+          const tags = TAG_ONE_SIGNAL.reduce((obj, tag) => {
+            obj[tag] = org.member[tag];
+            return obj;
+          }, {});
+
+          OneSignal.sendTags(tags);
         }
         //set language
         if (org.lang) {
