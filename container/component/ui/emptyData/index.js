@@ -5,7 +5,7 @@ import Messages from "container/translation/Message";
 import {
   scale,
   fontSize,
-  defaultText,
+  
   color,
 } from "container/variables/common";
 
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   textEmpty: {
     marginTop: scale(10),
-    ...defaultText,
+    
     color: color.lightGrey,
     fontSize: fontSize.sizeBigContent,
   },

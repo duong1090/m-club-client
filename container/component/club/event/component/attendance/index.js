@@ -21,7 +21,7 @@ import MaskedView from "@react-native-masked-view/masked-view";
 
 import {
   scale,
-  defaultText,
+  
   space,
   fontSize,
   shadow,
@@ -169,6 +169,7 @@ const Attendance = (props, ref) => {
       style={styles.modalWrapper}
       backdropOpacity={0.5}
       onBackdropPress={() => hide()}
+      onBackButtonPress={() => hide()}
       useNativeDriver={true}
       propagateSwipe
     >
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
     borderRadius: space.border,
   },
   textItem: {
-    ...defaultText,
+    
     marginLeft: scale(10),
     color: "#fff",
   },
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
     borderRadius: space.border,
   },
   textTotal: {
-    ...defaultText,
+    
     color: "#fff",
     fontWeight: "bold",
     fontSize: fontSize.sizeContent,

@@ -20,7 +20,7 @@ import QRScanner from "container/component/ui/qrCodeScanner";
 import {
   color,
   scale,
-  defaultText,
+  
   space,
   fontSize,
   shadow,
@@ -140,6 +140,7 @@ const QRScannerEvent = (props, ref) => {
       style={styles.modalWrapper}
       backdropOpacity={0.5}
       onBackdropPress={() => hide()}
+      onBackButtonPress={() => hide()}
       useNativeDriver={true}
       coverScreen={false}
       propagateSwipe
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   noteText: {
-    ...defaultText,
+    
     color: "#fff",
   },
   controlBox: {

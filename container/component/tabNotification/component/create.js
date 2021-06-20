@@ -15,7 +15,7 @@ import {
   scale,
   color,
   fontSize,
-  defaultText,
+  
   space,
 } from "container/variables/common";
 import { Textarea } from "native-base";
@@ -195,13 +195,13 @@ const CreateNotification = (props, ref) => {
           source={require("container/asset/icon/dukien.png")}
         />
         <View style={{ marginLeft: scale(15) }}>
-          <Text style={{ ...defaultText, fontSize: fontSize.size26 }}>
+          <Text style={{  fontSize: fontSize.size26 }}>
             {intl.formatMessage(Messages.due_time)}
           </Text>
           {dueTime ? (
             <Text
               style={{
-                ...defaultText,
+                
                 fontSize: fontSize.size26,
                 fontWeight: "bold",
                 color: dueDateColor,
@@ -238,7 +238,7 @@ const CreateNotification = (props, ref) => {
           source={require("container/asset/icon/unassign-hanchot.png")}
         />
         <View style={{ marginLeft: scale(15) }}>
-          <Text style={{ ...defaultText, fontSize: fontSize.size26 }}>
+          <Text style={{  fontSize: fontSize.size26 }}>
             {intl.formatMessage(Messages.due_date)}
           </Text>
           {dueDate ? (
@@ -246,7 +246,7 @@ const CreateNotification = (props, ref) => {
               font-size-22
               bold
               style={{
-                ...defaultText,
+                
                 fontSize: fontSize.size26,
                 color: dueDateColor,
               }}

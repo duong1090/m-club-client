@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { View, StyleSheet } from "react-native";
 import ListTask from "./component/list";
 import DetailTask from "./component/detail";
-import { scale, shadow, defaultText, color } from "container/variables/common";
+import { scale, shadow, color } from "container/variables/common";
 import { Icon } from "native-base";
 import { injectIntl } from "react-intl";
 import ActionButton from "container/component/ui/actionButton";
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   actionButtonText: {
-    ...defaultText,
+    
     color: "#fff",
   },
   actionButtonIcon: {

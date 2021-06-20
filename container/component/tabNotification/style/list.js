@@ -4,7 +4,7 @@ import {
   color,
   fontSize,
   space,
-  defaultText,
+  
   shadow,
 } from "container/variables/common";
 
@@ -62,11 +62,11 @@ export const styles = StyleSheet.create({
 
   contentBox: { flex: 1, marginLeft: space.componentMargin },
   content: {
-    ...defaultText,
+    
     fontSize: fontSize.sizeContent,
   },
   timeText: {
-    ...defaultText,
+    
     fontSize: fontSize.size22,
     color: color.grey,
     marginTop: scale(5),
@@ -77,7 +77,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   emptyText: {
-    ...defaultText,
+    
     fontSize: fontSize.sizeBigContent,
   },
   headerBox: {
@@ -91,7 +91,7 @@ export const styles = StyleSheet.create({
     borderColor: color.lightGrey,
   },
   headerText: {
-    ...defaultText,
+    
   },
 
   actionButtonBox: {

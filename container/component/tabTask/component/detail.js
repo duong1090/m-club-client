@@ -30,7 +30,7 @@ import Messages from "container/translation/Message";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ModalPopUp from "container/component/ui/modalPopUp";
 import CreateTask from "./create";
-import { scale } from "../../../variables/common";
+import { scale, space } from "../../../variables/common";
 import { PRIORITY_LEVEL } from "container/constant/element";
 import { back } from "container/utils/router";
 import SelectModal from "container/component/ui/selectModal";
@@ -72,7 +72,9 @@ const DetailTask = (props, ref) => {
   // const [listTask, setListTask] = useRecoilState(listTaskState);
 
   //context
-  const { showSpinner, hideSpinner } = useContext(ModalContext);
+  const { showSpinner, hideSpinner, showConfirmModal } = useContext(
+    ModalContext
+  );
 
   //variables
   const createTaskRef = useRef(null);
@@ -209,6 +211,15 @@ const DetailTask = (props, ref) => {
     });
   };
 
+  const confirmDelete = () => {
+    const options = {
+      onOk: () => onDelete(),
+      content: intl.formatMessage(Messages.are_you_sure_to_delete),
+    };
+
+    showConfirmModal(options);
+  };
+
   const onDelete = () => {
     showSpinner();
     let params = {};
@@ -221,10 +232,15 @@ const DetailTask = (props, ref) => {
           resetState();
 
           //update list
+          const currArrTask = listTask[INDEX_LIST[currTask.group]];
+          const currIndex = currArrTask.data.findIndex(
+            (i) => i.id == currTask.id
+          );
+
           setListTask(
             update(listTask, {
               [INDEX_LIST[currTask.group]]: {
-                data: { $splice: [[currTask.index, 1]] },
+                data: { $splice: [[currIndex, 1]] },
               },
             })
           );
@@ -270,8 +286,10 @@ const DetailTask = (props, ref) => {
   };
 
   const gotoChildTask = (item) => {
-    // gotoRoute(screens.TAB_TASK, { data: item, mode: "detail" });
-    showSpinner();
+    setCurrTask(item);
+  };
+
+  const gotoParentTask = (item) => {
     setCurrTask(item);
   };
 
@@ -287,7 +305,7 @@ const DetailTask = (props, ref) => {
           <Text numberOfLines={2} style={styles.contentMemName}>
             {member[0].name}
           </Text>
-          <Avatar size={AVATAR_SIZE} data={member[0]} />
+          <Avatar size={AVATAR_SIZE} data={member[0]} noShadow />
         </TouchableOpacity>
       );
     } else if (member.length > limit)
@@ -331,7 +349,7 @@ const DetailTask = (props, ref) => {
           onPress={() => gotoSelectMember()}
           style={styles.contentMemAdd}
         >
-          <Icon name="add" style={styles.contentMemAddIcon} />
+          <Icon name="plus" type="Feather" style={styles.contentMemAddIcon} />
         </TouchableOpacity>
       );
     } else
@@ -423,12 +441,15 @@ const DetailTask = (props, ref) => {
     return (
       <View style={styles.content}>
         {parent ? (
-          <View style={styles.contentChild}>
+          <TouchableOpacity
+            onPress={() => gotoParentTask(parent)}
+            style={styles.contentChild}
+          >
             <Text style={styles.contentChildText}>
               {intl.formatMessage(Messages.child_task_of)}
             </Text>
             <Text style={styles.contentChildTask}>{parent.name}</Text>
-          </View>
+          </TouchableOpacity>
         ) : null}
         {renderName()}
         <View style={styles.contentBody}>
@@ -535,7 +556,16 @@ const DetailTask = (props, ref) => {
   };
 
   const renderItemChildren = (item, index) => (
-    <View style={styles.childrenItem}>
+    <View
+      style={[
+        styles.childrenItem,
+        index > 0
+          ? {
+              borderTopWidth: scale(1),
+            }
+          : null,
+      ]}
+    >
       <TouchableOpacity
         onPress={() => gotoChildTask(item)}
         style={styles.childrenItemHeader}
@@ -571,7 +601,7 @@ const DetailTask = (props, ref) => {
         style={styles.childrenEmpty}
       >
         <View style={styles.childrenEmptyButton}>
-          <Icon name="add" style={styles.childrenEmptyIcon} />
+          <Icon name="plus" type="Feather" style={styles.childrenEmptyIcon} />
         </View>
         <Text style={styles.childrenEmptyText}>
           {intl.formatMessage(Messages.add)}
@@ -609,6 +639,11 @@ const DetailTask = (props, ref) => {
 
         <FlatList
           data={children}
+          style={{
+            backgroundColor: "#fff",
+            margin: space.componentMargin,
+            borderRadius: space.border,
+          }}
           renderItem={({ item, index }) => renderItemChildren(item, index)}
           ListEmptyComponent={renderItemChildrenEmpty()}
           keyExtractor={(item, index) => index.toString()}
@@ -697,7 +732,7 @@ const DetailTask = (props, ref) => {
           ) : null}
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => onDelete()}
+          onPress={() => confirmDelete()}
           style={styles.contentBtnDelete}
         >
           <Text style={styles.textDelete}>
@@ -713,6 +748,7 @@ const DetailTask = (props, ref) => {
       style={styles.modalWrapper}
       backdropOpacity={0.5}
       onBackdropPress={() => hide()}
+      onBackButtonPress={() => hide()}
       useNativeDriver={true}
       propagateSwipe
     >

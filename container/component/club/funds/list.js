@@ -9,7 +9,7 @@ import {
 import {
   scale,
   color,
-  defaultText,
+  
   space,
   shadow,
   fontSize,
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     ...shadow,
   },
   headerText: {
-    ...defaultText,
+    
     fontSize: fontSize.sizeTitle,
   },
   information: {
@@ -225,12 +225,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   informationTitle: {
-    ...defaultText,
+    
     fontWeight: "bold",
     marginRight: scale(10),
   },
   informationText: {
-    ...defaultText,
+    
     color: color.grey,
   },
 
@@ -253,11 +253,11 @@ const styles = StyleSheet.create({
     fontSize: scale(30),
   }),
   itemText: {
-    ...defaultText,
+    
     // fontSize: fontSize.sizeContent,
   },
   itemHeaderText: {
-    ...defaultText,
+    
     color: "#fff",
     fontWeight: "bold",
   },
@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   btnUpdateText: {
-    ...defaultText,
+    
     color: "#fff",
   },
   btnUpdateIcon: {

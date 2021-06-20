@@ -15,14 +15,11 @@ import {
 } from "react-native";
 import Config from "container/config/server.config";
 import { getRequest } from "container/utils/request";
-// import CheckBox from "@src/components/ui/checkbox";
-// import RadioButton from "@src/components/ui/radioButton/RadioButton";
 import {
   scale,
   color,
   fontSize,
   space,
-  defaultText,
   shadow,
 } from "container/variables/common";
 import { Dimensions } from "react-native";
@@ -102,9 +99,12 @@ const List = (props, ref) => {
   };
 
   const checkMultiItem = (item) => {
-    let temp = [...selectedData];
-    temp.push(item);
-    setSelectedData(temp);
+    const indexItem = selectedData.findIndex((i) => i.id == item.id);
+    if (indexItem < 0) {
+      setSelectedData(update(selectedData, { $push: [item] }));
+    } else {
+      setSelectedData(update(selectedData, { $splice: [[indexItem, 1]] }));
+    }
   };
 
   const getValues = () => {
@@ -150,8 +150,11 @@ const List = (props, ref) => {
           <CheckBox
             disabled={false}
             value={checked}
+            boxType="square"
+            lineWidth={1}
             onChange={() => checkMultiItem(item)}
             tintColors={{ true: color.done }}
+            style={{ width: scale(40), height: scale(40) }}
           />
         ) : (
           <RadioButton selected={checked} onChange={() => checkOneItem(item)} />
@@ -244,9 +247,7 @@ const styles = StyleSheet.create({
 
     return obj;
   },
-  textItem: {
-    ...defaultText,
-  },
+  textItem: {},
 
   quickAddBox: {
     flexDirection: "row",
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
     borderWidth: scale(1),
     borderStyle: "dashed",
   },
-  btnText: { ...defaultText, color: color.grey, fontWeight: "bold" },
+  btnText: { color: color.grey, fontWeight: "bold" },
 });
 
 export default forwardRef(List);

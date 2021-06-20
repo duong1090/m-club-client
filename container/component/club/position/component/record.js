@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { injectIntl, FormattedMessage } from "react-intl";
 import { useRecoilState } from "recoil";
-import { currPositionState, listPositionState } from "../recoil";
+import { currModeState, currPositionState, listPositionState } from "../recoil";
 import Messages from "container/translation/Message";
 import { View } from "react-native";
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import ModalContext from 'container/context/modal';
+import ModalContext from "container/context/modal";
 import Toast from "react-native-simple-toast";
 import SimpleRecord from "container/component/ui/simpleRecord";
 
@@ -17,13 +17,14 @@ const DEFAULT_INFO = {
 
 const PositionRecord = (props) => {
   //props
-  const { mode, intl, changeMode } = props;
+  const { intl } = props;
   //state
   const [info, setInfo] = useState(DEFAULT_INFO);
 
   //recoil
   const [data, setData] = useRecoilState(currPositionState);
   const [list, setList] = useRecoilState(listPositionState);
+  const [currMode, setCurrMode] = useRecoilState(currModeState);
 
   //context
   const { showSpinner, hideSpinner } = useContext(ModalContext);
@@ -38,6 +39,11 @@ const PositionRecord = (props) => {
   useEffect(() => {
     if (data) setInfo(data);
   }, [data]);
+
+  useEffect(() => {
+    if (currMode == "create") setInfo(DEFAULT_INFO);
+    else if (currMode == "edit") setInfo(data);
+  }, [currMode]);
 
   //#endregion
 
@@ -73,7 +79,7 @@ const PositionRecord = (props) => {
   };
 
   const onSubmit = () => {
-    switch (mode) {
+    switch (currMode) {
       case "create":
         create();
         break;
@@ -85,7 +91,7 @@ const PositionRecord = (props) => {
 
   const prepareParams = () => {
     let params = {};
-    if (mode == "edit" && data.id) params.id = data.id;
+    if (currMode == "edit" && data.id) params.id = data.id;
     if (info.name) params.name = info.name;
     if (info.department) params.department_id = info.department.id;
     return params;
@@ -113,7 +119,7 @@ const PositionRecord = (props) => {
     tempList.push(transform(data));
     setList(tempList);
     console.log("createSuccess:::", tempList);
-    changeMode("list");
+    setCurrMode("list");
   };
 
   const transform = (data) => {
@@ -155,13 +161,13 @@ const PositionRecord = (props) => {
   return (
     <View>
       <SimpleRecord
-        mode={mode}
+        mode={currMode}
         data={info}
         fields={fields}
         onSubmit={() => onSubmit()}
         backButton={{
           title: intl.formatMessage(Messages.list),
-          onPress: () => changeMode("list"),
+          onPress: () => setCurrMode("list"),
         }}
       />
     </View>

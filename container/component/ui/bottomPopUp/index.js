@@ -7,12 +7,7 @@ import {
   StyleSheet,
   Text,
 } from "react-native";
-import {
-  scale,
-  space,
-  defaultText,
-  fontSize,
-} from "container/variables/common";
+import { scale, space, fontSize } from "container/variables/common";
 import Modal from "react-native-modal";
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
@@ -51,11 +46,9 @@ const BottomPopUp = (props, ref) => {
       isVisible={visible}
       style={styles.modalWrapper}
       backdropOpacity={0.5}
-      // onSwipeComplete={() => hide()}
       onBackdropPress={() => hide()}
-      // useNativeDriverForBackdrop={true}
+      onBackButtonPress={() => hide()}
       useNativeDriver={true}
-      // swipeDirection={["down"]}
       propagateSwipe
     >
       <View style={styles.bodyWrapper}>
@@ -96,7 +89,6 @@ const styles = StyleSheet.create({
     marginBottom: space.componentMargin * 2,
   },
   textTitle: {
-    ...defaultText,
     fontWeight: "bold",
     fontSize: fontSize.sizeTitle,
   },

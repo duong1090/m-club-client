@@ -14,7 +14,7 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import { Icon } from "native-base";
 import InputItem from "container/component/ui/inputItem";
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     marginBottom: scale(20),
   },
   titleSymbol: {
-    ...defaultText,
+    
     fontSize: fontSize.sizeBigContent,
     fontWeight: "bold",
   },
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   backText: {
-    ...defaultText,
+    
     fontSize: fontSize.size26,
     color: "#fff",
     marginLeft: scale(5),

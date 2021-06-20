@@ -3,7 +3,7 @@ import {
   color,
   fontSize,
   space,
-  defaultText,
+  
   shadow,
 } from "container/variables/common";
 import { StyleSheet } from "react-native";
@@ -29,7 +29,7 @@ export default StyleSheet.create({
   },
 
   headerText: {
-    ...defaultText,
+    
     textAlign: "center",
     fontSize: 17,
     fontWeight: "600",
@@ -57,5 +57,5 @@ export default StyleSheet.create({
 
   bodyBox: {},
 
-  btnText: { ...defaultText, color: "#ffffff", fontWeight: "bold" },
+  btnText: {  color: "#ffffff", fontWeight: "bold" },
 });

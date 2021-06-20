@@ -4,29 +4,8 @@ import IntlMainProvider from "./component/intl";
 import PrivilegeProvider from "./component/privilege";
 import ModalProvider from "./component/modal";
 
-import { LogBox, SafeAreaView } from "react-native";
-
-// const PersistenceObserver = () => {
-//   useRecoilTransactionObserver_UNSTABLE(({ snapshot }) => {
-//     for (const modifiedAtom of snapshot.getNodes_UNSTABLE({
-//       isModified: true,
-//     })) {
-//       const atomLoadable = snapshot.getLoadable(modifiedAtom);
-//       console.log(
-//         "PersistenceObserver::::",
-//         modifiedAtom.key,
-//         atomLoadable.contents
-//       );
-//       if (atomLoadable.state === "hasValue") {
-//         setItem(
-//           modifiedAtom.key,
-//           JSON.stringify({ value: atomLoadable.contents })
-//         );
-//       }
-//     }
-//   });
-//   return null;
-// };
+import { BackHandler, LogBox, Text } from "react-native";
+import { defaultText } from "../variables/common";
 
 const MainProvider = (props) => {
   const { children } = props;
@@ -38,24 +17,25 @@ const MainProvider = (props) => {
     isRoot: member && member.is_root ? true : false,
   });
 
-  console.log("MainProvider::::", global, rolesState);
+  const setDefaultStyle = () => {
+    let oldRender = Text.render;
+    Text.render = (...args) => {
+      let origin = oldRender.call(this, ...args);
+      return React.cloneElement(origin, {
+        style: [defaultText, origin.props.style],
+      });
+    };
+  };
 
-  //disable warning box
   useEffect(() => {
+    //disable warning box
     LogBox.ignoreAllLogs();
-  }, []);
 
-  //initial state for atom - using update atom when persisting
-  // const initializeState = async ({ set }) => {
-  //   const localItems = await getAllItem();
-  //   localItems.map((item) => {
-  //     set(rootAtom[item.key], JSON.parse(item.value).value);
-  //   });
-  // };
+    setDefaultStyle();
+  }, []);
 
   return (
     <RecoilRoot>
-      {/* <PersistenceObserver /> */}
       <PrivilegeProvider value={rolesState}>
         <ModalProvider>
           <IntlMainProvider>{React.Children.only(children)}</IntlMainProvider>

@@ -8,7 +8,7 @@ import {
   color,
   fontSize,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import InputPhone from "./InputPhone";
 import SelectClub from "./SelectClub";
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   welcome: {
-    ...defaultText,
+    
     fontSize: fontSize.size40,
     color: color.fontColor,
     fontWeight: "bold",

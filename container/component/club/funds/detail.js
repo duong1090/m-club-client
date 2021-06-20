@@ -7,7 +7,7 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import Avatar from "container/component/ui/avatar";
 import Messages from "container/translation/Message";
@@ -133,11 +133,11 @@ const styles = StyleSheet.create({
     paddingBottom: scale(10),
   },
   itemTitle: {
-    ...defaultText,
+    
     fontWeight: "bold",
   },
   itemText: {
-    ...defaultText,
+    
   },
   avatarBox: {
     flexDirection: "row",
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   memberName: {
-    ...defaultText,
+    
     maxWidth: "75%",
     marginRight: space.itemMargin,
   },

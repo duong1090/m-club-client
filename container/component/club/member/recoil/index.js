@@ -9,3 +9,8 @@ export const listMemberState = atom({
   key: "listMemberState",
   default: [],
 });
+
+export const currModeState = atom({
+  key: "currModeState",
+  default: "list",
+});

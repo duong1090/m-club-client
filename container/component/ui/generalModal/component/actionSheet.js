@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import {
   scale,
   space,
-  defaultText,
+  
   fontSize,
   color,
 } from "container/variables/common";
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     if (type == "danger") textColor = color.danger;
 
     return {
-      ...defaultText,
+      
       color: textColor,
     };
   },

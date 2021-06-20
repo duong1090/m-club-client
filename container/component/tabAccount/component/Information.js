@@ -6,7 +6,7 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import Avatar from "container/component/ui/avatar";
 import { Icon } from "native-base";
@@ -109,12 +109,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   name: {
-    ...defaultText,
+    
     fontSize: fontSize.size36,
     fontWeight: "bold",
   },
   position: {
-    ...defaultText,
+    
     fontSize: fontSize.size28,
     color: "#fff",
   },
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     marginTop: space.itemMargin,
   },
   setting: {
-    ...defaultText,
+    
     color: "#fff",
     marginRight: scale(10),
   },

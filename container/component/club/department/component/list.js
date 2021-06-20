@@ -3,16 +3,16 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { listDepartmentState, currDepartmentState } from "../recoil";
 import { View } from "react-native";
 import { Icon } from "native-base";
-import { scale, defaultText } from "container/variables/common";
+import { scale } from "container/variables/common";
 import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
 import debounce from "lodash/debounce";
 import { normalRole } from "container/constant/role";
+import { currModeState } from "../../position/recoil";
 
 const DepartmentList = (props) => {
   //props
-  const { changeMode } = props;
   //state
   // const [data, setData] = useState([]);
   const [meta, setMeta] = useState({});
@@ -22,6 +22,7 @@ const DepartmentList = (props) => {
   //recoil
   const [data, setData] = useRecoilState(listDepartmentState);
   const setCurrDepartment = useSetRecoilState(currDepartmentState);
+  const setCurrMode = useSetRecoilState(currModeState);
 
   //variables
   const debounceSearch = useRef(debounce((text) => onSearch(text), 200))
@@ -39,12 +40,12 @@ const DepartmentList = (props) => {
   //#region function - event
   const gotoRecord = (mode = "create") => {
     // gotoRoute(screens.DEPARTMENT_EDIT, { mode });
-    changeMode && changeMode(mode);
+    setCurrMode && setCurrMode(mode);
   };
 
   const onPressItem = (item) => {
     setCurrDepartment(item);
-    changeMode && changeMode("detail");
+    setCurrMode && setCurrMode("detail");
   };
 
   const transform = (data) => {
@@ -107,7 +108,7 @@ const DepartmentList = (props) => {
         styleTextItem={{ fontWeight: "bold" }}
         onPressItem={(item) => onPressItem(item)}
         iconItem={
-          <Icon name="people" style={{ ...defaultText, fontSize: scale(30) }} />
+          <Icon name="people" style={{  fontSize: scale(30) }} />
         }
         loadMore={loadMore}
         privilege={{

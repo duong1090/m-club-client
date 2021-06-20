@@ -152,5 +152,9 @@
   "your_qr_code": "Mã QR của bạn",
   "event_qr_code": "Mã QR sự kiện",
   "student_id": "Mã sinh viên",
-  "student_id_placeholder": "Nhập mã sinh viên"
+  "student_id_placeholder": "Nhập mã sinh viên",
+  "confirm": "Xác nhận",
+  "are_you_sure_to_log_out": "Bạn có chắc muốn đăng xuất?",
+  "error": "Lỗi",
+  "date": "Ngày"
 }

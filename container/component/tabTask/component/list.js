@@ -1,14 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import SearchBox from "container/component/ui/searchBox";
-import {
-  scale,
-  color,
-  fontSize,
-  space,
-  defaultText,
-} from "container/variables/common";
-
+import { scale, color, fontSize, space } from "container/variables/common";
 import { styles, AVATAR_SIZE } from "../style/list";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { listTaskState, currTaskState } from "../recoil";
@@ -16,29 +9,31 @@ import { Icon, Tabs, Tab, ScrollableTab, CheckBox } from "native-base";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
 import { getRequest, postRequest } from "container/utils/request";
-import Config from "container/config/server.config";
 import HeaderInfo from "../ui/HeaderInfo";
 import ModalContext from "container/context/modal";
 import update from "immutability-helper";
 import debounce from "lodash/debounce";
 import { repairParams } from "container/helper/format";
-import { gotoRoute } from "container/utils/router";
-import { modals, screens } from "container/constant/screen";
 import { PRIORITY_LEVEL } from "container/constant/element";
 import Avatar from "container/component/ui/avatar";
 import EmptyData from "container/component/ui/emptyData";
 import SelectModal from "container/component/ui/selectModal";
+import LabelSelectModal from "../ui/labelSelectModal";
+import Collapsible from "react-native-collapsible";
 
 const TODAY = 0,
   FUTURE = 1,
   TIMED = 2,
   NO_TIME = 3;
 
+const PRIOR_LEVEL_ALL = 4;
+
 const DEFAULT_FILTER = {
   is_done: 0,
   user_ids: [],
-  prior_level: 4,
+  prior_level: PRIOR_LEVEL_ALL,
   dynamic: [],
+  visible: false,
 };
 
 const ListTask = (props) => {
@@ -59,6 +54,7 @@ const ListTask = (props) => {
   const selectMemberRef = useRef(null);
   const selectPriorityRef = useRef(null);
   const selectEventRef = useRef(null);
+  const selectLabelRef = useRef(null);
   const debounceSearch = useRef(debounce((text) => doFilter("name", text), 200))
     .current;
 
@@ -116,6 +112,11 @@ const ListTask = (props) => {
     );
   };
 
+  const toggleFilter = () => {
+    const value = filter.visible;
+    setFilter(update(filter, { visible: { $set: !value } }));
+  };
+
   const openFilter = (type) => {
     if (type == "priority")
       selectPriorityRef && selectPriorityRef.current.show();
@@ -129,9 +130,14 @@ const ListTask = (props) => {
     if (type == "dynamic") {
       const cloneFilter = { ...filter };
       filter.dynamic.map((i) => {
-        if (i.type == "event") {
-          cloneFilter.by_event = 1;
-          if (i.id && i.id != `all_event`) cloneFilter.event_id = i.id;
+        switch (i.type) {
+          case "event":
+            cloneFilter.by_event = 1;
+            cloneFilter.event_id = i.data.id;
+            break;
+          case "label":
+            cloneFilter.label_ids = i.data.map((item) => item.id);
+            break;
         }
       });
 
@@ -157,9 +163,11 @@ const ListTask = (props) => {
     const actions = [
       {
         title: intl.formatMessage(Messages.event),
-        onPress: () => {
-          selectEventRef.current && selectEventRef.current.show();
-        },
+        onPress: () => showEventSelectModal(),
+      },
+      {
+        title: intl.formatMessage(Messages.label),
+        onPress: () => showLabelSelectModal(),
       },
       {
         title: intl.formatMessage(Messages.cancel),
@@ -170,66 +178,49 @@ const ListTask = (props) => {
     showActionSheet({ actions });
   };
 
-  const changeDynamicFilter = (action = null, type = null, value) => {
-    const index = filter.dynamic.findIndex((i) => i.id == value.id);
-    const indexAllValue = filter.dynamic.findIndex(
-      (i) => i.id == `all_${type}`
-    );
+  const showEventSelectModal = () => {
+    selectEventRef.current && selectEventRef.current.show();
+  };
 
-    console.log("changeDynamicFilter:::", indexAllValue, filter.dynamic, value);
+  const showLabelSelectModal = () => {
+    if (selectLabelRef.current) {
+      const objFilter = filter.dynamic.find((i) => i.type == "label");
+      const selectedValues = objFilter && objFilter.data ? objFilter.data : [];
 
-    switch (action) {
-      case "add":
-        if (indexAllValue >= 0) {
-          if (value && index < 0) {
-            const transformValue = { ...value, type };
-            setFilter(
-              update(filter, {
-                dynamic: {
-                  $push: [transformValue],
-                  $splice: [[indexAllValue, 1]],
-                },
-              })
-            );
-          }
-        } else {
-          if (value != null && value != []) {
-            const all = {
-              type,
-              id: `all_${type}`,
-            };
+      selectLabelRef.current.show(selectedValues);
+    }
+  };
 
-            const tempFilter = { ...filter };
+  const deleteDynamicFilter = (index) => {
+    setFilter(update(filter, { dynamic: { $splice: [[index, 1]] } }));
+  };
 
-            tempFilter.dynamic.map((i, index) => {
-              console.log("checkFilterNE", i, index, type, i.type == type);
+  const addDynamicFilter = (type, value) => {
+    const indexFilter = filter.dynamic.findIndex((i) => i.type == type);
+    const isHasFiltered = indexFilter >= 0;
+    if (isHasFiltered) {
+      setFilter(
+        update(filter, {
+          dynamic: { [indexFilter]: { data: { $set: value } } },
+        })
+      );
+    } else {
+      const transformObj = {
+        type,
+        data: value,
+      };
+      setFilter(update(filter, { dynamic: { $push: [transformObj] } }));
+    }
+  };
 
-              if (i.type == type)
-                setFilter(
-                  update(filter, {
-                    dynamic: {
-                      $splice: [[index, 1]],
-                    },
-                  })
-                );
-            });
-
-            setFilter(
-              update(filter, {
-                dynamic: {
-                  $push: [all],
-                },
-              })
-            );
-          } else if (index < 0) {
-            const transformValue = { ...value, type };
-            setFilter(update(filter, { dynamic: { $push: [transformValue] } }));
-          }
-        }
+  const openDynamicFilterModal = (type) => {
+    switch (type) {
+      case "event":
+        showEventSelectModal();
         break;
-      case "remove":
-        if (index >= 0)
-          setFilter(update(filter, { dynamic: { $splice: [[index, 1]] } }));
+      case "label":
+        showLabelSelectModal();
+        break;
     }
   };
 
@@ -275,10 +266,7 @@ const ListTask = (props) => {
     if (filter.user_ids.length == 1) {
       return (
         <View style={styles.contentMemAvtBox}>
-          <Text numberOfLines={2} style={styles.contentMemName}>
-            {filter.user_ids[0].name}
-          </Text>
-          <Avatar size={AVATAR_SIZE} data={filter.user_ids[0]} />
+          <Avatar noShadow size={AVATAR_SIZE} data={filter.user_ids[0]} />
         </View>
       );
     } else if (filter.user_ids.length > limit)
@@ -302,6 +290,7 @@ const ListTask = (props) => {
             else
               return (
                 <Avatar
+                  noShadow
                   style={[
                     styles.contentMemAvt,
                     { right: (limit + 1 - index) * (AVATAR_SIZE / 2) },
@@ -328,11 +317,13 @@ const ListTask = (props) => {
         <View style={styles.contentMemAvtBox}>
           {filter.user_ids.map((item, index) => (
             <Avatar
+              noShadow
               style={[
                 styles.contentMemAvt,
                 {
                   right:
-                    (filter.user_ids.length - 1 - index) * (AVATAR_SIZE / 2),
+                    (filter.user_ids.length - 1 - index) *
+                    ((2 * AVATAR_SIZE) / 3),
                 },
               ]}
               size={AVATAR_SIZE}
@@ -344,6 +335,12 @@ const ListTask = (props) => {
   };
 
   const renderFilter = () => {
+    const hasFiltered =
+      filter.prior_level != PRIOR_LEVEL_ALL ||
+      filter.is_done != 0 ||
+      filter.user_ids.length ||
+      filter.dynamic.length;
+
     return (
       <View style={styles.filter}>
         <View style={styles.filterHeader}>
@@ -353,133 +350,177 @@ const ListTask = (props) => {
               debounceSearch(text);
             }}
           />
-          <TouchableOpacity style={styles.filterBox}>
+          <TouchableOpacity
+            onPress={() => toggleFilter()}
+            style={styles.filterBox}
+          >
             <Icon name="filter" type="FontAwesome5" style={styles.filterIcon} />
+            {hasFiltered ? <View style={styles.filteredDot} /> : null}
           </TouchableOpacity>
         </View>
-        <View style={styles.filterAdvanced}>
-          <View style={styles.filterWrapper}>
-            <TouchableOpacity
-              style={styles.filterItem}
-              onPress={() => {
-                setFilter({ ...filter, is_done: filter.is_done ? 0 : 1 });
-                doFilter("is_done", filter.is_done ? 0 : 1);
-              }}
-            >
-              <Text style={styles.filterItemText}>
-                {intl.formatMessage(Messages.done)}
-              </Text>
-              {filter.is_done ? (
-                <Icon
-                  type="Ionicons"
-                  name="md-checkmark-circle"
-                  style={styles.childrenItemDone(filter.is_done)}
-                />
-              ) : (
-                <Icon
-                  type="Ionicons"
-                  name="md-checkmark-circle-outline"
-                  style={styles.childrenItemDone(filter.is_done)}
-                />
-              )}
-            </TouchableOpacity>
+        <Collapsible collapsed={!filter.visible}>
+          <View style={styles.filterAdvanced}>
+            {renderStaticFilter()}
+            {renderDynamicFilter()}
+          </View>
+        </Collapsible>
+      </View>
+    );
+  };
 
-            <TouchableOpacity
-              onPress={() => openFilter("priority")}
+  const renderStaticFilter = () => {
+    return (
+      <View style={styles.filterWrapper}>
+        <TouchableOpacity
+          style={styles.filterItem}
+          onPress={() => {
+            setFilter({ ...filter, is_done: filter.is_done ? 0 : 1 });
+            doFilter("is_done", filter.is_done ? 0 : 1);
+          }}
+        >
+          <Text style={styles.filterItemText}>
+            {intl.formatMessage(Messages.done)}
+          </Text>
+          {filter.is_done ? (
+            <Icon
+              type="Ionicons"
+              name="md-checkmark-circle"
+              style={styles.childrenItemDone(filter.is_done)}
+            />
+          ) : (
+            <Icon
+              type="Ionicons"
+              name="md-checkmark-circle-outline"
+              style={styles.childrenItemDone(filter.is_done)}
+            />
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => openFilter("priority")}
+          style={[
+            styles.filterItem,
+            {
+              borderRightWidth: scale(5),
+              borderLeftWidth: scale(5),
+              borderColor: "#fff",
+            },
+          ]}
+        >
+          <Text style={styles.filterItemText}>
+            {intl.formatMessage(Messages.priority)}
+          </Text>
+          {filter.prior_level == 4 ? (
+            <Text style={{ color: color.primary }}>
+              {intl.formatMessage(Messages.all)}
+            </Text>
+          ) : (
+            <View
               style={[
-                styles.filterItem,
-                {
-                  borderRightWidth: scale(5),
-                  borderLeftWidth: scale(5),
-                  borderColor: "#fff",
-                },
+                styles.childrenItemPriorLevel(filter.prior_level),
+                { marginRight: 0 },
               ]}
-            >
-              <Text style={styles.filterItemText}>
-                {intl.formatMessage(Messages.priority)}
-              </Text>
-              {filter.prior_level == 4 ? (
-                <Text style={{ ...defaultText, color: color.primary }}>
-                  {intl.formatMessage(Messages.all)}
-                </Text>
-              ) : (
-                <View
-                  style={[
-                    styles.childrenItemPriorLevel(filter.prior_level),
-                    { marginRight: 0 },
-                  ]}
-                />
-              )}
-            </TouchableOpacity>
+            />
+          )}
+        </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => openFilter("member")}
-              style={styles.filterItem}
-            >
-              {renderAvatar()}
-            </TouchableOpacity>
-          </View>
+        <TouchableOpacity
+          onPress={() => openFilter("member")}
+          style={styles.filterItem}
+        >
+          {renderAvatar()}
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
-          <View style={styles.dynamicFilterList}>
-            {filter.dynamic.map((item) => (
-              <View
-                style={[
-                  styles.filterWrapper,
-                  {
-                    justifyContent: "space-between",
-                    marginBottom: scale(10),
-                  },
-                ]}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginVertical: space.itemMargin,
-                    marginHorizontal: space.componentMargin,
-                  }}
-                >
-                  <View style={styles.dynamicFilterDot} />
-                  <Text style={styles.dynamicFilterText}>
-                    {intl.formatMessage(Messages[item.type])}
-                  </Text>
-                </View>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <Text>
-                    {item.name ? item.name : intl.formatMessage(Messages.all)}
-                  </Text>
-                  <TouchableOpacity
-                    style={{
-                      paddingVertical: space.itemMargin,
-                      paddingHorizontal: space.componentMargin,
-                    }}
-                    onPress={() => changeDynamicFilter("remove", "event", item)}
-                  >
-                    <Icon
-                      name="close"
-                      type="FontAwesome"
-                      style={styles.dynamicFilterIcon}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ))}
+  const renderDynamicFilter = () => {
+    return (
+      <View style={styles.dynamicFilterList}>
+        {filter.dynamic.map((item, indexFilter) =>
+          renderItemDynamicFilter(item, indexFilter)
+        )}
+        <TouchableOpacity
+          style={styles.dynamicFilterBtn}
+          onPress={() => openSelectFilterOption()}
+        >
+          <Icon
+            name="plus"
+            type="Entypo"
+            style={{ fontSize: scale(30), color: color.blue }}
+          />
+          <Text style={[styles.dynamicFilterText, { color: color.blue }]}>
+            {intl.formatMessage(Messages.add_filter)}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
-            <TouchableOpacity
-              style={styles.dynamicFilterBtn}
-              onPress={() => openSelectFilterOption()}
-            >
-              <Icon
-                name="plus"
-                type="Entypo"
-                style={{ fontSize: scale(30), color: color.blue }}
-              />
-              <Text style={[styles.dynamicFilterText, { color: color.blue }]}>
-                {intl.formatMessage(Messages.add_filter)}
-              </Text>
-            </TouchableOpacity>
-          </View>
+  const renderItemDynamicFilter = (item, indexFilter) => {
+    const transformValue =
+      item.type == "label" ? (
+        transformLabelValue(item.data)
+      ) : item.data && item.data.name ? (
+        <Text>{item.data.name}</Text>
+      ) : (
+        <Text>{intl.formatMessage(Messages.all)}</Text>
+      );
+
+    return (
+      <TouchableOpacity
+        onPress={() => openDynamicFilterModal(item.type)}
+        style={[
+          styles.filterWrapper,
+          {
+            justifyContent: "space-between",
+            marginBottom: scale(10),
+          },
+        ]}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginVertical: space.itemMargin,
+            marginHorizontal: space.componentMargin,
+          }}
+        >
+          <View style={styles.dynamicFilterDot} />
+          <Text style={styles.dynamicFilterText}>
+            {intl.formatMessage(Messages[item.type])}
+          </Text>
         </View>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          {transformValue}
+          <TouchableOpacity
+            style={{
+              paddingVertical: space.itemMargin,
+              paddingHorizontal: space.componentMargin,
+            }}
+            onPress={() => deleteDynamicFilter(indexFilter)}
+          >
+            <Icon
+              name="close"
+              type="FontAwesome"
+              style={styles.dynamicFilterIcon}
+            />
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const transformLabelValue = (labels) => {
+    return (
+      <View style={styles.labelBox}>
+        {labels.length
+          ? labels.map((item) => (
+              <View style={styles.labelItem(item.color)}>
+                <Text style={styles.labelItemText}>{item.title}</Text>
+              </View>
+            ))
+          : null}
       </View>
     );
   };
@@ -494,7 +535,6 @@ const ListTask = (props) => {
       >
         <Text
           style={{
-            ...defaultText,
             fontWeight: "bold",
             textAlign: "center",
           }}
@@ -505,7 +545,6 @@ const ListTask = (props) => {
           <View style={styles.dot}>
             <Text
               style={{
-                ...defaultText,
                 fontSize: fontSize.size20,
                 fontWeight: "bold",
                 color: "#fff",
@@ -522,7 +561,7 @@ const ListTask = (props) => {
         {tab.data && tab.data.length ? (
           <FlatList
             data={tab.data}
-            style={{ marginTop: scale(20) }}
+            style={{ marginTop: scale(20), backgroundColor: "#fff" }}
             contentContainerStyle={{ paddingBottom: scale(80) }}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item, index }) =>
@@ -550,56 +589,73 @@ const ListTask = (props) => {
     );
   };
 
+  const renderModal = () => {
+    const selectedEvent = filter.dynamic.find((i) => i.type == "event");
+
+    return (
+      <React.Fragment>
+        <SelectModal
+          type="list"
+          ref={selectMemberRef}
+          key={"select_member"}
+          onDone={(value) => {
+            console.log("onDoneFilter::::", value);
+
+            if (value) {
+              setFilter(update(filter, { user_ids: { $set: value } }));
+              doFilter(
+                "user_ids",
+                value.map((item) => item.id)
+              );
+            }
+          }}
+          selectedData={filter.user_ids}
+          api="member/get"
+          params={{ type: "simple" }}
+          multiSelect={true}
+          isMember={true}
+        />
+        <SelectModal
+          type="list"
+          ref={selectPriorityRef}
+          key={"select_priority"}
+          externalData={PRIORITY_LEVEL.map((item) => {
+            return { ...item, name: intl.formatMessage(Messages[item.name]) };
+          })}
+          onDone={(value) => {
+            if (value) {
+              let temp = { ...filter };
+              temp.prior_level = value.id;
+              setFilter(temp);
+              doFilter("prior_level", value.id);
+            }
+          }}
+          selectedData={PRIORITY_LEVEL[filter.prior_level]}
+        />
+        <SelectModal
+          type="list"
+          ref={selectEventRef}
+          key={"select_event"}
+          api="event/get"
+          onDone={(value) => addDynamicFilter("event", value)}
+          selectedData={
+            selectedEvent && selectedEvent.data ? selectedEvent.data : null
+          }
+        />
+        <LabelSelectModal
+          ref={selectLabelRef}
+          onDone={(labels) => addDynamicFilter("label", labels)}
+        />
+      </React.Fragment>
+    );
+  };
+
   return (
     <View style={[styles.container, style]}>
       <HeaderInfo />
       {renderFilter()}
       {renderTabs()}
-      <SelectModal
-        type="list"
-        ref={selectMemberRef}
-        key={"select_member"}
-        onDone={(value) => {
-          if (value) {
-            let temp = { ...filter };
-            temp.user_ids = value;
-            setFilter(temp);
-            doFilter(
-              "user_ids",
-              temp.user_ids.map((item) => item.id)
-            );
-          }
-        }}
-        selectedData={filter.user_ids}
-        api="member/get"
-        params={{ type: "simple" }}
-        multiSelect={true}
-        isMember={true}
-      />
-      <SelectModal
-        type="list"
-        ref={selectPriorityRef}
-        key={"select_priority"}
-        externalData={PRIORITY_LEVEL.map((item) => {
-          return { ...item, name: intl.formatMessage(Messages[item.name]) };
-        })}
-        onDone={(value) => {
-          if (value) {
-            let temp = { ...filter };
-            temp.prior_level = value.id;
-            setFilter(temp);
-            doFilter("prior_level", value.id);
-          }
-        }}
-        selectedData={PRIORITY_LEVEL[filter.prior_level]}
-      />
-      <SelectModal
-        type="list"
-        ref={selectEventRef}
-        key={"select_event"}
-        api="event/get"
-        onDone={(value) => changeDynamicFilter("add", "event", value)}
-      />
+      {renderModal()}
     </View>
   );
 };

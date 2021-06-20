@@ -1,10 +1,13 @@
-import { getApiToken } from "./common";
+import { getApiToken, getIntl } from "./common";
 import { buildDeviceInfo } from "./common";
 import { Text, Alert } from "react-native";
 import { getItem } from "./storage";
 import Config, { formatURL } from "container/config/server.config";
 import { LANG, API_TOKEN, API_URL } from "container/constant/storage";
 import Toast from "react-native-simple-toast";
+import { gotoRoute } from "./router";
+import { modals } from "../constant/screen";
+import Message from "../translation/Message";
 
 const constants = {
   APP_JSON_HEADER: "application/json",
@@ -33,7 +36,20 @@ const showServerError = (error, cb) => {
 
   console.error("showServerError:::", message, statusCode);
 
-  Toast.show(error.message ? error.message : "Lỗi server", Toast.LONG);
+  // Toast.show(error.message ? error.message : "Lỗi server", Toast.LONG);
+
+  gotoRoute(
+    modals.GENERAL_MODAL,
+    {
+      options: {
+        content: error.message
+          ? error.message
+          : getIntl().formatMessage(Messages.error),
+      },
+      type: "error",
+    },
+    true
+  );
 
   //TODO: declare showSystemAlert
   // showSystemAlert({

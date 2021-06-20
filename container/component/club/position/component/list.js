@@ -1,23 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import {
-  listPositionState,
-  currPositionState,
-} from "../recoil";
+import { listPositionState, currPositionState } from "../recoil";
 import { View } from "react-native";
 import { Icon } from "native-base";
-import { scale, defaultText } from "container/variables/common";
+import { scale } from "container/variables/common";
 import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
 import debounce from "lodash/debounce";
 import { normalRole } from "container/constant/role";
+import { currModeState } from "../../member/recoil";
 
 const PositionList = (props) => {
   //props
-  const { changeMode } = props;
   //state
-  // const [data, setData] = useState([]);
   const [meta, setMeta] = useState({});
   const [loading, setLoading] = useState(false);
   let page = 1;
@@ -25,6 +21,7 @@ const PositionList = (props) => {
   //recoil
   const [data, setData] = useRecoilState(listPositionState);
   const setCurrPosition = useSetRecoilState(currPositionState);
+  const setCurrMode = useSetRecoilState(currModeState);
 
   //variables
   const debounceSearch = useRef(debounce((text) => onSearch(text), 200))
@@ -41,12 +38,12 @@ const PositionList = (props) => {
 
   //#region function - event
   const gotoRecord = (mode = "create") => {
-    changeMode && changeMode(mode);
+    setCurrMode(mode);
   };
 
   const onPressItem = (item) => {
     setCurrPosition(item);
-    changeMode && changeMode("detail");
+    setCurrMode("detail");
   };
 
   const transform = (data) => {
@@ -90,11 +87,11 @@ const PositionList = (props) => {
     }
   };
 
- const onSearch = (text) => {
-   let params = {};
-   if (text != "") params.name = text;
-   getList(params);
- };
+  const onSearch = (text) => {
+    let params = {};
+    if (text != "") params.name = text;
+    getList(params);
+  };
 
   //#endregion
 
@@ -112,7 +109,7 @@ const PositionList = (props) => {
           <Icon
             type="FontAwesome5"
             name="user-tag"
-            style={{ ...defaultText, fontSize: scale(30) }}
+            style={{  fontSize: scale(30) }}
           />
         }
         loadMore={loadMore}

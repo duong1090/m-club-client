@@ -4,8 +4,8 @@ import { injectIntl } from "react-intl";
 import { View, Text, StyleSheet } from "react-native";
 import { postRequest, getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import { listMemberState, currMemberState } from "../recoil";
-import { useRecoilState } from "recoil";
+import { listMemberState, currMemberState, currModeState } from "../recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import SimpleDetail from "container/component/ui/simpleDetail";
 import ModalContext from 'container/context/modal';
 import { SEX } from "container/constant/element";
@@ -13,7 +13,7 @@ import Avatar from "container/component/ui/avatar";
 import {
   color,
   scale,
-  defaultText,
+  
   space,
   fontSize,
 } from "container/variables/common";
@@ -21,9 +21,10 @@ import { normalRole } from "container/constant/role";
 
 const MemberDetail = (props) => {
   //props
-  const { intl, data, changeMode } = props;
+  const { intl, data } = props;
   //state
   const [isGetData, setIsGetData] = useState(true);
+  const setCurrMode = useSetRecoilState(currModeState);
 
   //context
   const { showSpinner, hideSpinner } = useContext(ModalContext);
@@ -58,11 +59,11 @@ const MemberDetail = (props) => {
   };
 
   const gotoList = () => {
-    changeMode && changeMode("list");
+    setCurrMode && setCurrMode("list");
   };
 
   const gotoEdit = () => {
-    changeMode && changeMode("edit");
+    setCurrMode && setCurrMode("edit");
   };
 
   const transform = (data) => {
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.light,
   },
   title: {
-    ...defaultText,
+    
     fontSize: fontSize.sizeTitle,
     fontWeight: "bold",
     marginTop: space.itemMargin,

@@ -3,7 +3,7 @@ import {
   color,
   scale,
   fontSize,
-  defaultText,
+  
 } from "container/variables/common";
 import { View, StyleSheet, TextInput } from "react-native";
 import { Icon } from "native-base";
@@ -34,7 +34,7 @@ const SearchBox = (props) => {
 const styles = StyleSheet.create({
   container: {},
   text: {
-    ...defaultText,
+    
     fontSize: fontSize.sizeContent,
   },
   searchBox: {

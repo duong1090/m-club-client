@@ -12,11 +12,8 @@ const SlideTab = (props) => {
     setActiveTab(props.activeTab);
   }, [props.activeTab]);
 
-
   //function
-  const onChangeTab = (index) => {
-    
-  };
+  const onChangeTab = (index) => {};
 
   //render
   return (
@@ -24,6 +21,7 @@ const SlideTab = (props) => {
       page={activeTab}
       onChangeTab={(e) => onChangeTab(e.i)}
       renderTabBar={() => <ScrollableTab style={{ height: 0 }} />}
+      locked
     >
       {tabs.map((tab) => (
         <Tab heading="" style={{ backgroundColor: "transparent" }}>

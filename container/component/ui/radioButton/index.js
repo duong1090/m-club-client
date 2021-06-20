@@ -32,9 +32,9 @@ const RadioButton = (props) => {
         {props.selected ? (
           <View
             style={{
-              height: scale(25),
-              width: scale(25),
-              borderRadius: scale(13),
+              height: scale(22),
+              width: scale(22),
+              borderRadius: scale(11),
               backgroundColor: color.done,
             }}
           />

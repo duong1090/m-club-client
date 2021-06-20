@@ -8,7 +8,7 @@ import {
   color,
   fontSize,
   space,
-  defaultText,
+  
   shadow,
 } from "container/variables/common";
 import { Navigation } from "react-native-navigation";
@@ -98,12 +98,12 @@ const styles = StyleSheet.create({
     marginRight: space.componentMargin,
   },
   settingTitle: {
-    ...defaultText,
+    
     fontSize: fontSize.sizeContent,
     color: color.primary,
   },
   settingValue: {
-    ...defaultText,
+    
     fontSize: fontSize.sizeContent,
     fontWeight: "bold",
   },

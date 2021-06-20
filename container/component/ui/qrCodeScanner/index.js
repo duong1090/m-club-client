@@ -4,7 +4,7 @@ import QRCodeScanner from "react-native-qrcode-scanner";
 import {
   color,
   scale,
-  defaultText,
+  
   space,
   fontSize,
   shadow,

@@ -3,7 +3,7 @@ import { Image, StyleSheet, View, Text } from "react-native";
 import {
   scale,
   color,
-  defaultText,
+  
   fontSize,
   space,
 } from "container/variables/common";
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   description: {
-    ...defaultText,
+    
     // backgroundColor: 'red',
     // color: '#00aaaa',
     marginTop: scale(70),
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   welcome: {
-    ...defaultText,
+    
     fontSize: fontSize.size36,
     color: "#00aaaa",
     fontWeight: "bold",

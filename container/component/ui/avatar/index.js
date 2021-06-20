@@ -12,7 +12,7 @@ import {
   scale,
   color,
   fontSize,
-  defaultText,
+  
   shadow,
 } from "container/variables/common";
 import {getAvatarSource} from 'container/action/user';
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     borderRadius: scale(50),
   },
   text: {
-    ...defaultText,
+    
     color: "#fff",
     fontSize: fontSize.size40,
   },

@@ -4,9 +4,8 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
 } from "container/variables/common";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 export const AVATAR_SIZE = scale(60);
 export const styles = StyleSheet.create({
@@ -26,12 +25,10 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   contentChildText: {
-    ...defaultText,
     fontStyle: "italic",
     fontSize: fontSize.size20,
   },
   contentChildTask: {
-    ...defaultText,
     fontSize: fontSize.size22,
     fontStyle: "italic",
     fontWeight: "bold",
@@ -40,6 +37,7 @@ export const styles = StyleSheet.create({
   contentHeader: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: space.itemMargin,
   },
   contentAction: {
     padding: space.bgPadding,
@@ -49,12 +47,11 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: space.itemMargin,
     marginBottom: space.itemMargin,
-    backgroundColor: isDone ? color.success : color.lightGrey,
+    backgroundColor: isDone ? color.success : color.lightGreyPlus,
     borderRadius: space.border,
   }),
   textDone: (isDone) => ({
-    ...defaultText,
-    color: isDone ? "#fff" : color.text,
+    color: isDone ? "#fff" : color.grey,
   }),
   contentDoneIcon: {
     color: "#fff",
@@ -66,23 +63,23 @@ export const styles = StyleSheet.create({
   },
 
   textDelete: {
-    ...defaultText,
-    color: "#fff",
+    color: color.danger,
   },
   contentBtnDelete: {
     flexDirection: "row",
     justifyContent: "center",
     paddingVertical: space.itemMargin,
-    backgroundColor: color.red,
     borderRadius: space.border,
+    borderWidth: scale(1),
+    borderStyle: "dashed",
+    borderColor: color.danger,
   },
   contentDeleteIcon: {
     fontSize: scale(30),
     marginLeft: scale(10),
-    color: "#fff",
+    color: color.danger,
   },
   contentTitle: {
-    ...defaultText,
     fontSize: fontSize.sizeTitle,
     fontWeight: "bold",
     flex: 1,
@@ -101,7 +98,6 @@ export const styles = StyleSheet.create({
     borderColor: color.hint,
   },
   contentMemText: {
-    ...defaultText,
     fontWeight: "bold",
     marginRight: space.componentMargin,
   },
@@ -119,6 +115,7 @@ export const styles = StyleSheet.create({
   contentMemAddIcon: {
     color: color.grey,
     fontSize: scale(40),
+    marginLeft: Platform.OS == "ios" ? scale(4) : 0,
   },
   contentMemAvtBox: {
     flexDirection: "row",
@@ -140,12 +137,10 @@ export const styles = StyleSheet.create({
     ...shadow,
   },
   contentMemAvtMoreText: {
-    ...defaultText,
     fontWeight: "bold",
     color: "#fff",
   },
   contentMemName: {
-    ...defaultText,
     maxWidth: "75%",
     marginRight: space.itemMargin,
   },
@@ -159,7 +154,6 @@ export const styles = StyleSheet.create({
     borderColor: color.hint,
   },
   contentPriorityText: {
-    ...defaultText,
     fontWeight: "bold",
     marginRight: space.componentMargin,
   },
@@ -175,7 +169,6 @@ export const styles = StyleSheet.create({
     borderColor: color.grey,
   }),
   contentPriorityLevel: (level) => ({
-    ...defaultText,
     color: level == 0 ? color.grey : "#fff",
   }),
   contentDeadline: {
@@ -188,7 +181,6 @@ export const styles = StyleSheet.create({
     borderColor: color.hint,
   },
   contentDeadlineText: {
-    ...defaultText,
     fontWeight: "bold",
     marginRight: space.componentMargin,
   },
@@ -197,7 +189,6 @@ export const styles = StyleSheet.create({
     paddingVertical: scale(10),
   },
   contentDeadlineTime: (deadline) => ({
-    ...defaultText,
     color: deadline ? color.danger : color.grey,
     fontSize: fontSize.size24,
   }),
@@ -209,7 +200,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(20),
   },
   contentLabelText: {
-    ...defaultText,
     fontWeight: "bold",
     marginRight: space.componentMargin,
   },
@@ -233,12 +223,10 @@ export const styles = StyleSheet.create({
     margin: scale(5),
   }),
   labelItemText: {
-    ...defaultText,
     color: "#fff",
     fontSize: fontSize.size22,
   },
   contentLabelDetail: {
-    ...defaultText,
     color: color.grey,
     fontSize: fontSize.size24,
   },
@@ -248,7 +236,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   contentDescriptionText: {
-    ...defaultText,
     flex: 1,
   },
 
@@ -257,13 +244,12 @@ export const styles = StyleSheet.create({
   //#region children
   children: {
     marginBottom: space.componentMargin,
-    paddingBottom: space.bgPadding * 2,
     backgroundColor: color.backgroundColor,
   },
   childrenHeader: {
     flexDirection: "row",
     margin: space.componentMargin,
-
+    marginBottom: 0,
     justifyContent: "space-between",
   },
   childrenTitleBox: {
@@ -272,7 +258,6 @@ export const styles = StyleSheet.create({
     marginBottom: space.componentMargin,
   },
   childrenTitle: {
-    ...defaultText,
     fontWeight: "bold",
   },
   childrenCreateIcon: {
@@ -281,13 +266,13 @@ export const styles = StyleSheet.create({
     marginLeft: scale(10),
   },
   childrenCreateText: {
-    ...defaultText,
     color: color.primary,
   },
 
   childrenEmpty: {
     justifyContent: "center",
     alignItems: "center",
+    padding: space.componentMargin,
   },
 
   childrenEmptyButton: {
@@ -309,19 +294,16 @@ export const styles = StyleSheet.create({
   childrenEmptyIcon: {
     color: color.grey,
     fontSize: scale(50),
+    marginLeft: Platform.OS == "ios" ? scale(2) : 0,
   },
 
   childrenItem: {
     flexDirection: "row",
-    backgroundColor: "#fff",
-    borderRadius: scale(20),
     alignItems: "center",
     justifyContent: "space-between",
     padding: scale(20),
     paddingVertical: scale(10),
-    marginTop: 0,
-    margin: space.componentMargin,
-    ...shadow,
+    borderColor: color.lightGrey,
   },
   childrenItemHeader: {
     flexDirection: "row",
@@ -339,9 +321,8 @@ export const styles = StyleSheet.create({
   }),
   childrenItemTitle: {},
   childrenItemDone: (isDone) => ({
-    ...defaultText,
     fontSize: scale(50),
-    color: isDone ? color.green : color.text,
+    color: isDone ? color.green : color.grey,
   }),
   //#endregion
 
@@ -366,7 +347,6 @@ export const styles = StyleSheet.create({
   },
 
   activityItemName: {
-    ...defaultText,
     flex: 1,
   },
   activityItemTime: {
@@ -380,7 +360,6 @@ export const styles = StyleSheet.create({
     color: color.grey,
   },
   activityItemTimeText: {
-    ...defaultText,
     maxWidth: scale(120),
     fontSize: fontSize.size22,
     color: color.grey,
@@ -400,7 +379,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   activityButtonText: {
-    ...defaultText,
     color: "#fff",
   },
   activityButtonIcon: {

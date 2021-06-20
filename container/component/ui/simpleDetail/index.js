@@ -1,17 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import { injectIntl } from "react-intl";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import {
   scale,
   color,
   fontSize,
   shadow,
   space,
-  defaultText,
 } from "container/variables/common";
 import { Icon } from "native-base";
 import Messages from "container/translation/Message";
 import PrivilegeAction from "container/component/ui/privilegeAction";
+import ModalContext from "../../../context/modal";
 
 const SimpleDetail = (props) => {
   const {
@@ -29,6 +35,17 @@ const SimpleDetail = (props) => {
     onDelete,
     privilege,
   } = props;
+
+  const { showConfirmModal } = useContext(ModalContext);
+
+  const confirmDelete = () => {
+    const options = {
+      onOk: () => onDelete(),
+      content: intl.formatMessage(Messages.are_you_sure_to_delete),
+    };
+
+    showConfirmModal(options);
+  };
 
   // render
   const renderHeader = () => {
@@ -79,9 +96,7 @@ const SimpleDetail = (props) => {
                 style={styles.memberList}
               ></TouchableOpacity>
             ) : (
-              <Text style={{ ...defaultText }}>
-                {intl.formatMessage(Messages.have_no_member)}
-              </Text>
+              <Text>{intl.formatMessage(Messages.have_no_member)}</Text>
             )}
           </View>
         ) : null}
@@ -122,19 +137,22 @@ const SimpleDetail = (props) => {
       </View>
       <View style={styles.card}>
         {header ? header(data) : renderHeader()}
-        <View style={styles.content}>
+        <ScrollView style={styles.content}>
           {body ? body(data) : renderBody()}
 
           {onDelete ? (
             <PrivilegeAction privilegeKey={privilege.delete}>
-              <TouchableOpacity style={styles.deleteBox} onPress={onDelete}>
+              <TouchableOpacity
+                style={styles.deleteBox}
+                onPress={() => confirmDelete()}
+              >
                 <Text style={styles.titleSymbol}>
                   {intl.formatMessage(Messages.delete)}
                 </Text>
               </TouchableOpacity>
             </PrivilegeAction>
           ) : null}
-        </View>
+        </ScrollView>
       </View>
     </View>
   );
@@ -177,13 +195,10 @@ const styles = StyleSheet.create({
     marginRight: space.componentMargin,
   },
   textTitle: {
-    ...defaultText,
     fontSize: fontSize.sizeTitle,
     fontWeight: "bold",
   },
-  description: {
-    ...defaultText,
-  },
+  description: {},
   dot: {
     width: scale(20),
     height: scale(20),
@@ -195,11 +210,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   textItem: {
-    ...defaultText,
     fontSize: fontSize.sizeContent,
   },
   titleItem: {
-    ...defaultText,
     fontSize: fontSize.sizeContent,
     fontWeight: "bold",
   },
@@ -221,9 +234,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   actionText: {
-    ...defaultText,
     fontSize: fontSize.size26,
-    fontWeight: "bold",
     color: "#fff",
   },
   actionIcon: {
@@ -240,14 +251,13 @@ const styles = StyleSheet.create({
   deleteBox: {
     paddingVertical: space.itemMargin,
     borderRadius: space.border,
-    borderStyle: 'dashed',
+    borderStyle: "dashed",
     borderWidth: scale(1),
     borderColor: color.danger,
     justifyContent: "center",
     alignItems: "center",
   },
   titleSymbol: {
-    ...defaultText,
     color: color.danger,
   },
 });

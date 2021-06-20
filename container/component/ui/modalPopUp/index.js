@@ -11,7 +11,7 @@ import {
   scale,
   color,
   space,
-  defaultText,
+  
   fontSize,
 } from "container/variables/common";
 import { Icon } from "native-base";
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     margin: scale(10),
   },
   title: {
-    ...defaultText,
+    
     fontSize: fontSize.sizeTitle,
     fontWeight: "bold",
     marginTop: scale(5),

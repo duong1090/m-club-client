@@ -50,6 +50,7 @@ const SignUp = (props) => {
 const styles = {
   container: {
     height: "100%",
+    backgroundColor: "#fff",
   },
   header: {
     height: scale(300),

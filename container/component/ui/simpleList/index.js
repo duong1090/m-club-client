@@ -15,7 +15,7 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import ModalContext from "container/context/modal";
 import { Icon } from "native-base";
@@ -133,11 +133,11 @@ const styles = StyleSheet.create({
     ...shadow,
   },
   textItem: {
-    ...defaultText,
+    
     fontSize: fontSize.sizeBigContent,
   },
   desItem: {
-    ...defaultText,
+    
     fontSize: fontSize.sizeBigContent - scale(2),
     marginTop: space.itemMargin,
   },
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textEmpty: {
-    ...defaultText,
+    
     fontSize: fontSize.sizeBigContent,
   },
   searchBox: {
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     ...shadow,
   },
   actionButtonText: {
-    ...defaultText,
+    
     color: "#fff",
   },
   actionButtonIcon: {

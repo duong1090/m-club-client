@@ -22,7 +22,7 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import { Icon, ScrollableTab, Tab, Tabs, View } from "native-base";
 import InputItem from "container/component/ui/inputItem";
@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textCreateButton: {
-    ...defaultText,
+    
     color: "#fff",
     height: scale(40),
   },
@@ -521,11 +521,11 @@ const styles = StyleSheet.create({
   leftTypeBox: {},
   titleTypeBox: {
     fontWeight: "bold",
-    ...defaultText,
+    
   },
   desTypeBox: {
     color: color.hint,
-    ...defaultText,
+    
   },
   inputStyle: {
     marginBottom: space.componentMargin,
@@ -572,7 +572,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.light,
   },
   textAddImg: {
-    ...defaultText,
+    
     color: color.hint,
   },
 });

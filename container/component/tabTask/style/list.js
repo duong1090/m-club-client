@@ -5,7 +5,6 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
 } from "container/variables/common";
 
 export const AVATAR_SIZE = scale(50);
@@ -52,7 +51,6 @@ export const styles = StyleSheet.create({
     marginTop: scale(15),
   },
   dynamicFilterText: {
-    ...defaultText,
     color: color.disable,
   },
 
@@ -69,7 +67,6 @@ export const styles = StyleSheet.create({
     paddingVertical: scale(10),
   },
   filterItemText: {
-    ...defaultText,
     marginRight: scale(10),
   },
   filterBox: {
@@ -80,6 +77,15 @@ export const styles = StyleSheet.create({
   filterIcon: {
     color: color.grey,
     fontSize: scale(30),
+  },
+  filteredDot: {
+    position: "absolute",
+    top: scale(18),
+    right: scale(-8),
+    width: scale(15),
+    aspectRatio: 1,
+    borderRadius: scale(8),
+    backgroundColor: color.danger,
   },
   contentMemAvtBox: {
     flexDirection: "row",
@@ -116,12 +122,10 @@ export const styles = StyleSheet.create({
     ...shadow,
   },
   contentMemAvtMoreText: {
-    ...defaultText,
     fontWeight: "bold",
     color: "#fff",
   },
   contentMemName: {
-    ...defaultText,
     maxWidth: "75%",
     marginRight: space.itemMargin,
   },
@@ -156,7 +160,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   textEmpty: {
-    ...defaultText,
     fontSize: fontSize.sizeBigContent,
   },
   actionButtonBox: {
@@ -178,7 +181,6 @@ export const styles = StyleSheet.create({
     ...shadow,
   },
   actionButtonText: {
-    ...defaultText,
     color: "#fff",
   },
   actionButtonIcon: {
@@ -196,13 +198,10 @@ export const styles = StyleSheet.create({
   },
   childrenItem: {
     flexDirection: "row",
-    backgroundColor: "#fff",
-    borderRadius: scale(20),
     alignItems: "center",
     justifyContent: "space-between",
-    marginHorizontal: scale(20),
-    marginTop: scale(15),
-    ...shadow,
+    borderBottomWidth: scale(1),
+    borderColor: color.lightGrey,
   },
   childrenItemHeader: {
     flexDirection: "row",
@@ -221,7 +220,6 @@ export const styles = StyleSheet.create({
     marginRight: scale(20),
   }),
   childrenItemName: {
-    ...defaultText,
     maxWidth: "90%",
   },
   childrenItemBtnDone: {
@@ -230,8 +228,24 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(20),
   },
   childrenItemDone: (isDone) => ({
-    ...defaultText,
     fontSize: scale(50),
-    color: isDone ? color.green : color.text,
+    color: isDone ? color.green : color.grey,
   }),
+  labelBox: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    margin: scale(-5),
+  },
+  labelItem: (color) => ({
+    borderRadius: space.border,
+    backgroundColor: color,
+    paddingHorizontal: space.itemMargin,
+    paddingVertical: scale(10),
+    margin: scale(5),
+  }),
+  labelItemText: {
+    color: "#fff",
+    fontSize: fontSize.size22,
+  },
 });

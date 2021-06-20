@@ -21,7 +21,7 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import { getIntl } from "container/utils/common";
 import Messages from "container/translation/Message";
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     borderRadius: space.border / 1.5,
   }),
   textDoneBtn: {
-    ...defaultText,
+    
     color: "#fff",
   },
   doneBox: {

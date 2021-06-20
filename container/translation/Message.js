@@ -626,4 +626,24 @@ export default defineMessages({
     id: "student_id_placeholder",
     defaultMessage: "Enter student ID",
   },
+  confirm: {
+    id: "confirm",
+    defaultMessage: "Confirm",
+  },
+  are_you_sure_to_log_out: {
+    id: "are_you_sure_to_log_out",
+    defaultMessage: "Are you sure to log out?",
+  },
+  are_you_sure_to_delete: {
+    id: "are_you_sure_to_delete",
+    defaultMessage: "Are you sure to delete?",
+  },
+  error: {
+    id: "error",
+    defaultMessage: "Error",
+  },
+  date: {
+    id: "date",
+    defaultMessage: "Date",
+  },
 });

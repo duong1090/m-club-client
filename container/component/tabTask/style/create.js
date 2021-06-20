@@ -4,7 +4,7 @@ import {
   color,
   shadow,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 
 export const AVATAR_SIZE = scale(60);
@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   textCreateButton: {
-    ...defaultText,
+    
     color: "#fff",
   },
   avatarBox: {
@@ -62,12 +62,12 @@ export const styles = StyleSheet.create({
     ...shadow,
   },
   textMoreAvatar: {
-    ...defaultText,
+    
     fontWeight: "bold",
     color: "#fff",
   },
   assignedName: {
-    ...defaultText,
+    
     maxWidth: "75%",
     fontWeight: "bold",
     marginLeft: space.itemMargin,
@@ -85,6 +85,6 @@ export const styles = StyleSheet.create({
     marginRight: scale(10),
   },
   byObjText: {
-    ...defaultText,
+    
   },
 });

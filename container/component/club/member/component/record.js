@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { injectIntl, FormattedMessage } from "react-intl";
 import { useRecoilState } from "recoil";
-import { listMemberState, currMemberState } from "../recoil";
+import { listMemberState, currMemberState, currModeState } from "../recoil";
 import Messages from "container/translation/Message";
 import { View } from "react-native";
 import { postRequest, getRequest } from "container/utils/request";
@@ -29,9 +29,10 @@ const DEFAULT_INFO = {
 
 const MemberRecord = (props) => {
   //props
-  const { mode, intl, changeMode } = props;
+  const { intl } = props;
   //state
   const [info, setInfo] = useState(DEFAULT_INFO);
+  const [currMode, setCurrMode] = useRecoilState(currModeState);
 
   //recoil
   const [data, setData] = useRecoilState(currMemberState);
@@ -48,6 +49,11 @@ const MemberRecord = (props) => {
   useEffect(() => {
     if (data) setInfo(data);
   }, [data]);
+
+  useEffect(() => {
+    if (currMode == "create") setInfo(DEFAULT_INFO);
+    else if (currMode == "edit") setInfo(data);
+  }, [currMode]);
 
   //#endregion
 
@@ -139,7 +145,7 @@ const MemberRecord = (props) => {
   };
 
   const onSubmit = () => {
-    switch (mode) {
+    switch (currMode) {
       case "create":
         create();
         break;
@@ -151,7 +157,7 @@ const MemberRecord = (props) => {
 
   const prepareParams = () => {
     let params = {};
-    if (mode == "edit" && data && data.id) params.id = data.id;
+    if (currMode == "edit" && data && data.id) params.id = data.id;
     if (info.name) params.name = info.name;
     if (info.phone) params.phone = info.phone;
     if (info.address) params.address = info.address;
@@ -188,7 +194,7 @@ const MemberRecord = (props) => {
     tempList.push(transform(data));
     setList(tempList);
     console.log("createSuccess:::", tempList);
-    changeMode("list");
+    setCurrMode("list");
   };
 
   const transform = (data) => {
@@ -230,13 +236,13 @@ const MemberRecord = (props) => {
   return (
     <View>
       <SimpleRecord
-        mode={mode}
+        mode={currMode}
         data={info}
         fields={fields}
         onSubmit={() => onSubmit()}
         backButton={{
           title: intl.formatMessage(Messages.list),
-          onPress: () => changeMode("list"),
+          onPress: () => setCurrMode("list"),
         }}
       />
     </View>

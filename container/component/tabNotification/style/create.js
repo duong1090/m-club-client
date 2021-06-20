@@ -4,7 +4,7 @@ import {
   color,
   fontSize,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 
 export default StyleSheet.create({
@@ -18,7 +18,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   textCreateButton: {
-    ...defaultText,
+    
     color: "#fff",
   },
   inputField: {

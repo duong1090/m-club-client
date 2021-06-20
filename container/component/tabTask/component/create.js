@@ -12,7 +12,7 @@ import {
   color,
   fontSize,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import { TextInput, View, Text, TouchableOpacity, Image } from "react-native";
 import { styles, AVATAR_SIZE } from "../style/create";
@@ -167,13 +167,13 @@ const CreateTask = (props, ref) => {
           source={require("container/asset/icon/dukien.png")}
         />
         <View style={{ marginLeft: scale(15) }}>
-          <Text style={{ ...defaultText, fontSize: fontSize.size26 }}>
+          <Text style={{  fontSize: fontSize.size26 }}>
             {intl.formatMessage(Messages.due_time)}
           </Text>
           {dueTime ? (
             <Text
               style={{
-                ...defaultText,
+                
                 fontSize: fontSize.size26,
                 fontWeight: "bold",
                 color: dueDateColor,
@@ -212,7 +212,7 @@ const CreateTask = (props, ref) => {
           source={require("container/asset/icon/unassign-hanchot.png")}
         />
         <View style={{ marginLeft: scale(15) }}>
-          <Text style={{ ...defaultText, fontSize: fontSize.size26 }}>
+          <Text style={{  fontSize: fontSize.size26 }}>
             {intl.formatMessage(Messages.due_date)}
           </Text>
           {dueDate ? (
@@ -220,7 +220,7 @@ const CreateTask = (props, ref) => {
               font-size-22
               bold
               style={{
-                ...defaultText,
+                
                 fontSize: fontSize.size26,
                 color: dueDateColor,
               }}
@@ -323,7 +323,7 @@ const CreateTask = (props, ref) => {
             <View style={{ marginLeft: scale(15) }}>
               <Text
                 style={{
-                  ...defaultText,
+                  
                   fontSize: fontSize.size26,
                   color: color.text,
                 }}

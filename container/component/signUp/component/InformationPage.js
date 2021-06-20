@@ -22,7 +22,6 @@ import {
   scale,
   color,
   fontSize,
-  defaultText,
   space,
   shadow,
 } from "container/variables/common";
@@ -302,6 +301,7 @@ const InformationPage = (props) => {
       <Tabs
         initialPage={0}
         page={currTab}
+        locked
         renderTabBar={() => (
           <ScrollableTab style={{ height: 0, borderWidth: 0 }} />
         )}
@@ -354,29 +354,29 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textSubmit: {
-    ...defaultText,
     fontSize: fontSize.size30,
     fontWeight: "bold",
   },
   textTitle: {
-    ...defaultText,
     fontSize: fontSize.sizeTitle,
     fontWeight: "bold",
     alignSelf: "center",
     marginBottom: space.componentMargin,
   },
   headingBox: {
-    backgroundColor: "#fff",
+    backgroundColor: color.backgroundColor,
     margin: space.componentMargin,
+    marginBottom: 0,
     borderRadius: space.border,
+    borderWidth: scale(1),
+    borderColor: color.lightGrey,
     paddingVertical: space.itemMargin,
     justifyContent: "center",
     alignItems: "center",
-    ...shadow,
   },
   textHeading: {
-    ...defaultText,
     fontSize: fontSize.sizeContent,
+    fontWeight: "bold",
   },
   bodyBox: {
     margin: space.componentMargin,
@@ -402,7 +402,6 @@ const styles = StyleSheet.create({
     borderColor: index <= currTab ? color.success : color.lightGrey,
   }),
   textPagination: (currTab, index) => ({
-    ...defaultText,
     fontSize: fontSize.size32,
     color: "#fff",
   }),

@@ -17,7 +17,7 @@ import {
   color,
   scale,
   fontSize,
-  defaultText,
+  
   space,
 } from "container/variables/common";
 import Messages from "container/translation/Message";
@@ -107,7 +107,7 @@ const InputItem = (props, ref) => {
         {placeholder ? (
           <Text
             style={{
-              ...defaultText,
+              
               fontSize: fontSize.size28,
               color: color.fontColor,
               marginRight: scale(15),
@@ -190,7 +190,6 @@ const InputItem = (props, ref) => {
         <View style={[styles.wrapButton, inputStyle]}>
           {transformValue ? (
             <Text
-              style={{ ...defaultText }}
               numberOfLines={1}
               ellipsizeMode={"tail"}
             >
@@ -199,7 +198,7 @@ const InputItem = (props, ref) => {
           ) : (
             <Text
               style={{
-                ...defaultText,
+                
                 fontSize: fontSize.size28,
                 color: color.hint,
               }}
@@ -231,7 +230,6 @@ const InputItem = (props, ref) => {
       >
         {value ? (
           <Text
-            style={{ ...defaultText }}
             numberOfLines={1}
             ellipsizeMode={"tail"}
           >
@@ -240,7 +238,7 @@ const InputItem = (props, ref) => {
         ) : (
           <Text
             style={{
-              ...defaultText,
+              
               fontSize: fontSize.size28,
               color: color.hint,
             }}
@@ -333,7 +331,7 @@ const styles = StyleSheet.create({
     return style;
   },
   textInput: {
-    ...defaultText,
+    
     flex: 1,
     fontSize: fontSize.size28,
     color: color.text,
@@ -341,7 +339,7 @@ const styles = StyleSheet.create({
   },
 
   otpInput: {
-    ...defaultText,
+    
     width: "80%",
     fontSize: fontSize.size28,
     color: "#000",
@@ -360,7 +358,7 @@ const styles = StyleSheet.create({
   },
 
   textLabel: {
-    ...defaultText,
+    
     fontSize: fontSize.size28,
     fontWeight: "bold",
     marginLeft: scale(30),
@@ -384,14 +382,14 @@ const styles = StyleSheet.create({
     marginLeft: scale(10),
   },
   textAreaInput: {
-    ...defaultText,
+    
     fontSize: fontSize.size28,
     paddingLeft: 0,
     paddingRight: 0,
     color: color.text,
   },
   textNote: {
-    ...defaultText,
+    
     fontSize: fontSize.size26,
     color: color.grey,
     fontStyle: "italic",

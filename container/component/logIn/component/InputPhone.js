@@ -13,7 +13,7 @@ import {
   color,
   space,
   fontSize,
-  defaultText,
+  
 } from "container/variables/common";
 import Messages from "container/translation/Message";
 import InputItem from "container/component/ui/inputItem";
@@ -69,7 +69,7 @@ const InputPhone = (props) => {
         onPress={() => checkLogin()}
       >
         <Text
-          style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
+          style={{  color: "#fff", fontSize: fontSize.size28 }}
         >
           {intl.formatMessage(Messages.sign_in)}
         </Text>
@@ -78,7 +78,7 @@ const InputPhone = (props) => {
       <View style={styles.signUp}>
         <Text
           style={{
-            ...defaultText,
+            
             color: color.fontColor,
             fontSize: fontSize.size28,
             fontWeight: "bold",
@@ -89,7 +89,7 @@ const InputPhone = (props) => {
         <TouchableOpacity onPress={() => gotoSignUp()}>
           <Text
             style={{
-              ...defaultText,
+              
               color: color.background,
               fontSize: fontSize.size28,
               fontWeight: "bold",

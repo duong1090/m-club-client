@@ -9,6 +9,7 @@ import Config from "container/config/server.config";
 import ModalContext from "container/context/modal";
 import Toast from "react-native-simple-toast";
 import SimpleRecord from "container/component/ui/simpleRecord";
+import { currModeState } from "../../position/recoil";
 
 const DEFAULT_INFO = {
   name: "",
@@ -16,13 +17,14 @@ const DEFAULT_INFO = {
 
 const DepartmentRecord = (props) => {
   //props
-  const { mode, intl, changeMode } = props;
+  const { intl } = props;
   //state
   const [info, setInfo] = useState(DEFAULT_INFO);
 
   //recoil
   const [data, setData] = useRecoilState(currDepartmentState);
   const [list, setList] = useRecoilState(listDepartmentState);
+  const [currMode, setCurrMode] = useRecoilState(currModeState);
 
   //context
   const { showSpinner, hideSpinner } = useContext(ModalContext);
@@ -37,6 +39,11 @@ const DepartmentRecord = (props) => {
   useEffect(() => {
     if (data) setInfo(data);
   }, [data]);
+
+  useEffect(() => {
+    if (currMode == "create") setInfo(DEFAULT_INFO);
+    else if (currMode == "edit") setInfo(data);
+  }, [currMode]);
 
   //#endregion
 
@@ -59,7 +66,7 @@ const DepartmentRecord = (props) => {
   };
 
   const onSubmit = () => {
-    switch (mode) {
+    switch (currMode) {
       case "create":
         create();
         break;
@@ -71,7 +78,7 @@ const DepartmentRecord = (props) => {
 
   const prepareParams = () => {
     let params = {};
-    if (mode == "edit" && data.id) params.id = data.id;
+    if (currMode == "edit" && data.id) params.id = data.id;
     if (info.name) params.name = info.name;
     return params;
   };
@@ -98,7 +105,7 @@ const DepartmentRecord = (props) => {
     tempList.push(transform(data));
     setList(tempList);
     console.log("createSuccess:::", tempList);
-    changeMode("list");
+    setCurrMode("list");
   };
 
   const transform = (data) => {
@@ -140,13 +147,13 @@ const DepartmentRecord = (props) => {
   return (
     <View>
       <SimpleRecord
-        mode={mode}
+        mode={currMode}
         data={info}
         fields={fields}
         onSubmit={() => onSubmit()}
         backButton={{
           title: intl.formatMessage(Messages.list),
-          onPress: () => changeMode("list"),
+          onPress: () => setCurrMode("list"),
         }}
       />
     </View>

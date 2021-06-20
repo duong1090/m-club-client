@@ -17,7 +17,6 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
 } from "container/variables/common";
 
 export const DEFAULT_TYPE = [
@@ -102,7 +101,7 @@ const styles = StyleSheet.create({
     marginBottom: space.itemMargin,
     marginTop: index == 0 ? space.componentMargin : 0,
   }),
-  textItem: { ...defaultText },
+  textItem: {},
   iconItem: {
     fontSize: scale(30),
     color: color.background,

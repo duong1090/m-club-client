@@ -6,13 +6,7 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-import {
-  scale,
-  color,
-  shadow,
-  space,
-  defaultText,
-} from "container/variables/common";
+import { scale, color, shadow, space } from "container/variables/common";
 import { FormattedMessage } from "react-intl";
 import Messages from "container/translation/Message";
 import Information from "./component/Information";
@@ -26,10 +20,13 @@ import PrivilegeAction from "container/component/ui/privilegeAction";
 import ActionButton from "container/component/ui/actionButton";
 import { logOut } from "container/action/user";
 import { Navigation } from "react-native-navigation";
+import { getIntl } from "../../utils/common";
 
 const TabAccount = (props) => {
   //context
-  const { showSpinner, hideSpinner } = useContext(ModalContext);
+  const { showSpinner, hideSpinner, showConfirmModal } = useContext(
+    ModalContext
+  );
 
   //function - event
   const gotoManageItem = (type) => {
@@ -54,6 +51,15 @@ const TabAccount = (props) => {
         console.error(err);
         hideSpinner();
       });
+  };
+
+  const confirmLogOut = () => {
+    const options = {
+      onOk: () => doLogOut(),
+      content: getIntl().formatMessage(Messages.are_you_sure_to_log_out),
+    };
+
+    showConfirmModal(options);
   };
 
   //render
@@ -135,7 +141,7 @@ const TabAccount = (props) => {
         }
         color={color.danger}
         style={styles.actionButtonBox}
-        onPress={() => doLogOut()}
+        onPress={() => confirmLogOut()}
       />
     </View>
   );
@@ -174,7 +180,6 @@ const styles = StyleSheet.create({
     ...shadow,
   },
   actionButtonText: {
-    ...defaultText,
     color: "#fff",
   },
   actionButtonIcon: {
@@ -183,7 +188,6 @@ const styles = StyleSheet.create({
     marginRight: scale(10),
   },
   iconList: {
-    ...defaultText,
     fontSize: scale(50),
     color: color.background,
   },

@@ -2,12 +2,12 @@ import React, { useContext, useEffect } from "react";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
 import { View, StyleSheet } from "react-native";
-import { useRecoilState } from "recoil";
-import { scale, color, defaultText } from "container/variables/common";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { scale, color } from "container/variables/common";
 import { Icon } from "native-base";
 import SimpleDetail from "container/component/ui/simpleDetail";
-import { currPositionState, listPositionState } from "../recoil";
-import ModalContext from 'container/context/modal';
+import { currModeState, currPositionState, listPositionState } from "../recoil";
+import ModalContext from "container/context/modal";
 import { postRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import Toast from "react-native-simple-toast";
@@ -15,11 +15,12 @@ import { normalRole } from "container/constant/role";
 
 const PositionDetail = (props) => {
   //props
-  const { intl, changeMode } = props;
+  const { intl } = props;
 
   //recoil
   const [data, setData] = useRecoilState(currPositionState);
   const [list, setList] = useRecoilState(listPositionState);
+  const setCurrMode = useSetRecoilState(currModeState);
 
   //context
   const { showSpinner, hideSpinner } = useContext(ModalContext);
@@ -32,11 +33,11 @@ const PositionDetail = (props) => {
 
   //function
   const gotoList = () => {
-    changeMode && changeMode("list");
+    setCurrMode && setCurrMode("list");
   };
 
   const gotoEdit = () => {
-    changeMode && changeMode("edit");
+    setCurrMode && setCurrMode("edit");
   };
 
   const onDelete = () => {
@@ -76,7 +77,7 @@ const PositionDetail = (props) => {
             type="FontAwesome5"
             name="user-tag"
             style={{
-              ...defaultText,
+              
               fontSize: scale(50),
               color: color.inverse,
             }}

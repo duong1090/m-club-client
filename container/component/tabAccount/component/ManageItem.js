@@ -6,7 +6,7 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 
 const ManageItem = (props) => {
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     // aspectRatio: 1,
   },
   title: {
-    ...defaultText,
+    
     fontSize: fontSize.sizeBigContent,
   },
 });

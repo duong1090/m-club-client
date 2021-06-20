@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { listMemberState, currMemberState } from "../recoil";
+import { listMemberState, currMemberState, currModeState } from "../recoil";
 import { View } from "react-native";
 import { Icon } from "native-base";
-import { scale, defaultText } from "container/variables/common";
+import { scale } from "container/variables/common";
 import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
@@ -13,7 +13,6 @@ import { normalRole } from "container/constant/role";
 
 const MemberList = (props) => {
   //props
-  const { changeMode } = props;
   //state
   // const [data, setData] = useState([]);
   const [meta, setMeta] = useState({});
@@ -23,6 +22,7 @@ const MemberList = (props) => {
   //recoil
   const [data, setData] = useRecoilState(listMemberState);
   const setCurrMember = useSetRecoilState(currMemberState);
+  const setCurrMode = useSetRecoilState(currModeState);
 
   //variables
   const debounceSearch = useRef(debounce((text) => onSearch(text), 200))
@@ -38,12 +38,12 @@ const MemberList = (props) => {
   //#region function - event
   const gotoRecord = (mode = "create") => {
     // gotoRoute(screens.DEPARTMENT_EDIT, { mode });
-    changeMode && changeMode(mode);
+    setCurrMode(mode);
   };
 
   const onPressItem = (item) => {
     setCurrMember(item);
-    changeMode && changeMode("detail");
+    setCurrMode("detail");
   };
 
   const transform = (data) => {
@@ -101,7 +101,7 @@ const MemberList = (props) => {
         onSearch={(text) => debounceSearch(text)}
         loading={loading}
         data={data}
-        iconHeader={(item) => <Avatar data={item} size={scale(80)} noShadow/>}
+        iconHeader={(item) => <Avatar data={item} size={scale(80)} noShadow />}
         addNewItem={gotoRecord}
         styleTextItem={{ fontWeight: "bold" }}
         onPressItem={(item) => onPressItem(item)}
@@ -109,7 +109,7 @@ const MemberList = (props) => {
           <Icon
             type="FontAwesome5"
             name="user"
-            style={{ ...defaultText, fontSize: scale(30) }}
+            style={{  fontSize: scale(30) }}
           />
         }
         loadMore={loadMore}

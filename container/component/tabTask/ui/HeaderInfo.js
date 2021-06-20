@@ -6,7 +6,7 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import Avatar from "container/component/ui/avatar";
 import { Icon } from "native-base";
@@ -64,14 +64,14 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   name: {
-    ...defaultText,
+    
     marginLeft: scale(20),
 
     fontSize: fontSize.sizeBigContent,
     fontWeight: "bold",
   },
   position: {
-    ...defaultText,
+    
     fontSize: fontSize.size28,
     marginLeft: scale(20),
   },
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     borderRadius: space.border,
   },
   backText: {
-    ...defaultText,
+    
     fontSize: fontSize.size24,
     color: color.text,
     marginLeft: scale(5),

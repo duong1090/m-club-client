@@ -24,7 +24,6 @@ import Config from "container/config/server.config";
 import {
   color,
   scale,
-  defaultText,
   space,
   fontSize,
   shadow,
@@ -234,7 +233,7 @@ const Detail = (props, ref) => {
   const renderImage = () => {
     const images = data.image_paths
       ? data.image_paths.map((item) =>
-          Config.API_IMAGE.concat(`event/${item}.jpg`)
+          Config().API_IMAGE.concat(`event/${item}.jpg`)
         )
       : null;
 
@@ -574,6 +573,7 @@ const Detail = (props, ref) => {
       style={styles.modalWrapper}
       backdropOpacity={0.5}
       onBackdropPress={() => hide()}
+      onBackButtonPress={() => hide()}
       useNativeDriver={true}
       propagateSwipe
       coverScreen={false}
@@ -640,24 +640,19 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
   },
   timeText: {
-    ...defaultText,
     fontWeight: "bold",
     color: color.disable,
   },
   titleText: {
-    ...defaultText,
     flex: 1,
     fontWeight: "bold",
     fontSize: fontSize.sizeTitle,
     padding: 0,
   },
   placeText: {
-    ...defaultText,
     color: color.disable,
   },
-  interestedText: {
-    ...defaultText,
-  },
+  interestedText: {},
   actionBox: {
     flexDirection: "row",
     justifyContent: "center",
@@ -677,13 +672,11 @@ const styles = StyleSheet.create({
   },
   actionIcon: (iconColor) => {
     return {
-      ...defaultText,
       fontSize: scale(40),
       color: iconColor,
     };
   },
   actionText: (disabled) => ({
-    ...defaultText,
     color: disabled ? color.disable : color.text,
   }),
   infoBox: {
@@ -703,7 +696,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   textInfo: {
-    ...defaultText,
     flex: 1,
     fontSize: fontSize.sizeBigContent,
     padding: 0,
@@ -715,14 +707,11 @@ const styles = StyleSheet.create({
     padding: space.componentMargin,
   },
   titleContent: {
-    ...defaultText,
     fontSize: fontSize.sizeTitle,
     fontWeight: "bold",
     marginBottom: space.componentMargin,
   },
-  textContent: {
-    ...defaultText,
-  },
+  textContent: {},
   memberBox: {
     flexDirection: "row",
     alignItems: "center",
@@ -731,7 +720,7 @@ const styles = StyleSheet.create({
   editInput: {
     borderBottomWidth: scale(1),
     borderColor: color.hint,
-    ...defaultText,
+
     fontWeight: "bold",
     fontSize: fontSize.sizeTitle,
     marginVertical: space.itemMargin,

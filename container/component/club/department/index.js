@@ -7,13 +7,15 @@ import Record from "./component/record";
 import { Navigation } from "react-native-navigation";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { currModeState } from "../position/recoil";
 
 const Department = (props) => {
   //props
   const { componentId, intl } = props;
 
   //state
-  const [mode, setMode] = useState("list");
+  const currMode = useRecoilValue(currModeState);
 
   //default option topBar
   Navigation.mergeOptions(componentId, {
@@ -25,31 +27,23 @@ const Department = (props) => {
     },
   });
 
-  //change mode to switch screen
-  const onChangeMode = (mode = "list") => {
-    setMode(mode);
-  };
-
   //screens
   const tabs = [
-    { key: "list", render: <List changeMode={onChangeMode} mode={mode} /> },
-    { key: "detail", render: <Detail changeMode={onChangeMode} mode={mode} /> },
-    { key: "edit", render: <Record changeMode={onChangeMode} mode={mode} /> },
-    { key: "create", render: <Record changeMode={onChangeMode} mode={mode} /> },
+    { key: "list", render: <List /> },
+    { key: "detail", render: <Detail /> },
+    { key: "edit", render: <Record /> },
+    { key: "create", render: <Record /> },
   ];
 
   //render
-  const renderMode = (mode) => {
-    const activeTab = tabs.findIndex((item) => item.key == mode);
+  const renderMode = () => {
+    const activeTab = tabs.findIndex((item) => item.key == currMode);
 
     return (
       <Tabs
         initialPage={0}
         page={activeTab}
         locked
-        onChangeTab={(e) => {
-          setMode(tabs[e.i].key);
-        }}
         renderTabBar={() => <ScrollableTab style={{ height: 0 }} />}
       >
         {tabs.map((tab) => (
@@ -61,7 +55,7 @@ const Department = (props) => {
     );
   };
 
-  return <View style={styles.container}>{renderMode(mode)}</View>;
+  return <View style={styles.container}>{renderMode()}</View>;
 };
 
 const styles = StyleSheet.create({

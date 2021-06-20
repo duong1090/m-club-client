@@ -10,7 +10,6 @@ import {
 import {
   color,
   scale,
-  defaultText,
   space,
   fontSize,
   shadow,
@@ -132,7 +131,9 @@ const List = (props) => {
         {item.image_paths && item.image_paths.length ? (
           <Image
             source={{
-              uri: Config.API_IMAGE.concat(`event/${item.image_paths[0]}.jpg`),
+              uri: Config().API_IMAGE.concat(
+                `event/${item.image_paths[0]}.jpg`
+              ),
             }}
             style={styles.image}
           />
@@ -241,21 +242,17 @@ const styles = StyleSheet.create({
     ...shadow,
   },
   timeText: {
-    ...defaultText,
     fontWeight: "bold",
     color: color.disable,
   },
   titleText: {
     fontWeight: "bold",
     fontSize: fontSize.sizeTitle,
-    ...defaultText,
   },
   placeText: {
-    ...defaultText,
     color: color.disable,
   },
   interestedText: {
-    ...defaultText,
     color: color.disable,
   },
   actionBtnBox: (applyMargin) => ({
@@ -283,7 +280,6 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   textActionBtn: {
-    ...defaultText,
     marginLeft: scale(10),
     fontSize: fontSize.size30,
     fontWeight: "bold",

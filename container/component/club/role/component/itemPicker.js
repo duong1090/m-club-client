@@ -15,7 +15,7 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import { currItemState, currTypeState, currTabState } from "../recoil";
 import { useSetRecoilState, useRecoilValue } from "recoil";
@@ -98,7 +98,7 @@ const ItemPicker = (props) => {
       >
         <View style={styles.headerItem}>
           {currType == "member" ? (
-            <Avatar data={item} size={scale(80)} style={styles.avatarItem} />
+            <Avatar data={item} size={scale(80)} noShadow style={styles.avatarItem} />
           ) : null}
           <Text style={styles.textItem}>{item.name}</Text>
         </View>
@@ -142,7 +142,7 @@ const ItemPicker = (props) => {
 
 const styles = StyleSheet.create({
   iconItem: {
-    ...defaultText,
+    
     fontSize: scale(50),
     color: color.green,
   },
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   },
 
   textItem: {
-    ...defaultText,
+    
   },
 
   avatarItem: {
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.grey,
   },
   actionText: {
-    ...defaultText,
+    
     fontSize: fontSize.size26,
     fontWeight: "bold",
     color: "#fff",

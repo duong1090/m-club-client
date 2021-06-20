@@ -7,13 +7,10 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import ActionSheet from "./component/actionSheet";
-import {
-  scale,
-  space,
-  defaultText,
-  fontSize,
-} from "container/variables/common";
+import { scale, space, fontSize } from "container/variables/common";
 import { back } from "../../../utils/router";
+import Confirm from "./component/confirm";
+import Error from "./component/error";
 
 const GeneralModal = (props, ref) => {
   const { type, options } = props;
@@ -28,6 +25,10 @@ const GeneralModal = (props, ref) => {
     switch (type) {
       case "actionSheet":
         return <ActionSheet {...options} hide={() => back()} />;
+      case "confirm":
+        return <Confirm {...options} hide={() => back()} />;
+      case "error":
+        return <Error {...options} hide={() => back()} />;
     }
   };
 

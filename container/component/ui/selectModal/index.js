@@ -44,6 +44,7 @@ const SelectModal = (props, ref) => {
   const onSubmit = () => {
     setVisible(false);
     const value = childrenRef ? childrenRef.current.getValues() : null;
+    console.log("onSubmit:::SelectModal", value);
     onDone && onDone(value);
   };
 
@@ -88,7 +89,8 @@ const SelectModal = (props, ref) => {
       style={styles.modalWrapper}
       backdropOpacity={0.5}
       // onSwipeComplete={() => setVisible(false)}
-      onBackdropPress={() => setVisible(false)}
+      onBackdropPress={() => hide()}
+      onBackButtonPress={() => hide()}
       // useNativeDriverForBackdrop={true}
       useNativeDriver={true}
       swipeDirection={["down"]}

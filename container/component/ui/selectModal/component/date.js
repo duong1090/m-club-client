@@ -11,7 +11,6 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
 } from "container/variables/common";
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import DatePicker from "react-native-date-picker";
@@ -19,6 +18,10 @@ import { getIntl } from "container/utils/common";
 import Messages from "container/translation/Message";
 const { height } = Dimensions.get("window");
 const intl = getIntl();
+
+const TIME_FORMAT = "HH:mm:ss";
+const DATE_FORMAT = "YYYY-MM-DD";
+const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm:ss";
 
 const DateType = (props, ref) => {
   const { typePicker, valuePicker } = props;
@@ -33,20 +36,20 @@ const DateType = (props, ref) => {
 
   useEffect(() => {
     if (valuePicker) {
-      console.log('caiquanquegiv', valuePicker)
+      console.log("caiquanquegiv", valuePicker);
 
       switch (typePicker) {
         case "date":
-          setDate(new Date(valuePicker));
+          setDate(moment(valuePicker).toDate());
           break;
         case "time":
-          setTime(new Date(`12/10/1999 ${valuePicker}`));
+          setTime(moment(valuePicker, TIME_FORMAT).toDate());
           break;
         case "date_time":
           const splitValue = valuePicker.split(" ");
           console.log("date_time:::", valuePicker, splitValue);
-          setDate(new Date(splitValue[0]));
-          setTime(new Date(valuePicker));
+          setDate(moment(splitValue[0], DATE_FORMAT).toDate());
+          setTime(moment(splitValue[1], TIME_FORMAT).toDate());
       }
     }
   }, [typePicker, valuePicker]);
@@ -68,14 +71,14 @@ const DateType = (props, ref) => {
   //render ----------------------------------------------------------------------------------
 
   const renderPicker = (type, value, format, onChange) => {
-    console.log("renderPicker:::", type, value);
-    const formatValue = moment(value).format(format);
     return (
       <View style={styles.pickerBox}>
-        <View style={styles.textBox}>
-          <Text style={styles.textValue}>{formatValue}</Text>
-        </View>
         <DatePicker mode={type} date={value} onDateChange={onChange} />
+        <View style={styles.textBox}>
+          <Text style={styles.textValue}>
+            {intl.formatMessage(Messages[type])}
+          </Text>
+        </View>
       </View>
     );
   };
@@ -108,19 +111,24 @@ const styles = StyleSheet.create({
     maxHeight: (60 * height) / 100,
   },
   pickerBox: {
-    marginBottom: space.componentMargin,
     alignItems: "center",
+    borderBottomWidth: scale(1),
+    borderColor: color.grey,
+    paddingVertical: scale(20),
   },
   textBox: {
-    backgroundColor: color.hint,
-    padding: space.bgPadding,
-    alignSelf: "stretch",
+    backgroundColor: color.lightGreyPlus,
+    paddingVertical: scale(5),
+    paddingHorizontal: space.componentMargin,
+    borderRadius: space.border,
     justifyContent: "center",
     alignItems: "center",
-    ...shadow,
+    position: "absolute",
+    top: scale(10),
+    left: scale(10),
   },
   textValue: {
-    ...defaultText,
+    fontSize: fontSize.size24,
     fontWeight: "bold",
   },
 });

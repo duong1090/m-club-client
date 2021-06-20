@@ -15,7 +15,7 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import Messages from "container/translation/Message";
 import { clubListState, certificateState, activeTabState } from "../recoil";
@@ -116,7 +116,7 @@ const SelectClub = (props) => {
         onPress={() => gotoInputOTP()}
       >
         <Text
-          style={{ ...defaultText, color: "#fff", fontSize: fontSize.size28 }}
+          style={{  color: "#fff", fontSize: fontSize.size28 }}
         >
           {intl.formatMessage(Messages.next)}
         </Text>
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    ...defaultText,
+    
     marginBottom: space.componentMargin,
     alignSelf: "center",
     fontSize: fontSize.size36,
@@ -165,14 +165,14 @@ const styles = StyleSheet.create({
   },
 
   titleItem: {
-    ...defaultText,
+    
     marginBottom: scale(10),
     fontSize: fontSize.size32,
     fontWeight: "bold",
   },
 
   codeItem: {
-    ...defaultText,
+    
     fontSize: fontSize.size28,
   },
 

@@ -4,7 +4,7 @@ import {
   scale,
   color,
   shadow,
-  defaultText,
+  
   space,
 } from "container/variables/common";
 import { elevation } from "../../../constant/screen";
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     elevation: 0,
   }),
   actionButtonText: (fontColor) => ({
-    ...defaultText,
+    
     color: fontColor ? fontColor : "#fff",
   }),
   actionButtonIcon: {

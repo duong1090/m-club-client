@@ -18,7 +18,7 @@ import {
   color,
   fontSize,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import { getIntl } from "container/utils/common";
 import Messages from "container/translation/Message";
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textCreateButton: {
-    ...defaultText,
+    
     color: "#fff",
   },
   radioBtn: (isRevenue) => ({
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     color: color.primary,
   },
   radioBtnText: {
-    ...defaultText,
+    
   },
 });
 

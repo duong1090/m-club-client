@@ -13,7 +13,7 @@ import {
   fontSize,
   shadow,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import { Icon } from "native-base";
 import CreateModal from "./labelCreateModal";
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.componentMargin,
   }),
   labelText: {
-    ...defaultText,
+    
     color: "#fff",
     fontWeight: "bold",
   },

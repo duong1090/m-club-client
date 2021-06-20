@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
   FlatList,
   TouchableOpacity,
@@ -15,14 +15,14 @@ import update from "immutability-helper";
 import { normalRole } from "container/constant/role";
 import { injectIntl } from "react-intl";
 import Messages from "container/translation/Message";
-import ModalContext from 'container/context/modal';
+import ModalContext from "container/context/modal";
 import {
   scale,
   color,
   fontSize,
   shadow,
   space,
-  defaultText,
+  
 } from "container/variables/common";
 import { DEFAULT_TYPE } from "./typeList";
 import { Icon } from "native-base";
@@ -45,6 +45,9 @@ const RoleList = (props) => {
   const currType = useRecoilValue(currTypeState);
   const setCurrTab = useSetRecoilState(currTabState);
 
+  //variables
+  const didMount = useRef(false);
+
   //context
   const { showSpinner, hideSpinner } = useContext(ModalContext);
   const privilegeContext = useContext(PrivilegeContext);
@@ -55,7 +58,7 @@ const RoleList = (props) => {
   }, [currItem]);
 
   useEffect(() => {
-    updateData();
+    if (didMount.current) updateData();
   }, [data]);
 
   useEffect(() => {
@@ -99,6 +102,7 @@ const RoleList = (props) => {
 
     setData(finalData);
     setBackUpData(finalData);
+    didMount.current = true;
   };
 
   const updateData = () => {
@@ -134,6 +138,7 @@ const RoleList = (props) => {
 
   const onChangeTab = (tab) => {
     setCurrTab(tab);
+    didMount.current = false;
   };
 
   const onSelectAll = () => {
@@ -155,6 +160,9 @@ const RoleList = (props) => {
           value={item.checked ? true : false}
           tintColors={{ true: color.done }}
           onChange={() => onCheckRole(index)}
+          boxType="square"
+          lineWidth={1}
+          style={{ width: scale(40), height: scale(40) }}
         />
         <Text style={styles.textItem}>{item.name}</Text>
       </View>
@@ -212,6 +220,9 @@ const RoleList = (props) => {
         <CheckBox
           disabled={false}
           value={selectAll}
+          boxType="square"
+          lineWidth={1}
+          style={{ width: scale(40), height: scale(40) }}
           tintColors={{ true: color.done }}
           onChange={() => setSelectAll(!selectAll)}
         />
@@ -273,14 +284,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderTopWidth: scale(2),
     borderColor: color.lightGrey,
-    paddingVertical: scale(5),
+    paddingVertical: scale(10),
     paddingHorizontal: scale(20),
     ...shadow,
   },
 
   textTool: {
-    ...defaultText,
+    
     color: color.fontColor,
+    marginLeft: scale(10),
   },
 
   itemBox: (index) => ({
@@ -298,14 +310,14 @@ const styles = StyleSheet.create({
   }),
 
   textItem: {
-    ...defaultText,
+    
   },
   iconHeader: {
     fontSize: scale(30),
     color: color.background,
   },
   textHeader: {
-    ...defaultText,
+    
     fontWeight: "bold",
   },
   backButton: {
@@ -326,7 +338,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.grey,
   },
   actionText: {
-    ...defaultText,
+    
     fontSize: fontSize.size26,
     fontWeight: "bold",
     color: "#fff",

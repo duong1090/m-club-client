@@ -12,7 +12,7 @@ import {
   color,
   space,
   shadow,
-  defaultText,
+  
   fontSize,
 } from "container/variables/common";
 import { injectIntl } from "react-intl";
@@ -21,14 +21,11 @@ import { SEX } from "container/constant/element";
 import Toast from "react-native-simple-toast";
 import moment from "moment";
 import { postRequest } from "container/utils/request";
-import Config from "container/config/server.config";
 import ModalContext from "container/context/modal";
 import InputItem from "container/component/ui/inputItem";
-import { gotoRoute } from "container/utils/router";
-import { modals } from "container/constant/screen";
 import { Icon } from "native-base";
-import { useActionSheet } from "@expo/react-native-action-sheet";
-import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import ImagePicker from "react-native-image-crop-picker";
+
 import { Navigation } from "react-native-navigation";
 import ModalPopUp from "container/component/ui/modalPopUp";
 import QRCode from "react-native-qrcode-svg";
@@ -50,10 +47,11 @@ const UserInfo = (props) => {
   });
   const [avatar, setAvatar] = useState(member ? member : {});
   const [qrVisible, setQRVisible] = useState(false);
-  const { showActionSheetWithOptions } = useActionSheet();
 
   //context
-  const { showSpinner, hideSpinner } = useContext(ModalContext);
+  const { showSpinner, hideSpinner, showActionSheet } = useContext(
+    ModalContext
+  );
 
   //event button navigation
   Navigation.events().registerNavigationButtonPressedListener(
@@ -155,43 +153,41 @@ const UserInfo = (props) => {
 
   //function - event ------------------------------------------------------------------------------------------------------
   const optionGetImage = () => {
-    const options = [
-      intl.formatMessage(Messages.take_photo),
-      intl.formatMessage(Messages.select_photo_from_library),
-      intl.formatMessage(Messages.cancel),
+    const actions = [
+      {
+        title: intl.formatMessage(Messages.take_photo),
+        onPress: () => takePhoto(),
+      },
+      {
+        title: intl.formatMessage(Messages.select_photo_from_library),
+        onPress: () => selectPhoto(),
+      },
+      {
+        title: intl.formatMessage(Messages.cancel),
+        type: "danger",
+      },
     ];
-    showActionSheetWithOptions(
-      { options, cancelButtonIndex: 2 },
-      (buttonIndex) => {
-        if (buttonIndex == 0) takePhoto();
-        else if (buttonIndex == 1) selectPhoto();
-      }
-    );
+
+    showActionSheet({ actions });
   };
 
   const takePhoto = () => {
-    const options = {
-      mediaType: "photo",
-      maxWidth: scale(500),
-      maxHeight: scale(500),
-      quality: 1,
+    ImagePicker.openCamera({
+      useFrontCamera: true,
       includeBase64: true,
-    };
-    launchCamera(options, (image) => {
-      if (image && image.base64) updateAvatar(image);
+      compressImageQuality: 1,
+      compressImageMaxHeight: scale(500),
+      compressImageMaxWidth: scale(500),
+    }).then((image) => {
+      if (image) updateAvatar(image);
     });
   };
 
   const selectPhoto = () => {
-    const options = {
-      mediaType: "photo",
-      maxWidth: scale(500),
-      maxHeight: scale(500),
-      quality: 1,
+    ImagePicker.openPicker({
       includeBase64: true,
-    };
-    launchImageLibrary(options, (image) => {
-      if (image && image.base64) updateAvatar(image);
+    }).then((image) => {
+      if (image) updateAvatar(image);
     });
   };
 
@@ -199,7 +195,7 @@ const UserInfo = (props) => {
     showSpinner();
 
     const params = new FormData();
-    params.append("image", image.base64);
+    params.append("image", image.data);
 
     postRequest("member/update-avatar", params)
       .then((res) => {
@@ -370,7 +366,7 @@ const styles = StyleSheet.create({
     ...shadow,
   },
   titleSymbol: {
-    ...defaultText,
+    
     color: "#fff",
     fontSize: fontSize.sizeBigContent,
     fontWeight: "bold",
