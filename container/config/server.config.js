@@ -7,6 +7,13 @@ const server = "103.151.241.11:8888";
 // const server = "tanca.ddns.net:8887";
 //android emulator server
 //
+
+global.env = process.env.NODE_ENV;
+
+if (global.env == "production") {
+  console.log = () => {};
+}
+
 const Config = () => {
   const { club } = global.organization || {};
   const clubId = club && club.id ? club.id : null;
