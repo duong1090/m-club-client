@@ -28,6 +28,7 @@ import { normalRole } from "container/constant/role";
 import ActionButton from "container/component/ui/actionButton";
 import { Icon } from "native-base";
 import { getNumberOfNotification } from "container/action/application";
+import Detail from "./detail";
 
 const NotificationList = (props) => {
   //props
@@ -43,11 +44,17 @@ const NotificationList = (props) => {
   //variables
   let page = 1;
   const createRef = useRef(null);
+  const detailRef = useRef(null);
 
   //effect -----------------------------------------------------------------------------------------------
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    if (props.mode == "detail" && props.data)
+      detailRef.current && detailRef.current.show(props.data);
+  }, [props.mode]);
 
   //function - event -------------------------------------------------------------------------------------
   const getData = () => {
@@ -82,10 +89,14 @@ const NotificationList = (props) => {
     console.log("onPressItem::", item);
 
     if (!item.is_read) doRead(item, index);
-    gotoRoute(item.target_route, {
-      data: { id: item.source_id ? item.source_id : null },
-      mode: item.source_id ? "detail" : "list",
-    });
+
+    if (item.target_route == screens.TAB_NOTIFICATION)
+      detailRef.current && detailRef.current.show(item);
+    else
+      gotoRoute(item.target_route, {
+        data: { id: item.source_id ? item.source_id : null },
+        mode: item.source_id ? "detail" : "list",
+      });
   };
 
   const doRead = (item, index) => {
@@ -170,6 +181,7 @@ const NotificationList = (props) => {
         <View style={styles.item(item.is_read)}>
           <View style={styles.avatarBox}>
             <Avatar
+              noShadow
               size={AVATAR_SIZE}
               data={{
                 id: item.implement_user,
@@ -208,6 +220,7 @@ const NotificationList = (props) => {
       <FlatList
         style={{ flex: 1 }}
         data={data}
+        contentContainerStyle={styles.listContainer}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => renderItem(item, index)}
         onEndReachedThreshold={0.5}
@@ -228,6 +241,7 @@ const NotificationList = (props) => {
         />
         <CreateNotification ref={createRef} />
       </PrivilegeAction>
+      <Detail intl={intl} ref={detailRef} />
     </View>
   );
 };

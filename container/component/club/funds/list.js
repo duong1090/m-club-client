@@ -145,6 +145,7 @@ const FundList = (props) => {
         </View>
         <FlatList
           data={data}
+          contentContainerStyle={{ paddingBottom: scale(70) }}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => renderItem(item, index)}
           contentContainerStyle={{ paddingBottom: scale(80) }}

@@ -20,29 +20,14 @@ const HttpCodes = {
   ENTITY_TOO_LARGE: 413,
 };
 
-const showServerError = (error, cb) => {
-  console.log("showServerError", error.message);
-
-  const message = error.message ? (
-    <Text>{error.message}</Text>
-  ) : (
-    //TODO: declare multi-language
-    // <FormattedMessage {...Messages.connect_server_error} />
-    "Lỗi kết nối Server"
-  );
-  const statusCode = error.response ? `${error.response.status}` : "";
-  //TODO: declare Spinner
-  //hideSpinner();
-
-  console.error("showServerError:::", message, statusCode);
-
-  // Toast.show(error.message ? error.message : "Lỗi server", Toast.LONG);
+const showServerError = (errorMessage, cb) => {
+  console.log("showServerError", errorMessage);
 
   gotoRoute(
     modals.GENERAL_MODAL,
     {
       options: {
-        content: error.message
+        content: errorMessage
           ? error.message
           : getIntl().formatMessage(Messages.error),
       },
@@ -50,17 +35,6 @@ const showServerError = (error, cb) => {
     },
     true
   );
-
-  //TODO: declare showSystemAlert
-  // showSystemAlert({
-  //   title: message,
-  //   content: `${getIntl().formatMessage(Messages.error_info)}${statusCode}`,
-  //   onPressOkButton: () => {
-  //     cb && cb();
-  //   },
-  //   okButtonText: getIntl().formatMessage(Messages.close),
-  //   isSingle: true,
-  // });
 };
 
 const checkStatus = (response) => {
@@ -86,28 +60,12 @@ const checkStatus = (response) => {
         error = new Error(response.statusText);
       }
 
-      response.json().then((json) => console.log("responesJSON:::", json));
+      response.json().then((json) => {
+        console.log("responesJSON:::", json);
 
-      // error.response = response;
-      // error.data = [response.statusText];
-      // notify(error);
-      // console.log('status not acceptable ')
-      // console.log(error);
-      showServerError(error, () => {
-        error.message = response.statusText
-          ? `${response.statusText}`
-          : `${response.status}`;
-        reject(error);
+        showServerError(json.message);
       });
-      error.message = response.statusText
-        ? `${response.statusText}`
-        : `${response.status}`;
-      reject(error);
     } else {
-      // let rnfbResp = response.rawResp();
-
-      // console.log('rnfbResp', response.json());
-
       response
         .json()
         .then((json) => {
@@ -129,23 +87,8 @@ const checkStatus = (response) => {
             error.error_code = json.error_code;
             if (json.error_code == 400 || json.error_code == 403) {
               // hideSpinner();
-
+              showServerError(message);
               console.error("checkStatus:::", message);
-
-              //TODO:
-              // Alert.alert(
-              //   global._intl.formatMessage(Messages.notify_setting_title),
-              //   message,
-              //   [
-              //     {
-              //       text: global._intl.formatMessage(Messages.ok),
-              //       onPress: () => {
-              //         reject(error);
-              //       },
-              //     },
-              //   ],
-              //   { cancelable: false }
-              // );
             }
           } else {
             resolve(json);

@@ -646,4 +646,8 @@ export default defineMessages({
     id: "date",
     defaultMessage: "Date",
   },
+  detail: {
+    id: "detail",
+    defaultMessage: "Detail",
+  },
 });

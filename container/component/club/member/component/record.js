@@ -168,6 +168,8 @@ const MemberRecord = (props) => {
       params.department_id = info.department.id;
     if (info.position && info.position.id)
       params.position_id = info.position.id;
+    if (info.identification && info.identification != "")
+      params.identification = info.identification;
 
     return params;
   };

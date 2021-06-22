@@ -211,6 +211,7 @@ const List = (props) => {
     <View style={styles.container}>
       <FlatList
         data={data}
+        contentContainerStyle={{ paddingBottom: scale(70) }}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => renderItem(item, index)}
         onEndReachedThreshold={0.5}

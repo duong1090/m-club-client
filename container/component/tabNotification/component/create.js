@@ -99,6 +99,7 @@ const CreateNotification = (props, ref) => {
     if (dueDate) {
       if (dueTime) params.time_schedule = `${dueDate} ${dueTime}`;
       else params.time_schedule = dueDate;
+      params.is_schedule = 1;
     }
 
     return params;

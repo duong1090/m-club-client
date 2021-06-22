@@ -4,7 +4,6 @@ import {
   color,
   fontSize,
   space,
-  
   shadow,
 } from "container/variables/common";
 
@@ -62,11 +61,9 @@ export const styles = StyleSheet.create({
 
   contentBox: { flex: 1, marginLeft: space.componentMargin },
   content: {
-    
     fontSize: fontSize.sizeContent,
   },
   timeText: {
-    
     fontSize: fontSize.size22,
     color: color.grey,
     marginTop: scale(5),
@@ -77,7 +74,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   emptyText: {
-    
     fontSize: fontSize.sizeBigContent,
   },
   headerBox: {
@@ -90,9 +86,7 @@ export const styles = StyleSheet.create({
     borderBottomWidth: scale(2),
     borderColor: color.lightGrey,
   },
-  headerText: {
-    
-  },
+  headerText: {},
 
   actionButtonBox: {
     position: "absolute",
@@ -106,5 +100,8 @@ export const styles = StyleSheet.create({
   actionButtonIcon: {
     fontSize: scale(30),
     color: "#fff",
+  },
+  listContainer: {
+    paddingBottom: scale(70),
   },
 });
