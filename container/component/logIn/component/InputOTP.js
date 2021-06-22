@@ -9,22 +9,15 @@ import {
 } from "react-native";
 import { useRecoilValue } from "recoil";
 import { certificateState } from "../recoil";
-import {
-  scale,
-  space,
-  color,
-  fontSize,
-  
-} from "container/variables/common";
+import { scale, space, color, fontSize } from "container/variables/common";
 import Messages from "container/translation/Message";
 import InputItem from "container/component/ui/inputItem";
-import ModalContext from 'container/context/modal';
+import ModalContext from "container/context/modal";
 import {
   signInWithPhoneNumber,
   getIdToken,
 } from "container/action/authenticate";
 import { doLogin } from "container/action/user";
-
 
 const InputOTP = (props) => {
   const { intl, style } = props;
@@ -75,6 +68,7 @@ const InputOTP = (props) => {
 
   const activeUser = async () => {
     if (confirmOTP && otp) {
+      showSpinner();
       confirmOTP
         .confirm(otp)
         .then((result) => {
@@ -90,8 +84,12 @@ const InputOTP = (props) => {
               }
             });
           }
+          hideSpinner();
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          console.error(err);
+          hideSpinner();
+        });
     }
   };
 
@@ -111,9 +109,7 @@ const InputOTP = (props) => {
         style={[styles.button, { backgroundColor: color.background }]}
         onPress={() => activeUser()}
       >
-        <Text
-          style={{  color: "#fff", fontSize: fontSize.size28 }}
-        >
+        <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
           {intl.formatMessage(Messages.sign_in)}
         </Text>
       </TouchableOpacity>
@@ -121,7 +117,6 @@ const InputOTP = (props) => {
       <View style={styles.signUp}>
         <Text
           style={{
-            
             color: color.fontColor,
             fontSize: fontSize.size28,
             fontWeight: "bold",
@@ -132,7 +127,6 @@ const InputOTP = (props) => {
         <TouchableOpacity onPress={() => {}}>
           <Text
             style={{
-              
               color: color.background,
               fontSize: fontSize.size28,
               fontWeight: "bold",

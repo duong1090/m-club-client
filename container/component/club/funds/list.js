@@ -9,14 +9,13 @@ import {
 import {
   scale,
   color,
-  
   space,
   shadow,
   fontSize,
 } from "container/variables/common";
 import { postRequest, getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
-import ModalContext from 'container/context/modal';
+import ModalContext from "container/context/modal";
 import CreateFund from "./create";
 import FundDetail from "./detail";
 import { injectIntl } from "react-intl";
@@ -208,7 +207,6 @@ const styles = StyleSheet.create({
     ...shadow,
   },
   headerText: {
-    
     fontSize: fontSize.sizeTitle,
   },
   information: {
@@ -225,12 +223,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   informationTitle: {
-    
     fontWeight: "bold",
     marginRight: scale(10),
   },
   informationText: {
-    
     color: color.grey,
   },
 
@@ -253,11 +249,9 @@ const styles = StyleSheet.create({
     fontSize: scale(30),
   }),
   itemText: {
-    
     // fontSize: fontSize.sizeContent,
   },
   itemHeaderText: {
-    
     color: "#fff",
     fontWeight: "bold",
   },
@@ -289,8 +283,6 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: space.border,
     justifyContent: "center",
     paddingVertical: scale(10),
-
-    ...shadow,
   },
   headerMid: {
     backgroundColor: color.primary,
@@ -298,7 +290,6 @@ const styles = StyleSheet.create({
     paddingVertical: scale(10),
     alignItems: "center",
     borderColor: "#fff",
-    ...shadow,
   },
   headerRight: {
     alignItems: "center",
@@ -306,7 +297,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: space.border,
     borderBottomRightRadius: space.border,
     paddingVertical: scale(10),
-    ...shadow,
   },
   btnUpdateBox: {
     position: "absolute",
@@ -330,7 +320,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   btnUpdateText: {
-    
     color: "#fff",
   },
   btnUpdateIcon: {

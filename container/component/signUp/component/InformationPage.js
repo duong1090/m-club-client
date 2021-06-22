@@ -105,6 +105,7 @@ const InformationPage = (props) => {
           if (result) {
             doSignUp();
           }
+          hideSpinner();
         })
         .catch((err) => {
           console.error(err);

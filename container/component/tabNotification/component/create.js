@@ -11,19 +11,13 @@ import InputItem from "container/component/ui/inputItem";
 import { getIntl } from "container/utils/common";
 import Messages from "container/translation/Message";
 import { TextInput, View, TouchableOpacity, Text, Image } from "react-native";
-import {
-  scale,
-  color,
-  fontSize,
-  
-  space,
-} from "container/variables/common";
+import { scale, color, fontSize, space } from "container/variables/common";
 import { Textarea } from "native-base";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import ModalContext from 'container/context/modal';
+import ModalContext from "container/context/modal";
 import { postRequest } from "container/utils/request";
-import Config from "container/config/server.config";
+import Toast from "react-native-simple-toast";
 
 const DEFAULT_VALUE = {
   department: null,
@@ -119,6 +113,7 @@ const CreateNotification = (props, ref) => {
         if (res && res.data) {
           //success
           console.log("create:::notification:::", res.data);
+          Toast.show(intl.formatMessage(Messages.create_success), Toast.LONG);
         }
         hideSpinner();
       })
@@ -195,13 +190,12 @@ const CreateNotification = (props, ref) => {
           source={require("container/asset/icon/dukien.png")}
         />
         <View style={{ marginLeft: scale(15) }}>
-          <Text style={{  fontSize: fontSize.size26 }}>
+          <Text style={{ fontSize: fontSize.size26 }}>
             {intl.formatMessage(Messages.due_time)}
           </Text>
           {dueTime ? (
             <Text
               style={{
-                
                 fontSize: fontSize.size26,
                 fontWeight: "bold",
                 color: dueDateColor,
@@ -238,7 +232,7 @@ const CreateNotification = (props, ref) => {
           source={require("container/asset/icon/unassign-hanchot.png")}
         />
         <View style={{ marginLeft: scale(15) }}>
-          <Text style={{  fontSize: fontSize.size26 }}>
+          <Text style={{ fontSize: fontSize.size26 }}>
             {intl.formatMessage(Messages.due_date)}
           </Text>
           {dueDate ? (
@@ -246,7 +240,6 @@ const CreateNotification = (props, ref) => {
               font-size-22
               bold
               style={{
-                
                 fontSize: fontSize.size26,
                 color: dueDateColor,
               }}

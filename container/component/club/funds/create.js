@@ -13,13 +13,7 @@ import {
   Text,
 } from "react-native";
 import BottomPopUp from "container/component/ui/bottomPopUp";
-import {
-  scale,
-  color,
-  fontSize,
-  space,
-  
-} from "container/variables/common";
+import { scale, color, fontSize, space } from "container/variables/common";
 import { getIntl } from "container/utils/common";
 import Messages from "container/translation/Message";
 import { Icon, Textarea } from "native-base";
@@ -57,6 +51,9 @@ const CreateFund = (props, ref) => {
 
   const hide = () => {
     bottomPopUpRef.current.hide();
+    setReason(null);
+    setIsRevenue(1);
+    setAmount(null);
   };
 
   const create = () => {
@@ -204,7 +201,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textCreateButton: {
-    
     color: "#fff",
   },
   radioBtn: (isRevenue) => ({
@@ -226,9 +222,7 @@ const styles = StyleSheet.create({
     fontSize: scale(25),
     color: color.primary,
   },
-  radioBtnText: {
-    
-  },
+  radioBtnText: {},
 });
 
 export default forwardRef(CreateFund);

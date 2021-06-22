@@ -6,6 +6,7 @@ import { gotoHome, gotoLogin } from "container/utils/router";
 import { ORGANIZATION } from "../constant/storage";
 import OneSignal from "react-native-onesignal"; // Import package from node modules
 import moment from "moment";
+import firebase from "../config/firebase.config";
 
 export const doLogin = async (payload) => {
   return new Promise((resolve, reject) => {
@@ -61,6 +62,7 @@ export const logOut = () => {
         if (res) {
           resolve(res);
           gotoLogin();
+          firebase.auth().signOut();
         }
       })
       .catch((err) => reject(err));

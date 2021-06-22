@@ -7,7 +7,7 @@ import { LANG, API_TOKEN, API_URL } from "container/constant/storage";
 import Toast from "react-native-simple-toast";
 import { gotoRoute } from "./router";
 import { modals } from "../constant/screen";
-import Message from "../translation/Message";
+import Messages from "../translation/Message";
 
 const constants = {
   APP_JSON_HEADER: "application/json",
@@ -66,12 +66,12 @@ const showServerError = (error, cb) => {
 const checkStatus = (response) => {
   console.log("checkStatus", response);
   return new Promise((resolve, reject) => {
-    var quiet = this.quiet;
+    // var quiet = this.quiet;
     var error;
-    if (quiet === undefined) {
-      quiet = false;
-    }
-    if (response.status === HttpCodes.UNAUTHORIZED && !quiet) {
+    // if (quiet === undefined) {
+    //   quiet = false;
+    // }
+    if (response.status === HttpCodes.UNAUTHORIZED) {
       console.log("CODE" + HttpCodes.UNAUTHORIZED);
       error = new Error(response.statusText);
       error.response = response;

@@ -131,7 +131,7 @@ export default defineMessages({
   },
   funds: {
     id: "funds",
-    defaultMessage: "Club Funds",
+    defaultMessage: "Funds",
   },
   search_placeholder: {
     id: "search_placeholder",

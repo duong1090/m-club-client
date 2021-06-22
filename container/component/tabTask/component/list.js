@@ -224,6 +224,11 @@ const ListTask = (props) => {
     }
   };
 
+  const onRefresh = () => {
+    console.log('onRefresh:::')
+    doFilter();
+  };
+
   //render --------------------------------------------------------------------------------------------------------------------
 
   const renderItemTask = (item, index, indexTab) => (
@@ -652,7 +657,7 @@ const ListTask = (props) => {
 
   return (
     <View style={[styles.container, style]}>
-      <HeaderInfo />
+      <HeaderInfo onRefresh={() => onRefresh()} />
       {renderFilter()}
       {renderTabs()}
       {renderModal()}

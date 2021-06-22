@@ -50,3 +50,7 @@ target 'MClub-tvOS' do
     # Pods for testing
   end
 end
+
+target 'OneSignalNotificationServiceExtension' do
+  pod 'OneSignal', '>= 2.0', '< 4.0'
+end

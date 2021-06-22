@@ -50,6 +50,7 @@ const BottomPopUp = (props, ref) => {
       onBackButtonPress={() => hide()}
       useNativeDriver={true}
       propagateSwipe
+      coverScreen={false}
     >
       <View style={styles.bodyWrapper}>
         {title ? (
