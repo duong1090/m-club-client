@@ -14,6 +14,7 @@ import java.util.List;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.wix.interactable.Interactable;
 import com.microsoft.codepush.react.CodePush;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 public class MainApplication extends NavigationApplication {
 

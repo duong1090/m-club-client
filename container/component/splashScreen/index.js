@@ -3,9 +3,11 @@ import { Image, StyleSheet, View } from "react-native";
 import { scale } from "container/variables/common";
 import LottieView from "lottie-react-native";
 import { loadInitialStatus } from "container/action/initialize";
+import Splash from "react-native-splash-screen";
 
 const SplashScreen = () => {
   useEffect(() => {
+    Splash.hide();
     setTimeout(loadInitialStatus, 1000);
   }, []);
 

@@ -66,7 +66,7 @@ const Detail = (props, ref) => {
         hide();
       }}
       width="90%"
-      height="60%"
+      height={scale(700)}
     >
       <View style={styles.container}>
         <View style={styles.itemBox}>

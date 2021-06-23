@@ -8,6 +8,18 @@ import OneSignal from "react-native-onesignal"; // Import package from node modu
 import moment from "moment";
 import firebase from "../config/firebase.config";
 
+const TAG_ONE_SIGNAL = [
+  "id",
+  "club_id",
+  "department_id",
+  "position_id",
+  "is_root",
+  "phone",
+  "identification",
+  "sex",
+  "lang",
+];
+
 export const doLogin = async (payload) => {
   return new Promise((resolve, reject) => {
     postRequest("auth/login", payload)
@@ -33,7 +45,12 @@ export const loginSuccess = async (token) => {
     setItem(ORGANIZATION, JSON.stringify(data));
     console.log("organizationnn", data);
     if (data.member && data.club) {
-      OneSignal.sendTags(data.member);
+      const tags = TAG_ONE_SIGNAL.reduce((obj, tag) => {
+        obj[tag] = org.member[tag];
+        return obj;
+      }, {});
+
+      OneSignal.sendTags(tags);
     }
   } else {
     const temp = await getItem(ORGANIZATION);

@@ -27,6 +27,8 @@ target 'MClub' do
 
   pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
 
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
   target 'MClubTests' do
     inherit! :complete
     # Pods for testing
@@ -52,5 +54,5 @@ target 'MClub-tvOS' do
 end
 
 target 'OneSignalNotificationServiceExtension' do
-  pod 'OneSignal', '>= 2.0', '< 4.0'
+  pod 'OneSignal', '>= 2.9.3', '< 3.0'
 end

@@ -6,6 +6,7 @@ import { setCurrentScreen, popNavigatorStack } from "../utils/router";
 import OneSignal from "react-native-onesignal"; // Import package from node modules
 import { gotoRoute } from "container/utils/router";
 import { SafeAreaView } from "react-native";
+import { ONE_SIGNAL_APP_ID } from "../constant/release";
 
 //#region Register Screen ------------------------------------------------------------------------------------------------
 
@@ -175,6 +176,7 @@ const configOneSignal = () => {
       });
     }
   };
+
   const onOpened = (openResult) => {
     const { isAppInFocus } = openResult.notification;
     const { additionalData } = openResult.notification.payload;
@@ -197,13 +199,10 @@ const configOneSignal = () => {
   OneSignal.setLogLevel(6, 0);
 
   // OneSignal.inFocusDisplaying(2); // Controls what should happen if a notification is received while the app is open. 2 means that the notification will go directly to the device's notification center.
-  const log = OneSignal.init("dfc57d2a-3657-4773-8073-2ff13aed2eb2", {
+  const log = OneSignal.init(ONE_SIGNAL_APP_ID, {
     kOSSettingsKeyAutoPrompt: false,
     kOSSettingsKeyInAppLaunchURL: false,
     kOSSettingsKeyInFocusDisplayOption: 2,
-    // kOSSettingsKeyAutoPrompt: false,
-    // kOSSettingsKeyInAppLaunchURL: false,
-    // kOSSSettingsKeyPromptBeforeOpeningPushURL: false,
   });
   console.log("OneSignal:::: init", log);
   OneSignal.enableSound(true);
