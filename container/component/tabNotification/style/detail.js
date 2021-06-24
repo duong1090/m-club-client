@@ -34,4 +34,15 @@ export default StyleSheet.create({
     maxWidth: "75%",
     marginRight: space.itemMargin,
   },
+  titleBox: {
+    backgroundColor: color.backgroundColor,
+    paddingVertical: space.componentMargin,
+    marginBottom: space.componentMargin,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  headerTitle: {
+    fontWeight: "bold",
+    fontSize: fontSize.sizeTitle,
+  },
 });

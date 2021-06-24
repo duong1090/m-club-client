@@ -1,6 +1,6 @@
 import { API_URL } from "container/constant/storage";
 import { getItem } from "container/utils/storage";
-const server = "103.151.241.11:8888";
+const server = "mclub.ga:8888";
 // const server = "113.172.236.109:1000";
 // const server = "10.0.2.2:8888"; //android emulator
 // const server = "localhost:8888"; //ios emulator

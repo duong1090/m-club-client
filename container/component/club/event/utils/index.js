@@ -46,8 +46,7 @@ export const formatHumanDate = (status, startDate, endDate) => {
   // else if (status > 4320) return formatDateTime(startDate, endDate);
   if (status > 4320) {
     return formatDateTime(startDate, endDate);
-  }
-  else if (status > 1440) {
+  } else if (status > 1440) {
     return getIntl().formatMessage(Messages.on_days, {
       number: status / 1440,
     });
@@ -59,8 +58,10 @@ export const formatHumanDate = (status, startDate, endDate) => {
     return getIntl().formatMessage(Messages.in_minutes, {
       number: status,
     });
-  } else {
+  } else if (status == 0) {
     return getIntl().formatMessage(Messages.happening);
+  } else {
+    return getIntl().formatMessage(Messages.over);
   }
 };
 

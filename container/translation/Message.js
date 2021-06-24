@@ -650,4 +650,8 @@ export default defineMessages({
     id: "detail",
     defaultMessage: "Detail",
   },
+  over: {
+    id: "over",
+    defaultMessage: "Over",
+  },
 });

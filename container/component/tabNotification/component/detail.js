@@ -46,6 +46,7 @@ const Detail = (props, ref) => {
           {data.implement_name}
         </Text>
         <Avatar
+          noShadow
           size={AVATAR_SIZE}
           data={{ id: data.implement_user, name: data.implement_name }}
         />
@@ -66,9 +67,12 @@ const Detail = (props, ref) => {
         hide();
       }}
       width="90%"
-      height={scale(700)}
+      style={{ minHeight: scale(700) }}
     >
       <View style={styles.container}>
+        <View style={styles.titleBox}>
+          <Text style={styles.headerTitle}>{data.title}</Text>
+        </View>
         <View style={styles.itemBox}>
           <Text style={styles.itemTitle}>
             {intl.formatMessage(Messages.implementer)}
