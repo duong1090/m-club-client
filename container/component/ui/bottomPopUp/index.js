@@ -1,27 +1,21 @@
-import React, { useState, forwardRef, useImperativeHandle } from "react";
-import {
-  View,
-  Animated,
-  Dimensions,
-  TouchableOpacity,
-  StyleSheet,
-  Text,
-} from "react-native";
+import React, {
+  useState,
+  forwardRef,
+  useImperativeHandle,
+  useContext,
+} from "react";
+import { View, StyleSheet, Text } from "react-native";
 import { scale, space, fontSize } from "container/variables/common";
+import ModalContext from "container/context/modal";
 import Modal from "react-native-modal";
-
-const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
-
-const Screen = {
-  width: Dimensions.get("window").width,
-  height: Dimensions.get("window").height,
-};
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const BottomPopUp = (props, ref) => {
   const { body, toolbar, title, reset } = props;
 
   //state
   const [visible, setVisible] = useState(false);
+  const { keyboardDidShow } = useContext(ModalContext);
 
   //effect
   useImperativeHandle(ref, () => ({
@@ -53,13 +47,15 @@ const BottomPopUp = (props, ref) => {
       coverScreen={false}
     >
       <View style={styles.bodyWrapper}>
-        {title ? (
-          <View style={styles.titleBox}>
-            <Text style={styles.textTitle}>{title}</Text>
-          </View>
-        ) : null}
-        {body}
-        {toolbar ? <View style={[styles.toolbar]}>{toolbar()}</View> : null}
+        <KeyboardAwareScrollView>
+          {title ? (
+            <View style={styles.titleBox}>
+              <Text style={styles.textTitle}>{title}</Text>
+            </View>
+          ) : null}
+          {body}
+          {toolbar ? <View style={[styles.toolbar]}>{toolbar()}</View> : null}
+        </KeyboardAwareScrollView>
       </View>
     </Modal>
   );
@@ -72,11 +68,16 @@ const styles = StyleSheet.create({
   },
 
   modalWrapper: {
-    margin: 0,
     justifyContent: "flex-end",
+    margin: 0,
   },
 
+  awareWrapper: {},
+
   bodyWrapper: {
+    position: "absolute",
+    width: "100%",
+    bottom: 0,
     backgroundColor: "#fff",
     borderTopLeftRadius: scale(30),
     borderTopRightRadius: scale(30),

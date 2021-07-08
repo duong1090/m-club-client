@@ -20,13 +20,14 @@ import QRScanner from "container/component/ui/qrCodeScanner";
 import {
   color,
   scale,
-  
   space,
   fontSize,
   shadow,
 } from "container/variables/common";
 import { Icon } from "native-base";
 import { Navigation } from "react-native-navigation";
+
+const MONGO_ID_LENGTH = 24;
 
 const QRScannerEvent = (props, ref) => {
   //state
@@ -65,12 +66,12 @@ const QRScannerEvent = (props, ref) => {
   const onRead = (data) => {
     const memberId = member && member.id ? member.id : undefined;
 
-    const splitData = data && data.data ? data.data.split(",") : [];
+    const splitData = data ? data.split(",") : [];
 
     if (splitData[0] == QR_EVENT) {
       const eventId = splitData[1] ? splitData[1] : undefined;
 
-      if (memberId && memberId == MONGO_ID_LENGTH)
+      if (memberId && memberId.length == MONGO_ID_LENGTH)
         postRequest("event/attendance", {
           event_id: eventId,
           member_id: memberId,
@@ -87,6 +88,11 @@ const QRScannerEvent = (props, ref) => {
               );
               Toast.show(
                 intl.formatMessage(Message.check_in_successfully),
+                Toast.LONG
+              );
+            } else {
+              Toast.show(
+                intl.formatMessage(Message.already_check_in),
                 Toast.LONG
               );
             }
@@ -177,7 +183,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   noteText: {
-    
     color: "#fff",
   },
   controlBox: {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { injectIntl } from "react-intl";
 import {
   Animated,
@@ -13,17 +13,28 @@ import { scale, space, color, fontSize } from "container/variables/common";
 import Messages from "container/translation/Message";
 import InputItem from "container/component/ui/inputItem";
 import ModalContext from "container/context/modal";
-import {
-  signInWithPhoneNumber,
-  getIdToken,
-} from "container/action/authenticate";
 import { doLogin } from "container/action/user";
+import { gotoRoute, showModal } from "../../../utils/router";
+import {
+  confirmCode,
+  verifyPhoneNumber,
+  getIdToken,
+} from "../../../action/authenticate";
+import { screens } from "../../../constant/screen";
+import { KeyboardAwareScrollView } from "@codler/react-native-keyboard-aware-scroll-view";
+
+const COUNT_DOWN_OTP = 15;
+const DELAY_TIME_OUT = 1000;
 
 const InputOTP = (props) => {
   const { intl, style } = props;
   //state
   const [otp, setOTP] = useState(null);
-  const [confirmOTP, setConfirmOTP] = useState(null);
+  const [countResend, setCountResend] = useState(COUNT_DOWN_OTP);
+
+  //variables
+  const verificationId = useRef(null);
+  const countDownInterval = useRef(null);
 
   //recoil
   const certificate = useRecoilValue(certificateState);
@@ -31,125 +42,221 @@ const InputOTP = (props) => {
   //context
   const { showSpinner, hideSpinner } = useContext(ModalContext);
 
-  //function
   useEffect(() => {
     console.log("didUpdate::::", certificate);
-
     //in case bypass, force login
-    if (certificate.is_bypass) {
-      showSpinner();
-      doLogin({
-        club_id: certificate.club_id,
-        is_bypass: certificate.is_bypass,
-        phone_number: certificate.phone,
-      })
-        .then((res) => {
-          hideSpinner();
-        })
-        .catch((err) => {
-          console.error(err);
-          hideSpinner();
-        });
-    }
+    if (certificate.is_bypass) doByPass();
     //do authenticate by firebase
-    else {
-      showSpinner();
-      signInWithPhoneNumber(certificate.phone)
-        .then((confirm) => {
-          if (confirm) setConfirmOTP(confirm);
-          hideSpinner();
-        })
-        .catch((err) => {
-          console.error(err);
-          hideSpinner();
-        });
-    }
+    else doVerify();
+
+    return () => {
+      if (countDownInterval.current) clearInterval(countDownInterval.current);
+    };
   }, [certificate]);
 
-  const activeUser = async () => {
-    if (confirmOTP && otp) {
+  useEffect(() => {
+    if (countResend <= 0) clearInterval(countDownInterval.current);
+  }, [countResend]);
+
+  //function ------------------------------------------------------------------------------------
+  const gotoSignUp = () => {
+    gotoRoute(screens.SIGNUP);
+  };
+
+  const doByPass = () => {
+    showSpinner();
+    doLogin({
+      club_id: certificate.club_id,
+      is_bypass: certificate.is_bypass,
+      phone_number: certificate.phone,
+    })
+      .then((res) => {
+        hideSpinner();
+      })
+      .catch((err) => {
+        console.error(err);
+        hideSpinner();
+      });
+  };
+
+  const doVerify = () => {
+    showSpinner();
+
+    verifyPhoneNumber(certificate.phone)
+      .then((id) => {
+        if (id) verificationId.current = id;
+        hideSpinner();
+
+        //do count down resend OTP
+        doCountDown();
+      })
+      .catch((err) => {
+        hideSpinner();
+        const message = err.code
+          ? intl.formatMessage(err.code)
+          : err.message
+          ? err.message
+          : err;
+        console.error(err);
+        showModal({
+          options: {
+            content: message,
+          },
+          type: "error",
+        });
+
+        //do count down resend OTP
+        doCountDown();
+      });
+  };
+
+  const doCountDown = () => {
+    countDownInterval.current = setInterval(() => {
+      if (countResend > 0) setCountResend((curr) => curr - 1);
+      else clearInterval(countDownInterval.current);
+    }, DELAY_TIME_OUT);
+  };
+
+  const activeUser = () => {
+    if (otp) {
       showSpinner();
-      confirmOTP
-        .confirm(otp)
-        .then((result) => {
-          if (result && certificate) {
-            getIdToken().then((token) => {
-              console.log("activeUser::::", token);
-              if (token) {
-                let payload = {};
-                if (certificate.phone) payload.phone_number = certificate.phone;
-                if (certificate.club_id) payload.club_id = certificate.club_id;
-                payload.firebase_token = token;
-                doLogin(payload);
-              }
-            });
-          }
-          hideSpinner();
+      confirmCode(verificationId.current, otp)
+        .then((isConfirmed) => {
+          if (isConfirmed && certificate)
+            getIdToken()
+              .then((token) => {
+                if (token != null) {
+                  let payload = {};
+                  if (certificate.phone)
+                    payload.phone_number = certificate.phone;
+                  if (certificate.club_id)
+                    payload.club_id = certificate.club_id;
+                  payload.firebase_token = token;
+                  doLogin(payload)
+                    .then((res) => {})
+                    .catch((err) => {
+                      console.log("activeUser loi ne ba:::", err);
+                    });
+                }
+                hideSpinner();
+              })
+              .catch((err) => {
+                const message = err.code
+                  ? intl.formatMessage(err.code)
+                  : err.message
+                  ? err.message
+                  : err;
+
+                hideSpinner();
+                showModal({
+                  options: {
+                    content: message,
+                  },
+                  type: "error",
+                });
+              });
         })
         .catch((err) => {
-          console.error(err);
+          const message = err.code
+            ? intl.formatMessage(err.code)
+            : err.message
+            ? err.message
+            : err;
+
           hideSpinner();
+          showModal({
+            options: {
+              content: message,
+            },
+            type: "error",
+          });
         });
     }
   };
 
   return (
-    <Animated.View style={style}>
-      <InputItem
-        inputStyle={{ fontSize: fontSize.size36 }}
-        style={styles.input}
-        type="otp"
-        textAlign="center"
-        placeholder={intl.formatMessage(Messages.otp)}
-        onChangeText={(code) => setOTP(code)}
-        value={otp ? otp : undefined}
-      />
+    <KeyboardAwareScrollView>
+      <Animated.View style={style}>
+        <InputItem
+          inputStyle={{ fontSize: fontSize.size36 }}
+          style={styles.input}
+          type="otp"
+          textAlign="center"
+          placeholder={intl.formatMessage(Messages.otp)}
+          onChangeText={(code) => setOTP(code)}
+          value={otp ? otp : undefined}
+        />
 
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: color.background }]}
-        onPress={() => activeUser()}
-      >
-        <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
-          {intl.formatMessage(Messages.sign_in)}
-        </Text>
-      </TouchableOpacity>
-
-      <View style={styles.signUp}>
-        <Text
-          style={{
-            color: color.fontColor,
-            fontSize: fontSize.size28,
-            fontWeight: "bold",
-          }}
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: color.background }]}
+          onPress={() => activeUser()}
         >
-          {intl.formatMessage(Messages.new_here)}{" "}
-        </Text>
-        <TouchableOpacity onPress={() => {}}>
+          <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
+            {intl.formatMessage(Messages.sign_in)}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.button,
+            {
+              borderStyle: "dashed",
+              borderWidth: scale(1),
+              borderColor: countResend <= 0 ? color.blue : color.text,
+              marginTop: space.componentMargin,
+            },
+          ]}
+          onPress={() => doVerify()}
+        >
           <Text
             style={{
-              color: color.background,
+              fontSize: fontSize.size28,
+              color: countResend <= 0 ? color.blue : color.hint,
+            }}
+          >
+            {intl.formatMessage(Messages.resend_otp)}
+          </Text>
+          {countResend != 0 ? (
+            <Text style={styles.textCountDown}>{countResend}</Text>
+          ) : null}
+        </TouchableOpacity>
+        <View style={styles.signUp}>
+          <Text
+            style={{
+              color: color.fontColor,
               fontSize: fontSize.size28,
               fontWeight: "bold",
             }}
           >
-            {intl.formatMessage(Messages.sign_up_now)}
+            {intl.formatMessage(Messages.new_here)}{" "}
           </Text>
-        </TouchableOpacity>
-      </View>
-    </Animated.View>
+          <TouchableOpacity onPress={() => gotoSignUp()}>
+            <Text
+              style={{
+                color: color.background,
+                fontSize: fontSize.size28,
+                fontWeight: "bold",
+              }}
+            >
+              {intl.formatMessage(Messages.sign_up_now)}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Animated.View>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   input: {
-    marginVertical: scale(60),
+    marginTop: scale(30),
+    marginBottom: scale(60),
     height: scale(100),
   },
   button: {
     flexDirection: "row",
     height: scale(80),
     borderRadius: space.border,
-    backgroundColor: color.background,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -157,6 +264,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginTop: scale(100),
+  },
+  textCountDown: {
+    position: "absolute",
+    right: space.componentMargin,
   },
 });
 

@@ -1,12 +1,9 @@
-import { getApiToken, getIntl } from "./common";
+import { getIntl } from "./common";
 import { buildDeviceInfo } from "./common";
-import { Text, Alert } from "react-native";
 import { getItem } from "./storage";
 import Config, { formatURL } from "container/config/server.config";
 import { LANG, API_TOKEN, API_URL } from "container/constant/storage";
-import Toast from "react-native-simple-toast";
-import { gotoRoute } from "./router";
-import { modals } from "../constant/screen";
+import { showModal } from "./router";
 import Messages from "../translation/Message";
 
 const constants = {
@@ -23,35 +20,28 @@ const HttpCodes = {
 const showServerError = (errorMessage, cb) => {
   console.log("showServerError", errorMessage);
 
-  gotoRoute(
-    modals.GENERAL_MODAL,
-    {
-      options: {
-        content: errorMessage
-          ? error.message
-          : getIntl().formatMessage(Messages.error),
-      },
-      type: "error",
+  const options = {
+    options: {
+      content: errorMessage
+        ? errorMessage
+        : getIntl().formatMessage(Messages.error),
     },
-    true
-  );
+    type: "error",
+  };
+
+  showModal(options);
 };
 
 const checkStatus = (response) => {
   console.log("checkStatus", response);
   return new Promise((resolve, reject) => {
-    // var quiet = this.quiet;
     var error;
-    // if (quiet === undefined) {
-    //   quiet = false;
-    // }
+
     if (response.status === HttpCodes.UNAUTHORIZED) {
       console.log("CODE" + HttpCodes.UNAUTHORIZED);
       error = new Error(response.statusText);
       error.response = response;
       error.data = [response.statusText];
-      //TODO: declare notify
-      // notify(error);
       reject(error);
     } else if (response.status != HttpCodes.OK) {
       if (response.status == HttpCodes.ENTITY_TOO_LARGE) {
@@ -62,14 +52,13 @@ const checkStatus = (response) => {
 
       response.json().then((json) => {
         console.log("responesJSON:::", json);
-
+        reject(json.message);
         showServerError(json.message);
       });
     } else {
       response
         .json()
         .then((json) => {
-          //const json = res.json();
           console.log("json", json, json.error_code);
           if (json.error_code) {
             let message = "Có lỗi xảy ra. Vui lòng thử lại";
@@ -82,11 +71,9 @@ const checkStatus = (response) => {
             }
 
             error = new Error(message);
-            // console.log(json.message);
             error.data = json.message;
             error.error_code = json.error_code;
             if (json.error_code == 400 || json.error_code == 403) {
-              // hideSpinner();
               showServerError(message);
               console.error("checkStatus:::", message);
             }

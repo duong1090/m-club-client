@@ -4,7 +4,6 @@ import QRCodeScanner from "react-native-qrcode-scanner";
 import {
   color,
   scale,
-  
   space,
   fontSize,
   shadow,
@@ -28,7 +27,7 @@ const QRScanner = (props) => {
 
   return (
     <View style={[styles.container, props.style]}>
-      <QRCodeScanner {...props} />
+      <QRCodeScanner {...props} onRead={(e) => props.onRead(e.data)} />
       {renderMarker()}
       <Icon name="qr-code" style={styles.controlQR} />
     </View>

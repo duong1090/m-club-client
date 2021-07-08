@@ -22,7 +22,6 @@ import {
   fontSize,
   shadow,
   space,
-  
 } from "container/variables/common";
 import { Icon, ScrollableTab, Tab, Tabs, View } from "native-base";
 import InputItem from "container/component/ui/inputItem";
@@ -38,7 +37,6 @@ import { useRecoilState } from "recoil";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { isIphoneX } from "../../../../variables/common";
 
-const intl = getIntl();
 const DEFAULT_VALUE = {
   name: "",
   start_date: null,
@@ -64,6 +62,7 @@ const Create = (props, ref) => {
 
   //ref
   const bottomPopUpRef = useRef(null);
+  const intl = getIntl();
 
   //hooks ----------------------------------------------------------------------------------------
   useImperativeHandle(ref, () => ({
@@ -283,7 +282,7 @@ const Create = (props, ref) => {
             style={styles.createButton}
           >
             <Text style={styles.textCreateButton}>
-              {intl.formatMessage(Messages.create)}
+              {intl.formatMessage(Messages.add)}
             </Text>
           </TouchableOpacity>
         </Tab>
@@ -501,7 +500,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textCreateButton: {
-    
     color: "#fff",
     height: scale(40),
   },
@@ -521,11 +519,9 @@ const styles = StyleSheet.create({
   leftTypeBox: {},
   titleTypeBox: {
     fontWeight: "bold",
-    
   },
   desTypeBox: {
     color: color.hint,
-    
   },
   inputStyle: {
     marginBottom: space.componentMargin,
@@ -572,7 +568,6 @@ const styles = StyleSheet.create({
     backgroundColor: color.light,
   },
   textAddImg: {
-    
     color: color.hint,
   },
 });

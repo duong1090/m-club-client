@@ -1,29 +1,32 @@
 import React from "react";
 import {
-  Modal,
   StyleSheet,
   Text,
   TouchableNativeFeedback,
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  scale,
-  color,
-  space,
-  
-  fontSize,
-} from "container/variables/common";
+import { scale, color, space, fontSize } from "container/variables/common";
+import Modal from "react-native-modal";
 import { Icon } from "native-base";
 
 const ModalPopUp = (props) => {
   //props
   const { children, style, maskClose, width, height, onClose, title } = props;
   return (
-    <Modal {...props}>
-      <TouchableNativeFeedback onPress={maskClose}>
-        <View style={styles.modalOverlay} />
-      </TouchableNativeFeedback>
+    <Modal
+      animationIn="zoomInDown"
+      animationOut="zoomOutUp"
+      animationInTiming={600}
+      animationOutTiming={600}
+      useNativeDriverForBackdrop={true}
+      useNativeDriver={true}
+      backdropOpacity={0.5}
+      coverScreen={false}
+      onBackdropPress={() => onClose()}
+      onBackButtonPress={() => onClose()}
+      {...props}
+    >
       <View style={styles.container}>
         <View
           style={[
@@ -52,7 +55,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
   },
   header: {
     flexDirection: "row",
@@ -60,7 +62,6 @@ const styles = StyleSheet.create({
     margin: scale(10),
   },
   title: {
-    
     fontSize: fontSize.sizeTitle,
     fontWeight: "bold",
     marginTop: scale(5),

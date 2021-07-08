@@ -1,4 +1,9 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useContext,
+  useImperativeHandle,
+  useState,
+} from "react";
 import ModalPopUp from "container/component/ui/modalPopUp";
 import { View, Text } from "react-native";
 import Messages from "container/translation/Message";
@@ -6,6 +11,9 @@ import { getRequest } from "../../../utils/request";
 import Avatar from "container/component/ui/avatar";
 import styles from "../style/detail";
 import { scale } from "container/variables/common";
+import { Navigation } from "react-native-navigation";
+import { screens } from "../../../constant/screen";
+import ModalContext from "../../../context/modal";
 
 export const AVATAR_SIZE = scale(60);
 
@@ -15,6 +23,8 @@ const Detail = (props, ref) => {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
 
+  const { showSpinner, hideSpinner } = useContext(ModalContext);
+
   const show = (data) => {
     getData(data.id);
     setVisible(true);
@@ -22,6 +32,8 @@ const Detail = (props, ref) => {
 
   const hide = () => {
     setVisible(false);
+    resetState();
+    Navigation.updateProps(screens.TAB_NOTIFICATION, { mode: "list" });
   };
 
   useImperativeHandle(ref, () => ({
@@ -29,12 +41,23 @@ const Detail = (props, ref) => {
     hide,
   }));
 
+  const resetState = () => {
+    setData({});
+  };
+
   const getData = (id) => {
-    getRequest("notification/detail", { id }).then((res) => {
-      if (res && res.data) {
-        setData(res.data);
-      }
-    });
+    showSpinner();
+    getRequest("notification/detail", { id })
+      .then((res) => {
+        if (res && res.data) {
+          setData(res.data);
+        }
+        hideSpinner();
+      })
+      .catch((err) => {
+        console.error(err);
+        hideSpinner();
+      });
   };
 
   const renderAvatar = () => {
@@ -57,16 +80,8 @@ const Detail = (props, ref) => {
   return (
     <ModalPopUp
       title={intl.formatMessage(Messages.detail)}
-      visible={visible}
-      transparent
-      animationType="fade"
-      maskClose={() => {
-        hide();
-      }}
-      onClose={() => {
-        hide();
-      }}
-      width="90%"
+      isVisible={visible}
+      onClose={() => hide()}
       style={{ minHeight: scale(700) }}
     >
       <View style={styles.container}>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 import ListTask from "./component/list";
 import DetailTask from "./component/detail";
 import { scale, shadow, color } from "container/variables/common";
@@ -11,9 +11,7 @@ import Messages from "container/translation/Message";
 import { Navigation } from "react-native-navigation";
 
 const TabTask = (props) => {
-  const { intl, componentId } = props;
-  //state
-
+  const { intl } = props;
   //variables
   const createTaskRef = useRef(null);
   const detailTaskRef = useRef(null);
@@ -24,26 +22,13 @@ const TabTask = (props) => {
         componentBackgroundColor: color.background,
       },
     });
-    if (props.mode) {
-      switch (props.mode) {
-        case "detail":
-          openDetailPopUp();
-          break;
-        case "create":
-          openCreatePopUp();
-          break;
-      }
-    }
   }, []);
 
-  //effect
   useEffect(() => {
-    console.log("TabTask::::useEffect", props);
-
     if (props.mode) {
       switch (props.mode) {
         case "detail":
-          openDetailPopUp();
+          openDetailPopUp(props.data);
           break;
         case "create":
           openCreatePopUp();
@@ -57,8 +42,8 @@ const TabTask = (props) => {
     createTaskRef.current && createTaskRef.current.show(props.passData);
   };
 
-  const openDetailPopUp = () => {
-    detailTaskRef.current && detailTaskRef.current.show(props.data);
+  const openDetailPopUp = (item) => {
+    detailTaskRef.current && detailTaskRef.current.show(item);
   };
 
   //render ----------------------------------------------------------------------------------------
@@ -104,7 +89,6 @@ const styles = StyleSheet.create({
     right: 0,
   },
   actionButtonText: {
-    
     color: "#fff",
   },
   actionButtonIcon: {

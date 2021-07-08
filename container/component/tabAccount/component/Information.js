@@ -6,7 +6,6 @@ import {
   fontSize,
   shadow,
   space,
-  
 } from "container/variables/common";
 import Avatar from "container/component/ui/avatar";
 import { Icon } from "native-base";
@@ -109,17 +108,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   name: {
-    
     fontSize: fontSize.size36,
     fontWeight: "bold",
   },
   position: {
-    
     fontSize: fontSize.size28,
     color: "#fff",
   },
   editIcon: {
-    fontSize: fontSize.size24,
+    fontSize: fontSize.size32,
+    color: color.background,
   },
   settingBtn: {
     flexDirection: "row",
@@ -129,7 +127,6 @@ const styles = StyleSheet.create({
     marginTop: space.itemMargin,
   },
   setting: {
-    
     color: "#fff",
     marginRight: scale(10),
   },

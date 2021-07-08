@@ -54,14 +54,29 @@ export const color = {
   green: "#5cb85c",
   colorMandy: "#E24F63",
   lightGreen: "#d0ffd0",
-  unread: "#ddefef",
-  change: "#f6c065",
-  remove: "#eb596e",
-  deadline: "#583d72",
-  create: "#00917c",
-  cancel: "#898b8a",
-  done: "#0278ae",
+
+  event: "#b4009c",
   blue: "#0275d8",
+
+  notification: {
+    unread: "#ddefef",
+    change: "#ffd23c",
+    remove: "#ff2d4d",
+    deadline: "#ff662a",
+    create: "#00c6e9",
+    cancel: "#898b8a",
+    done: "#1ac400",
+    direct: "#0085c3",
+  },
+
+  club: {
+    event: "#FF94CC",
+    member: "#51C4D3",
+    department: "#2F5D62",
+    position: "#39A2DB",
+    role: "#005792",
+    fund: "#C68B59",
+  },
 };
 
 export const shadow = {

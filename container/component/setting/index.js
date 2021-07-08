@@ -64,9 +64,7 @@ const Setting = (props) => {
         <Text style={styles.settingValue}>
           {global.lang && global.lang == "vi"
             ? intl.formatMessage(Messages.vi)
-            : global.lang == "en"
-            ? intl.formatMessage(Messages.en)
-            : ""}
+            : intl.formatMessage(Messages.en)}
         </Text>
       </TouchableOpacity>
     </View>

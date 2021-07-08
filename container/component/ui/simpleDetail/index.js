@@ -115,7 +115,7 @@ const SimpleDetail = (props) => {
             onPress={() => backButton.onPress()}
             style={styles.backButton}
           >
-            <Icon name="caret-back" style={styles.actionIcon} />
+            <Icon name="chevron-back" style={[styles.actionIcon, {fontSize: scale(40)}]} />
             <Text style={styles.actionText}>{backButton.title}</Text>
           </TouchableOpacity>
         ) : null}
@@ -234,11 +234,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   actionText: {
-    fontSize: fontSize.size26,
+    fontSize: fontSize.size28,
     color: "#fff",
   },
   actionIcon: {
-    fontSize: scale(25),
+    fontSize: scale(30),
     color: "#fff",
   },
   actionBox: {

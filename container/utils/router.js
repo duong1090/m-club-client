@@ -81,8 +81,8 @@ bottomTabsByID[screens.TAB_NAVIGATE] = (passProps) => ({
       },
       bottomTab: {
         text: getIntl().formatMessage(Messages.tab_navigate),
-        icon: require("container/asset/icon/navitage.png"),
-        selectedIcon: require("container/asset/icon/navitage_select.png"),
+        icon: require("container/asset/icon/navigate.png"),
+        selectedIcon: require("container/asset/icon/navigate_select.png"),
         testID: screens.TAB_NAVIGATE,
       },
     },
@@ -122,38 +122,42 @@ bottomTabsByID[screens.TAB_NOTIFICATION] = (passProps) => ({
   },
 });
 
-bottomTabsByID[screens.TAB_TASK] = (passProps) => ({
-  stack: {
-    children: [
-      {
-        component: {
-          name: screens.TAB_TASK,
-          id: screens.TAB_TASK,
-          options: {
-            layout: {
-              componentBackgroundColor: "#fff",
+bottomTabsByID[screens.TAB_TASK] = (passProps) => {
+  console.log("screens.TAB_TASK:::", passProps);
+
+  return {
+    stack: {
+      children: [
+        {
+          component: {
+            name: screens.TAB_TASK,
+            id: screens.TAB_TASK,
+            options: {
+              layout: {
+                componentBackgroundColor: "#fff",
+              },
             },
+            passProps,
           },
-          passProps,
+        },
+      ],
+      options: {
+        topBar: {
+          visible: false,
+        },
+        bottomTabs: {
+          titleDisplayMode: "alwaysShow",
+        },
+        bottomTab: {
+          text: getIntl().formatMessage(Messages.tab_task),
+          icon: require("container/asset/icon/task.png"),
+          selectedIcon: require("container/asset/icon/task_select.png"),
+          testID: screens.TAB_TASK,
         },
       },
-    ],
-    options: {
-      topBar: {
-        visible: false,
-      },
-      bottomTabs: {
-        titleDisplayMode: "alwaysShow",
-      },
-      bottomTab: {
-        text: getIntl().formatMessage(Messages.tab_task),
-        icon: require("container/asset/icon/task.png"),
-        selectedIcon: require("container/asset/icon/task_select.png"),
-        testID: screens.TAB_TASK,
-      },
     },
-  },
-});
+  };
+};
 
 export const gotoLogin = (options = {}) => {
   console.log("gotoLogin:::");
@@ -188,14 +192,14 @@ export const gotoHome = (params = {}) => {
 };
 
 const navigationHomeTab = async (passProps = {}, screenIndex = 0) => {
-  console.log("navigationHomeTab:::", screenIndex);
-
   const defaultTabs = [
     bottomTabsByID[screens.TAB_NAVIGATE](passProps),
     bottomTabsByID[screens.TAB_TASK](passProps),
     bottomTabsByID[screens.TAB_NOTIFICATION](passProps),
     bottomTabsByID[screens.TAB_ACCOUNT](passProps),
   ];
+
+  console.log("navigationHomeTab:::", screenIndex, passProps, defaultTabs);
 
   await Navigation.setRoot({
     root: {
@@ -209,7 +213,7 @@ const navigationHomeTab = async (passProps = {}, screenIndex = 0) => {
             currentTabIndex: screenIndex,
             tabsAttachMode:
               Platform.OS === "ios" && version <= 10
-                ? "together"
+                ? "onSwitchToTab"
                 : "onSwitchToTab",
           },
         },
@@ -219,8 +223,8 @@ const navigationHomeTab = async (passProps = {}, screenIndex = 0) => {
   });
 };
 
-const showModal = (screen, config = {}) => {
-  console.log("showModal:::", screen, config);
+const displayModal = (screen, config = {}) => {
+  console.log("displayModal:::", screen, config);
 
   const topBar =
     config.options && config.options.topBar ? config.options.topBar : {};
@@ -321,6 +325,15 @@ const showModal = (screen, config = {}) => {
   });
 };
 
+const gotoScreenNavigate = (screen, index, passProps) => {
+  Navigation.mergeOptions(screens.HOME, {
+    bottomTabs: {
+      currentTabIndex: index,
+    },
+  });
+  Navigation.updateProps(screen, passProps);
+};
+
 export const gotoRoute = (screen, config = {}, isModal = false) => {
   console.log("gotoRoute::::", screen, config);
 
@@ -341,11 +354,12 @@ export const gotoRoute = (screen, config = {}, isModal = false) => {
     if (screen == screens.HOME) {
       navigationHomeTab(config);
     } else if (NAVIGATION_SCREENS.find((i) => i == screen)) {
+      const screenNavigate = NAVIGATION_SCREENS.find((i) => i == screen);
       const screenIndex = NAVIGATION_SCREENS.findIndex((i) => i == screen);
-      navigationHomeTab(config, screenIndex);
+      gotoScreenNavigate(screenNavigate, screenIndex, config);
     } else {
       if (isModal) {
-        showModal(screen, config);
+        displayModal(screen, config);
       } else {
         let componentId =
           config.componentId ||
@@ -456,4 +470,8 @@ export const showSpinner = () => {
 export const hideSpinner = () => {
   console.log("hideSpinner");
   Navigation.dismissOverlay(modals.SPINNER);
+};
+
+export const showModal = (passProps) => {
+  gotoRoute(modals.GENERAL_MODAL, passProps, true);
 };

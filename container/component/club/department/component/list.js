@@ -3,7 +3,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { listDepartmentState, currDepartmentState } from "../recoil";
 import { View } from "react-native";
 import { Icon } from "native-base";
-import { scale } from "container/variables/common";
+import { scale, color } from "container/variables/common";
 import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
@@ -108,7 +108,10 @@ const DepartmentList = (props) => {
         styleTextItem={{ fontWeight: "bold" }}
         onPressItem={(item) => onPressItem(item)}
         iconItem={
-          <Icon name="people" style={{  fontSize: scale(30) }} />
+          <Icon
+            name="people"
+            style={{ fontSize: scale(30), color: color.club.department }}
+          />
         }
         loadMore={loadMore}
         privilege={{

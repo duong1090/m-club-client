@@ -6,7 +6,7 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  FlatList,
+  ScrollView,
 } from "react-native";
 import { Icon } from "native-base";
 import {
@@ -15,7 +15,6 @@ import {
   fontSize,
   shadow,
   space,
-  
 } from "container/variables/common";
 import Messages from "container/translation/Message";
 import { clubListState, certificateState, activeTabState } from "../recoil";
@@ -58,14 +57,14 @@ const SelectClub = (props) => {
         style={[
           styles.item,
           {
-            borderColor: item.selected ? color.background : color.disable,
+            borderColor: item.selected ? color.blue : color.disable,
           },
         ]}
       >
         <Text
           style={[
             styles.titleItem,
-            { color: item.selected ? color.background : color.disable },
+            { color: item.selected ? color.blue : color.disable },
           ]}
         >
           {item.name}
@@ -74,7 +73,7 @@ const SelectClub = (props) => {
           <Text
             style={[
               styles.codeItem,
-              { color: item.selected ? color.background : color.disable },
+              { color: item.selected ? color.blue : color.disable },
             ]}
           >
             {item.code}
@@ -82,7 +81,7 @@ const SelectClub = (props) => {
           <View
             style={[
               styles.checkIcon,
-              { backgroundColor: item.selected ? color.background : "#fff" },
+              { backgroundColor: item.selected ? color.blue : "#fff" },
             ]}
           >
             <Icon
@@ -103,21 +102,30 @@ const SelectClub = (props) => {
         {intl.formatMessage(Messages.select_club)}
       </Text>
 
-      <FlatList
-        style={styles.list}
+      {/* <FlatList
+        style={{ flex: 1 }}
+        numColumns={2}
+        // contentContainerStyle={styles.list}
+        contentContainerStyle={styles.list}
         data={clubList}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => clubItem(item, index)}
         showsVerticalScrollIndicator={false}
-      />
+      /> */}
+
+      <ScrollView horizontal>
+        <View style={styles.list}>
+          {clubList
+            .concat(clubList)
+            .map((item, index) => clubItem(item, index))}
+        </View>
+      </ScrollView>
 
       <TouchableOpacity
         style={[styles.button, { backgroundColor: color.background }]}
         onPress={() => gotoInputOTP()}
       >
-        <Text
-          style={{  color: "#fff", fontSize: fontSize.size28 }}
-        >
+        <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
           {intl.formatMessage(Messages.next)}
         </Text>
       </TouchableOpacity>
@@ -133,11 +141,11 @@ const styles = StyleSheet.create({
     backgroundColor: color.background,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: scale(30),
+    marginVertical: space.componentMargin,
+    marginHorizontal: space.componentMargin,
   },
 
   title: {
-    
     marginBottom: space.componentMargin,
     alignSelf: "center",
     fontSize: fontSize.size36,
@@ -147,14 +155,18 @@ const styles = StyleSheet.create({
 
   list: {
     flex: 1,
+    flexWrap: "wrap",
+    paddingHorizontal: space.componentMargin / 2,
+    paddingVertical: space.componentMargin,
   },
 
   item: {
     backgroundColor: "#fff",
+    width: scale(330),
     padding: scale(20),
     borderRadius: scale(20),
     marginBottom: space.componentMargin,
-    borderWidth: scale(2),
+    marginHorizontal: space.componentMargin / 2,
     ...shadow,
   },
 
@@ -165,15 +177,13 @@ const styles = StyleSheet.create({
   },
 
   titleItem: {
-    
     marginBottom: scale(10),
     fontSize: fontSize.size32,
     fontWeight: "bold",
   },
 
   codeItem: {
-    
-    fontSize: fontSize.size28,
+    fontSize: fontSize.size24,
   },
 
   checkIcon: {

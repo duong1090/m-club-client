@@ -68,39 +68,73 @@ const TabAccount = (props) => {
     {
       title: <FormattedMessage {...Messages.member} />,
       type: screens.MEMBER,
-      icon: <Icon type="FontAwesome5" name="user" style={styles.iconList} />,
+      icon: (
+        <Icon
+          type="FontAwesome5"
+          name="user"
+          style={[styles.iconList, { color: color.club.member }]}
+        />
+      ),
       privilege: normalRole.MEM_VIEW,
     },
     {
       title: <FormattedMessage {...Messages.department} />,
       type: screens.DEPARTMENT,
-      icon: <Icon type="FontAwesome5" name="users" style={styles.iconList} />,
+      icon: (
+        <Icon
+          type="FontAwesome5"
+          name="users"
+          style={[styles.iconList, { color: color.club.department }]}
+        />
+      ),
       privilege: normalRole.DEPT_VIEW,
     },
     {
       title: <FormattedMessage {...Messages.position} />,
       type: screens.POSITION,
       icon: (
-        <Icon type="FontAwesome5" name="user-tag" style={styles.iconList} />
+        <Icon
+          type="FontAwesome5"
+          name="user-tag"
+          style={[styles.iconList, { color: color.club.position }]}
+        />
       ),
       privilege: normalRole.POS_VIEW,
     },
     {
       title: <FormattedMessage {...Messages.funds} />,
       type: screens.FUNDS,
-      icon: <Icon type="FontAwesome5" name="wallet" style={styles.iconList} />,
+      icon: (
+        <Icon
+          type="FontAwesome5"
+          name="wallet"
+          style={[styles.iconList, { color: color.club.fund }]}
+        />
+      ),
       privilege: normalRole.FUND_VIEW,
     },
     {
       title: <FormattedMessage {...Messages.role} />,
       type: screens.ROLE,
-      icon: <Icon type="FontAwesome5" name="wallet" style={styles.iconList} />,
+      icon: (
+        <Icon
+          type="FontAwesome5"
+          name="wallet"
+          style={[styles.iconList, { color: color.club.role }]}
+        />
+      ),
       privilege: isRoot,
     },
     {
       title: <FormattedMessage {...Messages.event} />,
       type: screens.EVENT,
-      icon: <Icon type="MaterialIcons" name="event" style={styles.iconList} />,
+      icon: (
+        <Icon
+          type="MaterialIcons"
+          name="event"
+          style={[styles.iconList, { color: color.danger }]}
+        />
+      ),
       privilege: normalRole.EVENT_VIEW,
     },
   ];
@@ -188,8 +222,9 @@ const styles = StyleSheet.create({
     marginRight: scale(10),
   },
   iconList: {
-    fontSize: scale(50),
+    fontSize: scale(40),
     color: color.background,
+    marginBottom: scale(10),
   },
 });
 

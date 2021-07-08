@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import {
   View,
-  TextInput,
   Image,
   StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
-import { scale, color, fontSize } from "container/variables/common";
+import { scale, color, space } from "container/variables/common";
 import InformationPage from "./component/InformationPage";
 import InputItem from "container/component/ui/inputItem";
 import { API_URL } from "container/constant/storage";
@@ -27,80 +25,65 @@ const LogIn = () => {
 
   const header = () => {
     return (
-      <View style={styles.header}>
-        <View style={styles.elOneHeader}></View>
-        <View
-          style={{
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-            position: "absolute",
-            bottom: 0,
-          }}
-        >
-          {visibleURLInput >= 10 ? (
-            <InputItem
-              style={{ width: "100%", padding: scale(30) }}
-              placeholder="API URL"
-              onChangeText={(text) => doChangeApiURL(text)}
-            />
-          ) : null}
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.elTwoHeader}
-            onPress={() => doCountApiURL()}
-          >
-            <Image
-              style={styles.logo}
-              source={require("container/asset/image/Mclub-cirLogo.png")}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <ImageBackground
+        style={styles.header}
+        source={require("container/asset/image/backgroundlogin.png")}
+      >
+        {visibleURLInput >= 10 ? (
+          <InputItem
+            style={{ width: "100%", padding: scale(30) }}
+            placeholder="API URL"
+            onChangeText={(text) => doChangeApiURL(text)}
+          />
+        ) : null}
+        <TouchableOpacity activeOpacity={1} onPress={() => doCountApiURL()}>
+          <Image
+            style={styles.logo}
+            source={require("container/asset/image/MclubLogo.png")}
+          />
+        </TouchableOpacity>
+      </ImageBackground>
     );
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior="height"
-      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
-    >
-      <View style={styles.container}>
-        {header()}
-        <InformationPage style={styles.information} />
-      </View>
-    </KeyboardAvoidingView>
+    <View style={styles.container}>
+      {header()}
+      <InformationPage style={styles.information} />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     height: "100%",
+    backgroundColor: "#fff",
   },
   header: {
-    height: scale(300),
-  },
-  elOneHeader: {
-    height: scale(220),
-    backgroundColor: color.background,
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   elTwoHeader: {
-    width: scale(164),
-    height: scale(164),
+    width: scale(400),
+    height: scale(390),
+    position: "absolute",
+    right: scale(-120),
+    bottom: scale(-180),
+    paddingRight: scale(50),
+    paddingBottom: scale(150),
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: scale(82),
-    borderWidth: scale(4),
-    borderColor: color.fontColor,
+    borderRadius: scale(200),
     backgroundColor: "#fff",
   },
   logo: {
-    width: scale(160),
-    height: scale(160),
+    width: scale(300),
+    height: scale(300),
     resizeMode: "contain",
   },
   information: {
-    margin: scale(60),
+    marginTop: space.componentMargin,
   },
 });
 

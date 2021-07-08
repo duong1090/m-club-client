@@ -10,7 +10,7 @@ import { ONE_SIGNAL_APP_ID } from "../constant/release";
 
 //#region Register Screen ------------------------------------------------------------------------------------------------
 
-let pendingNotification = null;
+global.pendingNotification = null;
 
 export const registerLazyScreen = () => {
   Navigation.registerComponent(
@@ -144,10 +144,11 @@ Navigation.events().registerComponentDidAppearListener(
     setCurrentScreen(componentId, componentName, passProps);
 
     //if pendingNotification != null open pending notification
-    //then set reset to null
-    if (pendingNotification) {
-      processOpenNotification(pendingNotification);
-      pendingNotification = null;
+
+    if (componentName == screens.TAB_NAVIGATE && global.pendingNotification) {
+      console.log("pendingNotification::::", global.pendingNotification);
+      processOpenNotification(global.pendingNotification);
+      // global.pendingNotification = null;
     }
   }
 );
@@ -157,6 +158,7 @@ const processOpenNotification = (passData) => {
     data: { id: passData.id ? passData.id : null },
     mode: passData.id ? "detail" : "list",
   });
+  if (global.pendingNotification) global.pendingNotification = null;
 };
 
 const configOneSignal = () => {
@@ -182,7 +184,10 @@ const configOneSignal = () => {
     const { additionalData } = openResult.notification.payload;
 
     if (isAppInFocus) processOpenNotification(additionalData);
-    else pendingNotification = additionalData;
+    else {
+      console.log("onOpened:::Ne", pendingNotification, additionalData);
+      pendingNotification = additionalData;
+    }
 
     console.log("OneSignal:::: onOpened");
     console.log("Message: ", openResult.notification.payload.body);
@@ -200,7 +205,7 @@ const configOneSignal = () => {
 
   // OneSignal.inFocusDisplaying(2); // Controls what should happen if a notification is received while the app is open. 2 means that the notification will go directly to the device's notification center.
   const log = OneSignal.init(ONE_SIGNAL_APP_ID, {
-    kOSSettingsKeyAutoPrompt: false,
+    kOSSettingsKeyAutoPrompt: true,
     kOSSettingsKeyInAppLaunchURL: false,
     kOSSettingsKeyInFocusDisplayOption: 2,
   });

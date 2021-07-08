@@ -7,7 +7,6 @@ import {
   fontSize,
   shadow,
   space,
-  
 } from "container/variables/common";
 import Avatar from "container/component/ui/avatar";
 import Messages from "container/translation/Message";
@@ -51,19 +50,7 @@ const FundDetail = (props, ref) => {
   console.log("detail:::fund", intl);
 
   return (
-    <ModalPopUp
-      title="Chi tiết"
-      visible={visible}
-      transparent
-      animationType="fade"
-      maskClose={() => {
-        setVisible(false);
-      }}
-      onClose={() => {
-        setVisible(false);
-      }}
-      width="90%"
-    >
+    <ModalPopUp title="Chi tiết" isVisible={visible} onClose={() => hide()}>
       {data ? (
         <View style={styles.container}>
           <View style={styles.itemBox}>
@@ -133,12 +120,9 @@ const styles = StyleSheet.create({
     paddingBottom: scale(10),
   },
   itemTitle: {
-    
     fontWeight: "bold",
   },
-  itemText: {
-    
-  },
+  itemText: {},
   avatarBox: {
     flexDirection: "row",
     height: "100%",
@@ -147,7 +131,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   memberName: {
-    
     maxWidth: "75%",
     marginRight: space.itemMargin,
   },

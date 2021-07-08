@@ -47,7 +47,10 @@ const SimpleRecord = (props) => {
             onPress={() => backButton.onPress()}
             style={styles.backButton}
           >
-            <Icon name="chevron-back" style={styles.backIcon} />
+            <Icon
+              name="chevron-back"
+              style={[styles.backIcon, { fontSize: scale(40) }]}
+            />
             <Text style={styles.backText}>{backButton.title}</Text>
           </TouchableOpacity>
         ) : null}
@@ -71,7 +74,7 @@ const SimpleRecord = (props) => {
             </Text>
           ) : mode === "create" ? (
             <Text style={styles.titleSymbol}>
-              {intl.formatMessage(Messages.create)}
+              {intl.formatMessage(Messages.add)}
             </Text>
           ) : null}
         </View>
@@ -158,13 +161,12 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   backText: {
-    
-    fontSize: fontSize.size26,
+    fontSize: fontSize.size28,
     color: "#fff",
     marginLeft: scale(5),
   },
   backIcon: {
-    fontSize: scale(25),
+    fontSize: scale(30),
     color: "#fff",
   },
   actionBox: {

@@ -1,13 +1,15 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import PropTypes from "prop-types";
 import {
-  scale,
-  space,
-  
-  fontSize,
-  color,
-} from "container/variables/common";
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import PropTypes from "prop-types";
+import { scale, space, fontSize, color } from "container/variables/common";
+
+const DISMISS_MODAL_DELAY = 200;
 
 const ActionSheet = (props) => {
   //props
@@ -22,7 +24,9 @@ const ActionSheet = (props) => {
           onPress={
             item.onPress
               ? () => {
-                  item.onPress();
+                  if (Platform.OS == "ios")
+                    setTimeout(() => item.onPress(), DISMISS_MODAL_DELAY);
+                  else if (Platform.OS == "android") item.onPress();
                   hide();
                 }
               : () => hide()
@@ -55,7 +59,6 @@ const styles = StyleSheet.create({
     if (type == "danger") textColor = color.danger;
 
     return {
-      
       color: textColor,
     };
   },

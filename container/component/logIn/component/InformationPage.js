@@ -1,23 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { injectIntl } from "react-intl";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Tabs, Tab, ScrollableTab } from "native-base";
 import Messages from "container/translation/Message";
-import {
-  scale,
-  color,
-  fontSize,
-  space,
-  
-} from "container/variables/common";
+import { scale, color, fontSize, space } from "container/variables/common";
 import InputPhone from "./InputPhone";
 import SelectClub from "./SelectClub";
 import InputOTP from "./InputOTP";
-import {
-  clubListState,
-  certificateState,
-  activeTabState,
-} from "../recoil";
+import { clubListState, certificateState, activeTabState } from "../recoil";
 import { useRecoilValue, useRecoilState } from "recoil";
 import Toast from "react-native-simple-toast";
 
@@ -90,9 +80,7 @@ const InformationPage = (props) => {
 
   return (
     <View style={[style, styles.container]}>
-      <Text onPress={() => doByPass()} style={styles.welcome}>
-        {intl.formatMessage(Messages.welcome_to_mclub)}
-      </Text>
+      <TouchableOpacity style={styles.viewByPass} onPress={() => doByPass()} />
       {renderTabs()}
     </View>
   );
@@ -104,21 +92,24 @@ const styles = StyleSheet.create({
   },
   inputPhone: {
     flex: 1,
-  },
-  welcome: {
-    
-    fontSize: fontSize.size40,
-    color: color.fontColor,
-    fontWeight: "bold",
-    textAlign: 'center',
-    marginBottom: space.componentMargin,
-    alignSelf: "center",
+    margin: space.componentMargin,
+    marginTop: 0,
   },
   selectClub: {
     flex: 1,
   },
   inputOTP: {
     flex: 1,
+    margin: space.componentMargin,
+    marginTop: 0,
+  },
+  viewByPass: {
+    width: scale(200),
+    height: scale(200),
+    position: "absolute",
+    top: scale(-230),
+    left: 0,
+    right: 0,
   },
 });
 

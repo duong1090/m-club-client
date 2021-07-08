@@ -52,8 +52,6 @@ import Attendance from "./attendance";
 import { QR_EVENT } from "../../../../constant/qrdecode";
 import QRCode from "react-native-qrcode-svg";
 
-const intl = getIntl();
-
 const Detail = (props, ref) => {
   //props
   //state
@@ -63,6 +61,7 @@ const Detail = (props, ref) => {
   const [list, setList] = useRecoilState(listEventState);
 
   //variables
+  const intl = getIntl();
   const { member: currMember } = global.organization || {};
   const inputRef = {
     name: useRef(null),
@@ -135,12 +134,11 @@ const Detail = (props, ref) => {
   const addImage = (images) => {
     const params = new FormData();
     if (data.id) params.append("id", data.id);
-    if (images && images.length) {
+    if (images && images.length)
       images.map((img, index) => {
         params.append(`images[${index}]`, img.data);
       });
-      params.append("count", images.length);
-    }
+
     postRequest("event/add-image", params).then((res) => {
       if (res && res.data) callBackUpdate(res.data);
     });
@@ -232,9 +230,7 @@ const Detail = (props, ref) => {
 
   const renderImage = () => {
     const images = data.image_paths
-      ? data.image_paths.map((item) =>
-          Config().API_IMAGE.concat(`event/${item}.jpg`)
-        )
+      ? data.image_paths.map((item) => Config().API_IMAGE(`event/${item}.jpg`))
       : null;
 
     return (
@@ -678,6 +674,7 @@ const styles = StyleSheet.create({
   },
   actionText: (disabled) => ({
     color: disabled ? color.disable : color.text,
+    fontSize: fontSize.size28,
   }),
   infoBox: {
     flexDirection: "row",

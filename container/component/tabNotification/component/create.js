@@ -30,7 +30,6 @@ const DEFAULT_VALUE = {
 const DUE_DATE_FORMAT = "YYYY-MM-DD ";
 const DUE_TIME_FORMAT = "HH:mm:ss";
 const ICON_SIZE = scale(60);
-const intl = getIntl();
 
 const CreateNotification = (props, ref) => {
   //state
@@ -44,6 +43,7 @@ const CreateNotification = (props, ref) => {
   const { showSpinner, hideSpinner } = useContext(ModalContext);
 
   //variables
+  const intl = getIntl();
   const dueDateColor =
     dueDate ||
     (dueTime && moment(dueDate, DUE_DATE_FORMAT).isBefore(new Date()))
@@ -192,7 +192,7 @@ const CreateNotification = (props, ref) => {
         />
         <View style={{ marginLeft: scale(15) }}>
           <Text style={{ fontSize: fontSize.size26 }}>
-            {intl.formatMessage(Messages.due_time)}
+            {intl.formatMessage(Messages.time)}
           </Text>
           {dueTime ? (
             <Text
@@ -234,7 +234,7 @@ const CreateNotification = (props, ref) => {
         />
         <View style={{ marginLeft: scale(15) }}>
           <Text style={{ fontSize: fontSize.size26 }}>
-            {intl.formatMessage(Messages.due_date)}
+            {intl.formatMessage(Messages.date)}
           </Text>
           {dueDate ? (
             <Text
@@ -342,7 +342,7 @@ const CreateNotification = (props, ref) => {
       toolbar={() => (
         <TouchableOpacity onPress={() => create()} style={styles.createButton}>
           <Text style={styles.textCreateButton}>
-            {intl.formatMessage(Messages.create)}
+            {intl.formatMessage(Messages.add)}
           </Text>
         </TouchableOpacity>
       )}

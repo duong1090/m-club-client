@@ -12,14 +12,9 @@ import {
   Platform,
   Text,
   TouchableOpacity,
+  Keyboard,
 } from "react-native";
-import {
-  color,
-  scale,
-  fontSize,
-  
-  space,
-} from "container/variables/common";
+import { color, scale, fontSize, space } from "container/variables/common";
 import Messages from "container/translation/Message";
 import { injectIntl } from "react-intl";
 import { Icon, Textarea } from "native-base";
@@ -68,6 +63,10 @@ const InputItem = (props, ref) => {
     return str.replace(/\u0020/, "\u00a0");
   };
 
+  const hideKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   const onChange = (text) => {
     if (keyboardType === "numeric" || keyboardType === "decimal-pad") {
       let last = text.length - 1;
@@ -107,7 +106,6 @@ const InputItem = (props, ref) => {
         {placeholder ? (
           <Text
             style={{
-              
               fontSize: fontSize.size28,
               color: color.fontColor,
               marginRight: scale(15),
@@ -189,16 +187,12 @@ const InputItem = (props, ref) => {
       >
         <View style={[styles.wrapButton, inputStyle]}>
           {transformValue ? (
-            <Text
-              numberOfLines={1}
-              ellipsizeMode={"tail"}
-            >
+            <Text numberOfLines={1} ellipsizeMode={"tail"}>
               {transformValue}
             </Text>
           ) : (
             <Text
               style={{
-                
                 fontSize: fontSize.size28,
                 color: color.hint,
               }}
@@ -229,16 +223,12 @@ const InputItem = (props, ref) => {
         onPress={() => setVisible(true)}
       >
         {value ? (
-          <Text
-            numberOfLines={1}
-            ellipsizeMode={"tail"}
-          >
+          <Text numberOfLines={1} ellipsizeMode={"tail"}>
             {value}
           </Text>
         ) : (
           <Text
             style={{
-              
               fontSize: fontSize.size28,
               color: color.hint,
             }}
@@ -331,7 +321,6 @@ const styles = StyleSheet.create({
     return style;
   },
   textInput: {
-    
     flex: 1,
     fontSize: fontSize.size28,
     color: color.text,
@@ -339,7 +328,6 @@ const styles = StyleSheet.create({
   },
 
   otpInput: {
-    
     width: "80%",
     fontSize: fontSize.size28,
     color: "#000",
@@ -358,7 +346,6 @@ const styles = StyleSheet.create({
   },
 
   textLabel: {
-    
     fontSize: fontSize.size28,
     fontWeight: "bold",
     marginLeft: scale(30),
@@ -382,14 +369,12 @@ const styles = StyleSheet.create({
     marginLeft: scale(10),
   },
   textAreaInput: {
-    
     fontSize: fontSize.size28,
     paddingLeft: 0,
     paddingRight: 0,
     color: color.text,
   },
   textNote: {
-    
     fontSize: fontSize.size26,
     color: color.grey,
     fontStyle: "italic",

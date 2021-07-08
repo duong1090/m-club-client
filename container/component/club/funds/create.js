@@ -154,7 +154,7 @@ const CreateFund = (props, ref) => {
           placeholder={intl.formatMessage(Messages.purpose_fund)}
           style={{
             flex: 1,
-            marginTop: scale(15),
+            marginTop: scale(60),
             paddingLeft: 0,
           }}
         />
@@ -166,7 +166,7 @@ const CreateFund = (props, ref) => {
     <BottomPopUp
       ref={bottomPopUpRef}
       body={
-        <View style={{ height: scale(500), marginBottom: scale(30) }}>
+        <View style={{ height: scale(800), marginVertical: scale(30) }}>
           <View
             style={{
               flexDirection: "row",

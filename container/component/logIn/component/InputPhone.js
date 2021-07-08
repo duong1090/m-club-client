@@ -6,22 +6,18 @@ import {
   StyleSheet,
   Text,
   View,
+  Keyboard,
 } from "react-native";
 import { useSetRecoilState } from "recoil";
-import {
-  scale,
-  color,
-  space,
-  fontSize,
-  
-} from "container/variables/common";
+import { scale, color, space, fontSize } from "container/variables/common";
 import Messages from "container/translation/Message";
 import InputItem from "container/component/ui/inputItem";
 import { clubListState, certificateState } from "../recoil";
 import { gotoRoute } from "container/utils/router";
 import { screens } from "container/constant/screen";
-import ModalContext from 'container/context/modal';
-import {preValidateLogin} from 'container/action/user';
+import ModalContext from "container/context/modal";
+import { preValidateLogin } from "container/action/user";
+import { KeyboardAwareScrollView } from "@codler/react-native-keyboard-aware-scroll-view";
 
 const InputPhone = (props) => {
   const { intl, style } = props;
@@ -37,6 +33,8 @@ const InputPhone = (props) => {
     let payload = {
       phone,
     };
+
+    Keyboard.dismiss();
 
     showSpinner();
     preValidateLogin(payload)
@@ -55,57 +53,56 @@ const InputPhone = (props) => {
   };
 
   return (
-    <Animated.View style={style}>
-      <InputItem
-        style={styles.input}
-        keyboardType="numeric"
-        placeholder={intl.formatMessage(Messages.phone)}
-        onChangeText={(text) => setPhone(text)}
-        value={phone ? phone : null}
-      />
+    <KeyboardAwareScrollView>
+      <Animated.View style={style}>
+        <InputItem
+          style={styles.input}
+          keyboardType="numeric"
+          placeholder={intl.formatMessage(Messages.phone)}
+          onChangeText={(text) => setPhone(text)}
+          value={phone ? phone : null}
+        />
 
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: color.background }]}
-        onPress={() => checkLogin()}
-      >
-        <Text
-          style={{  color: "#fff", fontSize: fontSize.size28 }}
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: color.background }]}
+          onPress={() => checkLogin()}
         >
-          {intl.formatMessage(Messages.sign_in)}
-        </Text>
-      </TouchableOpacity>
+          <Text style={{ color: "#fff", fontSize: fontSize.size28 }}>
+            {intl.formatMessage(Messages.sign_in)}
+          </Text>
+        </TouchableOpacity>
 
-      <View style={styles.signUp}>
-        <Text
-          style={{
-            
-            color: color.fontColor,
-            fontSize: fontSize.size28,
-            fontWeight: "bold",
-          }}
-        >
-          {intl.formatMessage(Messages.new_here)}{" "}
-        </Text>
-        <TouchableOpacity onPress={() => gotoSignUp()}>
+        <View style={styles.signUp}>
           <Text
             style={{
-              
-              color: color.background,
+              color: color.fontColor,
               fontSize: fontSize.size28,
               fontWeight: "bold",
             }}
           >
-            {intl.formatMessage(Messages.sign_up_now)}
+            {intl.formatMessage(Messages.new_here)}{" "}
           </Text>
-        </TouchableOpacity>
-      </View>
-    </Animated.View>
+          <TouchableOpacity onPress={() => gotoSignUp()}>
+            <Text
+              style={{
+                color: color.background,
+                fontSize: fontSize.size28,
+                fontWeight: "bold",
+              }}
+            >
+              {intl.formatMessage(Messages.sign_up_now)}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Animated.View>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   input: {
-    marginVertical: scale(60),
+    marginTop: scale(30),
+    marginBottom: scale(60),
   },
   button: {
     flexDirection: "row",

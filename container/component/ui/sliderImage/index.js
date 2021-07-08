@@ -73,7 +73,6 @@ const SliderImage = (props) => {
     <View style={styles.container}>
       {images ? (
         <Tabs
-          locked
           initialPage={0}
           page={currImage}
           prerenderingSiblingsNumber={Infinity}

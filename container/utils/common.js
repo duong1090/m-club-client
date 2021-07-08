@@ -72,9 +72,7 @@ export const buildDeviceInfo = async () => {
   }
 };
 
-export const setIntl = async () => {
-  const lang = await getItem(LANG);
-  console.log("setIntl::::", lang);
+export const setIntl = async (lang) => {
   const intl = createIntl(
     {
       locale: lang ? lang : "en",
@@ -99,4 +97,29 @@ export const getIntl = () => {
     );
   }
   return global.intl;
+};
+
+export const formatCode = (str = "") => {
+  if (!str) {
+    return "";
+  }
+  if (typeof str !== "string") {
+    return "";
+  }
+  return unsignedString(str.toUpperCase().replace(/\s/g, "_")).replace(
+    /[^A-Z0-9_]/g,
+    ""
+  );
+};
+
+export const unsignedString = (string) => {
+  const signedChars =
+    "àảãáạăằẳẵắặâầẩẫấậđèẻẽéẹêềểễếệìỉĩíịòỏõóọôồổỗốộơờởỡớợùủũúụưừửữứựỳỷỹýỵÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬĐÈẺẼÉẸÊỀỂỄẾỆÌỈĨÍỊÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢÙỦŨÚỤƯỪỬỮỨỰỲỶỸÝỴ";
+  const unsignedChars =
+    "aaaaaaaaaaaaaaaaadeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyyAAAAAAAAAAAAAAAAADEEEEEEEEEEEIIIIIOOOOOOOOOOOOOOOOOUUUUUUUUUUUYYYYY";
+  const pattern = new RegExp(`[${signedChars}]`, "g");
+  const output = string.replace(pattern, (m, key, value) =>
+    unsignedChars.charAt(signedChars.indexOf(m))
+  );
+  return output;
 };

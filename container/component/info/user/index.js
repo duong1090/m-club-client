@@ -12,7 +12,6 @@ import {
   color,
   space,
   shadow,
-  
   fontSize,
 } from "container/variables/common";
 import { injectIntl } from "react-intl";
@@ -184,11 +183,16 @@ const UserInfo = (props) => {
   };
 
   const selectPhoto = () => {
+    console.log("selectPhoto:::");
     ImagePicker.openPicker({
       includeBase64: true,
-    }).then((image) => {
-      if (image) updateAvatar(image);
-    });
+    })
+      .then((image) => {
+        if (image) updateAvatar(image);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const updateAvatar = (image) => {
@@ -301,16 +305,9 @@ const UserInfo = (props) => {
       </TouchableOpacity>
       <ModalPopUp
         title={intl.formatMessage(Messages.your_qr_code)}
-        visible={qrVisible}
-        transparent
-        animationType="fade"
-        width="90%"
-        maskClose={() => {
-          setQRVisible(false);
-        }}
-        onClose={() => {
-          setQRVisible(false);
-        }}
+        isVisible={qrVisible}
+        onClose={() => setQRVisible(false)}
+        coverScreen={true}
       >
         <View style={styles.qrBox}>
           <QRCode value={`${QR_MEMBER},${member.id}`} size={scale(400)} />
@@ -356,20 +353,15 @@ const styles = StyleSheet.create({
     fontSize: scale(60),
   },
   doneBox: {
-    paddingVertical: scale(15),
+    paddingVertical: scale(20),
     paddingHorizontal: scale(20),
-    backgroundColor: color.warning,
-    borderRadius: scale(40),
+    backgroundColor: color.success,
+    borderRadius: space.border,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "flex-end",
-    ...shadow,
   },
   titleSymbol: {
-    
     color: "#fff",
-    fontSize: fontSize.sizeBigContent,
-    fontWeight: "bold",
   },
   qrBox: {
     justifyContent: "center",

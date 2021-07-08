@@ -17,7 +17,6 @@ import DatePicker from "react-native-date-picker";
 import { getIntl } from "container/utils/common";
 import Messages from "container/translation/Message";
 const { height } = Dimensions.get("window");
-const intl = getIntl();
 
 const TIME_FORMAT = "HH:mm:ss";
 const DATE_FORMAT = "YYYY-MM-DD";
@@ -28,6 +27,8 @@ const DateType = (props, ref) => {
 
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(new Date());
+
+  const intl = getIntl();
 
   //hooks
   useImperativeHandle(ref, () => ({

@@ -30,8 +30,8 @@ export const styles = StyleSheet.create({
 
     switch (type) {
       case "task":
-        if (options && options.noti_action)
-          backgroundColor = color[options.noti_action];
+        if (options && options.noti_color)
+          backgroundColor = color.notification[options.noti_color];
         break;
     }
 
@@ -82,7 +82,6 @@ export const styles = StyleSheet.create({
     alignItems: "flex-start",
     padding: space.bgPadding,
     paddingVertical: space.bgPadding / 2,
-    marginBottom: scale(20),
     borderBottomWidth: scale(2),
     borderColor: color.lightGrey,
   },

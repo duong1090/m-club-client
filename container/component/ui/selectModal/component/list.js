@@ -95,6 +95,8 @@ const List = (props, ref) => {
   };
 
   const checkOneItem = (item) => {
+    console.log("checkOneItem:::", item);
+
     setSelectedData([item]);
   };
 
@@ -144,15 +146,23 @@ const List = (props, ref) => {
 
     const label = item.title ? item.title : item.name ? item.name : "";
 
+    console.log("renderItem:::", checked, item, label);
+
     return (
-      <View style={styles.listItem(index)}>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        onPress={() =>
+          multiSelect ? checkMultiItem(item) : checkOneItem(item)
+        }
+        style={styles.listItem(index)}
+      >
         {multiSelect ? (
           <CheckBox
             disabled={false}
             value={checked}
             boxType="square"
             lineWidth={1}
-            onChange={() => checkMultiItem(item)}
+            // onChange={() => checkMultiItem(item)}
             tintColors={{ true: color.done }}
             style={{ width: scale(40), height: scale(40) }}
           />
@@ -170,7 +180,7 @@ const List = (props, ref) => {
             />
           ) : null}
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 

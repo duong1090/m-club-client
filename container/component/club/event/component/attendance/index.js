@@ -16,18 +16,15 @@ import { currEventState, listEventState } from "../../recoil";
 import update from "immutability-helper";
 import { elevation } from "../../../../../constant/screen";
 import { useRecoilState } from "recoil";
-import LinearGradient from "react-native-linear-gradient";
-import MaskedView from "@react-native-masked-view/masked-view";
+import { QR_MEMBER } from "../../../../../constant/qrdecode";
+import { getIntl } from "../../../../../utils/common";
+import Messages from "../../../../../translation/Message";
+import Toast from "react-native-simple-toast";
 
-import {
-  scale,
-  
-  space,
-  fontSize,
-  shadow,
-} from "container/variables/common";
+import { scale, space, fontSize, shadow } from "container/variables/common";
 import { Icon } from "native-base";
 import { isIphoneX } from "../../../../../variables/common";
+import FadedWrapper from "../../../../ui/fadedWrapper";
 
 const MONGO_ID_LENGTH = 24;
 
@@ -37,6 +34,9 @@ const Attendance = (props, ref) => {
   const [visible, setVisible] = useState(false);
   const [currEvent, setCurrEvent] = useRecoilState(currEventState);
   const [listEvent, setListEvent] = useRecoilState(listEventState);
+
+  //variables
+  const intl = getIntl();
 
   //hooks
   useImperativeHandle(ref, () => ({
@@ -54,12 +54,13 @@ const Attendance = (props, ref) => {
   };
 
   const onRead = (data) => {
-    const splitData = data && data.data ? data.data.split(",") : [];
+    const splitData = data ? data.split(",") : [];
+    console.log("onRead:::", data, splitData);
 
     if (splitData[0] == QR_MEMBER) {
       const memberId = splitData[1] || "nothing";
 
-      if (memberId && memberId == MONGO_ID_LENGTH)
+      if (memberId && memberId.length == MONGO_ID_LENGTH)
         postRequest("event/attendance", {
           event_id: currEvent.id,
           member_id: memberId,
@@ -68,7 +69,9 @@ const Attendance = (props, ref) => {
             if (res && res.data) {
               setCurrEvent(
                 update(currEvent, {
-                  attendanced_members: { $unshift: [res.data] },
+                  attendanced_members: {
+                    $unshift: [res.data],
+                  },
                 })
               );
               setListEvent(
@@ -77,6 +80,11 @@ const Attendance = (props, ref) => {
                     attendanced_members: { $unshift: [res.data] },
                   },
                 })
+              );
+            } else {
+              Toast.show(
+                intl.formatMessage(Messages.already_check_in),
+                Toast.LONG
               );
             }
           })
@@ -87,6 +95,27 @@ const Attendance = (props, ref) => {
   };
 
   //render ------------------------------------------------------------------------------------------
+  const renderHeader = () => {
+    return (
+      <View style={styles.headerBox}>
+        <View style={styles.headerTextBox}>
+          <Text style={styles.textName}>{currEvent.name}</Text>
+        </View>
+        <View style={[styles.headerTextBox, { flexDirection: "column" }]}>
+          <Text style={styles.textTotalName}>
+            {intl.formatMessage(Messages.attended)}{" "}
+          </Text>
+          <Text style={styles.textTotal}>
+            {currEvent.attendanced_members &&
+            currEvent.attendanced_members.length != null
+              ? currEvent.attendanced_members.length
+              : 0}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
   const renderControl = () => {
     return (
       <View style={styles.controlBox}>
@@ -116,15 +145,7 @@ const Attendance = (props, ref) => {
   const renderList = () => {
     return (
       <View style={styles.listBox}>
-        <MaskedView
-          style={{ flex: 1 }}
-          maskElement={
-            <LinearGradient
-              colors={["#FFFFFF00", "#FFFFFF", "#FFFFFF00"]}
-              style={styles.linearView}
-            />
-          }
-        >
+        <FadedWrapper>
           <FlatList
             data={currEvent.attendanced_members}
             contentContainerStyle={{
@@ -134,7 +155,7 @@ const Attendance = (props, ref) => {
             renderItem={({ item }) => renderItem(item)}
             showsVerticalScrollIndicator={false}
           />
-        </MaskedView>
+        </FadedWrapper>
       </View>
     );
   };
@@ -145,19 +166,6 @@ const Attendance = (props, ref) => {
         <Avatar size={scale(50)} data={item} noShadow />
         <Text numberOfLines={1} style={styles.textItem}>
           {item.name}
-        </Text>
-      </View>
-    );
-  };
-
-  const renderTotal = () => {
-    return (
-      <View style={styles.totalBox}>
-        <Text style={styles.textTotal}>
-          {currEvent.attendanced_members &&
-          currEvent.attendanced_members.length != null
-            ? currEvent.attendanced_members.length
-            : 0}
         </Text>
       </View>
     );
@@ -175,8 +183,9 @@ const Attendance = (props, ref) => {
     >
       <SafeAreaView style={styles.container}>
         {renderScanner()}
+        {renderHeader()}
         {renderList()}
-        {renderTotal()}
+        {/* {renderTotal()} */}
         {renderControl()}
       </SafeAreaView>
     </Modal>
@@ -203,7 +212,6 @@ const styles = StyleSheet.create({
     borderRadius: space.border,
   },
   textItem: {
-    
     marginLeft: scale(10),
     color: "#fff",
   },
@@ -221,25 +229,14 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
   },
-  linearView: {
-    flex: 1,
-    width: "100%",
-    borderRadius: 5,
-  },
-  totalBox: {
-    position: "absolute",
-    right: space.componentMargin,
-    bottom: isIphoneX ? scale(110) : space.componentMargin,
-    backgroundColor: "#00000055",
-    padding: space.componentMargin,
-    paddingVertical: scale(5),
-    borderRadius: space.border,
-  },
   textTotal: {
-    
     color: "#fff",
+    fontSize: scale(100),
+  },
+  textTotalName: {
+    color: "#ccc",
     fontWeight: "bold",
-    fontSize: fontSize.sizeContent,
+    fontSize: fontSize.size30,
   },
   controlBox: {
     flexDirection: "row",
@@ -262,6 +259,24 @@ const styles = StyleSheet.create({
   controlIcon: {
     fontSize: scale(30),
     marginRight: scale(5),
+  },
+  headerBox: {
+    position: "absolute",
+    top: scale(100),
+    left: 0,
+    right: 0,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  headerTextBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: space.componentMargin,
+  },
+  textName: {
+    color: "#fff",
+    fontSize: fontSize.size50,
+    fontWeight: "bold",
   },
 });
 

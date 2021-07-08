@@ -52,6 +52,8 @@ const NotificationList = (props) => {
   }, []);
 
   useEffect(() => {
+    console.log("useEffect:::", props);
+
     if (props.mode == "detail" && props.data)
       detailRef.current && detailRef.current.show(props.data);
   }, [props.mode]);
@@ -190,7 +192,7 @@ const NotificationList = (props) => {
             />
             <View
               style={styles.avatarIconBox("task", {
-                noti_action: item.noti_action,
+                noti_color: item.noti_color,
               })}
             >
               <ImageBackground
@@ -223,7 +225,7 @@ const NotificationList = (props) => {
         contentContainerStyle={styles.listContainer}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => renderItem(item, index)}
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={0.8}
         onEndReached={loadMore}
         refreshing={refresh}
         onRefresh={handleRefresh}
@@ -232,7 +234,7 @@ const NotificationList = (props) => {
       />
       <PrivilegeAction privilegeKey={normalRole.NOTI_CREATE}>
         <ActionButton
-          title={intl.formatMessage(Messages.create)}
+          title={intl.formatMessage(Messages.add)}
           style={styles.actionButtonBox}
           icon={
             <Icon name="plus" type="Entypo" style={styles.actionButtonIcon} />

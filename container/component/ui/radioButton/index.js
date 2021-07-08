@@ -19,7 +19,7 @@ const RadioButton = (props) => {
         style={{
           height: scale(40),
           width: scale(40),
-          borderColor: props.selected ? color.done : color.grey,
+          borderColor: props.selected ? color.blue : color.grey,
           borderRadius: scale(20),
           borderWidth: 1,
           justifyContent: "center",
@@ -35,7 +35,7 @@ const RadioButton = (props) => {
               height: scale(22),
               width: scale(22),
               borderRadius: scale(11),
-              backgroundColor: color.done,
+              backgroundColor: color.blue,
             }}
           />
         ) : null}

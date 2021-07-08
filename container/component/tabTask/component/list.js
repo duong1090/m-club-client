@@ -87,8 +87,8 @@ const ListTask = (props) => {
     setData(temp);
   };
 
-  const gotoDetail = async (item, index) => {
-    setCurrTask({ ...item, index });
+  const gotoDetail = async (item) => {
+    setCurrTask(item);
     openDetail && openDetail(item);
   };
 
@@ -225,7 +225,7 @@ const ListTask = (props) => {
   };
 
   const onRefresh = () => {
-    console.log('onRefresh:::')
+    console.log("onRefresh:::");
     doFilter();
   };
 
@@ -531,21 +531,17 @@ const ListTask = (props) => {
   };
 
   const renderEntityTab = (tab, indexTab) => {
+    const isActive = activeTab != indexTab;
+
     const heading = (
       <View
         style={[
           styles.headingBox,
-          activeTab != indexTab ? { backgroundColor: color.lightGrey } : null,
+          isActive
+            ? { backgroundColor: color.lightGreyPlus }
+            : { backgroundColor: color.backgroundColor },
         ]}
       >
-        <Text
-          style={{
-            fontWeight: "bold",
-            textAlign: "center",
-          }}
-        >
-          {intl.formatMessage(Messages[tab.name])}
-        </Text>
         {tab.data && tab.data.length > 0 ? (
           <View style={styles.dot}>
             <Text
@@ -559,6 +555,20 @@ const ListTask = (props) => {
             </Text>
           </View>
         ) : null}
+        <Text
+          style={[
+            {
+              textAlign: "center",
+            },
+            isActive
+              ? {
+                  color: color.grey,
+                }
+              : null,
+          ]}
+        >
+          {intl.formatMessage(Messages[tab.name])}
+        </Text>
       </View>
     );
     return (
@@ -568,7 +578,7 @@ const ListTask = (props) => {
             data={tab.data}
             style={{ marginTop: scale(20), backgroundColor: "#fff" }}
             contentContainerStyle={{ paddingBottom: scale(80) }}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item, index) => item.id}
             renderItem={({ item, index }) =>
               renderItemTask(item, index, indexTab)
             }
@@ -585,9 +595,9 @@ const ListTask = (props) => {
     return (
       <Tabs
         onChangeTab={(event) => setActiveTab(event.i)}
-        locked
         renderTabBar={() => <ScrollableTab style={styles.tabWrapper} />}
         tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
+        prerenderingSiblingsNumber={Infinity}
       >
         {data.map((item, index) => renderEntityTab(item, index))}
       </Tabs>

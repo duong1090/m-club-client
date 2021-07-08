@@ -1,7 +1,7 @@
-import { API_TOKEN, IS_RECENT_TIME } from "container/constant/storage";
-import { gotoLogin, gotoHome, gotoRoute } from "container/utils/router";
+import { API_TOKEN } from "container/constant/storage";
+import { gotoLogin, gotoHome } from "container/utils/router";
 import { setIntl } from "container/utils/common";
-import { getOrganization, logOut } from "./user";
+import { checkPlayServicesAdvanced, getOrganization, logOut } from "./user";
 import { getNumberOfNotification } from "./application";
 import { ORGANIZATION, LANG } from "container/constant/storage";
 import { setItem, getItem } from "container/utils/storage";
@@ -22,8 +22,10 @@ const TAG_ONE_SIGNAL = [
 ];
 
 export const loadInitialStatus = async () => {
-  const apiToken = await getItem(API_TOKEN);
+  //check Google Play Services
+  checkPlayServicesAdvanced();
 
+  const apiToken = await getItem(API_TOKEN);
   if (apiToken) {
     //loading organization when app start
     try {
@@ -41,14 +43,14 @@ export const loadInitialStatus = async () => {
           OneSignal.sendTags(tags);
         }
         //set language
-        if (org.lang) {
-          setItem(LANG, org.lang);
-          global.lang = org.lang;
+        if (org.member && org.member.lang) {
+          setItem(LANG, org.member.lang);
+          setIntl(org.member.lang);
+          global.lang = org.member.lang;
         } else {
           const tempLang = await getItem(LANG);
-          console.log("loadInitialStatus:::", tempLang);
-          if (tempLang) global.lang = tempLang;
-          else global.lang = "en";
+          setIntl(tempLang);
+          global.lang = tempLang;
         }
       } else {
         const tempOrg = await getItem(ORGANIZATION);
@@ -57,7 +59,6 @@ export const loadInitialStatus = async () => {
         if (tempLang) global.lang = tempLang;
       }
 
-      await setIntl();
       await gotoHome();
 
       const notiNumber = await getNumberOfNotification();

@@ -1,12 +1,6 @@
-import { API_URL } from "container/constant/storage";
-import { getItem } from "container/utils/storage";
+import moment from "moment";
+
 const server = "mclub.ga:8888";
-// const server = "113.172.236.109:1000";
-// const server = "10.0.2.2:8888"; //android emulator
-// const server = "localhost:8888"; //ios emulator
-// const server = "tanca.ddns.net:8887";
-//android emulator server
-//
 
 global.env = process.env.NODE_ENV;
 
@@ -20,7 +14,8 @@ const Config = () => {
 
   const development = {
     API_URL: `http://${server}/api/`,
-    API_IMAGE: `http://${server}/clubs/${clubId}/images/`,
+    API_IMAGE: (imgPath) =>
+      `http://${server}/clubs/${clubId}/images/${imgPath}?${moment().unix()}`,
   };
   return development;
 };

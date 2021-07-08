@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   FlatList,
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -34,8 +33,7 @@ import Config from "container/config/server.config";
 import ModalContext from "container/context/modal";
 import update from "immutability-helper";
 import EmptyData from "container/component/ui/emptyData";
-import { gotoRoute } from "../../../../utils/router";
-import { screens } from "container/constant/screen";
+import FastImage from "react-native-fast-image";
 
 const List = (props) => {
   const { intl } = props;
@@ -129,11 +127,9 @@ const List = (props) => {
         onPress={() => gotoDetail(item, index)}
       >
         {item.image_paths && item.image_paths.length ? (
-          <Image
+          <FastImage
             source={{
-              uri: Config().API_IMAGE.concat(
-                `event/${item.image_paths[0]}.jpg`
-              ),
+              uri: Config().API_IMAGE(`event/${item.image_paths[0]}.jpg`),
             }}
             style={styles.image}
           />
@@ -219,7 +215,7 @@ const List = (props) => {
         ListEmptyComponent={<EmptyData />}
       />
       <ActionButton
-        title={intl.formatMessage(Messages.create)}
+        title={intl.formatMessage(Messages.add)}
         style={styles.createBox}
         icon={<Icon name="plus" type="Entypo" style={styles.createIcon} />}
         onPress={() => openCreateEvent()}

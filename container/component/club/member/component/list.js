@@ -3,7 +3,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { listMemberState, currMemberState, currModeState } from "../recoil";
 import { View } from "react-native";
 import { Icon } from "native-base";
-import { scale } from "container/variables/common";
+import { scale, color } from "container/variables/common";
 import { getRequest } from "container/utils/request";
 import Config from "container/config/server.config";
 import SimpleList from "container/component/ui/simpleList";
@@ -109,7 +109,7 @@ const MemberList = (props) => {
           <Icon
             type="FontAwesome5"
             name="user"
-            style={{  fontSize: scale(30) }}
+            style={{ fontSize: scale(30), color: color.club.member }}
           />
         }
         loadMore={loadMore}

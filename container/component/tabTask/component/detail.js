@@ -18,8 +18,8 @@ import { styles, AVATAR_SIZE } from "../style/detail";
 import { Icon } from "native-base";
 import Avatar from "container/component/ui/avatar";
 import { getRequest, postRequest } from "container/utils/request";
-import { useRecoilState } from "recoil";
-import { listTaskState, currTaskState } from "../recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { currTaskState, listTaskState } from "../recoil";
 import ModalContext from "container/context/modal";
 import { highlighText } from "container/helper/format";
 import { getHumanDay } from "container/helper/time";
@@ -32,10 +32,11 @@ import ModalPopUp from "container/component/ui/modalPopUp";
 import CreateTask from "./create";
 import { scale, space } from "../../../variables/common";
 import { PRIORITY_LEVEL } from "container/constant/element";
-import { back } from "container/utils/router";
 import SelectModal from "container/component/ui/selectModal";
 import LabelSelectModal from "../ui/labelSelectModal";
 import Modal from "react-native-modal";
+import { Navigation } from "react-native-navigation";
+import { screens } from "../../../constant/screen";
 
 const UPDATE_API = {
   member: "task/update-assigned-member",
@@ -47,11 +48,9 @@ const UPDATE_API = {
 };
 const INDEX_LIST = { today: 0, future: 1, timed: 2, no_time: 3 };
 
-const intl = getIntl();
-
 const DetailTask = (props, ref) => {
   //props
-  const { style, setListTask, listTask } = props;
+  const { style } = props;
   //state
   const [visible, setVisible] = useState(false);
   const [name, setName] = useState(null);
@@ -69,7 +68,7 @@ const DetailTask = (props, ref) => {
   const [visibleNameIcon, setVisibleNameIcon] = useState(true);
   const [visibleDesIcon, setVisibleDesIcon] = useState(true);
   const [currTask, setCurrTask] = useRecoilState(currTaskState);
-  // const [listTask, setListTask] = useRecoilState(listTaskState);
+  const [listTask, setListTask] = useRecoilState(listTaskState);
 
   //context
   const { showSpinner, hideSpinner, showConfirmModal } = useContext(
@@ -77,6 +76,7 @@ const DetailTask = (props, ref) => {
   );
 
   //variables
+  const intl = getIntl();
   const createTaskRef = useRef(null);
   const nameInputRef = useRef(null);
   const desInputRef = useRef(null);
@@ -110,11 +110,15 @@ const DetailTask = (props, ref) => {
   //function - event ---------------------------------------------------------------------
   const show = (data) => {
     setVisible(true);
+    console.log("showDetailNe:::", data);
+
     if (data && data.id) setCurrTask(data);
   };
 
   const hide = () => {
     setVisible(false);
+    Navigation.updateProps(screens.TAB_TASK, { mode: "list" });
+    resetState();
   };
 
   const openCreatePopUp = () => {
@@ -134,6 +138,7 @@ const DetailTask = (props, ref) => {
     setVisibleTimePicker(false);
     setVisibleNameIcon(true);
     setVisibleDesIcon(true);
+    setCurrTask(null);
   };
 
   const getData = () => {
@@ -161,7 +166,6 @@ const DetailTask = (props, ref) => {
   };
 
   const updateTask = (field, extraParams) => {
-    console.log("updateTask:::", field, extraParams);
     showSpinner();
     let params = {};
     if (currTask && currTask.id) params.id = currTask.id;
@@ -172,20 +176,21 @@ const DetailTask = (props, ref) => {
       .then((res) => {
         if (res) {
           updateMethod[field](res.data);
+
           //update list
-          // let taskIndex = listTask[INDEX_LIST[currTask.group]].data.findIndex(
-          //   (item) => item.id == currTask.id
-          // );
-          console.log("updateTask::::", listTask);
-          setListTask &&
-            listTask &&
-            setListTask(
-              update(listTask, {
-                [INDEX_LIST[currTask.group]]: {
-                  data: { [currTask.index]: { [field]: { $set: res.data } } },
-                },
-              })
-            );
+          console.log("updateTask::::Ne", INDEX_LIST, currTask.group, listTask);
+          const currArrTask = listTask[INDEX_LIST[currTask.group]];
+          const currIndex = currArrTask.data.findIndex(
+            (i) => i.id == currTask.id
+          );
+
+          setListTask(
+            update(listTask, {
+              [INDEX_LIST[currTask.group]]: {
+                data: { [currIndex]: { [field]: { $set: res.data } } },
+              },
+            })
+          );
         }
         hideSpinner();
       })
@@ -228,8 +233,7 @@ const DetailTask = (props, ref) => {
       .then((res) => {
         if (res && res.data) {
           // changeMode && changeMode("list");
-          back();
-          resetState();
+          hide();
 
           //update list
           const currArrTask = listTask[INDEX_LIST[currTask.group]];
@@ -689,17 +693,10 @@ const DetailTask = (props, ref) => {
     return (
       <ModalPopUp
         title={intl.formatMessage(Messages.activity)}
-        visible={visibleActivity}
-        transparent
-        animationType="fade"
-        maskClose={() => {
-          setVisibleActivity(false);
-        }}
-        onClose={() => {
-          setVisibleActivity(false);
-        }}
-        width="90%"
-        height="80%"
+        isVisible={visibleActivity}
+        onClose={() => setVisibleActivity(false)}
+        height="70%"
+        coverScreen={true}
       >
         <View style={styles.activityModal}>
           <FlatList

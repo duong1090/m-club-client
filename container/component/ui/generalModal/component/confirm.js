@@ -21,7 +21,11 @@ const Confirm = (props) => {
   //render
 
   const renderTitle = () => {
-    return <Text style={styles.titleText}>{props.title}</Text>;
+    return (
+      <Text style={styles.titleText}>
+        {props.title ? props.title : getIntl().formatMessage(Messages.confirm)}
+      </Text>
+    );
   };
 
   const renderContent = () => {
@@ -32,7 +36,11 @@ const Confirm = (props) => {
     return (
       <View style={styles.actionBox}>
         <TouchableOpacity style={styles.btnBox} onPress={() => doCancel()}>
-          <Text style={{ color: color.danger }}>{props.cancelText}</Text>
+          <Text style={{ color: color.danger }}>
+            {props.cancelText
+              ? props.cancelText
+              : getIntl().formatMessage(Messages.cancel)}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btnBox} onPress={() => doOk()}>
           <Text style={{ color: color.blue }}>{props.okText}</Text>
@@ -90,9 +98,9 @@ Confirm.propTypes = {
 };
 
 Confirm.defaultProps = {
-  title: getIntl().formatMessage(Messages.confirm),
+  title: undefined,
   content: "",
-  cancelText: getIntl().formatMessage(Messages.cancel),
+  cancelText: undefined,
   okText: "OK",
   onCancel: () => {},
   onOk: () => {},

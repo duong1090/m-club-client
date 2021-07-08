@@ -3,23 +3,29 @@ import firebase from "../config/firebase.config";
 
 const { auth } = firebase;
 
-export const signInWithPhoneNumber = (phone) => {
-  console.log("signInWithPhoneNumber::::", phone);
+export const verifyPhoneNumber = (phone) => {
   return new Promise((resolve, reject) => {
     auth()
-      .signInWithPhoneNumber(`+84${phone}`)
-      .then((confirmResult) => {
-        console.log("signInWithPhoneNumber:::", confirmResult);
-        resolve(confirmResult);
+      .verifyPhoneNumber(`+84${phone}`, false, false)
+      .then((res) => {
+        resolve(res.verificationId);
       })
-      .catch((error) => reject(error));
+      .catch((err) => reject(err));
   });
+};
+
+export const confirmCode = async (verificationId, code) => {
+  const credential = auth.PhoneAuthProvider.credential(verificationId, code);
+  return auth()
+    .signInWithCredential(credential)
+    .then(() => Promise.resolve(true))
+    .catch((err) => Promise.reject(err));
 };
 
 export const getIdToken = () => {
   return new Promise((resolve, reject) => {
-    auth().currentUser
-      .getIdToken()
+    auth()
+      .currentUser.getIdToken()
       .then((idToken) => {
         resolve(idToken);
       })

@@ -16,7 +16,13 @@ const Error = (props) => {
   //render
 
   const renderTitle = () => {
-    return <Text style={styles.titleText}>{props.title}</Text>;
+    console.log("renderTitle:::", getIntl());
+
+    return (
+      <Text style={styles.titleText}>
+        {props.title ? props.title : getIntl().formatMessage(Messages.error)}
+      </Text>
+    );
   };
 
   const renderContent = () => {
@@ -80,7 +86,7 @@ Error.propTypes = {
 };
 
 Error.defaultProps = {
-  title: getIntl().formatMessage(Messages.error),
+  title: undefined,
   content: "",
   okText: "OK",
   onOk: () => {},

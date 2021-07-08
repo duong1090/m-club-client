@@ -7,13 +7,7 @@ import React, {
   useContext,
 } from "react";
 import BottomPopUp from "container/component/ui/bottomPopUp";
-import {
-  scale,
-  color,
-  fontSize,
-  space,
-  
-} from "container/variables/common";
+import { scale, color, fontSize, space } from "container/variables/common";
 import { TextInput, View, Text, TouchableOpacity, Image } from "react-native";
 import { styles, AVATAR_SIZE } from "../style/create";
 import { Textarea } from "native-base";
@@ -26,9 +20,10 @@ import { postRequest } from "container/utils/request";
 import { useRecoilState } from "recoil";
 import { listTaskState } from "../recoil";
 import update from "immutability-helper";
-import Config from "container/config/server.config";
 import ModalContext from "container/context/modal";
 import SelectModal from "container/component/ui/selectModal";
+import { Navigation } from "react-native-navigation";
+import { screens } from "../../../constant/screen";
 
 const DUE_DATE_FORMAT = "YYYY-MM-DD ";
 const DUE_TIME_FORMAT = "HH:mm:ss";
@@ -82,6 +77,7 @@ const CreateTask = (props, ref) => {
 
   const hide = () => {
     bottomPopUpRef.current.hide();
+    Navigation.updateProps(screens.TAB_TASK, { mode: "list" });
     resetFields();
   };
 
@@ -167,13 +163,12 @@ const CreateTask = (props, ref) => {
           source={require("container/asset/icon/dukien.png")}
         />
         <View style={{ marginLeft: scale(15) }}>
-          <Text style={{  fontSize: fontSize.size26 }}>
+          <Text style={{ fontSize: fontSize.size26 }}>
             {intl.formatMessage(Messages.due_time)}
           </Text>
           {dueTime ? (
             <Text
               style={{
-                
                 fontSize: fontSize.size26,
                 fontWeight: "bold",
                 color: dueDateColor,
@@ -212,7 +207,7 @@ const CreateTask = (props, ref) => {
           source={require("container/asset/icon/unassign-hanchot.png")}
         />
         <View style={{ marginLeft: scale(15) }}>
-          <Text style={{  fontSize: fontSize.size26 }}>
+          <Text style={{ fontSize: fontSize.size26 }}>
             {intl.formatMessage(Messages.due_date)}
           </Text>
           {dueDate ? (
@@ -220,7 +215,6 @@ const CreateTask = (props, ref) => {
               font-size-22
               bold
               style={{
-                
                 fontSize: fontSize.size26,
                 color: dueDateColor,
               }}
@@ -323,7 +317,6 @@ const CreateTask = (props, ref) => {
             <View style={{ marginLeft: scale(15) }}>
               <Text
                 style={{
-                  
                   fontSize: fontSize.size26,
                   color: color.text,
                 }}
@@ -363,12 +356,6 @@ const CreateTask = (props, ref) => {
         }}
         blurOnSubmit={false}
         returnKeyType="next"
-        onSubmitEditing={() => {
-          // this.createTaskElem && this.createTaskElem.snapTo({ index: 0 });
-          // this._descriptionText &&
-          //   this._descriptionText.wrappedInstance &&
-          //   this._descriptionText.wrappedInstance.focus();
-        }}
       />
     );
   };
@@ -421,7 +408,7 @@ const CreateTask = (props, ref) => {
     <BottomPopUp
       ref={bottomPopUpRef}
       body={
-        <View style={{ height: scale(500), marginBottom: scale(30) }}>
+        <View style={{ height: scale(700), marginBottom: scale(30) }}>
           {byObject ? renderByObject() : null}
           {renderName()}
           <View style={styles.blockItem}>
@@ -438,7 +425,7 @@ const CreateTask = (props, ref) => {
           style={styles.createButton}
         >
           <Text style={styles.textCreateButton}>
-            {intl.formatMessage(Messages.create)}
+            {intl.formatMessage(Messages.add)}
           </Text>
         </TouchableOpacity>
       )}

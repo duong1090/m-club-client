@@ -2,12 +2,9 @@ import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Navigation } from "react-native-navigation";
 import NotificationList from "./component/list";
-import {
-  color,
-} from "container/variables/common";
+import { color } from "container/variables/common";
 
 const TabNotification = (props) => {
-  
   useEffect(() => {
     Navigation.mergeOptions(props.componentId, {
       layout: {
@@ -18,7 +15,7 @@ const TabNotification = (props) => {
 
   return (
     <View style={styles.container}>
-      <NotificationList />
+      <NotificationList {...props} />
     </View>
   );
 };

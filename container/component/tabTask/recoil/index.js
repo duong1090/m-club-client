@@ -11,16 +11,21 @@ export const listTaskState = atom({
   key: "listTaskState",
   default: [
     {
-      name: 'today',
+      name: "today",
     },
     {
-      name: 'future',
+      name: "future",
     },
     {
-      name: 'timed',
+      name: "timed",
     },
     {
-      name: 'no_time',
+      name: "no_time",
     },
   ],
+});
+
+export const currModeState = atom({
+  key: "currModeState",
+  default: "list",
 });
