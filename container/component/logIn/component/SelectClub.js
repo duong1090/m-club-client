@@ -101,23 +101,9 @@ const SelectClub = (props) => {
       <Text style={styles.title}>
         {intl.formatMessage(Messages.select_club)}
       </Text>
-
-      {/* <FlatList
-        style={{ flex: 1 }}
-        numColumns={2}
-        // contentContainerStyle={styles.list}
-        contentContainerStyle={styles.list}
-        data={clubList}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => clubItem(item, index)}
-        showsVerticalScrollIndicator={false}
-      /> */}
-
       <ScrollView horizontal>
         <View style={styles.list}>
-          {clubList
-            .concat(clubList)
-            .map((item, index) => clubItem(item, index))}
+          {clubList.map((item, index) => clubItem(item, index))}
         </View>
       </ScrollView>
 
