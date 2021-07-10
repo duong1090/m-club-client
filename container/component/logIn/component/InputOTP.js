@@ -206,6 +206,7 @@ const InputOTP = (props) => {
               marginTop: space.componentMargin,
             },
           ]}
+          disabled={countResend > 0}
           onPress={() => doVerify()}
         >
           <Text
@@ -216,7 +217,7 @@ const InputOTP = (props) => {
           >
             {intl.formatMessage(Messages.resend_otp)}
           </Text>
-          {countResend != 0 ? (
+          {countResend > 0 ? (
             <Text style={styles.textCountDown}>{countResend}</Text>
           ) : null}
         </TouchableOpacity>

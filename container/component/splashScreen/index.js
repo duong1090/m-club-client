@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#fff",
   },
   imageBox: {
     width: scale(400),

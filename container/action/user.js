@@ -97,11 +97,10 @@ const removeUserInfo = () => {
         .catch((err) => reject(err));
       OneSignal.getTags((receivedTags) => {
         console.log("receivedTags", receivedTags);
-        OneSignal.deleteTag("mem_id");
-        OneSignal.deleteTag("club_id");
+        Object.keys(receivedTags).map((key) => {
+          OneSignal.deleteTag(key);
+        });
       });
-      // OneSignal.deleteTag('userId');
-      // OneSignal.deleteTag('username');
     } catch (err) {
       reject(err);
     }

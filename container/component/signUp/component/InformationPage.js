@@ -291,6 +291,7 @@ const InformationPage = (props) => {
             borderColor: countResend <= 0 ? color.blue : color.text,
           },
         ]}
+        disabled={countResend > 0}
         onPress={() => onVerifyPhone()}
       >
         <Text

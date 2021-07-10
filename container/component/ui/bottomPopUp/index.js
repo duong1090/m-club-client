@@ -11,7 +11,7 @@ import Modal from "react-native-modal";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const BottomPopUp = (props, ref) => {
-  const { body, toolbar, title, reset } = props;
+  const { body, toolbar, title, reset, coverScreen } = props;
 
   //state
   const [visible, setVisible] = useState(false);
@@ -44,7 +44,7 @@ const BottomPopUp = (props, ref) => {
       onBackButtonPress={() => hide()}
       useNativeDriver={true}
       propagateSwipe
-      coverScreen={false}
+      coverScreen={coverScreen != null ? coverScreen : false}
     >
       <View style={styles.bodyWrapper}>
         <KeyboardAwareScrollView>
