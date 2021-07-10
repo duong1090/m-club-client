@@ -192,8 +192,6 @@ const styles = StyleSheet.create({
   manageList: {
     flex: 1,
     padding: space.bgPadding / 2,
-    borderTopWidth: scale(4),
-    borderColor: color.backgroundColor,
   },
   actionButtonBox: {
     position: "absolute",

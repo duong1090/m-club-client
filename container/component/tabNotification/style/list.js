@@ -61,10 +61,10 @@ export const styles = StyleSheet.create({
 
   contentBox: { flex: 1, marginLeft: space.componentMargin },
   content: {
-    fontSize: fontSize.sizeContent,
+    fontSize: fontSize.sizeTitle,
   },
   timeText: {
-    fontSize: fontSize.size22,
+    fontSize: fontSize.sizeContent,
     color: color.grey,
     marginTop: scale(5),
   },
@@ -82,10 +82,11 @@ export const styles = StyleSheet.create({
     alignItems: "flex-start",
     padding: space.bgPadding,
     paddingVertical: space.bgPadding / 2,
-    borderBottomWidth: scale(2),
-    borderColor: color.lightGrey,
   },
-  headerText: {},
+  headerText: {
+    fontSize: fontSize.size36,
+    fontWeight: "bold",
+  },
 
   actionButtonBox: {
     position: "absolute",

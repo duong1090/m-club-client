@@ -1040,7 +1040,7 @@
 				CODE_SIGN_ENTITLEMENTS = MClub/MClub.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = R552MAJWNT;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
@@ -1073,7 +1073,7 @@
 				CODE_SIGN_ENTITLEMENTS = MClub/MClub.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = R552MAJWNT;
 				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = MClub/Info.plist;
@@ -1218,7 +1218,7 @@
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = R552MAJWNT;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1253,7 +1253,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = R552MAJWNT;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

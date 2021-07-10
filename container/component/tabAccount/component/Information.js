@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import {
   scale,
@@ -17,24 +17,26 @@ import { screens } from "container/constant/screen";
 const Information = (props) => {
   //props
   const { style, intl } = props;
-  const { member } = global.organization || {};
-  const [avatar, setAvatar] = useState(member ? member : {});
+  const [currMember, setCurrMember] = useState(
+    global.organization && global.organization.member
+      ? global.organization.member
+      : {}
+  );
+  // const [avatar, setAvatar] = useState(member ? member : {});
 
-  const updateAvatar = () => {
-    console.log("updateAvatar:::");
-    setAvatar(JSON.parse(JSON.stringify(member)));
+  const updateCurrMember = (value = null) => {
+    console.log("updateCurrMember:::");
+    if (value) setCurrMember(JSON.parse(JSON.stringify(value)));
+    else setCurrMember(JSON.parse(JSON.stringify(currMember)));
   };
 
   const gotoEdit = () => {
-    gotoRoute(screens.USER_INFO, { updateCallback: updateAvatar });
-  };
-
-  const gotoView = () => {
     gotoRoute(screens.USER_INFO, {
-      mode: "list",
-      updateCallback: updateAvatar,
+      member: currMember,
+      updateCallback: updateCurrMember,
     });
   };
+
   const gotoSetting = () => {
     gotoRoute(screens.SETTING);
   };
@@ -51,11 +53,11 @@ const Information = (props) => {
       <View style={styles.person}>
         <View style={styles.info}>
           <View style={styles.memberInfo}>
-            {member && member.name ? (
-              <Text style={styles.name}>{member.name}</Text>
+            {currMember && currMember.name ? (
+              <Text style={styles.name}>{currMember.name}</Text>
             ) : null}
-            {member && member.position && member.position.name ? (
-              <Text style={styles.position}>{member.position.name}</Text>
+            {currMember && currMember.position && currMember.position.name ? (
+              <Text style={styles.position}>{currMember.position.name}</Text>
             ) : null}
           </View>
           <TouchableOpacity style={styles.editInfo} onPress={() => gotoEdit()}>
@@ -63,7 +65,7 @@ const Information = (props) => {
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.avatar} onPress={() => gotoEdit()}>
-          <Avatar size={scale(150)} data={avatar} />
+          <Avatar size={scale(150)} data={currMember} />
         </TouchableOpacity>
       </View>
     </View>
@@ -106,14 +108,20 @@ const styles = StyleSheet.create({
     width: scale(80),
     justifyContent: "center",
     alignItems: "center",
+    paddingRight: space.itemMargin,
+    paddingLeft: scale(10),
+    paddingVertical: space.itemMargin,
+    borderTopLeftRadius: space.border,
+    borderBottomLeftRadius: space.border,
+    backgroundColor: color.backgroundColor,
   },
   name: {
     fontSize: fontSize.size36,
     fontWeight: "bold",
   },
   position: {
-    fontSize: fontSize.size28,
-    color: "#fff",
+    fontSize: fontSize.size24,
+    color: color.grey,
   },
   editIcon: {
     fontSize: fontSize.size32,

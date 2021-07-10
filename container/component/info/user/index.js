@@ -32,8 +32,8 @@ import { QR_MEMBER } from "../../../constant/qrdecode";
 
 const UserInfo = (props) => {
   //props
-  const { intl, updateCallback, componentId } = props;
-  const { member } = global.organization || {};
+  const { intl, updateCallback, componentId, member } = props;
+  // const { member } = global.organization || {};
   //state
   const [info, setInfo] = useState({
     name: member.name ? member.name : null,
@@ -246,7 +246,7 @@ const UserInfo = (props) => {
     const params = prepareParams();
     postRequest("member/update", params)
       .then((res) => {
-        if (res && res.data) updateSuccess();
+        if (res && res.data) updateSuccess(res.data);
         hideSpinner();
       })
       .catch((err) => {
@@ -256,8 +256,9 @@ const UserInfo = (props) => {
       });
   };
 
-  const updateSuccess = () => {
+  const updateSuccess = (data) => {
     Toast.show(intl.formatMessage(Messages.update_success), Toast.SHORT);
+    updateCallback && updateCallback(data);
   };
 
   //render ----------------------------------------------------------------------------------------------------------------

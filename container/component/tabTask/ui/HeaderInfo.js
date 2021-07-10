@@ -74,7 +74,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   position: {
-    fontSize: fontSize.size28,
+    fontSize: fontSize.size24,
+    color: color.grey,
     marginLeft: scale(20),
   },
   backButton: {

@@ -16,6 +16,7 @@ import {
   shadow,
 } from "container/variables/common";
 import {getAvatarSource} from 'container/action/user';
+import FastImage from "react-native-fast-image";
 
 const Avatar = (props, ref) => {
   //props
@@ -75,7 +76,7 @@ const Avatar = (props, ref) => {
       </Text>
 
       {avatar ? (
-        <Image
+        <FastImage
           style={[
             styles.avatar,
             size ? { width: size, height: size, borderRadius: size / 2 } : null,

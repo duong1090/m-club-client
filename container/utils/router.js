@@ -47,7 +47,7 @@ bottomTabsByID[screens.TAB_ACCOUNT] = (passProps) => ({
         titleDisplayMode: "alwaysShow",
       },
       bottomTab: {
-        text: getIntl().formatMessage(Messages.tab_account),
+        // text: getIntl().formatMessage(Messages.tab_account),
         icon: require("container/asset/icon/more.png"),
         selectedIcon: require("container/asset/icon/more_select.png"),
         testID: screens.TAB_ACCOUNT,
@@ -80,7 +80,7 @@ bottomTabsByID[screens.TAB_NAVIGATE] = (passProps) => ({
         titleDisplayMode: "alwaysShow",
       },
       bottomTab: {
-        text: getIntl().formatMessage(Messages.tab_navigate),
+        // text: getIntl().formatMessage(Messages.tab_navigate),
         icon: require("container/asset/icon/navigate.png"),
         selectedIcon: require("container/asset/icon/navigate_select.png"),
         testID: screens.TAB_NAVIGATE,
@@ -113,7 +113,7 @@ bottomTabsByID[screens.TAB_NOTIFICATION] = (passProps) => ({
         titleDisplayMode: "alwaysShow",
       },
       bottomTab: {
-        text: getIntl().formatMessage(Messages.tab_notification),
+        // text: getIntl().formatMessage(Messages.tab_notification),
         icon: require("container/asset/icon/notification.png"),
         selectedIcon: require("container/asset/icon/notification_select.png"),
         testID: screens.TAB_NOTIFICATION,
@@ -149,7 +149,7 @@ bottomTabsByID[screens.TAB_TASK] = (passProps) => {
           titleDisplayMode: "alwaysShow",
         },
         bottomTab: {
-          text: getIntl().formatMessage(Messages.tab_task),
+          // text: getIntl().formatMessage(Messages.tab_task),
           icon: require("container/asset/icon/task.png"),
           selectedIcon: require("container/asset/icon/task_select.png"),
           testID: screens.TAB_TASK,
@@ -215,6 +215,7 @@ const navigationHomeTab = async (passProps = {}, screenIndex = 0) => {
               Platform.OS === "ios" && version <= 10
                 ? "onSwitchToTab"
                 : "onSwitchToTab",
+            backgroundColor: "#fff",
           },
         },
         children: defaultTabs,
