@@ -149,8 +149,22 @@ const NotificationList = (props) => {
     );
   };
 
-  const renderIconType = () => {
-    return require("container/asset/icon/task_noti.png");
+  const renderIconType = (type) => {
+    switch (type) {
+      case "task":
+        return require("container/asset/icon/task_noti.png");
+      case "noti":
+        return require("container/asset/icon/megaphone.png");
+    }
+  };
+
+  const renderContent = (item) => {
+    switch (item.noti_icon) {
+      case "task":
+        return item.content;
+      case "noti":
+        return item.title;
+    }
   };
 
   const replaceText = (type) => {
@@ -169,10 +183,10 @@ const NotificationList = (props) => {
     );
 
     const highlightContent = highlighText(
-      item.content,
+      renderContent(item),
       item.objects,
       styles.content,
-      replaceText(item.noti_type)
+      replaceText(item.noti_icon)
     );
 
     return (
@@ -201,7 +215,7 @@ const NotificationList = (props) => {
               >
                 <Image
                   style={styles.avatarIconImage}
-                  source={renderIconType()}
+                  source={renderIconType(item.noti_icon)}
                 />
               </ImageBackground>
             </View>

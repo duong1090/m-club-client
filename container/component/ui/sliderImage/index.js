@@ -77,7 +77,9 @@ const SliderImage = (props) => {
           page={currImage}
           prerenderingSiblingsNumber={Infinity}
           renderTabBar={() => (
-            <ScrollableTab style={{ height: 0, borderColor: "#fff" }} />
+            <ScrollableTab
+              style={{ height: 0, borderColor: "#fff", marginTop: -2 }}
+            />
           )}
           onChangeTab={(e) => setCurrImage(e.i)}
         >

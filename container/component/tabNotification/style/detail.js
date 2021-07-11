@@ -37,6 +37,7 @@ export default StyleSheet.create({
   titleBox: {
     backgroundColor: color.backgroundColor,
     paddingVertical: space.componentMargin,
+    paddingHorizontal: space.componentMargin,
     marginBottom: space.componentMargin,
     justifyContent: "center",
     alignItems: "center",
@@ -44,5 +45,6 @@ export default StyleSheet.create({
   headerTitle: {
     fontWeight: "bold",
     fontSize: fontSize.sizeTitle,
+    textAlign: "center",
   },
 });

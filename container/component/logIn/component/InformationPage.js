@@ -66,7 +66,7 @@ const InformationPage = (props) => {
         page={activeTab}
         locked
         renderTabBar={() => (
-          <ScrollableTab style={{ height: 0, borderWidth: 0 }} />
+          <ScrollableTab style={{ height: 0, borderWidth: 0, marginTop: -2 }} />
         )}
       >
         {tabs.map((tab) => (

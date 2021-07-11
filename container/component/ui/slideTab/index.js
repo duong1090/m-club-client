@@ -20,7 +20,9 @@ const SlideTab = (props) => {
     <Tabs
       page={activeTab}
       onChangeTab={(e) => onChangeTab(e.i)}
-      renderTabBar={() => <ScrollableTab style={{ height: 0 }} />}
+      renderTabBar={() => (
+        <ScrollableTab style={{ height: 0, marginTop: -2 }} />
+      )}
       locked
     >
       {tabs.map((tab) => (

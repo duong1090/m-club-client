@@ -44,7 +44,7 @@ const Department = (props) => {
         initialPage={0}
         page={activeTab}
         locked
-        renderTabBar={() => <ScrollableTab style={{ height: 0 }} />}
+        renderTabBar={() => <ScrollableTab style={{ height: 0 , marginTop: -2}} />}
       >
         {tabs.map((tab) => (
           <Tab heading="" style={{ backgroundColor: "transparent" }}>

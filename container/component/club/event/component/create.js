@@ -271,7 +271,9 @@ const Create = (props, ref) => {
         page={tab}
         locked
         renderTabBar={() => (
-          <ScrollableTab style={{ height: 0, borderBottomColor: "#fff" }} />
+          <ScrollableTab
+            style={{ height: 0, marginTop: -2, borderBottomColor: "#fff" }}
+          />
         )}
       >
         <Tab heading="">{renderSelectType()}</Tab>

@@ -109,7 +109,7 @@ export default forwardRef(DateType);
 const styles = StyleSheet.create({
   container: {
     marginBottom: scale(30),
-    maxHeight: (60 * height) / 100,
+    maxHeight: (95 * height) / 100,
   },
   pickerBox: {
     alignItems: "center",
