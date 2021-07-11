@@ -9,6 +9,7 @@ const TabNotification = (props) => {
     Navigation.mergeOptions(props.componentId, {
       layout: {
         componentBackgroundColor: color.background,
+        orientation: ["portrait"],
       },
     });
   }, []);

@@ -20,7 +20,6 @@ import Messages from "container/translation/Message";
 import { clubListState, certificateState, activeTabState } from "../recoil";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import update from "immutability-helper";
-import FadedWrapper from "../../ui/fadedWrapper";
 
 const TAB_INPUT_OTP = 2;
 
@@ -102,13 +101,11 @@ const SelectClub = (props) => {
       <Text style={styles.title}>
         {intl.formatMessage(Messages.select_club)}
       </Text>
-      <FadedWrapper>
         <ScrollView>
           <View style={styles.list}>
             {clubList.map((item, index) => clubItem(item, index))}
           </View>
         </ScrollView>
-      </FadedWrapper>
 
       <TouchableOpacity
         style={[styles.button, { backgroundColor: color.background }]}
@@ -145,7 +142,6 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
     paddingHorizontal: space.componentMargin / 2,
-    paddingVertical: scale(190),
   },
 
   item: {

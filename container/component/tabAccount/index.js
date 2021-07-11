@@ -37,6 +37,7 @@ const TabAccount = (props) => {
     Navigation.mergeOptions(props.componentId, {
       layout: {
         componentBackgroundColor: color.background,
+        orientation: ["portrait"],
       },
     });
   }, []);

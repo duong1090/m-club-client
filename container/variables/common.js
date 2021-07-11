@@ -120,5 +120,6 @@ export const fontSize = {
 
 export const defaultText = {
   color: "#3F3F3F",
+  fontSize: fontSize.size24,
   fontFamily: "Roboto-Regular",
 };

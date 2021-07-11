@@ -32,6 +32,7 @@ bottomTabsByID[screens.TAB_ACCOUNT] = (passProps) => ({
           options: {
             layout: {
               componentBackgroundColor: "#fff",
+              orientation: ["portrait"],
             },
           },
           passProps,
@@ -66,6 +67,7 @@ bottomTabsByID[screens.TAB_NAVIGATE] = (passProps) => ({
           options: {
             layout: {
               componentBackgroundColor: color.background,
+              orientation: ["portrait"],
             },
           },
           passProps,
@@ -99,6 +101,7 @@ bottomTabsByID[screens.TAB_NOTIFICATION] = (passProps) => ({
           options: {
             layout: {
               componentBackgroundColor: "#fff",
+              orientation: ["portrait"],
             },
           },
           passProps,
@@ -135,6 +138,7 @@ bottomTabsByID[screens.TAB_TASK] = (passProps) => {
             options: {
               layout: {
                 componentBackgroundColor: "#fff",
+                orientation: ["portrait"],
               },
             },
             passProps,
@@ -246,6 +250,7 @@ const displayModal = (screen, config = {}) => {
                 backgroundColor: "transparent",
                 screenBackgroundColor: "transparent",
                 componentBackgroundColor: "transparent",
+                orientation: ["portrait"],
               },
               modalPresentationStyle: Platform.select({
                 ios: "overCurrentContext",
@@ -383,6 +388,7 @@ export const gotoRoute = (screen, config = {}, isModal = false) => {
                 componentBackgroundColor: color.backgroundColor,
                 backgroundColor: "#fff",
                 screenBackgroundColor: "#fff",
+                orientation: ["portrait"],
               },
               animations: {
                 push: {
