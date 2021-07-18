@@ -116,18 +116,7 @@ const InformationPage = (props) => {
         console.error(err);
         hideSpinner();
         doCountDown();
-        const message = err.code
-          ? intl.formatMessage(err.code)
-          : err.message
-          ? err.message
-          : err;
-
-        showModal({
-          options: {
-            content: message,
-          },
-          type: "error",
-        });
+        onFirebaseError(err);
       });
   };
 
@@ -140,18 +129,8 @@ const InformationPage = (props) => {
           hideSpinner();
         })
         .catch((err) => {
-          const message = err.code
-            ? intl.formatMessage(err.code)
-            : err.message
-            ? err.message
-            : err;
           hideSpinner();
-          showModal({
-            options: {
-              content: message,
-            },
-            type: "error",
-          });
+          onFirebaseError(err);
         });
     }
   };
@@ -175,6 +154,28 @@ const InformationPage = (props) => {
       if (countResend > 0) setCountResend((curr) => curr - 1);
       else clearInterval(countDownInterval.current);
     }, DELAY_TIME_OUT);
+  };
+
+  const onFirebaseError = (err) => {
+    //some magic from Duong with love
+    const errStr = err.toString();
+    const splitArr = errStr.split(/\[|\]/);
+    const code =
+      splitArr && splitArr.length && splitArr.length >= 2 ? splitArr[1] : null;
+
+    const message = code
+      ? intl.formatMessage(Messages[code])
+      : err.message
+      ? err.message
+      : err;
+    // console.error(err);
+    console.log("doVerify::::error:::message", message);
+    showModal({
+      options: {
+        content: message,
+      },
+      type: "error",
+    });
   };
 
   //render ------------------------------------------------------------------------------------

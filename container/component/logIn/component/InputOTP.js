@@ -92,22 +92,32 @@ const InputOTP = (props) => {
       })
       .catch((err) => {
         hideSpinner();
-        const message = err.code
-          ? intl.formatMessage(err.code)
-          : err.message
-          ? err.message
-          : err;
-        console.error(err);
-        showModal({
-          options: {
-            content: message,
-          },
-          type: "error",
-        });
-
+        onFirebaseError(err);
         //do count down resend OTP
         doCountDown();
       });
+  };
+
+  const onFirebaseError = (err) => {
+    //some magic from Duong with love
+    const errStr = err.toString();
+    const splitArr = errStr.split(/\[|\]/);
+    const code =
+      splitArr && splitArr.length && splitArr.length >= 2 ? splitArr[1] : null;
+
+    const message = code
+      ? intl.formatMessage(Messages[code])
+      : err.message
+      ? err.message
+      : err;
+    // console.error(err);
+    console.log("doVerify::::error:::message", message);
+    showModal({
+      options: {
+        content: message,
+      },
+      type: "error",
+    });
   };
 
   const doCountDown = () => {
@@ -141,35 +151,14 @@ const InputOTP = (props) => {
                 hideSpinner();
               })
               .catch((err) => {
-                const message = err.code
-                  ? intl.formatMessage(err.code)
-                  : err.message
-                  ? err.message
-                  : err;
-
                 hideSpinner();
-                showModal({
-                  options: {
-                    content: message,
-                  },
-                  type: "error",
-                });
+
+                onFirebaseError(err);
               });
         })
         .catch((err) => {
-          const message = err.code
-            ? intl.formatMessage(err.code)
-            : err.message
-            ? err.message
-            : err;
-
           hideSpinner();
-          showModal({
-            options: {
-              content: message,
-            },
-            type: "error",
-          });
+          onFirebaseError(err);
         });
     }
   };

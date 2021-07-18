@@ -33,11 +33,6 @@ export const verifyPhoneNumber = (phone) => {
               reject("error");
           }
         }
-        // (error) => {
-        //   console.log(error);
-        //   // verificationId is attached to error if required
-        //   console.log(error.verificationId);
-        // },
         // (phoneAuthSnapshot) => {
         //   // optionalCompleteCb would be same logic as the AUTO_VERIFIED/CODE_SENT switch cases above
         //   // depending on the platform. If you've already handled those cases in the observer then

@@ -5,7 +5,7 @@ const server = "mclub.ga:8888";
 global.env = process.env.NODE_ENV;
 
 if (global.env == "production") {
-  // console.log = () => {};
+  console.log = () => {};
 }
 
 const Config = () => {

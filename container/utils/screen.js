@@ -209,6 +209,7 @@ const configOneSignal = () => {
     kOSSettingsKeyInAppLaunchURL: false,
     kOSSettingsKeyInFocusDisplayOption: 2,
   });
+  OneSignal.configure();
   console.log("OneSignal:::: init", log);
   OneSignal.enableSound(true);
 

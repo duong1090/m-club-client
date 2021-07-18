@@ -48,7 +48,7 @@ const InformationPage = (props) => {
     countByPass++;
     console.log("doByPass:::", countByPass, isByPass);
     if (countByPass >= 10) {
-      Toast.show("sua di khang :))", Toast.SHORT);
+      Toast.show("Input your phone to sign in", Toast.SHORT);
       setIsByPass(true);
     }
   };
