@@ -12,6 +12,7 @@ apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 
 apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 import com.android.build.OutputFile
 
 /**
@@ -147,7 +148,7 @@ android {
         multiDexEnabled true
         targetSdkVersion rootProject.ext.targetSdkVersion
         vectorDrawables.useSupportLibrary = true
-        versionCode 2
+        versionCode 13
         versionName "0.1.0"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
@@ -162,10 +163,12 @@ android {
     signingConfigs {
         
         release {
-            storeFile file('mclub.keystore')
-            storePassword 'duong1210'
-            keyAlias 'mclub'
-            keyPassword 'duong1210'
+            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                storePassword MYAPP_UPLOAD_STORE_PASSWORD
+                keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+            }
         }
     }
     buildTypes {
@@ -206,13 +209,21 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
-    implementation platform('com.google.firebase:firebase-bom:27.1.0')
+    implementation platform('com.google.firebase:firebase-bom:28.2.1')
     
     implementation 'com.google.firebase:firebase-auth'
 
-    implementation 'androidx.browser:browser:1.2.0'
+    implementation "androidx.browser:browser:1.3.0"
 
     implementation "com.android.support:customtabs:25.1.0"
+
+    implementation 'com.google.firebase:firebase-analytics'
+
+    implementation 'com.google.firebase:firebase-crashlytics'
+
+    implementation ('com.google.firebase:firebase-messaging:21.1.0'){
+        exclude group: 'com.google.firebase', module: 'firebase-iid'
+    }
 
     implementation project(':lottie-react-native')
 

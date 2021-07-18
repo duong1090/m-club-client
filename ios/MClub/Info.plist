@@ -56,13 +56,13 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>This app requires access to the camera.</string>
+	<string>Enable Camera access so you can share your photo to another member in Event or update Avatar</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location will be used to do attendance the event.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app does not require access to the microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app requires access to the photo library.</string>
+	<string>Share your photos in library to share with another member in Event or update Avatar</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
